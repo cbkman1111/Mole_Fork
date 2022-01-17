@@ -21,18 +21,18 @@ public class AppManager : MonoSingleton<AppManager>
         scenes.Add("SceneLoading", new LoadingScene(SceneInfo.SCENES.LOADING));
         scenes.Add("SceneGame", new GameScene(SceneInfo.SCENES.GAME));
 
-        SceneManager.sceneUnloaded += UnLoadScene;
+        SceneManager.sceneUnloaded += OnUnLoadScene;
         SceneManager.sceneLoaded += OnSceneLoaded;
         gameObject.name = string.Format("singleton - {0}", TAG);
         return true;
     }
 
-    void UnLoadScene(Scene scene)
+    private void OnUnLoadScene(Scene scene)
     {
         Debug.Log($"{TAG} UnLoadScene {scene.name}");
     }
 
-    IEnumerator LoadScene(string name)
+    private IEnumerator LoadScene(string name)
     {
         AsyncOperation async = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(name, LoadSceneMode.Single);
         async.allowSceneActivation = false;
