@@ -1,1 +1,27 @@
-# develop modifyed.
+git command
+
++ git clone
+
++ git ignore 파일 추가
+ - 유니티 전체 프로젝트 한번에 추가시 100메가 초과로 안됨.
+ - https://parkjye.tistory.com/28
+
++ git add 파일명
+ - add --all (전체)
+
++ git commit -m "메세지"
+
++ git push origin devlop(branch)
+
++ git pull request ( 이건 웹페이지에서 했는데 명령어로는 모르겠네
+
++ git status
++ git log
+
++ git reset HEAD~2 // 마지막 2개의 comit 취소.
++ git reset --hard HEAD // 워킹 디렉터리를 원격 저장소의 마지막 commit 상태로 되돌린다.
+  - https://gmlwjd9405.github.io/2018/05/25/git-add-cancle.html
+
+
++ git pull origin develop(branch)
+ - origin 과 로컬 저장소 병합.
