@@ -25,3 +25,5 @@ git command
 
 + git pull origin develop(branch)
  - origin 과 로컬 저장소 병합.
+
++ 집에서 커밋 테스트
