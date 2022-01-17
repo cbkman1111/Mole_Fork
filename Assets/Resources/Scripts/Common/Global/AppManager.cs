@@ -21,9 +21,15 @@ public class AppManager : MonoSingleton<AppManager>
         scenes.Add("SceneLoading", new LoadingScene(SceneInfo.SCENES.LOADING));
         scenes.Add("SceneGame", new GameScene(SceneInfo.SCENES.GAME));
 
+        SceneManager.sceneUnloaded += UnLoadScene;
         SceneManager.sceneLoaded += OnSceneLoaded;
         gameObject.name = string.Format("singleton - {0}", TAG);
         return true;
+    }
+
+    void UnLoadScene(Scene scene)
+    {
+        Debug.Log($"{TAG} UnLoadScene {scene.name}");
     }
 
     IEnumerator LoadScene(string name)
