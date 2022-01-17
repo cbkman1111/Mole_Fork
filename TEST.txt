@@ -21,3 +21,7 @@ git command
 + git reset HEAD~2 // 마지막 2개의 comit 취소.
 + git reset --hard HEAD // 워킹 디렉터리를 원격 저장소의 마지막 commit 상태로 되돌린다.
   - https://gmlwjd9405.github.io/2018/05/25/git-add-cancle.html
+
+
++ git pull origin develop(branch)
+ - origin 과 로컬 저장소 병합.
