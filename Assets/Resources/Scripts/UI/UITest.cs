@@ -39,6 +39,6 @@ public class UITest : UIObject
             */
         }
 
-        Debug.Log(btn);
+        //Debug.Log(btn);
     }
 }

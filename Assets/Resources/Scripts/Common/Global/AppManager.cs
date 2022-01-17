@@ -66,8 +66,12 @@ public class AppManager : MonoSingleton<AppManager>
         if(scenes.TryGetValue(scene.name, out SceneInfo info) == true)
         {
             bool ret = info.Init();
-            if(ret == false)
+            if (ret == true)
             {
+                Debug.Log($"OnSceneLoaded. {scene.name}");
+            }
+            else
+            { 
                 Debug.LogError($"{TAG} init is failed. {scene.name}");
             }
         }
