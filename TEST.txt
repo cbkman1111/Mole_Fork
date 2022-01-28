@@ -34,3 +34,4 @@ git push origin develop
 
 feature/test
 release/test
+hotfix/test
