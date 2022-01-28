@@ -32,3 +32,5 @@ git push origin develop
 
 + 집에서 커밋 테스트
 
+feature/test
+release/test
