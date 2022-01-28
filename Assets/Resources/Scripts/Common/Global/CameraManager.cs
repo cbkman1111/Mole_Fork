@@ -14,8 +14,10 @@ public class CameraManager : MonoSingleton<CameraManager>
         MainCamera = gameObject.AddComponent<Camera>() as Camera;
         MainCamera.transform.position = new Vector3(0, 0, -1);
         MainCamera.orthographic = true;
-        DontDestroyOnLoad(MainCamera);
+        MainCamera.farClipPlane = 10f;
+        MainCamera.nearClipPlane = 0.1f;
 
+        DontDestroyOnLoad(MainCamera);
         gameObject.name = string.Format("singleton - {0}", TAG);
         return true;
     }
