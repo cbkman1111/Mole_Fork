@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class Pool : MonoBehaviour
@@ -14,7 +13,7 @@ public class Pool : MonoBehaviour
         GameObject gameObject = new GameObject("Pool");
         if (gameObject != null)
         {
-            Pool pool = gameObject.AddComponent<Pool>(); ;
+            Pool pool = gameObject.AddComponent<Pool>();
             if (pool.Init() == true)
             {
                 return pool;

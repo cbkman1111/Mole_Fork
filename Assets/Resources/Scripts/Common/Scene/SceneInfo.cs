@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class SceneInfo 
+public abstract class SceneBase
 {
     public enum SCENES
     {
@@ -14,7 +14,7 @@ public abstract class SceneInfo
     //public string name;
     public SCENES scene;
     
-    public SceneInfo(SCENES scene)
+    public SceneBase(SCENES scene)
     {
         //this.name = name;
         this.scene = scene;

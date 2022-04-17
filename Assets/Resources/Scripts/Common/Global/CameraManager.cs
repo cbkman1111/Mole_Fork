@@ -4,9 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraManager : MonoSingleton<CameraManager>
-{
-    public override string TAG { get => "CameraMain"; }
-    
+{    
     public Camera MainCamera { get; set; }
 
     public override bool Init()

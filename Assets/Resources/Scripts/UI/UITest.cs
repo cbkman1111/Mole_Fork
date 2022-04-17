@@ -14,7 +14,7 @@ public class UITest : UIObject
 
         if(CompareTo(name, "Button - Get") == 0)
         {
-            AppManager.Instance.ChangeScene(SceneInfo.SCENES.LOADING);
+            AppManager.Instance.ChangeScene(SceneBase.SCENES.LOADING);
             /*
             Block block = GameManager.Instance.GetPool().GetBlock();
             if(block != null)
@@ -26,7 +26,7 @@ public class UITest : UIObject
         }
         else if (CompareTo(name, "Button - Release") == 0)
         {
-            AppManager.Instance.ChangeScene(SceneInfo.SCENES.GAME);
+            AppManager.Instance.ChangeScene(SceneBase.SCENES.GAME);
             /*
             if(blocks.Count > 0)
             {

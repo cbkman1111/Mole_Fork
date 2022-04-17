@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class IntroScene : SceneInfo
+public class IntroScene : SceneBase
 {
     public IntroScene(SCENES scene) : base(scene)
     {

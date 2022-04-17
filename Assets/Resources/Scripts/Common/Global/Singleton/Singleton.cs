@@ -57,6 +57,6 @@ namespace Singleton
         }
 
         public abstract bool Init();
-        public abstract string TAG { get; }
+        public string TAG { get => name; }
     }
 }

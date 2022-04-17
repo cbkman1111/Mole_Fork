@@ -4,10 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class UIManager : MonoSingleton<UIManager>
-{
-    public override string TAG { get => "UIManager"; }
-    
+{    
     private GameObject root = null;
+    private List<UIObject> openList = new List<UIObject>();
 
     public override bool Init()
     {
@@ -24,10 +23,18 @@ public class UIManager : MonoSingleton<UIManager>
     {
         string path = string.Format("Prefabs/UI/{0}", name);
 
-        GameObject ui = ResourcesManager.Instance.Load(path);
-        Instantiate(ui, root.transform);
+        GameObject prefab = ResourcesManager.Instance.Load(path);
+        GameObject ui = Instantiate(prefab, root.transform);
 
         T ret = gameObject.GetComponent<T>();
+        UIObject obj = ui.GetComponent<UIObject>();
+
+        openList.Add(obj);
         return ret;
+    }
+
+    public void CloseUI(string name)
+    {
+
     }
 }

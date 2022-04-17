@@ -7,19 +7,17 @@ using UnityEngine.SceneManagement;
 
 public class AppManager : MonoSingleton<AppManager>
 {
-    public override string TAG { get => "AppManager"; }
-
-    private Dictionary<string, SceneInfo> scenes = null;
+    private Dictionary<string, SceneBase> scenes = null;
     public string SceneName { get; set; }
 
     public override bool Init()
     {
         SceneName = "";
 
-        scenes = new Dictionary<string, SceneInfo>();
-        scenes.Add("SceneIntro", new IntroScene(SceneInfo.SCENES.INTRO));
-        scenes.Add("SceneLoading", new LoadingScene(SceneInfo.SCENES.LOADING));
-        scenes.Add("SceneGame", new GameScene(SceneInfo.SCENES.GAME));
+        scenes = new Dictionary<string, SceneBase>();
+        scenes.Add("SceneIntro", new IntroScene(SceneBase.SCENES.INTRO));
+        scenes.Add("SceneLoading", new LoadingScene(SceneBase.SCENES.LOADING));
+        scenes.Add("SceneGame", new GameScene(SceneBase.SCENES.GAME));
 
         SceneManager.sceneUnloaded += OnUnLoadScene;
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -63,7 +61,7 @@ public class AppManager : MonoSingleton<AppManager>
 
     public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if(scenes.TryGetValue(scene.name, out SceneInfo info) == true)
+        if(scenes.TryGetValue(scene.name, out SceneBase info) == true)
         {
             bool ret = info.Init();
             if (ret == true)
@@ -81,7 +79,7 @@ public class AppManager : MonoSingleton<AppManager>
         }
     }
 
-    public void ChangeScene(SceneInfo.SCENES scene)
+    public void ChangeScene(SceneBase.SCENES scene)
     {
         var info = scenes.Where(e => e.Value.scene == scene).First();
         var name = info.Key;

@@ -6,7 +6,7 @@ public class AppDelegate : MonoBehaviour
     static void main()
     {
         Debug.Log("App Started. by AppDelegate.cs");
-        AppManager.Instance.ChangeScene(SceneInfo.SCENES.INTRO);
+        AppManager.Instance.ChangeScene(SceneBase.SCENES.INTRO);
     }
 
     void OnApplicationPause(bool paused)

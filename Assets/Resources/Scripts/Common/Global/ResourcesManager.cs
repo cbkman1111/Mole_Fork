@@ -3,8 +3,6 @@ using UnityEngine;
 
 public class ResourcesManager : MonoSingleton<ResourcesManager>
 {
-    public override string TAG { get => "ResourcesManager"; }
-
     public override bool Init()
     {
         gameObject.name = string.Format("singleton - {0}", TAG);

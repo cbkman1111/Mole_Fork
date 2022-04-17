@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-public class LoadingScene : SceneInfo
+public class LoadingScene : SceneBase
 {
     public LoadingScene(SCENES scene) : base(scene)
     {
