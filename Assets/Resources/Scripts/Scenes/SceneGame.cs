@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class GameScene : SceneBase
+public class SceneGame : SceneBase
 {
-    public GameScene(SCENES scene) : base(scene)
+    public SceneGame(SCENES scene) : base(scene)
     {
 
     }
@@ -14,7 +12,7 @@ public class GameScene : SceneBase
         CameraManager.Instance.MainCamera.backgroundColor = Color.red;
         CameraManager.Instance.MainCamera.transform.position = new Vector3(0f, 0f, -1f);
 
-        
+        UIManager.Instance.OpenPopup<PopupSample>("PopupSample");
         return true;
     }
 }

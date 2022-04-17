@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,7 +7,7 @@ public abstract class UIObject : MonoBehaviour
     protected Dictionary<string, Button> buttons = null;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         Init();
     }

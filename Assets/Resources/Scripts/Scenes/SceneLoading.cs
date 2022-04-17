@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class LoadingScene : SceneBase
+public class SceneLoading : SceneBase
 {
-    public LoadingScene(SCENES scene) : base(scene)
+    public SceneLoading(SCENES scene) : base(scene)
     {
 
     }

@@ -6,6 +6,8 @@ public class AppDelegate : MonoBehaviour
     static void main()
     {
         Debug.Log("App Started. by AppDelegate.cs");
+        UIManager.Instance.RemoveAll();
+
         AppManager.Instance.ChangeScene(SceneBase.SCENES.INTRO);
     }
 

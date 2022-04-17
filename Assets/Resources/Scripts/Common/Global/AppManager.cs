@@ -15,12 +15,13 @@ public class AppManager : MonoSingleton<AppManager>
         SceneName = "";
 
         scenes = new Dictionary<string, SceneBase>();
-        scenes.Add("SceneIntro", new IntroScene(SceneBase.SCENES.INTRO));
-        scenes.Add("SceneLoading", new LoadingScene(SceneBase.SCENES.LOADING));
-        scenes.Add("SceneGame", new GameScene(SceneBase.SCENES.GAME));
+        scenes.Add("SceneIntro", new SceneIntro(SceneBase.SCENES.INTRO));
+        scenes.Add("SceneLoading", new SceneLoading(SceneBase.SCENES.LOADING));
+        scenes.Add("SceneGame", new SceneGame(SceneBase.SCENES.GAME));
 
-        SceneManager.sceneUnloaded += OnUnLoadScene;
+        //SceneManager.sceneUnloaded += OnUnLoadScene;
         SceneManager.sceneLoaded += OnSceneLoaded;
+        
         gameObject.name = string.Format("singleton - {0}", TAG);
         return true;
     }
@@ -61,7 +62,11 @@ public class AppManager : MonoSingleton<AppManager>
 
     public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if(scenes.TryGetValue(scene.name, out SceneBase info) == true)
+        // UI를 초기화 합니다.
+        UIManager.Instance.RemoveAll();
+
+        // 로드된 씬을 초기화 하빈다.
+        if (scenes.TryGetValue(scene.name, out SceneBase info) == true)
         {
             bool ret = info.Init();
             if (ret == true)
@@ -92,7 +97,6 @@ public class AppManager : MonoSingleton<AppManager>
 
         SceneName = name;
         Debug.Log($"{TAG} ChangeScene. {name}, {info.Value}");
-
         StartCoroutine("LoadScene", name);
     }
 

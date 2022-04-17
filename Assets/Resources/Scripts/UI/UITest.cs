@@ -3,9 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UITest : UIObject
+public class UITest : UIBase
 {
     Queue<Block> blocks = new Queue<Block>();
+
+    public bool Init()
+    {
+        return true;
+    }
 
     public override void OnClick(Button btn)
     {
@@ -15,14 +20,6 @@ public class UITest : UIObject
         if(CompareTo(name, "Button - Get") == 0)
         {
             AppManager.Instance.ChangeScene(SceneBase.SCENES.LOADING);
-            /*
-            Block block = GameManager.Instance.GetPool().GetBlock();
-            if(block != null)
-            {
-                block.transform.SetParent(null);
-                blocks.Enqueue(block);
-            }
-            */
         }
         else if (CompareTo(name, "Button - Release") == 0)
         {
@@ -38,7 +35,5 @@ public class UITest : UIObject
             }
             */
         }
-
-        //Debug.Log(btn);
     }
 }
