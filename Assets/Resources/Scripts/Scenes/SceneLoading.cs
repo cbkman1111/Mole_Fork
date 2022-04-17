@@ -8,6 +8,21 @@ public class SceneLoading : SceneBase
 
     public override bool Init()
     {
+        AppManager.Instance.ChangeScene(SCENES.GAME);
         return true;
+    }
+    public override void OnTouchBean(Vector3 position)
+    {
+
+    }
+
+    public override void OnTouchEnd(Vector3 position)
+    {
+
+    }
+
+    public override void OnTouchMove(Vector3 position)
+    {
+
     }
 }

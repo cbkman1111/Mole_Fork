@@ -12,4 +12,19 @@ public class SceneGame : SceneBase
         UIManager.Instance.OpenPopup<PopupSample>("PopupSample");
         return true;
     }
+
+    public override void OnTouchBean(Vector3 position)
+    {
+        
+    }
+
+    public override void OnTouchEnd(Vector3 position)
+    {
+        
+    }
+
+    public override void OnTouchMove(Vector3 position)
+    {
+        
+    }
 }

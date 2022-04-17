@@ -7,8 +7,18 @@ using UnityEngine.SceneManagement;
 
 public class AppManager : MonoSingleton<AppManager>
 {
+    enum TOUCH_STATE
+    {
+        NONE,
+
+        BEGIN,
+        MOVE,
+        END,
+    }
+
     private Dictionary<string, SceneBase> scenes = null;
     public string SceneName { get; set; }
+    public SceneBase currScene = null;
 
     public override bool Init()
     {
@@ -62,27 +72,28 @@ public class AppManager : MonoSingleton<AppManager>
         }
     }
 
-    public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    public void OnSceneLoaded(Scene sceneLoaded, LoadSceneMode mode)
     {
         // UI를 초기화 합니다.
         UIManager.Instance.RemoveAll();
 
         // 로드된 씬을 초기화 하빈다.
-        if (scenes.TryGetValue(scene.name, out SceneBase info) == true)
+        if (scenes.TryGetValue(sceneLoaded.name, out SceneBase scene) == true)
         {
-            bool ret = info.Init();
+            bool ret = scene.Init();
             if (ret == true)
             {
-                Debug.Log($"OnSceneLoaded. {scene.name}");
+                currScene = scene;
+                Debug.Log($"OnSceneLoaded. {sceneLoaded.name}");
             }
             else
             { 
-                Debug.LogError($"{TAG} init is failed. {scene.name}");
+                Debug.LogError($"{TAG} init is failed. {sceneLoaded.name}");
             }
         }
         else
         {
-            Debug.LogError($"{TAG} not exist. {scene.name}");
+            Debug.LogError($"{TAG} not exist. {sceneLoaded.name}");
         }
     }
 
@@ -102,6 +113,16 @@ public class AppManager : MonoSingleton<AppManager>
         StartCoroutine("LoadScene", name);
     }
 
+    public SceneBase GetCurrentScene()
+    {
+        if (scenes.TryGetValue(SceneName, out SceneBase scene) == true)
+        {
+            return scene;
+        }
+
+        return null;
+    }
+
     public void OnAppPause(bool paused)
     {
         Debug.Log($"{TAG} OnAppPause. {paused}");
@@ -117,6 +138,82 @@ public class AppManager : MonoSingleton<AppManager>
         Debug.Log($"{TAG} OnAppQuit.");
     }
 
+    void Update()
+    {
+        var touches = Input.touches;
+        TOUCH_STATE state = TOUCH_STATE.NONE;
+
+        if (touches.Count() == 1)
+        {
+            switch (touches[0].phase)
+            {
+                case TouchPhase.Began:
+                    state = TOUCH_STATE.BEGIN;
+                    break;
+
+                case TouchPhase.Moved:
+                    state = TOUCH_STATE.MOVE;
+                    break;
+
+                case TouchPhase.Stationary:
+                    break;
+
+                case TouchPhase.Ended:
+                case TouchPhase.Canceled:
+                    state = TOUCH_STATE.END;
+                    break;
+            }
+
+            Debug.Log($"TOUCH - {touches[0].fingerId}");
+        }
+        else if (touches.Count() == 2)
+        {
+            Debug.Log($"TOUCH 0 - {touches[0].fingerId}");
+            Debug.Log($"TOUCH 1 - {touches[1].fingerId}");
+        }
+        else if(Input.GetMouseButton(0))
+        {
+            state = TOUCH_STATE.BEGIN;
+            Debug.Log($"TOUCH - {Input.mousePosition}");
+        }
+
+        switch(state)
+        {
+            case TOUCH_STATE.BEGIN:
+                OnTouchBean(Vector3.zero);
+                break;
+            case TOUCH_STATE.MOVE:
+                OnTouchMove(Vector3.zero);
+                break;
+            case TOUCH_STATE.END:
+                OnTouchEnd(Vector3.zero);
+                break;
+        }
+    }
+
+    void OnTouchBean(Vector3 position)
+    {
+        if (currScene != null)
+        {
+            currScene.OnTouchBean(position);
+        }
+    }
+
+    void OnTouchMove(Vector3 position)
+    {
+        if (currScene != null)
+        {
+            currScene.OnTouchMove(position);
+        }
+    }
+
+    void OnTouchEnd(Vector3 position)
+    {
+        if (currScene != null)
+        {
+            currScene.OnTouchEnd(position);
+        }
+    }
 }
 
 

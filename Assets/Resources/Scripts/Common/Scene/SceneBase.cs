@@ -19,4 +19,7 @@ public abstract class SceneBase
     }
 
     public abstract bool Init();
+    public abstract void OnTouchBean(Vector3 position);
+    public abstract void OnTouchMove(Vector3 position);
+    public abstract void OnTouchEnd(Vector3 position);
 }

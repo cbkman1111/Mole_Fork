@@ -4,7 +4,9 @@ public class PopupSample : PopupBase
 {
     public override void OnClick(Button button)
     {
-        if(button.name.CompareTo("Button - Ok") == 0)
+        string name = button.name;
+
+        if(CompareTo(name, "Button - Ok") == 0)
         {
             Close();
         }

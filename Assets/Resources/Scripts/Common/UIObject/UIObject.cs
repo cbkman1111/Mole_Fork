@@ -6,7 +6,6 @@ public abstract class UIObject : MonoBehaviour
 {
     protected Dictionary<string, Button> buttons = null;
 
-    // Start is called before the first frame update
     void Awake()
     {
         Init();
@@ -26,11 +25,10 @@ public abstract class UIObject : MonoBehaviour
             Button button = child.GetComponent<Button>();
             if (button != null)
             {
-                button.onClick.AddListener(delegate {
+                buttons.Add(button.name, button);
+                button.onClick.AddListener(() => {
                     Click(button);  
                 });
-
-                buttons.Add(button.name, button);
             }
         }
     }
