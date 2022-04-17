@@ -11,12 +11,10 @@ public abstract class SceneBase
         GAME,
     }
 
-    //public string name;
     public SCENES scene;
     
     public SceneBase(SCENES scene)
     {
-        //this.name = name;
         this.scene = scene;
     }
 

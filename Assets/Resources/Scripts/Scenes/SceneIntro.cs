@@ -9,9 +9,8 @@ public class SceneIntro : SceneBase
 
     public override bool Init()
     {
-        var ui = UIManager.Instance.OpenUI<UITest>("UITest");
         
-        CameraManager.Instance.MainCamera.backgroundColor = Color.green;
+        var ui = UIManager.Instance.OpenUI<UITest>("UITest");
         return true;
     }
 }

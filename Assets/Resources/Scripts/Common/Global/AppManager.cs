@@ -12,6 +12,8 @@ public class AppManager : MonoSingleton<AppManager>
 
     public override bool Init()
     {
+        var mainCamera = CameraManager.Instance.MainCamera; // ÂüÁ¶¸¸.
+
         SceneName = "";
 
         scenes = new Dictionary<string, SceneBase>();
