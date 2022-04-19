@@ -17,6 +17,9 @@ public class AppManager : MonoSingleton<AppManager>
     }
 
     private Dictionary<string, SceneBase> scenes = null;
+    private Vector3 begin = Vector3.zero;
+    private Vector3 curr = Vector3.zero;
+
     public string SceneName { get; set; }
     public SceneBase currScene = null;
 
@@ -31,7 +34,6 @@ public class AppManager : MonoSingleton<AppManager>
         scenes.Add("SceneLoading", new SceneLoading(SceneBase.SCENES.LOADING));
         scenes.Add("SceneGame", new SceneGame(SceneBase.SCENES.GAME));
 
-        //SceneManager.sceneUnloaded += OnUnLoadScene;
         SceneManager.sceneLoaded += OnSceneLoaded;
         
         gameObject.name = string.Format("singleton - {0}", TAG);
@@ -141,53 +143,73 @@ public class AppManager : MonoSingleton<AppManager>
     void Update()
     {
         var touches = Input.touches;
-        TOUCH_STATE state = TOUCH_STATE.NONE;
+        int phase = -1;
 
         if (touches.Count() == 1)
         {
-            switch (touches[0].phase)
+            phase = (int)touches[0].phase;
+            switch ((TouchPhase)phase)
             {
                 case TouchPhase.Began:
-                    state = TOUCH_STATE.BEGIN;
+                    begin = touches[0].position;
+                    curr = touches[0].position;
                     break;
 
                 case TouchPhase.Moved:
-                    state = TOUCH_STATE.MOVE;
+                    begin = touches[0].position;
+                    curr = touches[0].position;
                     break;
 
                 case TouchPhase.Stationary:
                     break;
 
                 case TouchPhase.Ended:
+                    begin = touches[0].position;
+                    curr = touches[0].position;
+                    break;
+
                 case TouchPhase.Canceled:
-                    state = TOUCH_STATE.END;
+                    begin = Vector3.zero;
+                    curr = Vector3.zero;
                     break;
             }
-
-            Debug.Log($"TOUCH - {touches[0].fingerId}");
         }
         else if (touches.Count() == 2)
         {
             Debug.Log($"TOUCH 0 - {touches[0].fingerId}");
             Debug.Log($"TOUCH 1 - {touches[1].fingerId}");
         }
-        else if(Input.GetMouseButton(0))
+        else if(Input.GetMouseButtonDown(0))
         {
-            state = TOUCH_STATE.BEGIN;
-            Debug.Log($"TOUCH - {Input.mousePosition}");
+            phase = (int)TouchPhase.Began;
+            begin = Input.mousePosition;
+            curr = Input.mousePosition;
+        }
+        else if (Input.GetMouseButton(0))
+        {
+            phase = (int)TouchPhase.Moved;
+            curr = Input.mousePosition;
+        }
+        else if (Input.GetMouseButtonUp(0))
+        {
+            phase = (int)TouchPhase.Ended;
+            curr = Input.mousePosition;
         }
 
-        switch(state)
+        if(phase > 0)
         {
-            case TOUCH_STATE.BEGIN:
-                OnTouchBean(Vector3.zero);
-                break;
-            case TOUCH_STATE.MOVE:
-                OnTouchMove(Vector3.zero);
-                break;
-            case TOUCH_STATE.END:
-                OnTouchEnd(Vector3.zero);
-                break;
+            switch ((TouchPhase)phase)
+            {
+                case TouchPhase.Began:
+                    OnTouchBean(curr);
+                    break;
+                case TouchPhase.Moved:
+                    OnTouchMove(curr);
+                    break;
+                case TouchPhase.Ended:
+                    OnTouchEnd(curr);
+                    break;
+            }
         }
     }
 
