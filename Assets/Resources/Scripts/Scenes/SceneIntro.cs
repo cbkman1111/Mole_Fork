@@ -8,7 +8,7 @@ public class SceneIntro : SceneBase
 
     public override bool Init()
     {
-        var ui = UIManager.Instance.OpenUI<UITest>("UITest");
+        var ui = UIManager.Instance.OpenMenu<UITest>("UITest");
         return true;
     }
 

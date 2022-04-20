@@ -2,6 +2,11 @@
 
 public class PopupSample : PopupBase
 {
+    public override void Close()
+    {
+        UIManager.Instance.ClosePopup(name);
+    }
+
     public override void OnClick(Button button)
     {
         string name = button.name;
