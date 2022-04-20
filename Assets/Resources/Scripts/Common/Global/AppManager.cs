@@ -7,27 +7,15 @@ using UnityEngine.SceneManagement;
 
 public class AppManager : MonoSingleton<AppManager>
 {
-    enum TOUCH_STATE
-    {
-        NONE,
-
-        BEGIN,
-        MOVE,
-        END,
-    }
-
     private Dictionary<string, SceneBase> scenes = null;
     private Vector3 begin = Vector3.zero;
     private Vector3 curr = Vector3.zero;
 
-    public string SceneName { get; set; }
     public SceneBase currScene = null;
 
     public override bool Init()
     {
         var mainCamera = CameraManager.Instance.MainCamera; // 참조만.
-
-        SceneName = "";
 
         scenes = new Dictionary<string, SceneBase>();
         scenes.Add("SceneIntro", new SceneIntro(SceneBase.SCENES.INTRO));
@@ -40,38 +28,31 @@ public class AppManager : MonoSingleton<AppManager>
         return true;
     }
 
-    private void OnUnLoadScene(Scene scene)
-    {
-        Debug.Log($"{TAG} UnLoadScene {scene.name}");
-    }
-
     private IEnumerator LoadScene(string name)
     {
         AsyncOperation async = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(name, LoadSceneMode.Single);
         async.allowSceneActivation = false;
 
+        float percent = 0;
         while (async.isDone == false)
         {
-            yield return null;
-
-            if (async.progress < 0.9f)
+            percent = async.progress * 100f;
+            if (async.progress >= 0.9f)
+            {
+                async.allowSceneActivation = true;
+            }
+            else
             {
                 if (async.progress == 1)
                 {
                     async.allowSceneActivation = true;
-                    break;
-                }
-                else
-                {
-                    yield return null;
                 }
             }
-            else
-            {
-                async.allowSceneActivation = true;
-                yield break;
-            }
+
+            yield return null;
         }
+
+        Debug.Log($"{TAG} Scene Load Complete");
     }
 
     public void OnSceneLoaded(Scene sceneLoaded, LoadSceneMode mode)
@@ -79,7 +60,7 @@ public class AppManager : MonoSingleton<AppManager>
         // UI를 초기화 합니다.
         UIManager.Instance.RemoveAll();
 
-        // 로드된 씬을 초기화 하빈다.
+        // 로드된 씬을 초기화 합니다.
         if (scenes.TryGetValue(sceneLoaded.name, out SceneBase scene) == true)
         {
             bool ret = scene.Init();
@@ -104,25 +85,20 @@ public class AppManager : MonoSingleton<AppManager>
         var info = scenes.Where(e => e.Value.scene == scene).First();
         var name = info.Key;
 
-        if (SceneName.CompareTo(name) == 0)
+        if(currScene == info.Value)
         {
-            Debug.LogWarning($"{TAG} Same Scene. {name}, {info.Value}");
+            Debug.LogWarning($"{TAG} Same Scene.");
             return;
         }
 
-        SceneName = name;
+        currScene = info.Value;
         Debug.Log($"{TAG} ChangeScene. {name}, {info.Value}");
         StartCoroutine("LoadScene", name);
     }
 
     public SceneBase GetCurrentScene()
     {
-        if (scenes.TryGetValue(SceneName, out SceneBase scene) == true)
-        {
-            return scene;
-        }
-
-        return null;
+        return currScene;
     }
 
     public void OnAppPause(bool paused)
@@ -176,8 +152,8 @@ public class AppManager : MonoSingleton<AppManager>
         }
         else if (touches.Count() == 2)
         {
-            Debug.Log($"TOUCH 0 - {touches[0].fingerId}");
-            Debug.Log($"TOUCH 1 - {touches[1].fingerId}");
+            Debug.Log($"{TAG} TOUCH 0 - {touches[0].fingerId}");
+            Debug.Log($"{TAG} TOUCH 1 - {touches[1].fingerId}");
         }
         else if(Input.GetMouseButtonDown(0))
         {
