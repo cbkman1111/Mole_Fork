@@ -12,6 +12,10 @@ public class UITest : UIBase
         return true;
     }
 
+    public override void Close()
+    {
+    }
+
     public override void OnClick(Button btn)
     {
         //throw new System.NotImplementedException();

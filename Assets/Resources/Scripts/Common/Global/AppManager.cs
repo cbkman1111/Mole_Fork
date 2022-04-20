@@ -23,7 +23,7 @@ public class AppManager : MonoSingleton<AppManager>
         scenes.Add("SceneGame", new SceneGame(SceneBase.SCENES.GAME));
 
         SceneManager.sceneLoaded += OnSceneLoaded;
-        
+
         gameObject.name = string.Format("singleton - {0}", TAG);
         return true;
     }
@@ -58,7 +58,7 @@ public class AppManager : MonoSingleton<AppManager>
     public void OnSceneLoaded(Scene sceneLoaded, LoadSceneMode mode)
     {
         // UI를 초기화 합니다.
-        UIManager.Instance.RemoveAll();
+        UIManager.Instance.Clear();
 
         // 로드된 씬을 초기화 합니다.
         if (scenes.TryGetValue(sceneLoaded.name, out SceneBase scene) == true)
@@ -70,7 +70,7 @@ public class AppManager : MonoSingleton<AppManager>
                 Debug.Log($"OnSceneLoaded. {sceneLoaded.name}");
             }
             else
-            { 
+            {
                 Debug.LogError($"{TAG} init is failed. {sceneLoaded.name}");
             }
         }
@@ -85,7 +85,7 @@ public class AppManager : MonoSingleton<AppManager>
         var info = scenes.Where(e => e.Value.scene == scene).First();
         var name = info.Key;
 
-        if(currScene == info.Value)
+        if (currScene == info.Value)
         {
             Debug.LogWarning($"{TAG} Same Scene.");
             return;
@@ -111,7 +111,7 @@ public class AppManager : MonoSingleton<AppManager>
         Debug.Log($"{TAG} OnAppFocus. {focus}");
     }
 
-    public  void OnAppQuit()
+    public void OnAppQuit()
     {
         Debug.Log($"{TAG} OnAppQuit.");
     }
@@ -155,7 +155,7 @@ public class AppManager : MonoSingleton<AppManager>
             Debug.Log($"{TAG} TOUCH 0 - {touches[0].fingerId}");
             Debug.Log($"{TAG} TOUCH 1 - {touches[1].fingerId}");
         }
-        else if(Input.GetMouseButtonDown(0))
+        else if (Input.GetMouseButtonDown(0))
         {
             phase = (int)TouchPhase.Began;
             begin = Input.mousePosition;
@@ -171,8 +171,12 @@ public class AppManager : MonoSingleton<AppManager>
             phase = (int)TouchPhase.Ended;
             curr = Input.mousePosition;
         }
+        else if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            BackKeyDown();
+        }
 
-        if(phase > 0)
+        if (phase > 0)
         {
             switch ((TouchPhase)phase)
             {
@@ -211,6 +215,11 @@ public class AppManager : MonoSingleton<AppManager>
         {
             currScene.OnTouchEnd(position);
         }
+    }
+
+    void BackKeyDown()
+    {
+        UIManager.Instance.BackKey();
     }
 }
 

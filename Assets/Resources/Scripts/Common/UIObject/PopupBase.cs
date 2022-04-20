@@ -20,21 +20,20 @@ public class PopupBase : UIObject
                 "oncomplete", "OnShowComplete" ));                           
     }
 
-    public virtual void Close()
+    public override void Close()
     {
-        iTween.MoveTo( gameObject, 
+        iTween.MoveTo(gameObject,
             iTween.Hash(
-                "y", Screen.height * 5,                                   
+                "y", Screen.height * 5,
                 "time", 0.4f,
-                "easeType", "easeInOutExpo",                                    
-                "oncompletetarget", gameObject, 
-                "oncomplete", "OnCloseComplete" ));
+                "easeType", "easeInOutExpo",
+                "oncompletetarget", gameObject,
+                "oncomplete", "OnCloseComplete"));
     }
 
     private void OnCloseComplete()
     {
         UIManager.Instance.ClosePopup(name);
-
     }
 
     public override void OnClick(Button button){}

@@ -1,4 +1,4 @@
-using Singleton;
+﻿using Singleton;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,10 +6,10 @@ using UnityEngine;
 public class UIManager : MonoSingleton<UIManager>
 {
     private CanvasGroup canvasMain;
-    private CanvasGroup canvasUI;
-    private CanvasGroup canvasHud;
-    private CanvasGroup canvasPopup;
-    private CanvasGroup canvasEtc;
+    private CanvasController controllerMenu = null;
+    private CanvasController controllerHud = null;
+    private CanvasController controllerPopup = null;
+    private CanvasController controllerEtc = null;
 
     private GameObject root = null;
 
@@ -26,62 +26,99 @@ public class UIManager : MonoSingleton<UIManager>
 
         root.name = "UIRoot";
         root.transform.position = new Vector3(100,0,0);
-        gameObject.name = string.Format("singleton - {0}", TAG);
 
         canvasMain = root.GetComponent<CanvasGroup>();
-        canvasUI = root.transform.Find("Canvas - ui").gameObject.GetComponent<CanvasGroup>();
-        canvasHud = root.transform.Find("Canvas - hud").gameObject.GetComponent<CanvasGroup>();
-        canvasPopup = root.transform.Find("Canvas - popup").gameObject.GetComponent<CanvasGroup>();
-        canvasEtc = root.transform.Find("Canvas - etc").gameObject.GetComponent<CanvasGroup>();
+
+        controllerMenu = new CanvasController();
+        controllerMenu.Init(root.transform.Find("Canvas - ui"));
+        controllerHud = new CanvasController();
+        controllerHud.Init(root.transform.Find("Canvas - hud"));
+        controllerPopup = new CanvasController();
+        controllerPopup.Init(root.transform.Find("Canvas - popup"));
+        controllerEtc = new CanvasController();
+        controllerEtc.Init(root.transform.Find("Canvas - etc"));
+
+        gameObject.name = string.Format("singleton - {0}", TAG);
         return true;
     }
 
-    /// <summary>
-    /// Canvas - ui
-    /// </summary>
-    /// <param name="name">Prefabs/UI/���ҽ���</param>
-    /// <returns>ui GameObject</returns>
-    public T OpenUI<T>(string name)
+    public T OpenMenu<T>(string name)
     {
-        string path = string.Format("Prefabs/UI/{0}", name);
-        GameObject prefab = ResourcesManager.Instance.Load(path);
-        if(prefab == null)
-        {
-            Debug.Log($"{path} prefab is null.");
-            return default(T);
-        }
-
-        GameObject ui = Instantiate(prefab, canvasUI.transform);
-        if(ui == null)
-        {
-            Debug.Log($"ui is null.");
-            return default(T);
-        }
-
-        UIBase obj = ui.GetComponent<UIBase>();
-        obj.name = name;
-        return obj.GetComponent<T>();
+        return controllerMenu.Open<T>(name);
     }
 
-    public void CloseUI(string name)
+    public T OpenPopup<T>(string name)
     {
-        var trans = canvasUI.transform.Find(name);
-        if(trans != null)
-        {
-            GameObject.Destroy(trans.gameObject);
-        }
+        return controllerPopup.Open<T>(name);
+    }
+
+    public T OpenHud<T>(string name)
+    {
+        return controllerHud.Open<T>(name);
+    }
+
+    public T OpenEtc<T>(string name)
+    {
+        return controllerEtc.Open<T>(name);
+    }
+
+    public void CloseMenu(string name)
+    {
+        controllerMenu.Close(name);
     }
 
     public void ClosePopup(string name)
     {
-        var trans = canvasPopup.transform.Find(name);
-        if (trans != null)
-        {
-            GameObject.Destroy(trans.gameObject);
-        }
+        controllerPopup.Close(name);
     }
 
-    public T OpenPopup<T>(string name)
+    public void CloseHud(string name)
+    {
+        controllerHud.Close(name);
+    }
+
+    public void CloseEtc(string name)
+    {
+        controllerEtc.Close(name);
+    }
+
+    public void Clear()
+    {
+        controllerMenu.Clear();
+        controllerHud.Clear();
+        controllerPopup.Clear();
+        controllerEtc.Clear();
+    }
+
+    public void BackKey()
+    {
+        if(controllerEtc.Last() != null)
+        {
+            controllerEtc.Close(controllerEtc.Last());
+        }
+        else if (controllerPopup.Last() != null)
+        {
+            controllerPopup.Close(controllerPopup.Last());
+        }
+        else
+        {
+            // 더이상 닫을 팝업이 없음.
+        }
+    }
+}
+
+public class CanvasController
+{
+    Canvas canvas = null;
+    CanvasGroup group = null;
+
+    public void Init(Transform trans)
+    {
+        canvas = trans.GetComponent<Canvas>();
+        group = trans.GetComponent<CanvasGroup>();
+    }
+
+    public T Open<T>(string name)
     {
         string path = string.Format("Prefabs/UI/{0}", name);
         GameObject prefab = ResourcesManager.Instance.Load(path);
@@ -91,33 +128,61 @@ public class UIManager : MonoSingleton<UIManager>
             return default(T);
         }
 
-        GameObject ui = Instantiate(prefab, canvasPopup.transform);
-        if (ui == null)
+        GameObject clone = GameObject.Instantiate(prefab, canvas.transform);
+        if (clone == null)
         {
             Debug.Log($"ui is null.");
             return default(T);
         }
 
-        PopupBase obj = ui.GetComponent<PopupBase>();
-        obj.name = name;
-        return obj.GetComponent<T>();
+        clone.name = name;
+
+        UIObject obj = clone.GetComponent<UIObject>();
+        obj.OnOpen();
+
+        return clone.GetComponent<T>();
     }
 
-    public void RemoveAll()
+    public void Close(string name)
     {
-        foreach (var ui in canvasUI.GetComponentsInChildren<UIBase>())
+        var trans = canvas.transform.Find(name);
+        if (trans != null)
         {
-            GameObject.Destroy(ui.gameObject);
+            UIObject obj = trans.GetComponent<UIObject>();
+            obj.OnClose();
+
+            GameObject.Destroy(trans.gameObject);
         }
     }
 
-    public GameObject GetLastPopup()
+    public void Close(Transform transform)
     {
-        return null;
+        Close(transform.name);
     }
 
-    public GameObject GetPopup(string name)
+    public Transform Get(string name)
     {
-        return canvasPopup.transform.Find(name).gameObject;
+        return canvas.transform.Find(name);
+    }
+
+    public Transform Last()
+    {
+        int index = canvas.transform.childCount - 1;
+        Transform trans = null;
+        if(index >= 0)
+        {
+            trans = canvas.transform.GetChild(index);
+        }
+        
+        return trans;
+    }
+
+    public void Clear()
+    {
+        for (int i = canvas.transform.childCount; i >= 0; i--)
+        {
+            Transform trans = canvas.transform.GetChild(i);
+            GameObject.Destroy(trans.gameObject);
+        }
     }
 }
