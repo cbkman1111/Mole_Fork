@@ -27,7 +27,12 @@ public class SceneGame : SceneBase
 
     public override void OnTouchEnd(Vector3 position)
     {
-        
+        Ray ray = MainCamera.ScreenPointToRay(position);
+        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
+        {
+            Debug.DrawRay(ray.origin, ray.direction * 20, Color.red, 5f);
+            Debug.Log(hit.point);
+        }
     }
 
     public override void OnTouchMove(Vector3 position)
