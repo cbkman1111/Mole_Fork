@@ -7,8 +7,10 @@ public class SceneGame : SceneBase
 
     }
 
-    public override bool Init()
+    public override bool Init(Camera camera)
     {
+        mainCamera = camera;
+
         UIManager.Instance.OpenPopup<PopupSample>("PopupSample");
         return true;
     }

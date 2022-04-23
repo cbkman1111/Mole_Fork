@@ -15,8 +15,6 @@ public class AppManager : MonoSingleton<AppManager>
 
     public override bool Init()
     {
-        var mainCamera = CameraManager.Instance.MainCamera; // 참조만.
-
         scenes = new Dictionary<string, SceneBase>();
         scenes.Add("SceneIntro", new SceneIntro(SceneBase.SCENES.INTRO));
         scenes.Add("SceneLoading", new SceneLoading(SceneBase.SCENES.LOADING));
@@ -57,13 +55,12 @@ public class AppManager : MonoSingleton<AppManager>
 
     public void OnSceneLoaded(Scene sceneLoaded, LoadSceneMode mode)
     {
-        // UI를 초기화 합니다.
         UIManager.Instance.Clear();
 
         // 로드된 씬을 초기화 합니다.
         if (scenes.TryGetValue(sceneLoaded.name, out SceneBase scene) == true)
         {
-            bool ret = scene.Init();
+            bool ret = scene.Init(Camera.main);
             if (ret == true)
             {
                 currScene = scene;

@@ -6,8 +6,10 @@ public class SceneLoading : SceneBase
     {
     }
 
-    public override bool Init()
+    public override bool Init(Camera camera)
     {
+        mainCamera = camera;
+
         AppManager.Instance.ChangeScene(SCENES.GAME);
         return true;
     }

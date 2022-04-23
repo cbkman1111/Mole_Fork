@@ -6,8 +6,10 @@ public class SceneIntro : SceneBase
     {
     }
 
-    public override bool Init()
+    public override bool Init(Camera camera)
     {
+        mainCamera = camera;
+
         var ui = UIManager.Instance.OpenMenu<UITest>("UITest");
         return true;
     }

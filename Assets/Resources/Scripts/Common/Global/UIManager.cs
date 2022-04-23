@@ -179,9 +179,9 @@ public class CanvasController
 
     public void Clear()
     {
-        for (int i = canvas.transform.childCount; i >= 0; i--)
+        for (int i = 0; i < canvas.transform.childCount ;i++)
         {
-            Transform trans = canvas.transform.GetChild(i);
+            Transform trans = canvas.transform.GetChild(0);
             GameObject.Destroy(trans.gameObject);
         }
     }

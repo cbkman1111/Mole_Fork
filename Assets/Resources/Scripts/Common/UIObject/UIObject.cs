@@ -50,8 +50,11 @@ public abstract class UIObject : MonoBehaviour
             Text text = child.GetComponent<Text>();
             if (text != null)
             {
-                texts.Add(text.name, text);
-                text.text = "";
+                if(texts.ContainsKey(text.name) == false)
+                {
+                    texts.Add(text.name, text);
+                }
+
                 continue;
             }
         }

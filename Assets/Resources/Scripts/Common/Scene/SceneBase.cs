@@ -12,13 +12,14 @@ public abstract class SceneBase
     }
 
     public SCENES scene;
+    protected Camera mainCamera;
     
     public SceneBase(SCENES scene)
     {
         this.scene = scene;
     }
 
-    public abstract bool Init();
+    public abstract bool Init(Camera camera);
     public abstract void OnTouchBean(Vector3 position);
     public abstract void OnTouchMove(Vector3 position);
     public abstract void OnTouchEnd(Vector3 position);
