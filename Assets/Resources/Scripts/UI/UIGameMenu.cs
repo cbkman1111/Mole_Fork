@@ -5,14 +5,18 @@ using UnityEngine.UI;
 
 public class UIGameMenu : MenuBase
 {
-    public bool Init()
+    public override void OnInit()
+    {
+
+    }
+
+    public bool InitMenu()
     {
         Button btn = GetObject<Button>("Button - A");
-
         return true;
     }
 
-    public override void OnClick(Button btn)
+    protected override void OnClick(Button btn)
     {
         string name = btn.name;
         if(CompareTo(name, "Button - A") == 0)

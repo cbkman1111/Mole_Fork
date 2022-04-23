@@ -6,12 +6,7 @@ public abstract class UIObject : MonoBehaviour
 {
     protected Dictionary<string, GameObject> list = null;
 
-    void Awake()
-    {
-        Init();
-    }
-
-    private void Init()
+    public void Init()
     {
         list = new Dictionary<string, GameObject>();
 
@@ -105,7 +100,8 @@ public abstract class UIObject : MonoBehaviour
         OnClick(btn);
     }
 
-    public abstract void OnClick(Button btn);
+    public abstract void OnInit();
+    protected abstract void OnClick(Button btn);
     public abstract void Close();
 
 }

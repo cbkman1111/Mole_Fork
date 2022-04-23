@@ -7,7 +7,7 @@ public class UITest : MenuBase
 {
     Queue<Block> blocks = new Queue<Block>();
 
-    public bool Init()
+    public bool InitMenu()
     {
         return true;
     }
@@ -16,7 +16,7 @@ public class UITest : MenuBase
     {
     }
 
-    public override void OnClick(Button btn)
+    protected override void OnClick(Button btn)
     {
         //throw new System.NotImplementedException();
         string name = btn.name;

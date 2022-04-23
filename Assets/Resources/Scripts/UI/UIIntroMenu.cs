@@ -5,12 +5,17 @@ using UnityEngine.UI;
 
 public class UIIntroMenu : MenuBase
 {
-    public bool Init()
+    public override void OnInit()
+    {
+
+    }
+
+    public bool InitMenu()
     {
         return true;
     }
 
-    public override void OnClick(Button btn)
+    protected override void OnClick(Button btn)
     {
         string name = btn.name;
         if(CompareTo(name, "Button - Start") == 0)

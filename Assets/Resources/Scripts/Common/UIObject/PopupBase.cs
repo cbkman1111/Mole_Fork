@@ -3,12 +3,10 @@ using UnityEngine.UI;
 
 public class PopupBase : UIObject
 {
-    private void Start()
-    {
-        Show();    
-    }
+    public override void OnInit() { }
+    protected override void OnClick(Button button) { }
 
-    public virtual void Show()
+    public virtual void ShowAnimation()
     {
         transform.position = new Vector3(Screen.width * 0.5f, Screen.height * 2.0f);
         iTween.MoveTo( gameObject, 
@@ -35,7 +33,5 @@ public class PopupBase : UIObject
     {
         UIManager.Instance.ClosePopup(name);
     }
-
-    public override void OnClick(Button button){}
 }
 

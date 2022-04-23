@@ -8,7 +8,7 @@ public class PopupSample : PopupBase
         base.Close();
     }
 
-    public override void OnClick(Button button)
+    protected override void OnClick(Button button)
     {
         string name = button.name;
 

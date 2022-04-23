@@ -14,7 +14,7 @@ public class SceneGame : SceneBase
         UIGameMenu menu = UIManager.Instance.OpenMenu<UIGameMenu>("UIGameMenu");
         if(menu != null)
         {
-            menu.Init();
+            menu.InitMenu();
         }
 
         return true;

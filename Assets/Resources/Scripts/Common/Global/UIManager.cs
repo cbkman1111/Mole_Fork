@@ -40,24 +40,48 @@ public class UIManager : MonoSingleton<UIManager>
         return true;
     }
 
-    public T OpenMenu<T>(string name) where T : UIObject
+    public T OpenMenu<T>(string name) where T : MenuBase
     {
-        return controllerMenu.Open<T>(name);
+        T ret = controllerMenu.Open<T>(name);
+        if (ret != null)
+        {
+            ret.OnInit();
+        }
+        
+        return ret;
     }
 
-    public T OpenPopup<T>(string name) where T : UIObject
+    public T OpenPopup<T>(string name) where T : PopupBase
     {
-        return controllerPopup.Open<T>(name);
+        T ret = controllerPopup.Open<T>(name);
+        if (ret != null)
+        {
+            ret.OnInit();
+            ret.ShowAnimation();
+        }
+        return ret;
     }
 
     public T OpenHud<T>(string name) where T : UIObject
     {
-        return controllerHud.Open<T>(name);
+        T ret = controllerPopup.Open<T>(name);
+        if (ret != null)
+        {
+            ret.OnInit();
+        }
+
+        return ret;
     }
 
     public T OpenEtc<T>(string name) where T : UIObject
     {
-        return controllerEtc.Open<T>(name);
+        T ret = controllerPopup.Open<T>(name);
+        if (ret != null)
+        {
+            ret.OnInit();
+        }
+
+        return ret;
     }
 
     public void CloseMenu(string name)
@@ -147,7 +171,7 @@ public class CanvasController
             ret = trans.GetComponent<T>();
         }
 
-        ret.OnOpen();
+        ret.Init();
         return ret;
     }
 
