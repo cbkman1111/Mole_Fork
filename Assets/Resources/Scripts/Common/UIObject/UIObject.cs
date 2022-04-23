@@ -4,9 +4,7 @@ using UnityEngine.UI;
 
 public abstract class UIObject : MonoBehaviour
 {
-    protected Dictionary<string, Button> buttons = null;
-    protected Dictionary<string, Slider> sliders = null;
-    protected Dictionary<string, Text> texts = null;
+    protected Dictionary<string, GameObject> list = null;
 
     void Awake()
     {
@@ -15,9 +13,7 @@ public abstract class UIObject : MonoBehaviour
 
     private void Init()
     {
-        buttons = new Dictionary<string, Button>();
-        sliders = new Dictionary<string, Slider>();
-        texts = new Dictionary<string, Text>();
+        list = new Dictionary<string, GameObject>();
 
         Transform[] children = GetComponentsInChildren<Transform>(true);
         foreach(var child in children)
@@ -25,34 +21,39 @@ public abstract class UIObject : MonoBehaviour
             Button button = child.GetComponent<Button>();
             if (button != null)
             {
-                buttons.Add(button.name, button);
-                button.onClick.AddListener(() => {
-                    Click(button);  
-                });
+                if(list.ContainsKey(button.name) == false)
+                {
+                    button.onClick.AddListener(() => {
+                        Click(button);
+                    });
 
-                continue;
+                    list.Add(button.name, button.gameObject);
+                    continue;
+                }
             }
 
             Slider slider = child.GetComponent<Slider>();
             if(slider != null)
             {
-                sliders.Add(slider.name, slider);
-                slider.value = 0;
-                slider.onValueChanged.AddListener((float f) =>
+                if (list.ContainsKey(slider.name) == false)
                 {
-                    OnValueChanged(slider, f);
-                });
+                    slider.value = 0;
+                    slider.onValueChanged.AddListener((float f) =>
+                    {
+                        OnValueChanged(slider, f);
+                    });
 
-                
-                continue;
+                    list.Add(slider.name, slider.gameObject);
+                    continue;
+                }
             }
 
             Text text = child.GetComponent<Text>();
             if (text != null)
             {
-                if(texts.ContainsKey(text.name) == false)
+                if(list.ContainsKey(text.name) == false)
                 {
-                    texts.Add(text.name, text);
+                    list.Add(text.name, text.gameObject);
                 }
 
                 continue;
@@ -69,21 +70,33 @@ public abstract class UIObject : MonoBehaviour
         return a.CompareTo(b);
     }
 
-    protected Button GetButton(string name)
+    protected T GetObject<T>(string name)
     {
-        if(buttons.ContainsKey(name) == true)
+        if (list.TryGetValue(name, out GameObject obj) == true)
         {
-            return buttons[name];
+            return obj.GetComponent<T>();
         }
-
-        return null;
+         
+        return default(T);
     }
 
     protected void SetText(string name, string str)
     {
-        if(texts.TryGetValue(name, out Text text) == true)
+        if (list.TryGetValue(name, out GameObject obj) == true)
         {
-            text.text = str;
+            Text text = obj.GetComponent<Text>();
+            if(text != null)
+            {
+                text.text = str;
+            }
+        }
+    }
+
+    protected void SetActive(string name, bool active)
+    {
+        if (list.TryGetValue(name, out GameObject obj) == true)
+        {
+            obj.gameObject.SetActive(active);
         }
     }
 

@@ -7,6 +7,8 @@ public class UIGameMenu : MenuBase
 {
     public bool Init()
     {
+        Button btn = GetObject<Button>("Button - A");
+
         return true;
     }
 

@@ -6,10 +6,8 @@ public class SceneIntro : SceneBase
     {
     }
 
-    public override bool Init(Camera camera)
+    public override bool Init()
     {
-        mainCamera = camera;
-
         UIIntroMenu menu = UIManager.Instance.OpenMenu<UIIntroMenu>("UIIntroMenu");
 
         return true;

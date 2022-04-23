@@ -67,8 +67,11 @@ public class AppManager : MonoSingleton<AppManager>
             // remove all ui objects. 
             UIManager.Instance.Clear();
 
+            // set main camera.
+            scene.MainCamera = Camera.main;
+
             // start scene init.
-            if (scene.Init(Camera.main) == true)
+            if (scene.Init() == true)
             {
                 currScene = scene;
             }
@@ -94,9 +97,8 @@ public class AppManager : MonoSingleton<AppManager>
             return;
         }
 
-        //currScene = info.Value;
-        Debug.Log($"{TAG} ChangeScene. {name}, {info.Value}");
         StartCoroutine("LoadScene", name);
+        Debug.Log($"{TAG} ChangeScene. {name}, {info.Value}");
     }
 
     public SceneBase GetCurrentScene()

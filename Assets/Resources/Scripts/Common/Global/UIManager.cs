@@ -14,7 +14,7 @@ public class UIManager : MonoSingleton<UIManager>
     public override bool Init()
     {
         const string PATH_UI_ROOT = "Prefabs/UI/UIRoot";
-        GameObject obj = ResourcesManager.Instance.Load(PATH_UI_ROOT);
+        GameObject obj = ResourcesManager.Instance.Load<GameObject>(PATH_UI_ROOT);
         root = Instantiate(obj, transform);
         if(root == null)
         {
@@ -40,22 +40,22 @@ public class UIManager : MonoSingleton<UIManager>
         return true;
     }
 
-    public T OpenMenu<T>(string name)
+    public T OpenMenu<T>(string name) where T : UIObject
     {
         return controllerMenu.Open<T>(name);
     }
 
-    public T OpenPopup<T>(string name)
+    public T OpenPopup<T>(string name) where T : UIObject
     {
         return controllerPopup.Open<T>(name);
     }
 
-    public T OpenHud<T>(string name)
+    public T OpenHud<T>(string name) where T : UIObject
     {
         return controllerHud.Open<T>(name);
     }
 
-    public T OpenEtc<T>(string name)
+    public T OpenEtc<T>(string name) where T : UIObject
     {
         return controllerEtc.Open<T>(name);
     }
@@ -116,38 +116,39 @@ public class CanvasController
         group = trans.GetComponent<CanvasGroup>();
     }
 
-    public T Open<T>(string name)
+    public T Open<T>(string name) where T : UIObject
     {
-        UIObject obj = null;
         Transform trans = canvas.transform.Find(name);
+        T ret = default(T);
+        
         if(trans == null)
         {
             string path = string.Format("Prefabs/UI/{0}", name);
-            GameObject prefab = ResourcesManager.Instance.Load(path);
+            T prefab = ResourcesManager.Instance.Load<T>(path);
             if (prefab == null)
             {
                 Debug.Log($"{path} prefab is null.");
                 return default(T);
             }
 
-            GameObject clone = GameObject.Instantiate(prefab, canvas.transform);
+            T clone = GameObject.Instantiate<T>(prefab, canvas.transform);
             if (clone == null)
             {
-                Debug.Log($"ui is null.");
+                Debug.LogError($"clone is null.");
                 return default(T);
             }
 
+            clone.transform.SetAsLastSibling();
             clone.name = name;
-            obj = clone.GetComponent<UIObject>();
-            obj.OnOpen();
+            ret = clone;
         }
         else
         {
-            obj = trans.GetComponent<UIObject>();
-            obj.OnOpen();
+            ret = trans.GetComponent<T>();
         }
 
-        return obj.GetComponent<T>();
+        ret.OnOpen();
+        return ret;
     }
 
     public void Close(string name)

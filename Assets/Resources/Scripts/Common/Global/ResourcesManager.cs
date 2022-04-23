@@ -9,9 +9,13 @@ public class ResourcesManager : MonoSingleton<ResourcesManager>
         return true;
     }
 
-    public GameObject Load(string path) 
+    public T Load<T>(string path) where T : Object
     {
-        GameObject ret = Resources.Load(path) as GameObject;
-        return ret;
+        return Resources.Load<T>(path);
+    }
+    
+    public T[] LoadAll<T>(string path) where T : Object
+    {
+        return Resources.LoadAll<T>(path);
     }
 }

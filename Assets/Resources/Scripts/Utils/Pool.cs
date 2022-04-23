@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Pool<T>
+public class Pool<T> where T : Object
 {
-    private GameObject prefab = null;
+    private T prefab = null;
     private int max = 0;
     private Queue<T> queue;
     private Transform parent;
@@ -15,7 +15,7 @@ public class Pool<T>
     /// <param name="prefab">프리팹 리소스</param>
     /// <param name="count">최대 수량</param>
     /// <returns></returns>
-    public static Pool<T> Create(GameObject prefab, Transform parent, int max)
+    public static Pool<T> Create(T prefab, Transform parent, int max)
     {
         var pool = new Pool<T>();
         if(pool != null && pool.Init(prefab, parent, max))
@@ -26,7 +26,7 @@ public class Pool<T>
         return null;
     }
 
-    public bool Init(GameObject prefab, Transform parent, int max)
+    public bool Init(T prefab, Transform parent, int max) 
     {
         this.prefab = prefab;
         this.max = max;
@@ -35,8 +35,7 @@ public class Pool<T>
 
         for(int i = 0; i < max; i++)
         {
-            var clone = GameObject.Instantiate(prefab, parent);
-            var obj = clone.GetComponent<T>();
+            var obj = GameObject.Instantiate(prefab, parent);
             if (obj != null)
             {
                 queue.Enqueue(obj);

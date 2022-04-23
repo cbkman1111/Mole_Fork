@@ -1,8 +1,7 @@
 ﻿using Singleton;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.Audio;
 
 public class SoundManager : MonoSingleton<SoundManager>
 { 
@@ -10,11 +9,15 @@ public class SoundManager : MonoSingleton<SoundManager>
     Hashtable soundTable = new Hashtable();
     private Pool<AudioSource> musics = null;
     private Pool<AudioSource> effect = null;
-     
+    private AudioMixer mixer = null;
+
     public override bool Init()
     {
         gameObject.name = string.Format("singleton - {0}", TAG);
-        var prefab = ResourcesManager.Instance.Load("Prefabs/Audio Source");
+
+        mixer = ResourcesManager.Instance.Load<AudioMixer>("AudioMixer");
+
+        AudioSource prefab = ResourcesManager.Instance.Load<AudioSource>("Prefabs/Audio Source");
         musics = Pool<AudioSource>.Create(prefab, transform, 1);
         effect = Pool<AudioSource>.Create(prefab, transform, 10);
 
@@ -23,9 +26,9 @@ public class SoundManager : MonoSingleton<SoundManager>
     }
 
     public void LoadSoundClips(){
-        AudioClip[] clips = Resources.LoadAll<AudioClip>( "Sounds/" );
+        AudioClip[] clips = ResourcesManager.Instance.LoadAll<AudioClip>("Sounds/");
         foreach( var clip in clips ){
-            soundTable.Add( clip.name, clip );
+            soundTable.Add(clip.name, clip);
         }
     }
 

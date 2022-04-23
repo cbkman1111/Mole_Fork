@@ -7,12 +7,16 @@ public class SceneGame : SceneBase
 
     }
 
-    public override bool Init(Camera camera)
+    public override bool Init()
     {
-        mainCamera = camera;
-
         SoundManager.Instance.PlayMusic("17856_1462216818");
-        UIManager.Instance.OpenMenu<UIGameMenu>("UIGameMenu");
+        
+        UIGameMenu menu = UIManager.Instance.OpenMenu<UIGameMenu>("UIGameMenu");
+        if(menu != null)
+        {
+            menu.Init();
+        }
+
         return true;
     }
 
