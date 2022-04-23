@@ -22,12 +22,17 @@ public class UIGameMenu : MenuBase
         if(CompareTo(name, "Button - A") == 0)
         {
             UIManager.Instance.OpenPopup<PopupSample>("PopupSample");
-            SetText("Text - C", "a clicked");
+            SetText("Text - title", "a clicked");
         }
         else if (CompareTo(name, "Button - B") == 0)
         {
             SoundManager.Instance.PlayEffect("EFF_shoot");
-            SetText("Text - C", "b clicked");
+            SetText("Text - title", "b clicked");
+        }
+        else if (CompareTo(name, "Button - C") == 0)
+        {
+            SoundManager.Instance.PlayEffect("single_coin_fall_on_wood");
+            SetText("Text - title", "c clicked");
         }
     }
 }
