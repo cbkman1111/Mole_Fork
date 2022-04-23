@@ -53,8 +53,8 @@ public class SoundManager : MonoSingleton<SoundManager>
             audio.playOnAwake = false;
             audio.loop = false;
             audio.clip = clip;
+            audio.name = name;
             audio.Play();
-
             StartCoroutine(ReturnEffect(audio));
         }
     }
@@ -73,6 +73,7 @@ public class SoundManager : MonoSingleton<SoundManager>
 
             AudioClip clip = (AudioClip)soundTable[name];
             audio.clip = clip;
+            audio.name = name;
             audio.Play();
         }
     }
