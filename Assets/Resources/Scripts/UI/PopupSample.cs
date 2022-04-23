@@ -4,7 +4,8 @@ public class PopupSample : PopupBase
 {
     public override void Close()
     {
-        UIManager.Instance.ClosePopup(name);
+        //UIManager.Instance.ClosePopup(name);
+        base.Close();
     }
 
     public override void OnClick(Button button)

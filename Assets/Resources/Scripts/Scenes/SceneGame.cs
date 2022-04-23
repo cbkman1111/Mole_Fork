@@ -11,7 +11,7 @@ public class SceneGame : SceneBase
     {
         mainCamera = camera;
 
-        UIManager.Instance.OpenPopup<PopupSample>("PopupSample");
+        UIManager.Instance.OpenMenu<UIGameMenu>("UIGameMenu");
         return true;
     }
 

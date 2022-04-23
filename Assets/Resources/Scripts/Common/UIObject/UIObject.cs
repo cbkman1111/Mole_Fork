@@ -79,6 +79,14 @@ public abstract class UIObject : MonoBehaviour
         return null;
     }
 
+    protected void SetText(string name, string str)
+    {
+        if(texts.TryGetValue(name, out Text text) == true)
+        {
+            text.text = str;
+        }
+    }
+
     private void Click(Button btn)
     {
         OnClick(btn);

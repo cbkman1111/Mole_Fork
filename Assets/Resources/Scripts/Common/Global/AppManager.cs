@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 public class AppManager : MonoSingleton<AppManager>
@@ -175,17 +176,20 @@ public class AppManager : MonoSingleton<AppManager>
 
         if (phase > 0)
         {
-            switch ((TouchPhase)phase)
+            if(!EventSystem.current.IsPointerOverGameObject())
             {
-                case TouchPhase.Began:
-                    OnTouchBean(curr);
-                    break;
-                case TouchPhase.Moved:
-                    OnTouchMove(curr);
-                    break;
-                case TouchPhase.Ended:
-                    OnTouchEnd(curr);
-                    break;
+                switch ((TouchPhase)phase)
+                {
+                    case TouchPhase.Began:
+                        OnTouchBean(curr);
+                        break;
+                    case TouchPhase.Moved:
+                        OnTouchMove(curr);
+                        break;
+                    case TouchPhase.Ended:
+                        OnTouchEnd(curr);
+                        break;
+                }
             }
         }
     }
