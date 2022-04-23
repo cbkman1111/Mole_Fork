@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UITest : UIBase
+public class UITest : MenuBase
 {
     Queue<Block> blocks = new Queue<Block>();
 

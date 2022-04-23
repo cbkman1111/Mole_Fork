@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIIntroMenu : UIBase
+public class UIIntroMenu : MenuBase
 {
     public bool Init()
     {

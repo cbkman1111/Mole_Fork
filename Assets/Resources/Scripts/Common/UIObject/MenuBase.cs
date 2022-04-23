@@ -1,6 +1,6 @@
 ﻿using UnityEngine.UI;
 
-public abstract class UIBase : UIObject
+public abstract class MenuBase : UIObject
 {
     public override void Close()
     {
