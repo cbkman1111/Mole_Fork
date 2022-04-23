@@ -10,7 +10,8 @@ public class SceneIntro : SceneBase
     {
         mainCamera = camera;
 
-        var ui = UIManager.Instance.OpenMenu<UITest>("UIIntroMenu");
+        UIIntroMenu menu = UIManager.Instance.OpenMenu<UIIntroMenu>("UIIntroMenu");
+
         return true;
     }
 

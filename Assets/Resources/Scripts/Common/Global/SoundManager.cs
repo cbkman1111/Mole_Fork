@@ -16,7 +16,7 @@ public class SoundManager : MonoSingleton<SoundManager>
         gameObject.name = string.Format("singleton - {0}", TAG);
         var prefab = ResourcesManager.Instance.Load("Prefabs/Audio Source");
         musics = Pool<AudioSource>.Create(prefab, transform, 1);
-        effect = Pool<AudioSource>.Create(prefab, transform, 4);
+        effect = Pool<AudioSource>.Create(prefab, transform, 10);
 
         LoadSoundClips();
         return true;
@@ -35,11 +35,12 @@ public class SoundManager : MonoSingleton<SoundManager>
         effect.ReturnObject(audio);
 	}
 
-    public void StopAllSound(){
+    public void StopAllSound()
+    {
    
     }
 
-    public void PlayEffect( string name, float volume )
+    public void PlayEffect( string name)
     {
         if( soundTable.ContainsKey( name ) == false )
             return;
@@ -58,19 +59,21 @@ public class SoundManager : MonoSingleton<SoundManager>
         }
     }
     
-
-    public void PlayMusic(string name, float volume)
+    public void PlayMusic(string name)
     {
         if(soundTable.ContainsKey(name) == false )
             return;
 
         AudioSource audio = musics.GetObject();
-        audio.gameObject.SetActive(true);
-        audio.playOnAwake = false;
-        audio.loop = true;
+        if(audio != null)
+        {
+            audio.gameObject.SetActive(true);
+            audio.playOnAwake = false;
+            audio.loop = true;
 
-        AudioClip clip = (AudioClip)soundTable[name];
-        audio.clip = clip;
-        audio.Play();
+            AudioClip clip = (AudioClip)soundTable[name];
+            audio.clip = clip;
+            audio.Play();
+        }
     }
 }

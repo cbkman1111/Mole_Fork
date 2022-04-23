@@ -11,7 +11,7 @@ public class SceneGame : SceneBase
     {
         mainCamera = camera;
 
-        SoundManager.Instance.PlayMusic("17856_1462216818", 1f);
+        SoundManager.Instance.PlayMusic("17856_1462216818");
         UIManager.Instance.OpenMenu<UIGameMenu>("UIGameMenu");
         return true;
     }

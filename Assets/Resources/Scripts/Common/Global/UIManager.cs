@@ -118,27 +118,36 @@ public class CanvasController
 
     public T Open<T>(string name)
     {
-        string path = string.Format("Prefabs/UI/{0}", name);
-        GameObject prefab = ResourcesManager.Instance.Load(path);
-        if (prefab == null)
+        UIObject obj = null;
+        Transform trans = canvas.transform.Find(name);
+        if(trans == null)
         {
-            Debug.Log($"{path} prefab is null.");
-            return default(T);
+            string path = string.Format("Prefabs/UI/{0}", name);
+            GameObject prefab = ResourcesManager.Instance.Load(path);
+            if (prefab == null)
+            {
+                Debug.Log($"{path} prefab is null.");
+                return default(T);
+            }
+
+            GameObject clone = GameObject.Instantiate(prefab, canvas.transform);
+            if (clone == null)
+            {
+                Debug.Log($"ui is null.");
+                return default(T);
+            }
+
+            clone.name = name;
+            obj = clone.GetComponent<UIObject>();
+            obj.OnOpen();
+        }
+        else
+        {
+            obj = trans.GetComponent<UIObject>();
+            obj.OnOpen();
         }
 
-        GameObject clone = GameObject.Instantiate(prefab, canvas.transform);
-        if (clone == null)
-        {
-            Debug.Log($"ui is null.");
-            return default(T);
-        }
-
-        clone.name = name;
-
-        UIObject obj = clone.GetComponent<UIObject>();
-        obj.OnOpen();
-
-        return clone.GetComponent<T>();
+        return obj.GetComponent<T>();
     }
 
     public void Close(string name)

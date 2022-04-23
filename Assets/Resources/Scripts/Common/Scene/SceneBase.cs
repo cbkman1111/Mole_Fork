@@ -11,12 +11,12 @@ public abstract class SceneBase
         GAME,
     }
 
-    public SCENES scene;
+    public SCENES Scene { get; set; }
     protected Camera mainCamera;
     
     public SceneBase(SCENES scene)
     {
-        this.scene = scene;
+        Scene = scene;
     }
 
     public abstract bool Init(Camera camera);

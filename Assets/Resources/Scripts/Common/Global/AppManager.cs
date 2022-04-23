@@ -56,16 +56,21 @@ public class AppManager : MonoSingleton<AppManager>
 
     public void OnSceneLoaded(Scene sceneLoaded, LoadSceneMode mode)
     {
-        UIManager.Instance.Clear();
-
         // 로드된 씬을 초기화 합니다.
         if (scenes.TryGetValue(sceneLoaded.name, out SceneBase scene) == true)
         {
-            bool ret = scene.Init(Camera.main);
-            if (ret == true)
+            if (currScene != null && currScene.Scene == scene.Scene) // 동일씬 로드.
+            {
+                return;
+            }
+
+            // remove all ui objects. 
+            UIManager.Instance.Clear();
+
+            // start scene init.
+            if (scene.Init(Camera.main) == true)
             {
                 currScene = scene;
-                Debug.Log($"OnSceneLoaded. {sceneLoaded.name}");
             }
             else
             {
@@ -80,7 +85,7 @@ public class AppManager : MonoSingleton<AppManager>
 
     public void ChangeScene(SceneBase.SCENES scene)
     {
-        var info = scenes.Where(e => e.Value.scene == scene).First();
+        var info = scenes.Where(e => e.Value.Scene == scene).First();
         var name = info.Key;
 
         if (currScene == info.Value)
@@ -89,7 +94,7 @@ public class AppManager : MonoSingleton<AppManager>
             return;
         }
 
-        currScene = info.Value;
+        //currScene = info.Value;
         Debug.Log($"{TAG} ChangeScene. {name}, {info.Value}");
         StartCoroutine("LoadScene", name);
     }
