@@ -1,74 +1,63 @@
-癤퓎sing System.Collections.Generic;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class Pool : MonoBehaviour
+public class Pool<T>
 {
-    public const int MAX_COUNT = 10000;
+    private GameObject prefab = null;
+    private int max = 0;
+    private Queue<T> queue;
+    private Transform parent;
 
-    private Block prefabBlock = null;
-    private Queue<Block> poolBlocks = null;
-
-    public static Pool Create()
+    /// <summary>
+    /// 오브젝트 풀.
+    /// </summary>
+    /// <param name="prefab">프리팹 리소스</param>
+    /// <param name="count">최대 수량</param>
+    /// <returns></returns>
+    public static Pool<T> Create(GameObject prefab, Transform parent, int max)
     {
-        GameObject gameObject = new GameObject("Pool");
-        if (gameObject != null)
+        var pool = new Pool<T>();
+        if(pool != null && pool.Init(prefab, parent, max))
         {
-            Pool pool = gameObject.AddComponent<Pool>();
-            if (pool.Init() == true)
-            {
-                return pool;
-            }
+            return pool;
         }
 
         return null;
     }
 
-    public bool Init()
+    public bool Init(GameObject prefab, Transform parent, int max)
     {
-        prefabBlock = Resources.Load<Block>("Prefabs/Block");
-        if (prefabBlock == null)
-        {
-            Debug.LogError("prefabBlock can not be null.");
-        }
+        this.prefab = prefab;
+        this.max = max;
+        this.queue = new Queue<T>();
+        this.parent = parent;
 
-        poolBlocks = new Queue<Block>();
-        for (int i = 0; i < MAX_COUNT; i++)
+        for(int i = 0; i < max; i++)
         {
-            Block block = Instantiate<Block>(prefabBlock, transform);
-            if (block != null)
+            var clone = GameObject.Instantiate(prefab, parent);
+            var obj = clone.GetComponent<T>();
+            if (obj != null)
             {
-                block.name = block.name.Replace("(Clone)", "");
-                block.gameObject.SetActive(false);
-                poolBlocks.Enqueue(block);
+                queue.Enqueue(obj);
             }
         }
-
+     
         return true;
     }
 
-    public Block GetBlock()
+    public T GetObject()
     {
-        if(poolBlocks.Count == 0)
+        if(queue.Count > 0)
         {
-            Debug.Log("no more insatnace.");
-            return null;
+            return queue.Dequeue();
         }
 
-        Block block = poolBlocks.Dequeue();
-        block.gameObject.SetActive(true);
-        return block;
+        return default(T);
     }
 
-    public bool ReleaseBlock(Block block)
+    public void ReturnObject(T obj)
     {
-        if (poolBlocks.Contains(block) == true)
-        {
-            return false;
-        }
-
-        block.transform.SetParent(transform);
-        block.gameObject.SetActive(false);
-        poolBlocks.Enqueue(block);
-        return true;
+        queue.Enqueue(obj);
     }
 }

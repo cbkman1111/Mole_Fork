@@ -20,6 +20,7 @@ public class UIGameMenu : MenuBase
         }
         else if (CompareTo(name, "Button - B") == 0)
         {
+            SoundManager.Instance.PlayEffect("EFF_shoot", 1);
             SetText("Text - C", "b clicked");
         }
     }
