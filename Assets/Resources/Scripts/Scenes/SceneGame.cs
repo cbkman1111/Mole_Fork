@@ -4,7 +4,6 @@ public class SceneGame : SceneBase
 {
     public SceneGame(SCENES scene) : base(scene)
     {
-
     }
 
     public override bool Init()

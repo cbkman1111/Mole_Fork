@@ -19,17 +19,17 @@ public class UIGameMenu : MenuBase
     protected override void OnClick(Button btn)
     {
         string name = btn.name;
-        if(CompareTo(name, "Button - A") == 0)
+        if(name == "Button - A")
         {
             UIManager.Instance.OpenPopup<PopupSample>("PopupSample");
             SetText("Text - title", "a clicked");
         }
-        else if (CompareTo(name, "Button - B") == 0)
+        else if (name == "Button - B")
         {
             SoundManager.Instance.PlayEffect("EFF_shoot");
             SetText("Text - title", "b clicked");
         }
-        else if (CompareTo(name, "Button - C") == 0)
+        else if (name == "Button - C")
         {
             SoundManager.Instance.PlayEffect("single_coin_fall_on_wood");
             SetText("Text - title", "c clicked");

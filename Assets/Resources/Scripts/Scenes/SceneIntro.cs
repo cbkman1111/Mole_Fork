@@ -9,6 +9,10 @@ public class SceneIntro : SceneBase
     public override bool Init()
     {
         UIIntroMenu menu = UIManager.Instance.OpenMenu<UIIntroMenu>("UIIntroMenu");
+        if(menu != null)
+        {
+            menu.InitMenu();
+        }
 
         return true;
     }

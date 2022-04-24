@@ -21,11 +21,11 @@ public class UITest : MenuBase
         //throw new System.NotImplementedException();
         string name = btn.name;
 
-        if(CompareTo(name, "Button - Get") == 0)
+        if(name == "Button - Get")
         {
             AppManager.Instance.ChangeScene(SceneBase.SCENES.LOADING);
         }
-        else if (CompareTo(name, "Button - Release") == 0)
+        else if (name == "Button - Release")
         {
             AppManager.Instance.ChangeScene(SceneBase.SCENES.GAME);
             /*

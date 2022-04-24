@@ -8,21 +8,21 @@ using UnityEngine.SceneManagement;
 
 public class AppManager : MonoSingleton<AppManager>
 {
-    private Dictionary<string, SceneBase> scenes = null;
+    private Dictionary<string, SceneBase.SCENES> scenes = null;
+    public SceneBase CurrScene { get; set; }
+
     private Vector3 begin = Vector3.zero;
     private Vector3 curr = Vector3.zero;
 
-    public SceneBase currScene = null;
-
     public override bool Init()
     {
-        scenes = new Dictionary<string, SceneBase>();
-        scenes.Add("SceneIntro", new SceneIntro(SceneBase.SCENES.INTRO));
-        scenes.Add("SceneLoading", new SceneLoading(SceneBase.SCENES.LOADING));
-        scenes.Add("SceneGame", new SceneGame(SceneBase.SCENES.GAME));
+        scenes = new Dictionary<string, SceneBase.SCENES>();
+        scenes.Add("SceneIntro", SceneBase.SCENES.INTRO);
+        scenes.Add("SceneLoading", SceneBase.SCENES.LOADING);
+        scenes.Add("SceneGame", SceneBase.SCENES.GAME);
 
         SceneManager.sceneLoaded += OnSceneLoaded;
-
+        
         gameObject.name = string.Format("singleton - {0}", TAG);
         return true;
     }
@@ -54,44 +54,53 @@ public class AppManager : MonoSingleton<AppManager>
         Debug.Log($"{TAG} Scene Load Complete");
     }
 
+
     public void OnSceneLoaded(Scene sceneLoaded, LoadSceneMode mode)
     {
-        // 로드된 씬을 초기화 합니다.
-        if (scenes.TryGetValue(sceneLoaded.name, out SceneBase scene) == true)
+        switch(mode)
         {
-            if (currScene != null && currScene.Scene == scene.Scene) // 동일씬 로드.
-            {
-                return;
-            }
+            case LoadSceneMode.Additive:
+            case LoadSceneMode.Single:
+                if (scenes.TryGetValue(sceneLoaded.name, out SceneBase.SCENES idx) == true)
+                {
+                    if (CurrScene != null && CurrScene.Scene == idx) // 동일씬 로드.
+                    {
+                        return;
+                    }
 
-            // remove all ui objects. 
-            UIManager.Instance.Clear();
+                    string name = sceneLoaded.name;
 
-            // set main camera.
-            scene.MainCamera = Camera.main;
+                    // UI 제거.
+                    UIManager.Instance.Clear();
 
-            // start scene init.
-            if (scene.Init() == true)
-            {
-                currScene = scene;
-            }
-            else
-            {
-                Debug.LogError($"{TAG} init is failed. {sceneLoaded.name}");
-            }
-        }
-        else
-        {
-            Debug.LogError($"{TAG} not exist. {sceneLoaded.name}");
+                    // 씬 추가.
+                    if(idx == SceneBase.SCENES.INTRO)
+                        CurrScene = new GameObject(name).AddComponent<SceneIntro>();
+                    else if (idx == SceneBase.SCENES.LOADING)
+                        CurrScene = new GameObject(name).AddComponent<SceneLoading>();
+                    else if (idx == SceneBase.SCENES.GAME)
+                        CurrScene = new GameObject(name).AddComponent<SceneGame>();
+
+                    // 카메라를 미리 셋 초기화 전에 사용할 수 있도록.
+                    CurrScene.MainCamera = Camera.main;
+
+                    // 초기화.
+                    CurrScene.Init();
+                }
+                break;
+
+            default:
+                Debug.LogWarning($"{TAG} mode not exist. {sceneLoaded.name}/{mode}");
+                break;
         }
     }
 
     public void ChangeScene(SceneBase.SCENES scene)
     {
-        var info = scenes.Where(e => e.Value.Scene == scene).First();
+        var info = scenes.Where(e => e.Value == scene).First();
         var name = info.Key;
 
-        if (currScene == info.Value)
+        if (CurrScene != null && CurrScene.Scene == info.Value)
         {
             Debug.LogWarning($"{TAG} Same Scene.");
             return;
@@ -103,7 +112,7 @@ public class AppManager : MonoSingleton<AppManager>
 
     public SceneBase GetCurrentScene()
     {
-        return currScene;
+        return CurrScene;
     }
 
     public void OnAppPause(bool paused)
@@ -203,25 +212,25 @@ public class AppManager : MonoSingleton<AppManager>
 
     void OnTouchBean(Vector3 position)
     {
-        if (currScene != null)
+        if (CurrScene != null)
         {
-            currScene.OnTouchBean(position);
+            CurrScene.OnTouchBean(position);
         }
     }
 
     void OnTouchMove(Vector3 position)
     {
-        if (currScene != null)
+        if (CurrScene != null)
         {
-            currScene.OnTouchMove(position);
+            CurrScene.OnTouchMove(position);
         }
     }
 
     void OnTouchEnd(Vector3 position)
     {
-        if (currScene != null)
+        if (CurrScene != null)
         {
-            currScene.OnTouchEnd(position);
+            CurrScene.OnTouchEnd(position);
         }
     }
 
