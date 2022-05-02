@@ -1,0 +1,108 @@
+ManifestFileVersion: 0
+CRC: 3427188435
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 57081810b18a5efaa0b15f22ab7a3889
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 1b7e6b3afab6e904c5acb731a52d8415
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 82
+  Script: {instanceID: 0}
+- Class: 83
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: f17772e3189cd904ea057a0764c1c70d, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 6d54ce54a45eca84a8f964975b49f0c4, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: c2933c4d7be62614e9e052451c8155c2, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 02cd67cc68a2a90429e8a2b2e244c446, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 0b13ce43a200ba24eb8cfa7ed7607c93, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 841e496f3bb53cc48b27d369a94249b5, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: c183ff58309b1fe45a7cbbc38324da35, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 128
+  Script: {instanceID: 0}
+- Class: 212
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+- Class: 222
+  Script: {instanceID: 0}
+- Class: 224
+  Script: {instanceID: 0}
+- Class: 241
+  Script: {instanceID: 0}
+- Class: 243
+  Script: {instanceID: 0}
+- Class: 245
+  Script: {instanceID: 0}
+- Class: 19719996
+  Script: {instanceID: 0}
+- Class: 156049354
+  Script: {instanceID: 0}
+- Class: 483693784
+  Script: {instanceID: 0}
+- Class: 1839735485
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: UnityEngine.CoreModule
+  ClassName: UnityEngine.Events.PersistentCallGroup
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.AnimationTriggers
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.Button/ButtonClickedEvent
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.ColorBlock
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.FontData
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.MaskableGraphic/CullStateChangedEvent
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.Navigation
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.SpriteState
+Assets:
+- Assets/Prefabs/Audio Source.prefab
+- Assets/Prefabs/UI/UILoadingMenu.prefab
+- Assets/Prefabs/UI/PopupNormal.prefab
+- Assets/Sounds/16788_1460739422.mp3
+- Assets/Prefabs/UI/UIIntroMenu.prefab
+- Assets/Prefabs/UI/PopupSample.prefab
+- Assets/Prefabs/UI/UITest.prefab
+- Assets/Prefabs/Block.prefab
+- Assets/Prefabs/UI/UILoading.prefab
+- Assets/Sounds/EFF_shoot.mp3
+- Assets/Sounds/17856_1462216818.mp3
+- Assets/Sounds/SFX_Storage_Close.mp3
+- Assets/Sounds/single_coin_fall_on_wood.mp3
+- Assets/Prefabs/Grid.prefab
+- Assets/Prefabs/UI/UIGameMenu.prefab
+- Assets/Sounds/18449_1464718821.mp3
+Dependencies: []
