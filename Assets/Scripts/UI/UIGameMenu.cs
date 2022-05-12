@@ -33,6 +33,8 @@ public class UIGameMenu : MenuBase
         {
             SoundManager.Instance.PlayEffect("single_coin_fall_on_wood");
             SetText("Text - title", "c clicked");
+
+            UIManager.Instance.OpenPopup<PopupScrollViewTest>("PopupScrollViewTest");
         }
     }
 }
