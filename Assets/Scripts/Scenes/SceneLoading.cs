@@ -19,8 +19,12 @@ public class SceneLoading : SceneBase
     {
         yield return new WaitForSeconds(1.0f);
         
+        // 번들 데이터 로드.
+        //ResourcesManager.Instance.Load();
+        // 사운드 로드.
         SoundManager.Instance.Load();
 
+        // 
         AppManager.Instance.ChangeScene(SCENES.GAME);
     }
 
