@@ -12,8 +12,10 @@ public abstract class ScrollBase<T> : ScrollRect
     private List<int> indexList = null; // 셀의 인덱스.
     protected List<T> dataList = null; // 전체 데이터.
     
-    private bool limited = false;
+    private bool limitTop = false;
+    private bool limitBottom = false;
     public float paddingY = 2;
+    Vector2 velocity = Vector2.zero;
 
     protected override void Awake()
     {
@@ -46,16 +48,20 @@ public abstract class ScrollBase<T> : ScrollRect
         Vector3 move = Vector3.zero;
         move.y = deltaY;
 
+        bool upSide = (deltaY > 0) ? true : false;
+
+
         // 객체들을 옮김.
         foreach (var cell in cellList)
         {
             var rectTransform = cell.GetComponent<RectTransform>();
             rectTransform.localPosition += move;
         }
-
-        if(deltaY > 0)
+     
+        // 
+        if(upSide == true)
         {
-            // 최 상단 노드가 화면 위를 탈출.
+            // 최 상단 노드가 탈출.
             Vector2 bottom = new Vector2(
                 first.localPosition.x,
                 first.localPosition.y - size.y * first.pivot.y);
@@ -67,15 +73,13 @@ public abstract class ScrollBase<T> : ScrollRect
             if (contentTransform.rect.Contains(top) == false &&
                 contentTransform.rect.Contains(bottom) == false)
             {
-                //var cell = first.GetComponent<CellTest>();
                 int newIndex = indexList.Last() + 1;
-                if(newIndex < dataList.Count)
+                if (newIndex < dataList.Count)
                 {
                     indexList[0] = newIndex;
-                    UpdateCell(first, newIndex);
-
-                    indexList.Remove(indexList[0]);
+                    indexList.Remove(newIndex);
                     indexList.Add(newIndex);
+                    UpdateCell(first, newIndex);
 
                     var localposition = first.localPosition;
                     localposition.y = last.localPosition.y - (paddingY + size.y);
@@ -85,32 +89,47 @@ public abstract class ScrollBase<T> : ScrollRect
                 else
                 {
                     // 밑바닥임.
-                    limited = true;
+                    limitBottom = true;
                 }
             }
         }
-        else if(deltaY < 0)
-        {
-            // 최 하단 노드가 화면 아래를 탈출.
+        else
+        {   
+            // 최 상단 노드가  아래로 탈출.
             Vector2 bottom = new Vector2(
-                last.localPosition.x,
-                last.localPosition.y - size.y * last.pivot.y);
+                first.localPosition.x,
+                first.localPosition.y - size.y * first.pivot.y);
 
             Vector2 top = new Vector2(
-                last.localPosition.x,
-                last.localPosition.y + size.y * last.pivot.y);
+                first.localPosition.x,
+                first.localPosition.y + size.y * first.pivot.y);
+
+            if (contentTransform.rect.Contains(top) == false &&
+                contentTransform.rect.Contains(bottom) == false)
+            {
+                limitTop = true;
+                return;
+            }
+          
+            // 최 하단 노드가 화면 탈출.
+            bottom = new Vector2(
+            last.localPosition.x,
+            last.localPosition.y - size.y * last.pivot.y);
+
+            top = new Vector2(
+            last.localPosition.x,
+            last.localPosition.y + size.y * last.pivot.y);
 
             if (contentTransform.rect.Contains(top) == false &&
                 contentTransform.rect.Contains(bottom) == false)
             {
                 int newIndex = indexList.First() - 1;
-                if(newIndex >= 0)
+                if (newIndex >= 0)
                 {
                     indexList[indexList.Count - 1] = newIndex;
-                    UpdateCell(last, newIndex);
-
-                    indexList.Remove(indexList[indexList.Count - 1]);
+                    indexList.Remove(newIndex);
                     indexList.Insert(0, newIndex);
+                    UpdateCell(last, newIndex);
 
                     var localposition = last.localPosition;
                     localposition.y = first.localPosition.y + (paddingY + size.y);
@@ -121,22 +140,27 @@ public abstract class ScrollBase<T> : ScrollRect
                 else
                 {
                     // 꼭대기임.
-                    limited = true;
+                    limitTop = true;
                 }
             }
         }
 
-        Debug.Log($"OnDrag {eventData.delta.y}");
+        //Debug.LogWarning($"limited 1 = {limited}");
+        //Debug.LogWarning($"limited 2 = {limited}");
+        //Debug.Log($"OnDrag {eventData.delta.y}");
+    }
+
+    private void Update()
+    {
+        
     }
 
     public override void OnEndDrag(UnityEngine.EventSystems.PointerEventData eventData)
     {
-        Debug.Log("OnEndDrag");
-        if(limited == true)
+        Debug.Log($"OnEndDrag limitTop = {limitTop}, limitBottom = {limitBottom}");
+        if(limitBottom == true || limitTop == true)
         {
-            limited = false;
-
-            if(indexList.First() == 0)
+            if(limitTop == true)
             {
                 RectTransform r = content.GetChild(0).GetComponent<RectTransform>();
                 float positionY = -(r.pivot.y * r.rect.size.y);
@@ -149,7 +173,7 @@ public abstract class ScrollBase<T> : ScrollRect
                     rectTransform.localPosition += move;
                 }
             }
-            else if(indexList.Last() == dataList.Count() - 1)
+            else if(limitBottom == true)
             {
                 RectTransform r = content.GetChild(content.childCount-1).GetComponent<RectTransform>();
                 float contentHeight = content.rect.height;
@@ -163,6 +187,9 @@ public abstract class ScrollBase<T> : ScrollRect
                     rectTransform.localPosition += move;
                 }
             }
+
+            limitTop = false;
+            limitBottom = false;
         }
     }
 
