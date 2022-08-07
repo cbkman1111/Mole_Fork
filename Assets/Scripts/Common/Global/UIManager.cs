@@ -161,6 +161,8 @@ public class UIManager : MonoSingleton<UIManager>
         {
             // 더이상 닫을 팝업이 없음.
         }
+
+        CoverCheck();
     }
 }
 
