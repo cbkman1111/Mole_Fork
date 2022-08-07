@@ -15,6 +15,18 @@ public class UIGameMenu : MenuBase
         Button btn = GetObject<Button>("Button - A");
         return true;
     }
+    public override void OnValueChanged(Slider slider, float f) 
+    {
+        string name = slider.name;
+        if(name.CompareTo("Slider - Camera") == 0)
+        {
+            SceneBase scene = AppManager.Instance.GetCurrentScene();
+            const int FOV_MIN = 10;
+            const int FOV_AMOUNT = 50;
+
+            scene.MainCamera.fieldOfView = FOV_MIN + FOV_AMOUNT * f;
+        }
+    }
 
     protected override void OnClick(Button btn)
     {

@@ -2,9 +2,11 @@ using Spine.Unity;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class UnitBase : MonoBehaviour
 {
+    public NavMeshAgent agent = null;
     public SkeletonAnimation skel = null;
     public enum SkellAnimationState { attack = 0, die, hit, idle, run, run_shoot};
     public SkellAnimationState state = SkellAnimationState.idle;
@@ -21,8 +23,29 @@ public class UnitBase : MonoBehaviour
         skel.transform.LookAt(scene.MainCamera.transform.position - v);
     }
 
-    public void SetState(SkellAnimationState state)
+    private void Update()
     {
+        var r = transform.rotation;
+        transform.rotation = Quaternion.Euler(r.x,0,r.z);
+
+        if(agent != null)
+        {
+            if(agent.remainingDistance > agent.stoppingDistance)
+            {
+                SetState(SkellAnimationState.run);
+            }
+            else
+            {
+                SetState(SkellAnimationState.idle);
+            }
+        }
+    }
+
+    public void SetState(SkellAnimationState s)
+    {
+        if (s == state)
+            return;
+
         string name = SkellAnimationState.idle.ToString();
         switch(state)
         {
@@ -32,10 +55,11 @@ public class UnitBase : MonoBehaviour
             case SkellAnimationState.hit:
             case SkellAnimationState.run:
             case SkellAnimationState.run_shoot:
-                name = state.ToString();
+                name = s.ToString();
                 break;
         }
 
+        state = s;
         skel.state.SetAnimation(0, name, true);
     }
 }

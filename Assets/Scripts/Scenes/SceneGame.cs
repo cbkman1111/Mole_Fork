@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using static UnitBase;
 
 public class SceneGame : SceneBase
@@ -29,9 +30,10 @@ public class SceneGame : SceneBase
         player.transform.position = Vector3.zero;
 
         monsters = new List<UnitBase>();
-        for ( int i = 0; i < 20; i++)
+        for ( int i = 0; i < 3; i++)
         {
             UnitBase monster = null;
+            /*
             if(i == 0)
             {
                 monster = Instantiate<PigeonQueen>(prefabPigeonQueen);
@@ -40,6 +42,9 @@ public class SceneGame : SceneBase
             {
                 monster = Instantiate<Pigeon>(prefabPigeon);
             }
+            */
+
+            monster = Instantiate<Pigeon>(prefabPigeon);
 
             int x = UnityEngine.Random.Range(0, 10) - 5;
             int z = UnityEngine.Random.Range(0, 10) - 5;
@@ -70,6 +75,12 @@ public class SceneGame : SceneBase
         Ray ray = MainCamera.ScreenPointToRay(position);
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
         {
+            if(hit.collider.name.CompareTo("Navi - Boat") == 0)
+            {
+                var agent = player.GetComponent<NavMeshAgent>();
+                agent.SetDestination(hit.point);
+            }
+            
             Debug.DrawRay(ray.origin, ray.direction * 20, Color.red, 5f);
             Debug.Log(hit.point);
         }

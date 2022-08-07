@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 2912882053
+CRC: 176223991
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: a86169b2971f1cd7eecc58e8cd2e6b0e
+    Hash: 1025d4eb9218ece42ce46477681fff8e
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 37dfa56b053c182b294daf2c59a4295a
+    Hash: e9d7b46fc7ad7b89041917ef7cbee557
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -35,6 +35,8 @@ ClassTypes:
   Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
 - Class: 114
   Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: f17772e3189cd904ea057a0764c1c70d, type: 3}
 - Class: 114
@@ -77,6 +79,8 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 128
   Script: {instanceID: 0}
+- Class: 195
+  Script: {instanceID: 0}
 - Class: 212
   Script: {instanceID: 0}
 - Class: 213
@@ -116,6 +120,8 @@ SerializeReferenceClassIdentifiers:
   ClassName: UnityEngine.UI.Navigation
 - AssemblyName: UnityEngine.UI
   ClassName: UnityEngine.UI.ScrollRect/ScrollRectEvent
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.Slider/SliderEvent
 - AssemblyName: UnityEngine.UI
   ClassName: UnityEngine.UI.SpriteState
 - AssemblyName: spine-unity
