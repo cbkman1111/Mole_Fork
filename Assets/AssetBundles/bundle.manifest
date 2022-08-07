@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 833914237
+CRC: 2912882053
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 14a4b0ae97955758044baf864414f86b
+    Hash: a86169b2971f1cd7eecc58e8cd2e6b0e
   TypeTreeHash:
     serializedVersion: 2
-    Hash: e5b2a0c3e77474128eca2b50b0f42c82
+    Hash: 37dfa56b053c182b294daf2c59a4295a
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -15,9 +15,17 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 21
   Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
 - Class: 28
   Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
 - Class: 48
+  Script: {instanceID: 0}
+- Class: 49
   Script: {instanceID: 0}
 - Class: 82
   Script: {instanceID: 0}
@@ -32,27 +40,39 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: a360f3b57615226448426236344de815, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: a6b194f808b1af6499c93410e504af42, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 492a6ac1910f6584baac9f9bcb199b03, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 6d54ce54a45eca84a8f964975b49f0c4, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 0c0aba79c2ce6eb46baf763350aabb17, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: d3260faa3a2d7124b9fcd998e889e29c, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: c2933c4d7be62614e9e052451c8155c2, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 8e67e5dc30eef4443909f9a5f8ea8df4, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: f1b3b4b945939a54ea0b23d3396115fb, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 02cd67cc68a2a90429e8a2b2e244c446, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 3857b3280614a9d42825ea76c283a241, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 0b13ce43a200ba24eb8cfa7ed7607c93, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 841e496f3bb53cc48b27d369a94249b5, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: c183ff58309b1fe45a7cbbc38324da35, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: 8e67e5dc30eef4443909f9a5f8ea8df4, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 128
@@ -98,9 +118,15 @@ SerializeReferenceClassIdentifiers:
   ClassName: UnityEngine.UI.ScrollRect/ScrollRectEvent
 - AssemblyName: UnityEngine.UI
   ClassName: UnityEngine.UI.SpriteState
+- AssemblyName: spine-unity
+  ClassName: Spine.Unity.BlendModeMaterials
+- AssemblyName: spine-unity
+  ClassName: Spine.Unity.SkeletonRenderer/SpriteMaskInteractionMaterials
 Assets:
+- Assets/Sounds/18449_1464718821.mp3
 - Assets/Prefabs/Audio Source.prefab
 - Assets/Prefabs/UI/UILoadingMenu.prefab
+- Assets/Prefabs/Units/Player.prefab
 - Assets/Prefabs/UI/PopupNormal.prefab
 - Assets/Prefabs/UI/CellTest.prefab
 - Assets/Prefabs/UI/PopupScrollViewTest.prefab
@@ -113,7 +139,8 @@ Assets:
 - Assets/Sounds/17856_1462216818.mp3
 - Assets/Sounds/SFX_Storage_Close.mp3
 - Assets/Sounds/single_coin_fall_on_wood.mp3
+- Assets/Prefabs/Units/Pigeon.prefab
 - Assets/Prefabs/Grid.prefab
 - Assets/Prefabs/UI/UIGameMenu.prefab
-- Assets/Sounds/18449_1464718821.mp3
+- Assets/Prefabs/Units/PigeonQueen.prefab
 Dependencies: []
