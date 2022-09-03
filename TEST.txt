@@ -31,7 +31,11 @@ git commit -m "커밋 메세지"
 git push origin develop
 
 + 집에서 커밋 테스트
++ 회사 커밋 테스트
 
 feature/test
 release/test
 hotfix/test
+
+
++ 회사 컴퓨터에서 Git Flow Test 커밋.
