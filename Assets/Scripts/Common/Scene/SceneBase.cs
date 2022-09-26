@@ -7,8 +7,10 @@ public abstract class SceneBase : MonoBehaviour
     public enum SCENES
     {
         INTRO = 0,
+        MENU,
         LOADING,
         GAME,
+        GAME_GOSTOP
     }
 
     public SCENES Scene { get; set; }

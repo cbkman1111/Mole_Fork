@@ -18,8 +18,10 @@ public class AppManager : MonoSingleton<AppManager>
     {
         scenes = new Dictionary<string, SceneBase.SCENES>();
         scenes.Add("SceneIntro", SceneBase.SCENES.INTRO);
+        scenes.Add("SceneMenu", SceneBase.SCENES.MENU);
         scenes.Add("SceneLoading", SceneBase.SCENES.LOADING);
         scenes.Add("SceneGame", SceneBase.SCENES.GAME);
+        scenes.Add("SceneGostop", SceneBase.SCENES.GAME_GOSTOP);
 
         SceneManager.sceneLoaded += OnSceneLoaded;
 
@@ -27,29 +29,63 @@ public class AppManager : MonoSingleton<AppManager>
         return true;
     }
 
-    private IEnumerator LoadScene(string name)
+    private IEnumerator LoadScene(string name, bool loading)
     {
-        AsyncOperation async = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(name, LoadSceneMode.Single);
-        async.allowSceneActivation = false;
-
-        float percent = 0;
-        while (async.isDone == false)
+        if (loading == true)
         {
-            percent = async.progress * 100f;
-            if (async.progress >= 0.9f)
+            AsyncOperation async = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("SceneLoading", LoadSceneMode.Single);
+            async.allowSceneActivation = true;
+            
+            float percent = 0;
+            while (async.isDone == false)
             {
-                async.allowSceneActivation = true;
-            }
-            else
-            {
-                if (async.progress == 1)
+                percent = Mathf.Clamp01(async.progress / 0.9f);
+                if (percent == 1.0)
                 {
                     async.allowSceneActivation = true;
                 }
+
+                yield return null;
             }
 
-            yield return null;
+            var currScene = GetCurrentScene() as SceneLoading;
+            
+            AsyncOperation asyncNext = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(name, LoadSceneMode.Single);
+            asyncNext.allowSceneActivation = false;
+            while (asyncNext.isDone == false)
+            {
+                percent = Mathf.Clamp01(asyncNext.progress / 0.9f);
+                currScene.SetPercent(percent);
+                Debug.Log($"{TAG} loading percent {percent}");
+
+                yield return new WaitForSeconds(0.1f);
+
+                if (percent == 1.0)
+                {
+                    asyncNext.allowSceneActivation = true;
+                }
+
+                yield return null;
+            }
         }
+        else 
+        {
+            AsyncOperation async = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(name, LoadSceneMode.Single);
+            async.allowSceneActivation = false;
+
+            float percent = 0;
+            while (async.isDone == false)
+            {
+                percent = Mathf.Clamp01(async.progress / 0.9f);
+                if (percent == 1)
+                {
+                    async.allowSceneActivation = true;
+                }
+
+                yield return null;
+            }
+        }
+        
 
         Debug.Log($"{TAG} Scene Load Complete");
     }
@@ -61,9 +97,9 @@ public class AppManager : MonoSingleton<AppManager>
         {
             case LoadSceneMode.Additive:
             case LoadSceneMode.Single:
-                if (scenes.TryGetValue(sceneLoaded.name, out SceneBase.SCENES idx) == true)
+                if (scenes.TryGetValue(sceneLoaded.name, out SceneBase.SCENES index) == true)
                 {
-                    if (CurrScene != null && CurrScene.Scene == idx) // 동일씬 로드.
+                    if (CurrScene != null && CurrScene.Scene == index) // 동일씬 로드.
                     {
                         return;
                     }
@@ -73,14 +109,26 @@ public class AppManager : MonoSingleton<AppManager>
                     // UI 제거.
                     UIManager.Instance.Clear();
 
-                    // 씬 추가.
-                    if(idx == SceneBase.SCENES.INTRO)
-                        CurrScene = new GameObject(name).AddComponent<SceneIntro>();
-                    else if (idx == SceneBase.SCENES.LOADING)
-                        CurrScene = new GameObject(name).AddComponent<SceneLoading>();
-                    else if (idx == SceneBase.SCENES.GAME)
-                        CurrScene = new GameObject(name).AddComponent<SceneGame>();
-
+                    // 씬 스크립트 부착.
+                    switch (index)
+                    {
+                        case SceneBase.SCENES.INTRO:
+                            CurrScene = new GameObject(name).AddComponent<SceneIntro>();
+                            break;
+                        case SceneBase.SCENES.MENU:
+                            CurrScene = new GameObject(name).AddComponent<SceneMenu>();
+                            break;
+                        case SceneBase.SCENES.LOADING:
+                            CurrScene = new GameObject(name).AddComponent<SceneLoading>();
+                            break;
+                        case SceneBase.SCENES.GAME:
+                            CurrScene = new GameObject(name).AddComponent<SceneGame>();
+                            break;
+                        case SceneBase.SCENES.GAME_GOSTOP:
+                            CurrScene = new GameObject(name).AddComponent<SceneGostop>();
+                            break;
+                    }
+                
                     // 카메라를 미리 셋 초기화 전에 사용할 수 있도록.
                     CurrScene.MainCamera = Camera.main;
 
@@ -95,7 +143,7 @@ public class AppManager : MonoSingleton<AppManager>
         }
     }
 
-    public void ChangeScene(SceneBase.SCENES scene)
+    public void ChangeScene(SceneBase.SCENES scene, bool loading = true)
     {
         var info = scenes.Where(e => e.Value == scene).First();
         var name = info.Key;
@@ -106,7 +154,7 @@ public class AppManager : MonoSingleton<AppManager>
             return;
         }
 
-        StartCoroutine("LoadScene", name);
+        StartCoroutine(LoadScene(name, loading));
         Debug.Log($"{TAG} ChangeScene. {name}, {info.Value}");
     }
 

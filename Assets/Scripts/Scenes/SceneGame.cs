@@ -1,12 +1,24 @@
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UIElements;
 using static UnitBase;
 
 public class SceneGame : SceneBase
 {
     private Player player = null;
     private List<UnitBase> monsters = null;
+    private Boat boat = null;
+    private Magnatic magnatic = null;
+    private UIMenuGame menu = null;
+
+    private Boat prefabBoat = null;
+    private Magnatic prefabMagnatic = null;
+    private Player prefabPlayer = null;
+    private Pigeon prefabPigeon = null;
+    private PigeonQueen prefabPigeonQueen = null;
+    private PropBase prefabProp = null;
 
     public SceneGame(SCENES scene) : base(scene)
     {
@@ -16,53 +28,84 @@ public class SceneGame : SceneBase
     {
         SoundManager.Instance.PlayMusic("17856_1462216818");
         
-        UIGameMenu menu = UIManager.Instance.OpenMenu<UIGameMenu>("UIGameMenu");
+        menu = UIManager.Instance.OpenMenu<UIMenuGame>("UIMenuGame");
         if(menu != null)
         {
             menu.InitMenu();
         }
 
-        Player prefabPlayer = ResourcesManager.Instance.LoadBundle<Player>("Player.prefab");
-        Pigeon prefabPigeon = ResourcesManager.Instance.LoadBundle<Pigeon>("Pigeon.prefab");
-        PigeonQueen prefabPigeonQueen = ResourcesManager.Instance.LoadBundle<PigeonQueen>("PigeonQueen.prefab");
-
+        prefabBoat = ResourcesManager.Instance.LoadBundle<Boat>("Boat.prefab");
+        prefabMagnatic = ResourcesManager.Instance.LoadBundle<Magnatic>("Magnatic.prefab");
+        prefabPlayer = ResourcesManager.Instance.LoadBundle<Player>("Player.prefab");
+        prefabPigeon = ResourcesManager.Instance.LoadBundle<Pigeon>("Pigeon.prefab");
+        prefabPigeonQueen = ResourcesManager.Instance.LoadBundle<PigeonQueen>("PigeonQueen.prefab");
+        prefabProp = ResourcesManager.Instance.LoadBundle<PropBase>("Prop.prefab"); 
         player = Instantiate<Player>(prefabPlayer);
         player.transform.position = Vector3.zero;
 
-        monsters = new List<UnitBase>();
-        for ( int i = 0; i < 3; i++)
+        boat = Instantiate<Boat>(prefabBoat);
+        if (boat != null)
         {
-            UnitBase monster = null;
-            /*
-            if(i == 0)
-            {
-                monster = Instantiate<PigeonQueen>(prefabPigeonQueen);
-            }
-            else
-            {
-                monster = Instantiate<Pigeon>(prefabPigeon);
-            }
-            */
-
-            monster = Instantiate<Pigeon>(prefabPigeon);
-
-            int x = UnityEngine.Random.Range(0, 10) - 5;
-            int z = UnityEngine.Random.Range(0, 10) - 5;
-            int y = 0;
-            
-            monster.transform.position = new Vector3(x, y, z);
-
-            SkellAnimationState[] animations = { SkellAnimationState.idle, SkellAnimationState.run, SkellAnimationState.die, SkellAnimationState.attack};
-            int randIndex = UnityEngine.Random.Range(0, animations.Length);
-            string name = animations[randIndex].ToString();
-            monster.skel.state.SetAnimation(0, name, true);
-            monsters.Add(monster);
+            boat.GenerateNavmesh();
         }
 
+        magnatic = Instantiate<Magnatic>(prefabMagnatic);
+        if (magnatic != null)
+        {
+            magnatic.SetAngle(0);
+        }
 
-        //player = Instantiate<PigeonQueen>(prefabPigeonQueen);
-        //player.transform.position = Vector3.zero;
+        monsters = new List<UnitBase>();
+
+        StartCoroutine("Proc", gameObject);
         return true;
+    }
+
+    float GetAngle(Vector2 start, Vector2 end)
+    {
+        Vector2 v2 = end - start;
+        return Mathf.Atan2(v2.y, v2.x) * Mathf.Rad2Deg;
+    }
+
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        GUIStyle style = new GUIStyle();
+        style.normal.textColor = Color.white;
+
+        for (int i = 0; i < 36; i++)
+        {
+            float angle = i * 10;
+            Vector3 position = GeneratePosition(angle);
+
+            Handles.Label(position, $"{angle}", style);
+        }
+    }
+#endif
+
+    private Vector3 GeneratePosition(float angle)
+    {
+        float r = 50;
+        float x = (Mathf.Sin(angle * (Mathf.PI / 180)) * r);
+        float z = (Mathf.Cos(angle * (Mathf.PI / 180)) * r);
+        Vector3 position = new Vector3(x, 0, z);
+
+        return position;
+    }
+
+    private System.Collections.IEnumerator Proc()
+    {
+        while (true)
+        {
+            if (monsters.Count < 100)
+            {
+                Vector3 position = GeneratePosition(UnityEngine.Random.Range(0, 360));
+                PropBase mon = Instantiate<PropBase>(prefabProp);
+                mon.transform.position = position;
+            }
+
+            yield return new WaitForSeconds(0.1f);
+        }
     }
 
     public override void OnTouchBean(Vector3 position)
@@ -75,10 +118,18 @@ public class SceneGame : SceneBase
         Ray ray = MainCamera.ScreenPointToRay(position);
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
         {
-            if(hit.collider.name.CompareTo("Navi - Boat") == 0)
+            var layer = hit.collider.gameObject.layer;
+            if (layer == LayerMask.NameToLayer("Tile"))
             {
                 var agent = player.GetComponent<NavMeshAgent>();
                 agent.SetDestination(hit.point);
+            }
+            else if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Water"))
+            {
+                float angle = GetAngle(Vector3.zero, hit.point);
+                boat.SetAngle(angle);
+
+                menu.OnAngleChange(angle);
             }
             
             Debug.DrawRay(ray.origin, ray.direction * 20, Color.red, 5f);

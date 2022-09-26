@@ -56,4 +56,9 @@ public class ResourcesManager : MonoSingleton<ResourcesManager>
     {
         return bundle.LoadAllAssets<T>();
     }
+
+    public T[] LoadBudleAll<T>(string path) where T : Object
+    {
+        return bundle.LoadAssetWithSubAssets<T>(path);
+    }
 }
