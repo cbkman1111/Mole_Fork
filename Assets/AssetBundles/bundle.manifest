@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 176223991
+CRC: 4177467581
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 1025d4eb9218ece42ce46477681fff8e
+    Hash: 8ac5066ca52828e4be2b96b56fc260db
   TypeTreeHash:
     serializedVersion: 2
-    Hash: e9d7b46fc7ad7b89041917ef7cbee557
+    Hash: c522a56f320473363dbc9cd6a08bff65
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -27,22 +27,28 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 49
   Script: {instanceID: 0}
+- Class: 65
+  Script: {instanceID: 0}
 - Class: 82
   Script: {instanceID: 0}
 - Class: 83
   Script: {instanceID: 0}
 - Class: 114
-  Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
-- Class: 114
   Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: 5e5db4494a841bb4ab9244870254cb5b, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: f17772e3189cd904ea057a0764c1c70d, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 49ca5543db197c847a84b084e68e88b8, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: a360f3b57615226448426236344de815, type: 3}
 - Class: 114
@@ -60,6 +66,8 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: c2933c4d7be62614e9e052451c8155c2, type: 3}
 - Class: 114
+  Script: {fileID: 11500000, guid: b5eaba114acafee479c757c1d8bda6ac, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 8e67e5dc30eef4443909f9a5f8ea8df4, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: f1b3b4b945939a54ea0b23d3396115fb, type: 3}
@@ -74,7 +82,7 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 841e496f3bb53cc48b27d369a94249b5, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: c183ff58309b1fe45a7cbbc38324da35, type: 3}
+  Script: {fileID: 11500000, guid: 44a77f3ad2e09b649b204d795d708061, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 128
@@ -94,8 +102,6 @@ ClassTypes:
 - Class: 243
   Script: {instanceID: 0}
 - Class: 245
-  Script: {instanceID: 0}
-- Class: 19719996
   Script: {instanceID: 0}
 - Class: 156049354
   Script: {instanceID: 0}
@@ -131,22 +137,25 @@ SerializeReferenceClassIdentifiers:
 Assets:
 - Assets/Sounds/18449_1464718821.mp3
 - Assets/Prefabs/Audio Source.prefab
+- Assets/Images/cards.png
 - Assets/Prefabs/UI/UILoadingMenu.prefab
 - Assets/Prefabs/Units/Player.prefab
 - Assets/Prefabs/UI/PopupNormal.prefab
 - Assets/Prefabs/UI/CellTest.prefab
 - Assets/Prefabs/UI/PopupScrollViewTest.prefab
+- Assets/Prefabs/Prop.prefab
 - Assets/Sounds/16788_1460739422.mp3
 - Assets/Prefabs/UI/PopupSample.prefab
 - Assets/Prefabs/UI/UITest.prefab
 - Assets/Prefabs/Block.prefab
-- Assets/Prefabs/UI/UILoading.prefab
+- Assets/Resources/UILoading.prefab
 - Assets/Sounds/EFF_shoot.mp3
 - Assets/Sounds/17856_1462216818.mp3
 - Assets/Sounds/SFX_Storage_Close.mp3
 - Assets/Sounds/single_coin_fall_on_wood.mp3
 - Assets/Prefabs/Units/Pigeon.prefab
+- Assets/Prefabs/Boat.prefab
 - Assets/Prefabs/Grid.prefab
-- Assets/Prefabs/UI/UIGameMenu.prefab
+- Assets/Prefabs/Magnatic.prefab
 - Assets/Prefabs/Units/PigeonQueen.prefab
 Dependencies: []
