@@ -24,11 +24,9 @@ public class SceneGostop : SceneBase
             menu.InitMenu();
         }
 
-
         board = Board.Create();
+        board.StartGame();
 
-        board.Suffle();
-        //StartCoroutine(ShuffleCards());
         return true;
     }
 
