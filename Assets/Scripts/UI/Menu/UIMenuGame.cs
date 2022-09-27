@@ -1,9 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIGameMenu : MenuBase
+public class UIMenuGame : MenuBase
 {
     public override void OnInit()
     {
@@ -15,6 +16,12 @@ public class UIGameMenu : MenuBase
         Button btn = GetObject<Button>("Button - A");
         return true;
     }
+
+    public void OnAngleChange(float angle)
+    {
+        SetText("Text - title", $"{angle}");
+    }
+
     public override void OnValueChanged(Slider slider, float f) 
     {
         string name = slider.name;
@@ -31,7 +38,7 @@ public class UIGameMenu : MenuBase
     protected override void OnClick(Button btn)
     {
         string name = btn.name;
-        if(name == "Button - A")
+        if (name == "Button - A")
         {
             UIManager.Instance.OpenPopup<PopupSample>("PopupSample");
             SetText("Text - title", "a clicked");
@@ -40,6 +47,7 @@ public class UIGameMenu : MenuBase
         {
             SoundManager.Instance.PlayEffect("EFF_shoot");
             SetText("Text - title", "b clicked");
+
         }
         else if (name == "Button - C")
         {
@@ -47,6 +55,10 @@ public class UIGameMenu : MenuBase
             SetText("Text - title", "c clicked");
 
             UIManager.Instance.OpenPopup<PopupScrollViewTest>("PopupScrollViewTest");
+        }
+        else if (name == "Button - Exit")
+        {
+            AppManager.Instance.ChangeScene(SceneBase.SCENES.MENU);
         }
     }
 }

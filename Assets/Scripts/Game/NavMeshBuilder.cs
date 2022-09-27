@@ -7,7 +7,7 @@ public class NavMeshBuilder : MonoBehaviour
 {
 	//NavMeshSurface surface = null;
 
-	private void GenerateNavmesh()
+	public void GenerateNavmesh()
 	{
 		NavMeshSurface[] surfaces = gameObject.GetComponentsInChildren<NavMeshSurface>();
 		foreach (var s in surfaces)

@@ -6,7 +6,10 @@ public class AppDelegate : MonoBehaviour
     static void main()
     {
         Debug.Log("App Started. by AppDelegate.cs");
-        AppManager.Instance.ChangeScene(SceneBase.SCENES.INTRO);
+        
+        SoundManager.Instance.Load();
+
+        AppManager.Instance.ChangeScene(SceneBase.SCENES.INTRO, false);
     }
 
     void OnApplicationPause(bool paused)
