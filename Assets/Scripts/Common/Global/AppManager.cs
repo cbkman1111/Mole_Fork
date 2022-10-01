@@ -48,16 +48,21 @@ public class AppManager : MonoSingleton<AppManager>
                 yield return null;
             }
 
-            var currScene = GetCurrentScene() as SceneLoading;
+            
             
             AsyncOperation asyncNext = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(name, LoadSceneMode.Single);
             asyncNext.allowSceneActivation = false;
             while (asyncNext.isDone == false)
             {
                 percent = Mathf.Clamp01(asyncNext.progress / 0.9f);
-                currScene.SetPercent(percent);
-                Debug.Log($"{TAG} loading percent {percent}");
-
+                
+                var currScene = GetCurrentScene() as SceneLoading;
+                if (currScene == true)
+                {
+                    currScene.SetPercent(percent);
+                }
+                
+                //Debug.Log($"{TAG} loading percent {percent}");
                 yield return new WaitForSeconds(0.1f);
 
                 if (percent == 1.0)

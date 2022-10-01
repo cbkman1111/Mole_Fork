@@ -1,13 +1,21 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Card : MonoBehaviour
 {
+    [SerializeField]
+    public SpriteRenderer spriteRenderer = null;
+
+    public Rigidbody rigid { get; set; }
     public int Num { get; set; }
     public KindOf Type { get; set; }
     public float Height { get; set; }
-    private Rigidbody rigid = null;
+    public float Width { get; set; }
+    public bool Open { get; set; }
+    public bool CompleteMove { get; set; }
+    private Action completeMove = null;
 
     public enum KindOf { 
         GWANG,
@@ -29,21 +37,20 @@ public class Card : MonoBehaviour
     public bool Init(int num, Sprite sprite)
     {
         Num = num;
+        Open = false;
+        CompleteMove = false;
 
-        var front = transform.Find("Front");
-        var renderer = front.GetComponent<SpriteRenderer>();
-        renderer.sprite = sprite;
+        spriteRenderer.sprite = sprite;
         
         var collider = GetComponent<BoxCollider>();
-        Height = collider.size.z;
+        Height = collider.size.y;
+        Width = collider.size.x;
 
         rigid = GetComponent<Rigidbody>();
-        
-
         gameObject.name = $"card_{num}";
 
-        Flip(false);
-        SetKinematic(true);
+        SetOpen(false);
+        SetPhysicDiable(true);
         return true;
     }
 
@@ -54,20 +61,79 @@ public class Card : MonoBehaviour
         return (int)Mathf.Floor((Num - 1) / 4 + 1);
     }
 
-    public void Flip(bool active)
+    public void SetOpen(bool open)
     {
-        if (active == true)
+        Open = open;
+        if (Open == true)
         {
-            transform.rotation = Quaternion.Euler(90, 0, 0);
+            transform.localRotation = Quaternion.Euler(0, 0, 360);
         }
         else
         {
-            transform.rotation = Quaternion.Euler(-90, 0, 0);
-        }   
+            transform.localRotation = Quaternion.Euler(0, 0, 180); 
+        }
     }
 
-    public void SetKinematic(bool active)
+    public void SetPhysicDiable(bool active)
     {
         rigid.isKinematic = active;
+    }
+
+    public void MoveTo(Vector3 position, iTween.EaseType ease = iTween.EaseType.linear, float time = 0.5f, float delay = 0f, Action complete = null)
+    {
+        completeMove = complete;
+        CompleteMove = false;
+        iTween.MoveTo(gameObject, iTween.Hash(
+           "x", position.x,
+           "y", position.y,
+           "z", position.z,
+           "delay", delay,
+           "time", time,
+           "easeType", ease,
+           "oncompletetarget", gameObject,
+           "oncomplete", "OnMoveComplete"));
+    }
+
+    public void CardOpen(iTween.EaseType ease = iTween.EaseType.linear, float interval = 0.1f, float delay = 0.0f)
+    {
+        iTween.RotateTo(gameObject, iTween.Hash(
+                "x", 0,
+                "y", 0,
+                "z", 360,
+                "delay", delay,
+                "time", interval,
+                "easeType",
+                ease,
+                "oncompletetarget", gameObject,
+                "oncomplete", "OnOpenComplte"));
+    }
+
+    public void ShowMe(iTween.EaseType ease = iTween.EaseType.linear, float interval = 0.1f, float delay = 0.0f)
+    {
+        iTween.RotateTo(gameObject, iTween.Hash(
+                "x", -45,
+                "y", 0,
+                "z", 360,
+                "delay", delay,
+                "time", interval,
+                "easeType",
+                ease,
+                "oncompletetarget", gameObject,
+                "oncomplete", "OnOpenComplte"));
+    }
+
+    private void OnOpenComplte()
+    {
+        Open = true;
+    }
+
+    private void OnMoveComplete()
+    {
+        CompleteMove = true;
+        if (completeMove != null)
+        {
+            completeMove();
+            completeMove = null;
+        }
     }
 }

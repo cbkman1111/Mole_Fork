@@ -52,7 +52,19 @@ public class SceneGostop : SceneBase
 
     public override void OnTouchEnd(Vector3 position)
     {
-
+        Ray ray = MainCamera.ScreenPointToRay(position);
+        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
+        {
+            var layer = hit.collider.gameObject.layer;
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Card"))
+            {
+                Card card = hit.collider.GetComponent<Card>();
+                if (card != null)
+                {
+                    board.HitCard(0, card);
+                }
+            }
+        }
     }
 
     public override void OnTouchMove(Vector3 position)
