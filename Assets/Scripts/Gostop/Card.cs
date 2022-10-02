@@ -7,15 +7,17 @@ public class Card : MonoBehaviour
 {
     [SerializeField]
     public SpriteRenderer spriteRenderer = null;
+    public MeshRenderer meshRenderer = null;
 
     public Rigidbody rigid { get; set; }
     public int Num { get; set; }
-    public KindOf Type { get; set; }
+    public KindOf KindOfCard { get; set; }
     public float Height { get; set; }
     public float Width { get; set; }
     public bool Open { get; set; }
     public bool CompleteMove { get; set; }
     private Action completeMove = null;
+    public Board.Player Owner { get; set; }
 
     public enum KindOf { 
         GWANG,
@@ -24,6 +26,7 @@ public class Card : MonoBehaviour
         HONG,
         CHUNG,
         CHO,
+        CHO_B,
 
         MUNG,
         MUNG_GODORI,
@@ -39,6 +42,7 @@ public class Card : MonoBehaviour
         Num = num;
         Open = false;
         CompleteMove = false;
+        Owner = Board.Player.NONE;
 
         spriteRenderer.sprite = sprite;
         
@@ -49,14 +53,70 @@ public class Card : MonoBehaviour
         rigid = GetComponent<Rigidbody>();
         gameObject.name = $"card_{num}";
 
+        switch (Num)
+        {
+            case 1:
+            case 9:
+            case 29:
+            case 41:
+                KindOfCard = KindOf.GWANG;
+                break;
+            case 45:
+                KindOfCard = KindOf.GWANG_B;
+                break;
+            case 5:
+            case 13:
+            case 30:
+                KindOfCard = KindOf.MUNG_GODORI;
+                break;
+            case 33:
+                KindOfCard = KindOf.MUNG_KOO;
+                break;
+            case 17:
+            case 21:
+            case 25:
+            case 37:
+            case 46:
+                KindOfCard = KindOf.MUNG;
+                break;
+            case 2:
+            case 6:
+            case 10:
+                KindOfCard = KindOf.HONG;
+                break;
+            case 14:
+            case 18:
+            case 26:
+                KindOfCard = KindOf.CHO;
+                break;
+            case 22:
+            case 34:
+            case 38:
+                KindOfCard = KindOf.CHUNG;
+                break;
+            case 47:
+                KindOfCard = KindOf.CHO_B;
+                break;
+            case 49:
+                KindOfCard = KindOf.PPP;
+                break;
+            case 50:
+            case 51:
+            case 52:
+                KindOfCard = KindOf.PP;
+                break;
+            default:
+                KindOfCard = KindOf.P;
+                break;
+        }
+        
+
         SetOpen(false);
         SetPhysicDiable(true);
         return true;
     }
 
-
-    public int Kind { get => GetKind(); }
-    private int GetKind()
+    public int GetMonth()
     {
         return (int)Mathf.Floor((Num - 1) / 4 + 1);
     }
@@ -96,6 +156,7 @@ public class Card : MonoBehaviour
 
     public void CardOpen(iTween.EaseType ease = iTween.EaseType.linear, float interval = 0.1f, float delay = 0.0f)
     {
+        Open = false;
         iTween.RotateTo(gameObject, iTween.Hash(
                 "x", 0,
                 "y", 0,
@@ -110,6 +171,7 @@ public class Card : MonoBehaviour
 
     public void ShowMe(iTween.EaseType ease = iTween.EaseType.linear, float interval = 0.1f, float delay = 0.0f)
     {
+        Open = false;
         iTween.RotateTo(gameObject, iTween.Hash(
                 "x", -45,
                 "y", 0,
@@ -120,6 +182,34 @@ public class Card : MonoBehaviour
                 ease,
                 "oncompletetarget", gameObject,
                 "oncomplete", "OnOpenComplte"));
+    }
+
+    public void ShowEnemy(iTween.EaseType ease = iTween.EaseType.linear, float interval = 0.1f, float delay = 0.0f)
+    {
+        Open = false;
+        iTween.RotateTo(gameObject, iTween.Hash(
+                "x", -45,
+                "y", 0,
+                "z", 360,
+                "delay", delay,
+                "time", interval,
+                "easeType",
+                ease,
+                "oncompletetarget", gameObject,
+                "oncomplete", "OnOpenComplte"));
+    }
+    
+
+    public void SetShadow(bool active)
+    {
+        if (active == true)
+        {
+            meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
+        }
+        else
+        {
+            meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        }
     }
 
     private void OnOpenComplte()

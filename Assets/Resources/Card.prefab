@@ -45,7 +45,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2, y: 0.08, z: 3}
+  m_Size: {x: 2, y: 0.1, z: 3}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &6165693552872213153
 MonoBehaviour:
@@ -60,6 +60,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 649706916941490318}
+  meshRenderer: {fileID: 7049704932113846458}
 --- !u!54 &6817480921922514462
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -75,7 +76,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 2
+  m_CollisionDetection: 3
 --- !u!1 &4193640622394097035
 GameObject:
   m_ObjectHideFlags: 0

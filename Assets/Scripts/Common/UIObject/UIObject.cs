@@ -53,6 +53,17 @@ public abstract class UIObject : MonoBehaviour
 
                 continue;
             }
+
+            Image img = child.GetComponent<Image>();
+            if (img != null)
+            {
+                if (list.ContainsKey(img.name) == false)
+                {
+                    list.Add(img.name, img.gameObject);
+                }
+
+                continue;
+            }
         }
     }
 
@@ -87,6 +98,14 @@ public abstract class UIObject : MonoBehaviour
         }
     }
 
+    protected void SetPosition(string name, Vector3 position)
+    {
+        if (list.TryGetValue(name, out GameObject obj) == true)
+        {
+            obj.transform.position = position;
+        }
+    }
+
     protected void SetActive(string name, bool active)
     {
         if (list.TryGetValue(name, out GameObject obj) == true)
@@ -94,6 +113,7 @@ public abstract class UIObject : MonoBehaviour
             obj.gameObject.SetActive(active);
         }
     }
+
     public virtual Transform FindTransform(Transform node, string path)
     {
         if (node == false)
