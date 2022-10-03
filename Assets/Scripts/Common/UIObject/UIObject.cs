@@ -4,11 +4,10 @@ using UnityEngine.UI;
 
 public abstract class UIObject : MonoBehaviour
 {
-    protected Dictionary<string, GameObject> list = null;
-
+    protected Dictionary<string, Component> list = null;
     private void Awake()
     {
-        list = new Dictionary<string, GameObject>();
+        list = new Dictionary<string, Component>();
 
         Transform[] children = GetComponentsInChildren<Transform>(true);
         foreach (var child in children)
@@ -22,7 +21,7 @@ public abstract class UIObject : MonoBehaviour
                         Click(button);
                     });
 
-                    list.Add(button.name, button.gameObject);
+                    list.Add(button.name, button);
                     continue;
                 }
             }
@@ -38,7 +37,7 @@ public abstract class UIObject : MonoBehaviour
                         OnValueChanged(slider, f);
                     });
 
-                    list.Add(slider.name, slider.gameObject);
+                    list.Add(slider.name, slider);
                     continue;
                 }
             }
@@ -48,7 +47,7 @@ public abstract class UIObject : MonoBehaviour
             {
                 if (list.ContainsKey(text.name) == false)
                 {
-                    list.Add(text.name, text.gameObject);
+                    list.Add(text.name, text);
                 }
 
                 continue;
@@ -59,7 +58,7 @@ public abstract class UIObject : MonoBehaviour
             {
                 if (list.ContainsKey(img.name) == false)
                 {
-                    list.Add(img.name, img.gameObject);
+                    list.Add(img.name, img);
                 }
 
                 continue;
@@ -67,28 +66,24 @@ public abstract class UIObject : MonoBehaviour
         }
     }
 
-    public virtual void OnOpen(){}
-    public virtual void OnClose(){}
-    public virtual void OnValueChanged(Slider slider, float f){}
-
     protected int CompareTo(string a, string b)
     {
         return a.CompareTo(b);
     }
 
-    protected T GetObject<T>(string name)
+    protected T GetObject<T>(string key)
     {
-        if (list.TryGetValue(name, out GameObject obj) == true)
+        if (list.TryGetValue(key, out Component obj) == true)
         {
             return obj.GetComponent<T>();
         }
          
         return default(T);
     }
-
-    protected void SetText(string name, string str)
+    
+    protected void SetText(string key, string str)
     {
-        if (list.TryGetValue(name, out GameObject obj) == true)
+        if (list.TryGetValue(key, out Component obj) == true)
         {
             Text text = obj.GetComponent<Text>();
             if(text != null)
@@ -98,19 +93,31 @@ public abstract class UIObject : MonoBehaviour
         }
     }
 
-    protected void SetPosition(string name, Vector3 position)
+    protected void SetPosition(string key, Vector3 position)
     {
-        if (list.TryGetValue(name, out GameObject obj) == true)
+        if (list.TryGetValue(key, out Component obj) == true)
         {
             obj.transform.position = position;
         }
     }
 
-    protected void SetActive(string name, bool active)
+    protected void SetActive(string key, bool active)
     {
-        if (list.TryGetValue(name, out GameObject obj) == true)
+        if (list.TryGetValue(key, out Component obj) == true)
         {
             obj.gameObject.SetActive(active);
+        }
+    }
+
+    protected void SetSprite(string key, Sprite sprite)
+    {
+        if (list.TryGetValue(key, out Component obj) == true)
+        {
+            Image img = obj.GetComponent<Image>();
+            if (img != null)
+            {
+                img.sprite = sprite;
+            }
         }
     }
 
@@ -142,11 +149,14 @@ public abstract class UIObject : MonoBehaviour
 
         return trans;
     }
+
     private void Click(Button btn)
     {
         OnClick(btn);
     }
-
+    public virtual void OnOpen() { }
+    public virtual void OnClose() { }
+    public virtual void OnValueChanged(Slider slider, float f) { }
     public abstract void OnInit();
     protected abstract void OnClick(Button btn);
     public abstract void Close();
