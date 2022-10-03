@@ -1,5 +1,6 @@
 ﻿using Singleton;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -90,6 +91,11 @@ public class UIManager : MonoSingleton<UIManager>
 
         CoverCheck();
         return ret;
+    }
+
+    public bool FindPopup(string name)
+    {
+        return controllerPopup.Get(name) != null;
     }
 
     public void CloseMenu(string name)
@@ -249,7 +255,15 @@ public class CanvasController
 
     public Transform Get(string name)
     {
-        return canvas.transform.Find(name);
+        var ret = list.Where(obj => obj.name.CompareTo(name) == 0).ToList();
+        if (ret != null && ret.Count == 1)
+        {
+            return ret[0].transform;
+        }
+        else 
+        {
+            return null;
+        }
     }
 
     public T Get<T>(string name) where T : UIObject

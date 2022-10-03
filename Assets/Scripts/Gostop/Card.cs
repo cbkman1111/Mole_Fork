@@ -12,6 +12,7 @@ public class Card : MonoBehaviour
     public Rigidbody rigid { get; set; }
     public int Num { get; set; }
     public KindOf KindOfCard { get; set; }
+    public int Month { get; set; }
     public float Height { get; set; }
     public float Width { get; set; }
     public bool Open { get; set; }
@@ -40,6 +41,7 @@ public class Card : MonoBehaviour
     public bool Init(int num, Sprite sprite)
     {
         Num = num;
+        Month = GetMonth(num);
         Open = false;
         CompleteMove = false;
         Owner = Board.Player.NONE;
@@ -116,9 +118,14 @@ public class Card : MonoBehaviour
         return true;
     }
 
-    public int GetMonth()
+    public Sprite GetSprite()
     {
-        return (int)Mathf.Floor((Num - 1) / 4 + 1);
+        return spriteRenderer.sprite;
+    }
+
+    public int GetMonth(int num)
+    {
+        return (int)Mathf.Floor((num - 1) / 4 + 1);
     }
 
     public void SetOpen(bool open)

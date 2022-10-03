@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 905114017962246411}
   - component: {fileID: 6773622826596387432}
   m_Layer: 5
-  m_Name: Text  - Pee Player 1
+  m_Name: Text - Pee Player 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -212,7 +212,7 @@ GameObject:
   - component: {fileID: 3048054560520444876}
   - component: {fileID: 8411458069257946543}
   m_Layer: 5
-  m_Name: Text  - Mung Player 1
+  m_Name: Text - Mung Player 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -291,7 +291,7 @@ GameObject:
   - component: {fileID: 3034387319605763865}
   - component: {fileID: 948752072593855046}
   m_Layer: 5
-  m_Name: Text  - Pee Player 2
+  m_Name: Text - Pee Player 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -543,7 +543,7 @@ GameObject:
   - component: {fileID: 110665552565289433}
   - component: {fileID: 3551154294015383531}
   m_Layer: 5
-  m_Name: Text  - Gwang Player 2
+  m_Name: Text - Gwang Player 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -622,7 +622,7 @@ GameObject:
   - component: {fileID: 7244062975235527018}
   - component: {fileID: 9002121203971037496}
   m_Layer: 5
-  m_Name: Text  - Thee Player 1
+  m_Name: Text - Thee Player 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -701,7 +701,7 @@ GameObject:
   - component: {fileID: 8968162184388607211}
   - component: {fileID: 1415678691410572637}
   m_Layer: 5
-  m_Name: Text  - Mung Player 2
+  m_Name: Text - Mung Player 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1084,7 +1084,7 @@ GameObject:
   - component: {fileID: 2271044110932019286}
   - component: {fileID: 6442871849098182710}
   m_Layer: 5
-  m_Name: Text  - Thee Player 2
+  m_Name: Text - Thee Player 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1470,7 +1470,7 @@ GameObject:
   - component: {fileID: 5581565379973110237}
   - component: {fileID: 5275699412664693655}
   m_Layer: 5
-  m_Name: Text  - Gwang Player 1
+  m_Name: Text - Gwang Player 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

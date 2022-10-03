@@ -18,19 +18,17 @@ public class SceneGostop : SceneBase
     /// <returns></returns>
     public override bool Init()
     {
-        board = Board.Create();
         UIMenuGostop menu = UIManager.Instance.OpenMenu<UIMenuGostop>("UIMenuGostop");
         if (menu != null)
         {
-            menu.InitMenu(board);
-            
+            menu.InitMenu();
         }
 
-        //
-        board.OnGameStart = () => {
-            menu.ShowScoreMenu(true);
-        };
-        board.StartGame();
+        board = Board.Create(menu);
+        if (board != null)
+        {
+            board.StartGame();
+        }
 
         return true;
     }
@@ -66,10 +64,15 @@ public class SceneGostop : SceneBase
                 Card card = hit.collider.GetComponent<Card>();
                 if (card != null)
                 {
-                    if (board.GetState() == Board.State.CARD_HIT &&
+                    var stateMachine = board.GetStateMachine();
+                    var turnInfo = stateMachine.GetCurrturnInfo();
+                    var stateInfo = turnInfo.GetCurrentStateInfo();
+
+                    if (stateInfo.state == StateMachineGostop.State.CARD_HIT &&
                         board.MyTurn() == true)
                     {
-                        board.HitCard(0, card);
+                        board.HitCard((int)Board.Player.USER, card);
+                        stateInfo.evt = StateMachineGostop.StateEvent.PROGRESS; // Ä«µå Ä§.
                     }
                 }
             }

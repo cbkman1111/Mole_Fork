@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static StateMachineGostop;
 
 /// <summary>
 /// 
@@ -29,6 +30,8 @@ public class BoardPosition
 /// </summary>
 public class Board : MonoBehaviour
 {
+    private StateMachineGostop stateMachine = null;
+
     [SerializeField]
     public Card prefabCard = null;
     public Sprite[] sprites = null;
@@ -42,16 +45,14 @@ public class Board : MonoBehaviour
     private List<Card>[] hands = null;
     private List<Card>[] scores = null;
     private Stack<Card> deck = null;
+    private List<Card> select = null; // 선택해야 하는 카드.
 
     private float cardWidth = 0;
     private float cardHeight = 0;
 
-    private State state = State.WAIT;
-    private StateEvent evt = StateEvent.INIT;
+    private Board.Player turnUser = 0;
 
-    private Player turnUser = 0;
-
-    public Action OnGameStart = null;
+    public UIMenuGostop menu = null;
 
     public enum Player { 
         NONE = -1,
@@ -72,48 +73,15 @@ public class Board : MonoBehaviour
         HAND,
     }
 
-    public enum StateEvent { 
-        INIT = 0,
-        PROGRESS,
-        DONE,
-    }
-
-    public enum State { 
-        WAIT = 0,
-
-        CREATE_DECK,
-        
-        SHUFFLE_8,
-        SHUFFLE_10,
-
-        SHUFFLE_OPEN_8,
-
-        HANDS_UP,
-        HANDS_OPEN,
-        HANDS_SORT,
-
-        CARD_HIT, // 카드 치기.
-        CARD_POP, // 카드 뒤집기.
-        
-        //HIT_USER_SECOND,
-        //DECK_CARD_POP_USER_SECOND, // 패 뒤집기.
-
-        EAT_CHECK, // 먹는 판정.
-
-        TURN_CHECK, // 턴 바꾸기.
-
-        GAME_OVER_TIE, // 무승부.
-    }
-
     /// <summary>
     /// 
     /// </summary>
     /// <returns></returns>
-    public static Board Create()
+    public static Board Create(UIMenuGostop menu)
     {
         Board prefab = ResourcesManager.Instance.LoadInBuild<Board>("Board");
         Board board = Instantiate<Board>(prefab);
-        if (board != null && board.Init())
+        if (board != null && board.Init(menu))
         {
             return board;
         }
@@ -125,10 +93,12 @@ public class Board : MonoBehaviour
     /// 
     /// </summary>
     /// <returns></returns>
-    public bool Init()
+    public bool Init(UIMenuGostop menu)
     {
-        state = State.WAIT;
-        evt = StateEvent.INIT;
+        this.menu = menu;
+        this.stateMachine = StateMachineGostop.Create();
+
+        stateMachine.Change(State.WAIT);
 
         deck = new Stack<Card>();
         hands = new List<Card>[(int)Player.MAX];
@@ -138,6 +108,8 @@ public class Board : MonoBehaviour
         scores = new List<Card>[(int)Player.MAX];
         scores[0] = new List<Card>();
         scores[1] = new List<Card>();
+        
+        select = new List<Card>();
 
         bottoms = new Dictionary<int, List<Card>>();
         bottoms.Add(1, new List<Card>());
@@ -154,16 +126,13 @@ public class Board : MonoBehaviour
         bottoms.Add(12, new List<Card>());
         bottoms.Add(13, new List<Card>());
 
+        menu.SetPosition(this);
         return true;
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <returns></returns>
-    public State GetState()
+    public StateMachineGostop GetStateMachine()
     {
-        return state;
+        return stateMachine;
     }
 
     /// <summary>
@@ -180,8 +149,7 @@ public class Board : MonoBehaviour
     /// </summary>
     public void StartGame()
     {
-        state = State.CREATE_DECK;
-        evt = StateEvent.INIT;
+        stateMachine.Change(State.CREATE_DECK);
     }
 
     /// <summary>
@@ -190,324 +158,379 @@ public class Board : MonoBehaviour
     /// <returns></returns>
     private void Update()
     {
-        switch (state)
+        var turnInfo = stateMachine.GetCurrturnInfo();
+        var stateInfo = turnInfo.GetCurrentStateInfo();
+        switch (stateInfo.state)
         {
             case State.WAIT:
+                stateMachine.Process(
+                    () => {},
+                    () => {
+                        return true;
+                    },
+                    () => {});
                 break;
 
             // 카드덱 생성.
             case State.CREATE_DECK:
-                if (evt == StateEvent.INIT)
-                {
-                    CreateDeck();
-                    evt = StateEvent.PROGRESS;
-                }
-                else if (evt == StateEvent.PROGRESS)
-                {
-                    int count = deck.Where(card => card.CompleteMove == true).ToList().Count;
-                    if (count == 52)
-                    {
-                        evt = StateEvent.DONE;
-                    }
-                }
-                else if (evt == StateEvent.DONE)
-                {
-                    state = State.SHUFFLE_8;
-                    evt = StateEvent.INIT;
-                }
+                stateMachine.Process(
+                    () => {
+                        SetCardCount();
+                        CreateDeck();
+                    },
+                    () => {
+                        int count = deck.Where(card => card.CompleteMove == true).ToList().Count;
+                        return count == 52;
+                    },
+                    () => {
+                        stateMachine.Change(State.SHUFFLE_8);
+                    });
+
                 break;
 
             // 바닥 8장 깔기.
             case State.SHUFFLE_8:
-                if (evt == StateEvent.INIT)
-                {
-                    Pop8Cards();
-                    evt = StateEvent.PROGRESS;
-                }
-                else if (evt == StateEvent.PROGRESS)
-                {
-                    int count = 0;
-                    foreach (var slot in bottoms)
-                    {
-                        count += slot.Value.Where(card => card.CompleteMove == true).
-                            ToList().
-                            Count;
-                    }
+                stateMachine.Process(
+                    () => { 
+                        Pop8Cards(); 
+                    },
+                    () => {
+                        int count = 0;
+                        foreach (var slot in bottoms)
+                        {
+                            count += slot.Value.Where(card => card.CompleteMove == true).ToList().Count;
+                        }
 
-                    if (count == 8)
-                    {
-                        evt = StateEvent.DONE;
-                    }
-                }
-                else if (evt == StateEvent.DONE)
-                {
-                    state = State.SHUFFLE_10;
-                    evt = StateEvent.INIT;
-                }
+                        return count == 8;
+                    },
+                    () => {
+                        stateMachine.Change(State.SHUFFLE_10);
+                    });
+
                 break;
 
             // 열장씩 나누기.
             case State.SHUFFLE_10:
-                if (evt == StateEvent.INIT)
-                {
-                    Pop10Cards();
-                    evt = StateEvent.PROGRESS;
-                }
-                else if (evt == StateEvent.PROGRESS)
-                {
-                    int completeCount = 0;
-                    completeCount += hands[0].Where(e => e.CompleteMove == true).ToList().Count;
-                    completeCount += hands[1].Where(e => e.CompleteMove == true).ToList().Count;
-                    if (completeCount == 20)
-                    {
-                        evt = StateEvent.DONE;
-                    }
-                }
-                else if (evt == StateEvent.DONE)
-                {
-                    state = State.SHUFFLE_OPEN_8;
-                    evt = StateEvent.INIT;
-                    
-                }
+                stateMachine.Process(
+                    () => {
+                        Pop10Cards();
+                    },
+                    () => {
+                        int count = 0;
+                        count += hands[0].Where(e => e.CompleteMove == true).ToList().Count;
+                        count += hands[1].Where(e => e.CompleteMove == true).ToList().Count;
+                        return count == 20;
+                    },
+                    () => {
+                        stateMachine.Change(State.OPEN_8);
+                    });
                 break;
 
             // 8장 뒤집기
-            case State.SHUFFLE_OPEN_8:
-                if (evt == StateEvent.INIT)
-                {
-                    FlipCard8(); 
-                    evt = StateEvent.PROGRESS;
-                }
-                else if (evt == StateEvent.PROGRESS)
-                {
-                    int count = 0;
-                    foreach (var slot in bottoms)
-                    {
-                        count += slot.Value.Where(e => e.Open == true).ToList().Count;
-                    }
+            case State.OPEN_8:
+                stateMachine.Process(
+                    () => {
+                        FlipCard8();
+                    },
+                    () => {
+                        int count = 0;
+                        foreach (var slot in bottoms)
+                        {
+                            count += slot.Value.Where(e => e.Open == true).ToList().Count;
+                        }
 
-                    if (count == 8)
-                    {
-                        evt = StateEvent.DONE;
-                    }
-                }
-                else if (evt == StateEvent.DONE)
-                {
-                    state = State.HANDS_UP;
-                    evt = StateEvent.INIT;
+                        return count == 8;
+                    },
+                    () => {
+                        stateMachine.Change(State.CHECK_JORKER);
+                    });
+                break;
 
-                }
+            case State.CHECK_JORKER:
+                stateMachine.Process(
+                    () => {
+                        foreach (var slot in bottoms)
+                        {
+                            var list = slot.Value.Where(e => e.Month == 13).ToList();
+                            for (int i = list.Count - 1; i >= 0; --i)
+                            {
+                                var card = list[i];
 
+                                turnInfo.pop = Pop1Cards((int)turnUser);
+                                EatScore(card);
+                                list.Remove(card);
+                            }
+                        }
+                    },
+                    () => {
+
+                        int count = 0;
+                        foreach (var slot in bottoms)
+                        {
+                            count += slot.Value.Where(e => e.Open == true).ToList().Count;
+                        }
+
+                        // 수량이 부족하면 다시 깔도록 INIT 상태로 되돌립니다.
+                        if (count < 8)
+                        {
+                            stateInfo.evt = StateEvent.INIT;
+                            return false;
+                        }
+                        else
+                        {
+                            int countMove = 0;
+                            foreach (var slot in bottoms)
+                            {
+                                countMove += slot.Value.Where(e => e.CompleteMove == false).ToList().Count;
+                            }
+
+                            return countMove == 0;
+                        }
+                    },
+                    () => {
+                        stateMachine.Change(State.HANDS_UP);
+                    });
                 break;
 
             case State.HANDS_UP:
-                if (evt == StateEvent.INIT)
-                {
-                    HandsUp();
-                    evt = StateEvent.PROGRESS;
-                }
-                else if (evt == StateEvent.PROGRESS)
-                {
-                    int completeCount = 0;
-                    completeCount += hands[0].Where(e => e.CompleteMove == true).ToList().Count;
-                    completeCount += hands[1].Where(e => e.CompleteMove == true).ToList().Count;
-                    if (completeCount == 20)
-                    {
-                        evt = StateEvent.DONE;
-                    }
-                }
-                else if (evt == StateEvent.DONE)
-                {
-                    state = State.HANDS_OPEN;
-                    evt = StateEvent.INIT;
+                stateMachine.Process(
+                    () => {
+                        HandsUp();
+                    },
+                    () => {
+                        int count = 0;
+                        count += hands[0].Where(e => e.CompleteMove == true).ToList().Count;
+                        count += hands[1].Where(e => e.CompleteMove == true).ToList().Count;
 
-                }
+                        return count == 20;
+                    },
+                    () => {
+                        stateMachine.Change(State.HANDS_OPEN);
+                    });
                 break;
 
-            case State.HANDS_OPEN:
-                if (evt == StateEvent.INIT)
-                {
-                    HandOpen();
-                    evt = StateEvent.PROGRESS;
-                }
-                else if (evt == StateEvent.PROGRESS)
-                {
-                    int count = hands[0].Where(e => e.Open == false).ToList().Count;
-                    if (count == 0)
-                    {
-                        evt = StateEvent.DONE;
-                    }
-                }
-                else if (evt == StateEvent.DONE)
-                {
-                    state = State.HANDS_SORT;
-                    evt = StateEvent.INIT;
-                }
+            case State.HANDS_OPEN: // 손패를 뒤집습니다.
+                stateMachine.Process(
+                    () => {
+                        HandOpen();
+                    },
+                    () => {
+                        int count = hands[0].Where(e => e.Open == false).ToList().Count;
+                        return count == 0;
+                    },
+                    () => {
+                        stateMachine.Change(State.HANDS_SORT);
+                    });
+
                 break;
 
             case State.HANDS_SORT: // 손패를 정렬합니다.
-                if (evt == StateEvent.INIT)
-                {
-                    SortHand();
-                    evt = StateEvent.PROGRESS;
-                }
-                else if (evt == StateEvent.PROGRESS)
-                {
-                    int count = hands[0].Where(e => e.Open == false).ToList().Count;
-                    if (count == 0)
-                    {
-                        evt = StateEvent.DONE;
-                    }
-                }
-                else if (evt == StateEvent.DONE)
-                {
-                    state = State.CARD_HIT;
-                    evt = StateEvent.INIT;
-                }
+                stateMachine.Process(
+                    () => {
+                        SortHand();
+                    },
+                    () => {
+                        int count = hands[0].Where(e => e.Open == false).ToList().Count;
+                        return count == 0;
+                    },
+                    () => {
+                        stateMachine.Change(State.CARD_HIT);
+                    });
                 break;
 
             case State.CARD_HIT:
-                if (evt == StateEvent.INIT)
-                {
-                    if (OnGameStart != null)
-                    {
-                        OnGameStart();
-                    }
+                stateMachine.Process(
+                    () => {
+                        menu.ShowScoreMenu(true);
+                        if (turnUser == Player.COMPUTER)
+                        {
+                            HitCard((int)Player.COMPUTER, hands[(int)Player.COMPUTER][0]);
+                        }
+                    },
+                    () => {
+                        if (turnInfo.hited == false)
+                        { 
+                            return false;
+                        }
 
-                    // HitCard 에서 PROGRESS 로 변환.
-                    if (turnUser == Player.COMPUTER)
-                    {
-                        HitCard((int)Player.COMPUTER, hands[(int)Player.COMPUTER][0]);
-                    }
-                }
-                else if (evt == StateEvent.PROGRESS)
-                {
-                    int count = GetMoveAllCount();
-                    if (count == 0)
-                    {
-                        evt = StateEvent.DONE;
-                    }
-                }
-                else if (evt == StateEvent.DONE)
-                {
-                    state = State.CARD_POP;
-                    evt = StateEvent.INIT;
-                }
+                        if (turnInfo.hit.Month == 13)
+                        {
+                            return false;
+                        }
+
+                        int count = GetMoveAllCount();
+                        return count == 0;
+                    },
+                    () => {
+                        stateMachine.Change(State.CARD_POP);
+                    });
                 break;
 
             case State.CARD_POP:
-                if (evt == StateEvent.INIT)
-                {
-                    Pop1Cards((int)turnUser);
-                    evt = StateEvent.PROGRESS;
-                }
-                else if (evt == StateEvent.PROGRESS)
-                {
-                    int count = GetMoveAllCount();
-                    if (count == 0)
-                    {
-                        evt = StateEvent.DONE;
-                    }
-                }
-                else if (evt == StateEvent.DONE)
-                {
-                    state = State.EAT_CHECK;
-                    evt = StateEvent.INIT;
-                }
+                stateMachine.Process(
+                    () => {
+                        turnInfo.pop = Pop1Cards((int)turnUser); 
+                    },
+                    () => {
+                        
+                        int count = GetMoveAllCount();
+                        if (count == 0)
+                        {
+                            if (turnInfo.pop.Month == 13) // 뒤집어서 조커가 나오면 다시 뽑습니다.
+                            {
+                                stateInfo.evt = StateEvent.INIT;
+                                return false;
+                            }
+                        }
+
+                        return count == 0;
+                    },
+                    () => {
+                        stateMachine.Change(State.EAT_CHECK);
+                    });
+
                 break;
 
             case State.EAT_CHECK: // 카드 획득 처리.
-                if (evt == StateEvent.INIT)
-                {
-                    EatCheck();
-                    evt = StateEvent.PROGRESS;
-                }
-                else if (evt == StateEvent.PROGRESS)
-                {
-                    int count = GetMoveAllCount();
-                    if (count == 0)
-                    {
-                        evt = StateEvent.DONE;
-                    }
-                }
-                else if (evt == StateEvent.DONE)
-                {
-                    // 주인 없는 카드로 설정.
-                    foreach (var kindSlot in bottoms)
-                    {
-                        var list = kindSlot.Value;
-                        foreach (var card in list)
+                stateMachine.Process(
+                    () => {
+                        EatCheck();
+                    },
+                    () => {
+                        if (select.Count == 2)
                         {
-                            card.Owner = Player.NONE;
-                        }
-                    }
+                            if (turnUser == Player.COMPUTER)
+                            {
+                                select[0].Owner = turnUser;
 
-                    state = State.TURN_CHECK;
-                    evt = StateEvent.INIT;
-                }
+                                var slot = GetSlot(select[0]);
+                                for (int i = slot.Value.Count - 1; i >= 0; --i)
+                                {
+                                    var slotCard = slot.Value[i];
+                                    if (slotCard.Owner == turnUser)
+                                    {
+                                        slot.Value.Remove(slotCard);
+                                        EatScore(slotCard);
+                                    }
+                                }
+
+                                select.Clear();
+                            }
+                            else 
+                            {
+                                if (UIManager.Instance.FindPopup("PopupCardSelect") == false)
+                                {
+                                    PopupCardSelect popup = UIManager.Instance.OpenPopup<PopupCardSelect>("PopupCardSelect");
+                                    popup.Init(select[0], select[1], (Card selectCard) => {
+
+                                        selectCard.Owner = turnUser;
+
+                                        var slot = GetSlot(selectCard);
+                                        for (int i = slot.Value.Count - 1; i >= 0; --i)
+                                        {
+                                            var slotCard = slot.Value[i];
+                                            if (slotCard.Owner == turnUser)
+                                            {
+                                                slot.Value.Remove(slotCard);
+                                                EatScore(slotCard);
+                                            }
+                                        }
+
+                                        select.Clear();
+                                    });
+                                }
+                            }
+                            
+
+                            return false;
+                        }
+                        else
+                        {
+                            int count = GetMoveAllCount();
+                            count += scores[0].Where(card => card.CompleteMove == false).ToList().Count();
+                            count += scores[1].Where(card => card.CompleteMove == false).ToList().Count();
+                            return count == 0;
+                        }
+                    },
+                    () => {
+                        // 주인 없는 카드로 설정.
+                        foreach (var kindSlot in bottoms)
+                        {
+                            var list = kindSlot.Value;
+                            foreach (var card in list)
+                            {
+                                card.Owner = Player.NONE;
+                            }
+                        }
+
+                        select.Clear();
+                        stateMachine.Change(State.SCORE_UPDATE);
+                    });
                 break;
 
-            case State.TURN_CHECK: // 턴 바꾸기.
-                if (evt == StateEvent.INIT)
-                {
-                    if (turnUser == Player.USER)
-                    {
-                        turnUser = Player.COMPUTER;
-                    }
-                    else
-                    {
-                        turnUser = Player.USER;
-                    }
+            case State.SCORE_UPDATE: // 점수 체크.
+                stateMachine.Process(
+                    () => {
+                        SetCardCount();
+                    },
+                    () => {
+                        return true;
+                    },
+                    () => {
+                        stateMachine.Change(State.TURN_CHECK);
+                    });
 
-                    evt = StateEvent.PROGRESS;
-                }
-                else if (evt == StateEvent.PROGRESS)
-                {
-                    int count = GetMoveAllCount();
-                    if (count == 0)
-                    {
-                        evt = StateEvent.DONE;
-                    }
-                }
-                else if (evt == StateEvent.DONE)
-                {
-                    if (hands[(int)Player.COMPUTER].Count > 0 && turnUser == Player.COMPUTER)
-                    {
-                        state = State.HANDS_SORT;
-                    }
-                    else if (hands[(int)Player.USER].Count > 0 && turnUser == Player.USER)
-                    {
-                        state = State.HANDS_SORT;
-                    }
-                    else
-                    {
-                        state = State.GAME_OVER_TIE;
-                    }
-                    
-                    evt = StateEvent.INIT;
-                }
+                break;
+            case State.TURN_CHECK: // 턴 바꾸기.
+                stateMachine.Process(
+                    () => {
+                        if (turnUser == Player.USER)
+                        {
+                            turnUser = Player.COMPUTER;
+                        }
+                        else
+                        {
+                            turnUser = Player.USER;
+                        }
+                    },
+                    () => {
+                        int count = GetMoveAllCount();
+                        return count == 0;
+                    },
+                    () => {
+                        State nextState = State.HANDS_SORT;
+                        if (hands[(int)Player.COMPUTER].Count > 0 && turnUser == Player.COMPUTER)
+                        {
+                            nextState = State.HANDS_SORT;
+                        }
+                        else if (hands[(int)Player.USER].Count > 0 && turnUser == Player.USER)
+                        {
+                            nextState = State.HANDS_SORT;
+                        }
+                        else
+                        {
+                            nextState = State.GAME_OVER_TIE;
+                        }
+
+                        stateMachine.AddTurn(turnUser); // 턴을 증가.
+                        stateMachine.Change(nextState);
+                    });
                 break;
 
             case State.GAME_OVER_TIE: // 무승부 상태 처리.
-                if (evt == StateEvent.INIT)
-                {
-                    evt = StateEvent.PROGRESS;
-                }
-                else if (evt == StateEvent.PROGRESS)
-                {
-                    int count = GetMoveAllCount();
-                    if (count == 0)
-                    {
-                        evt = StateEvent.DONE;
-                    }
-                }
-                else if (evt == StateEvent.DONE)
-                {
-                    DestroyAllCards();
+                stateMachine.Process(
+                    () => {
+                    },
+                    () => {
+                        int count = GetMoveAllCount();
+                        return count == 0;
+                    },
+                    () => {
+                        DestroyAllCards();
 
-                    state = State.CREATE_DECK;
-                    evt = StateEvent.INIT;
-                }
+                        stateMachine.Init();
+                        stateMachine.Change(State.CREATE_DECK);
+                    });
                 break;
         }
     }
@@ -549,6 +572,7 @@ public class Board : MonoBehaviour
         
         // 배열 지우기.
         deck.Clear();
+        stateMachine.Clear();
 
         foreach (var kindSlot in bottoms)
         {
@@ -623,7 +647,19 @@ public class Board : MonoBehaviour
 
         return true;
     }
-    
+
+    private void SetCardCount()
+    {
+        for (int user = 0; user < (int)Player.MAX; user++)
+        {
+            int gwang = scores[user].Where(card => card.KindOfCard == Card.KindOf.GWANG || card.KindOfCard == Card.KindOf.GWANG_B).ToList().Count();
+            int mung = scores[user].Where(card => card.KindOfCard == Card.KindOf.MUNG || card.KindOfCard == Card.KindOf.MUNG_GODORI || card.KindOfCard == Card.KindOf.MUNG_KOO).ToList().Count();
+            int thee = scores[user].Where(card => card.KindOfCard == Card.KindOf.CHO || card.KindOfCard == Card.KindOf.CHUNG || card.KindOfCard == Card.KindOf.HONG).ToList().Count();
+            int pee = scores[user].Where(card => card.KindOfCard == Card.KindOf.P || card.KindOfCard == Card.KindOf.PP || card.KindOfCard == Card.KindOf.PPP).ToList().Count();
+
+            menu.ScoreUpdate((Player)user, gwang, mung, thee, pee);
+        }
+    }
     /// <summary>
     /// 
     /// </summary>
@@ -645,9 +681,10 @@ public class Board : MonoBehaviour
             Card card = Instantiate<Card>(prefabCard);
             card.Init(n, sp);
             deck.Push(card);
-
+            
             float height = card.Height * 0.5f;
-            card.MoveTo(new Vector3(0, height * i, 0), delay: i * 0.01f);
+            card.transform.position = deckPosition.position;
+            card.MoveTo( new Vector3(deckPosition.position.x, height * i, deckPosition.position.z), delay: i * 0.01f);
 
             // 카드 크기를 저장해둡니다.
             cardWidth = card.Width;
@@ -796,16 +833,16 @@ public class Board : MonoBehaviour
     /// <param name="card"></param>
     public void HitCard(int user, Card card)
     {
-        if (evt == StateEvent.PROGRESS)
-        {
-            Debug.Log("allready hit card.");
-            return;
-        }
+        var turnInfo = stateMachine.GetCurrturnInfo();
+        var info = turnInfo.GetCurrentStateInfo();
 
         KeyValuePair<int, List<Card>> slot = GetSlot(card);
         bool success = hands[user].Remove(card);
         if (success == true)
         {
+            turnInfo.hit = card;
+            turnInfo.hited = true;
+
             if (slot.Key != -1)
             {
                 float randX = UnityEngine.Random.Range(-0.5f, 0.5f);
@@ -818,51 +855,77 @@ public class Board : MonoBehaviour
 
                 card.SetPhysicDiable(true);
                 card.SetShadow(true);
-
+                
                 if (user == 0)
                 {
-                    card.MoveTo(
-                        destination1,
-                        time: 0.2f,
-                        ease: iTween.EaseType.easeInBack,
-                        complete: () =>
-                        {
-                            card.SetPhysicDiable(false);
-                            card.MoveTo(
-                                destination2,
-                                time: 0.2f,
-                                ease: iTween.EaseType.easeInQuint,
-                                complete: () =>
-                                {
+                    if (card.Month == 13)
+                    {
+                        EatScore(card);
 
-                                });
-                        });
+                        var deckCard = deck.Pop();
+                        deckCard.MoveTo(card.transform.position, time: 0.1f);
+                        deckCard.ShowMe();
+                        hands[user].Add(deckCard);
+                    }
+                    else
+                    {
+                        card.MoveTo(
+                            destination1,
+                            time: 0.2f,
+                            ease: iTween.EaseType.easeInBack,
+                            complete: () =>
+                            {
+                                card.SetPhysicDiable(false);
+                                card.MoveTo(
+                                    destination2,
+                                    time: 0.2f,
+                                    ease: iTween.EaseType.easeInQuint,
+                                    complete: () =>
+                                    {
+
+                                    });
+                            });
+
+                        slot.Value.Add(card);
+                    }
                 }
                 else
                 {
-                    Vector3 destination2Up = cardPosition[slot.Key - 1].position + new Vector3(0, 10, 0);
+                    if (card.Month == 13)
+                    {
+                        EatScore(card);
 
-                    card.MoveTo(
-                        destination2Up,
-                        time: 0.2f,
-                        ease: iTween.EaseType.easeInBack,
-                        complete: () =>
-                        {
-                            card.SetPhysicDiable(false);
-                            card.MoveTo(
-                                destination2,
-                                time: 0.2f,
-                                ease: iTween.EaseType.easeInQuint,
-                                complete: () =>
-                                {
+                        var deckCard = deck.Pop();
+                        deckCard.MoveTo(card.transform.position);
+                        deckCard.CardOpen();
+                        hands[user].Add(deckCard);
 
-                                });
-                        });
+                        info.evt = StateEvent.INIT;
+                    }
+                    else
+                    {
+                        Vector3 destination2Up = cardPosition[slot.Key - 1].position + new Vector3(0, 10, 0);
+
+                        card.MoveTo(
+                            destination2Up,
+                            time: 0.2f,
+                            ease: iTween.EaseType.easeInBack,
+                            complete: () =>
+                            {
+                                card.SetPhysicDiable(false);
+                                card.MoveTo(
+                                    destination2,
+                                    time: 0.2f,
+                                    ease: iTween.EaseType.easeInQuint,
+                                    complete: () =>
+                                    {
+
+                                    });
+                            });
+
+                        slot.Value.Add(card);
+                    }
                 }
-
-
-                slot.Value.Add(card);
-                evt = StateEvent.PROGRESS; // 카드 침.
             }
         }    
     }
@@ -986,11 +1049,13 @@ public class Board : MonoBehaviour
                                  list[1].Owner == Player.NONE &&
                                  list[2].Owner == turnUser)
                         {
-                            for (int i = list.Count - 1; i > 0; --i)
+                            for (int i = list.Count - 1; i >= 0; --i)
                             {
                                 var card = list[i];
-                                EatScore(card, total - i);
-                                list.Remove(card);
+                                if (card.Owner == Player.NONE)
+                                {
+                                    select.Add(card);
+                                }
                             }
 
                             Debug.LogWarning("골라 먹기.");
@@ -1033,16 +1098,22 @@ public class Board : MonoBehaviour
     /// 10장씩 나눠주기
     /// </summary>
     /// <returns></returns>
-    private bool Pop1Cards(int user)
+    private Card Pop1Cards(int user)
     {
-        if (deck.Count <= 0)
-        {
-            Debug.LogError("deck count is 0.");
-            return false;
-        }
-
+        var turnInfo = stateMachine.GetCurrturnInfo();
+        var info = turnInfo.GetCurrentStateInfo();
         Card card = deck.Pop();
-        KeyValuePair<int, List<Card>> slot = GetSlot(card);
+
+        KeyValuePair<int, List<Card>> slot;
+        if (card.Month == 13 && turnInfo.hit != null) // 뒤집은 카드가 조커면 때린 카드 위로 올립니다.
+        {
+            slot = GetSlot(turnInfo.hit);
+        }
+        else 
+        {
+            slot = GetSlot(card);
+        }
+        
         if (slot.Key != -1)
         {
             float randX = UnityEngine.Random.Range(-0.5f, 0.5f);
@@ -1072,7 +1143,7 @@ public class Board : MonoBehaviour
             slot.Value.Add(card);
         }
          
-        return true;
+        return card;
     }
 
     /// <summary>
@@ -1085,7 +1156,7 @@ public class Board : MonoBehaviour
         int key = -1;
         foreach (var kindSlot in bottoms)
         {
-            var exist = kindSlot.Value.Where(e => e.GetMonth() == card.GetMonth()).FirstOrDefault();
+            var exist = kindSlot.Value.Where(e => e.Month == card.Month).FirstOrDefault();
             if (exist != null)
             {
                 key = kindSlot.Key;
