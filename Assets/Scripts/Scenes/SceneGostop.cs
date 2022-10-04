@@ -68,11 +68,11 @@ public class SceneGostop : SceneBase
                     var turnInfo = stateMachine.GetCurrturnInfo();
                     var stateInfo = turnInfo.GetCurrentStateInfo();
 
-                    if (stateInfo.state == StateMachineGostop.State.CARD_HIT &&
+                    if (stateInfo.state == State.CARD_HIT &&
                         board.MyTurn() == true)
                     {
                         board.HitCard((int)Board.Player.USER, card);
-                        stateInfo.evt = StateMachineGostop.StateEvent.PROGRESS; // 카드 침.
+                        stateInfo.evt = StateEvent.PROGRESS; // 카드 침.
                     }
                 }
             }

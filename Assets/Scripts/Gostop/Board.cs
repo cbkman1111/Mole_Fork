@@ -159,7 +159,7 @@ public class Board : MonoBehaviour
     private void Update()
     {
         var turnInfo = stateMachine.GetCurrturnInfo();
-        var stateInfo = turnInfo.GetCurrentStateInfo();
+        var stateInfo = stateMachine.GetCurrStateInfo();
         switch (stateInfo.state)
         {
             case State.WAIT:
@@ -990,9 +990,8 @@ public class Board : MonoBehaviour
         }
         
         var position = targetPosition + new Vector3(stack * 0.6f, stack * card.Height, 0);
-        card.MoveTo(position, ease: iTween.EaseType.easeInQuad, time: 0.2f, delay: count * 0.1f);
+        card.MoveTo(position, ease: iTween.EaseType.easeInQuad, time: 0.1f, delay: count * 0.1f);
         card.SetPhysicDiable(false);
-
         scores[(int)turnUser].Add(card);
     }
 
@@ -1002,93 +1001,119 @@ public class Board : MonoBehaviour
     /// <returns></returns>
     private bool EatCheck()
     {
+        List<Card> listTotal = new List<Card>();
         foreach (var kindSlot in bottoms)
         {
             var list = kindSlot.Value;
-            int count = list.Where(card => card.Owner == turnUser).ToList().Count();
-            if (count > 0) // ÆÇÁ¤ÀÌ °¡´É.
+            switch (list.Count)
             {
-                int total = list.Count;
-                switch (total)
-                {
-                    case 2:
-                        if (list[0].Owner == turnUser && 
-                            list[1].Owner == turnUser)
+                case 2:
+                    if (list[0].Owner == turnUser &&
+                        list[1].Owner == turnUser &&
+                        list[1].Month != 13)
+                    {
+                        foreach (var card in list)
                         {
-                            for (int i = list.Count - 1; i >= 0; --i)
-                            {
-                                var card = list[i]; 
-                                EatScore(card, total - i);
-                                list.Remove(card);
-                            }
-
-                            Debug.LogWarning("±Í½Å."); 
+                            listTotal.Add(card);
                         }
-                        else if (list[0].Owner == Player.NONE && 
-                                 list[1].Owner == turnUser )
+
+                        Debug.LogWarning("±Í½Å.");
+                    }
+                    else if (list[0].Owner == turnUser &&
+                             list[1].Month == 13)
+                    {
+                        listTotal.Add(list[1]);
+
+                        Debug.LogWarning("½ÖÇÇ¸¸ ¸ÔÀ½.");
+                    }
+                    else if (list[0].Owner == Player.NONE &&
+                                list[1].Owner == turnUser)
+                    {
+                        foreach (var card in list)
                         {
-                            for (int i = list.Count - 1; i >= 0; --i)
+                            listTotal.Add(card);
+                        }
+
+                        Debug.LogWarning("¸ÔÀ½.");
+                    }
+
+                    break;
+                case 3:
+                    if (list[0].Owner == Player.NONE &&
+                        list[1].Owner == turnUser &&
+                        list[2].Owner == Player.NONE)
+                    {
+                        Debug.LogWarning("½Ó.");
+                    }
+                    else if (list[0].Owner == Player.NONE &&
+                                list[1].Owner == Player.NONE &&
+                                list[2].Owner == turnUser)
+                    {
+                        foreach (var card in list)
+                        {
+                            if (card.Owner == Player.NONE)
                             {
-                                var card = list[i];
-                                EatScore(card, total - i);
-                                list.Remove(card);
+                                select.Add(card);
                             }
+                        }
+
+                        Debug.LogWarning("°ñ¶ó ¸Ô±â.");
+                    }
+                    else if (list[0].Owner == Player.NONE &&
+                        list[1].Owner == turnUser &&
+                        list[2].Month == 13)
+                    {
+                        foreach (var card in list)
+                        {
+                            listTotal.Add(card);
+                        }
+                    }
+                         
+                    break;
+                case 4:
+                    if (list[0].Owner == Player.NONE &&
+                        list[1].Owner == Player.NONE &&
+                        list[2].Owner == turnUser &&
+                        list[3].Owner == Player.NONE)
+                    {
+                        Debug.LogWarning("½Ó.");
+                    }
+                    else if (list[0].Owner == Player.NONE &&
+                                list[1].Owner == Player.NONE &&
+                                list[2].Owner == Player.NONE &&
+                                list[3].Owner == turnUser)
+                    {
+                        foreach (var card in list)
+                        {
+                            listTotal.Add(card);
+                        }
                             
-                            Debug.LogWarning("¸ÔÀ½.");
-                        }
-                        break;
-                    case 3:
-                        if (list[0].Owner == Player.NONE &&
+                        Debug.LogWarning("½Ñ°É ¸Ô´Â´Ù.");
+                    }
+                    else if (list[0].Owner == Player.NONE &&
                             list[1].Owner == turnUser &&
-                            list[2].Owner == Player.NONE)
+                            list[2].Month == 13 &&
+                            list[3].Month == 13)
+                    {
+                        foreach (var card in list)
                         {
-
-                            Debug.LogWarning("½Ó.");
+                            listTotal.Add(card);
                         }
-                        else if (list[0].Owner == Player.NONE &&
-                                 list[1].Owner == Player.NONE &&
-                                 list[2].Owner == turnUser)
-                        {
-                            for (int i = list.Count - 1; i >= 0; --i)
-                            {
-                                var card = list[i];
-                                if (card.Owner == Player.NONE)
-                                {
-                                    select.Add(card);
-                                }
-                            }
-
-                            Debug.LogWarning("°ñ¶ó ¸Ô±â.");
-                        }
-                        break;
-                    case 4:
-                        if (list[0].Owner == Player.NONE &&
-                            list[1].Owner == Player.NONE &&
-                            list[2].Owner == turnUser &&
-                            list[3].Owner == Player.NONE)
-                        {
-
-                            Debug.LogWarning("½Ó.");
-                        }
-                        else if (list[0].Owner == Player.NONE &&
-                                 list[1].Owner == Player.NONE &&
-                                 list[2].Owner == Player.NONE &&
-                                 list[3].Owner == turnUser)
-                        {
-                            for (int i = list.Count - 1; i >= 0; --i)
-                            {
-                                var card = list[i];
-                                EatScore(card, total - i);
-                                list.Remove(card);
-                            }
-
-                            Debug.LogWarning("½Ñ°É ¸Ô´Â´Ù.");
-                        }
-                        break;
-                    default:
-                        break;
-                }
+                    }
+                    break;
+                default:
+                    break;
             }
+        }
+
+        Debug.Log($"¸Ô´Â ÆÇÁ¤ ÆÐ : {listTotal.Count}");
+        int total = listTotal.Count;
+        for (int i = listTotal.Count - 1; i >= 0; --i)
+        {
+            var card = listTotal[i];
+            EatScore(card, total - i); // Ä«µå È¹µæ.
+            var slot = GetSlot(card);
+            slot.Value.Remove(card); // º¸µå ½½·Ô¿¡¼­ Á¦°Å.           
         }
 
         return true;
