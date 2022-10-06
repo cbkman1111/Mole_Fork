@@ -24,8 +24,11 @@ public class SceneGostop : SceneBase
             menu.InitMenu();
         }
 
-        board = Board.Create();
-        board.StartGame();
+        board = Board.Create(menu);
+        if (board != null)
+        {
+            board.StartGame();
+        }
 
         return true;
     }
@@ -52,7 +55,28 @@ public class SceneGostop : SceneBase
 
     public override void OnTouchEnd(Vector3 position)
     {
+        Ray ray = MainCamera.ScreenPointToRay(position);
+        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
+        {
+            var layer = hit.collider.gameObject.layer;
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Card"))
+            {
+                Card card = hit.collider.GetComponent<Card>();
+                if (card != null)
+                {
+                    var stateMachine = board.GetStateMachine();
+                    var turnInfo = stateMachine.GetCurrturnInfo();
+                    var stateInfo = turnInfo.GetCurrentStateInfo();
 
+                    if (stateInfo.state == State.CARD_HIT &&
+                        board.MyTurn() == true)
+                    {
+                        board.HitCard((int)Board.Player.USER, card);
+                        stateInfo.evt = StateEvent.PROGRESS; // Ä«µå Ä§.
+                    }
+                }
+            }
+        }
     }
 
     public override void OnTouchMove(Vector3 position)

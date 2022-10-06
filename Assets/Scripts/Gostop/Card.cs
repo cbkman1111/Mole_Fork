@@ -1,13 +1,24 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Card : MonoBehaviour
 {
+    [SerializeField]
+    public SpriteRenderer spriteRenderer = null;
+    public MeshRenderer meshRenderer = null;
+
+    public Rigidbody rigid { get; set; }
     public int Num { get; set; }
-    public KindOf Type { get; set; }
+    public KindOf KindOfCard { get; set; }
+    public int Month { get; set; }
     public float Height { get; set; }
-    private Rigidbody rigid = null;
+    public float Width { get; set; }
+    public bool Open { get; set; }
+    public bool CompleteMove { get; set; }
+    private Action completeMove = null;
+    public Board.Player Owner { get; set; }
 
     public enum KindOf { 
         GWANG,
@@ -16,6 +27,7 @@ public class Card : MonoBehaviour
         HONG,
         CHUNG,
         CHO,
+        CHO_B,
 
         MUNG,
         MUNG_GODORI,
@@ -29,45 +41,196 @@ public class Card : MonoBehaviour
     public bool Init(int num, Sprite sprite)
     {
         Num = num;
+        Month = GetMonth(num);
+        Open = false;
+        CompleteMove = false;
+        Owner = Board.Player.NONE;
 
-        var front = transform.Find("Front");
-        var renderer = front.GetComponent<SpriteRenderer>();
-        renderer.sprite = sprite;
+        spriteRenderer.sprite = sprite;
         
         var collider = GetComponent<BoxCollider>();
-        Height = collider.size.z;
+        Height = collider.size.y;
+        Width = collider.size.x;
 
         rigid = GetComponent<Rigidbody>();
-        
-
         gameObject.name = $"card_{num}";
 
-        Flip(false);
-        SetKinematic(true);
+        switch (Num)
+        {
+            case 1:
+            case 9:
+            case 29:
+            case 41:
+                KindOfCard = KindOf.GWANG;
+                break;
+            case 45:
+                KindOfCard = KindOf.GWANG_B;
+                break;
+            case 5:
+            case 13:
+            case 30:
+                KindOfCard = KindOf.MUNG_GODORI;
+                break;
+            case 33:
+                KindOfCard = KindOf.MUNG_KOO;
+                break;
+            case 17:
+            case 21:
+            case 25:
+            case 37:
+            case 46:
+                KindOfCard = KindOf.MUNG;
+                break;
+            case 2:
+            case 6:
+            case 10:
+                KindOfCard = KindOf.HONG;
+                break;
+            case 14:
+            case 18:
+            case 26:
+                KindOfCard = KindOf.CHO;
+                break;
+            case 22:
+            case 34:
+            case 38:
+                KindOfCard = KindOf.CHUNG;
+                break;
+            case 47:
+                KindOfCard = KindOf.CHO_B;
+                break;
+            case 49:
+                KindOfCard = KindOf.PPP;
+                break;
+            case 50:
+            case 51:
+            case 52:
+                KindOfCard = KindOf.PP;
+                break;
+            default:
+                KindOfCard = KindOf.P;
+                break;
+        }
+        
+
+        SetOpen(false);
+        SetPhysicDiable(true);
         return true;
     }
 
-
-    public int Kind { get => GetKind(); }
-    private int GetKind()
+    public Sprite GetSprite()
     {
-        return (int)Mathf.Floor((Num - 1) / 4 + 1);
+        return spriteRenderer.sprite;
     }
 
-    public void Flip(bool active)
+    public int GetMonth(int num)
     {
-        if (active == true)
+        return (int)Mathf.Floor((num - 1) / 4 + 1);
+    }
+
+    public void SetOpen(bool open)
+    {
+        Open = open;
+        if (Open == true)
         {
-            transform.rotation = Quaternion.Euler(90, 0, 0);
+            transform.localRotation = Quaternion.Euler(0, 0, 360);
         }
         else
         {
-            transform.rotation = Quaternion.Euler(-90, 0, 0);
-        }   
+            transform.localRotation = Quaternion.Euler(0, 0, 180); 
+        }
     }
 
-    public void SetKinematic(bool active)
+    public void SetPhysicDiable(bool active)
     {
         rigid.isKinematic = active;
+    }
+
+    public void MoveTo(Vector3 position, iTween.EaseType ease = iTween.EaseType.linear, float time = 0.5f, float delay = 0f, Action complete = null)
+    {
+        completeMove = complete;
+        CompleteMove = false;
+        iTween.MoveTo(gameObject, iTween.Hash(
+           "x", position.x,
+           "y", position.y,
+           "z", position.z,
+           "delay", delay,
+           "time", time,
+           "easeType", ease,
+           "oncompletetarget", gameObject,
+           "oncomplete", "OnMoveComplete"));
+    }
+
+    public void CardOpen(iTween.EaseType ease = iTween.EaseType.linear, float interval = 0.1f, float delay = 0.0f)
+    {
+        Open = false;
+        iTween.RotateTo(gameObject, iTween.Hash(
+                "x", 0,
+                "y", 0,
+                "z", 360,
+                "delay", delay,
+                "time", interval,
+                "easeType",
+                ease,
+                "oncompletetarget", gameObject,
+                "oncomplete", "OnOpenComplte"));
+    }
+
+    public void ShowMe(iTween.EaseType ease = iTween.EaseType.linear, float interval = 0.1f, float delay = 0.0f)
+    {
+        Open = false;
+        iTween.RotateTo(gameObject, iTween.Hash(
+                "x", -45,
+                "y", 0,
+                "z", 360,
+                "delay", delay,
+                "time", interval,
+                "easeType",
+                ease,
+                "oncompletetarget", gameObject,
+                "oncomplete", "OnOpenComplte"));
+    }
+
+    public void ShowEnemy(iTween.EaseType ease = iTween.EaseType.linear, float interval = 0.1f, float delay = 0.0f)
+    {
+        Open = false;
+        iTween.RotateTo(gameObject, iTween.Hash(
+                "x", -45,
+                "y", 0,
+                "z", 360,
+                "delay", delay,
+                "time", interval,
+                "easeType",
+                ease,
+                "oncompletetarget", gameObject,
+                "oncomplete", "OnOpenComplte"));
+    }
+    
+
+    public void SetShadow(bool active)
+    {
+        if (active == true)
+        {
+            meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
+        }
+        else
+        {
+            meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        }
+    }
+
+    private void OnOpenComplte()
+    {
+        Open = true;
+    }
+
+    private void OnMoveComplete()
+    {
+        CompleteMove = true;
+        if (completeMove != null)
+        {
+            completeMove();
+            completeMove = null;
+        }
     }
 }
