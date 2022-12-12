@@ -164,25 +164,25 @@ public class Board : MonoBehaviour
         {
             case State.WAIT:
                 stateMachine.Process(
-                    () => {},
-                    () => {
+                    start: () => {},
+                    check: () => {
                         return true;
                     },
-                    () => {});
+                    complete:() => {});
                 break;
 
             // 카드덱 생성.
             case State.CREATE_DECK:
                 stateMachine.Process(
-                    () => {
+                    start: () => {
                         SetCardCount();
                         CreateDeck();
                     },
-                    () => {
+                    check: () => {
                         int count = deck.Where(card => card.CompleteMove == true).ToList().Count;
                         return count == 52;
                     },
-                    () => {
+                    complete: () => {
                         stateMachine.Change(State.SHUFFLE_8);
                     });
 
@@ -191,10 +191,10 @@ public class Board : MonoBehaviour
             // 바닥 8장 깔기.
             case State.SHUFFLE_8:
                 stateMachine.Process(
-                    () => { 
+                    start: () => { 
                         Pop8Cards(); 
                     },
-                    () => {
+                    check: () => {
                         int count = 0;
                         foreach (var slot in bottoms)
                         {
@@ -203,7 +203,7 @@ public class Board : MonoBehaviour
 
                         return count == 8;
                     },
-                    () => {
+                    complete:  () => {
                         stateMachine.Change(State.SHUFFLE_10);
                     });
 
@@ -212,16 +212,16 @@ public class Board : MonoBehaviour
             // 열장씩 나누기.
             case State.SHUFFLE_10:
                 stateMachine.Process(
-                    () => {
+                    start: () => {
                         Pop10Cards();
                     },
-                    () => {
+                    check: () => {
                         int count = 0;
                         count += hands[0].Where(e => e.CompleteMove == true).ToList().Count;
                         count += hands[1].Where(e => e.CompleteMove == true).ToList().Count;
                         return count == 20;
                     },
-                    () => {
+                    complete:  () => {
                         stateMachine.Change(State.OPEN_8);
                     });
                 break;
@@ -229,10 +229,10 @@ public class Board : MonoBehaviour
             // 8장 뒤집기
             case State.OPEN_8:
                 stateMachine.Process(
-                    () => {
+                    start: () => {
                         FlipCard8();
                     },
-                    () => {
+                    check: () => {
                         int count = 0;
                         foreach (var slot in bottoms)
                         {
@@ -241,14 +241,14 @@ public class Board : MonoBehaviour
 
                         return count == 8;
                     },
-                    () => {
+                    complete: () => {
                         stateMachine.Change(State.CHECK_JORKER);
                     });
                 break;
 
             case State.CHECK_JORKER:
                 stateMachine.Process(
-                    () => {
+                    start: () => {
                         foreach (var slot in bottoms)
                         {
                             var list = slot.Value.Where(e => e.Month == 13).ToList();
@@ -262,7 +262,7 @@ public class Board : MonoBehaviour
                             }
                         }
                     },
-                    () => {
+                    check: () => {
 
                         int count = 0;
                         foreach (var slot in bottoms)
@@ -287,38 +287,38 @@ public class Board : MonoBehaviour
                             return countMove == 0;
                         }
                     },
-                    () => {
+                    complete: () => {
                         stateMachine.Change(State.HANDS_UP);
                     });
                 break;
 
             case State.HANDS_UP:
                 stateMachine.Process(
-                    () => {
+                    start: () => {
                         HandsUp();
                     },
-                    () => {
+                    check: () => {
                         int count = 0;
                         count += hands[0].Where(e => e.CompleteMove == true).ToList().Count;
                         count += hands[1].Where(e => e.CompleteMove == true).ToList().Count;
 
                         return count == 20;
                     },
-                    () => {
+                    complete: () => {
                         stateMachine.Change(State.HANDS_OPEN);
                     });
                 break;
 
             case State.HANDS_OPEN: // 손패를 뒤집습니다.
                 stateMachine.Process(
-                    () => {
+                    start: () => {
                         HandOpen();
                     },
-                    () => {
+                    check: () => {
                         int count = hands[0].Where(e => e.Open == false).ToList().Count;
                         return count == 0;
                     },
-                    () => {
+                    complete: () => {
                         stateMachine.Change(State.HANDS_SORT);
                     });
 
@@ -326,28 +326,28 @@ public class Board : MonoBehaviour
 
             case State.HANDS_SORT: // 손패를 정렬합니다.
                 stateMachine.Process(
-                    () => {
+                    start: () => {
                         SortHand();
                     },
-                    () => {
+                    check: () => {
                         int count = hands[0].Where(e => e.Open == false).ToList().Count;
                         return count == 0;
                     },
-                    () => {
+                    complete: () => {
                         stateMachine.Change(State.CARD_HIT);
                     });
                 break;
 
             case State.CARD_HIT:
                 stateMachine.Process(
-                    () => {
+                    start: () => {
                         menu.ShowScoreMenu(true);
                         if (turnUser == Player.COMPUTER)
                         {
                             HitCard((int)Player.COMPUTER, hands[(int)Player.COMPUTER][0]);
                         }
                     },
-                    () => {
+                    check: () => {
                         if (turnInfo.hited == false)
                         { 
                             return false;
@@ -361,17 +361,17 @@ public class Board : MonoBehaviour
                         int count = GetMoveAllCount();
                         return count == 0;
                     },
-                    () => {
+                    complete: () => {
                         stateMachine.Change(State.CARD_POP);
                     });
                 break;
 
             case State.CARD_POP:
                 stateMachine.Process(
-                    () => {
+                    start: () => {
                         turnInfo.pop = Pop1Cards((int)turnUser); 
                     },
-                    () => {
+                    check: () => {
                         
                         int count = GetMoveAllCount();
                         if (count == 0)
@@ -385,7 +385,7 @@ public class Board : MonoBehaviour
 
                         return count == 0;
                     },
-                    () => {
+                    complete: () => {
                         stateMachine.Change(State.EAT_CHECK);
                     });
 
@@ -393,10 +393,10 @@ public class Board : MonoBehaviour
 
             case State.EAT_CHECK: // 카드 획득 처리.
                 stateMachine.Process(
-                    () => {
+                    start: () => {
                         EatCheck();
                     },
-                    () => {
+                    check: () => {
                         if (select.Count == 2)
                         {
                             if (turnUser == Player.COMPUTER)
@@ -452,7 +452,7 @@ public class Board : MonoBehaviour
                             return count == 0;
                         }
                     },
-                    () => {
+                    complete: () => {
                         // 주인 없는 카드로 설정.
                         foreach (var kindSlot in bottoms)
                         {
@@ -470,20 +470,20 @@ public class Board : MonoBehaviour
 
             case State.SCORE_UPDATE: // 점수 체크.
                 stateMachine.Process(
-                    () => {
+                    start: () => {
                         SetCardCount();
                     },
-                    () => {
+                    check: () => {
                         return true;
                     },
-                    () => {
+                    complete: () => {
                         stateMachine.Change(State.TURN_CHECK);
                     });
 
                 break;
             case State.TURN_CHECK: // 턴 바꾸기.
                 stateMachine.Process(
-                    () => {
+                    start: () => {
                         if (turnUser == Player.USER)
                         {
                             turnUser = Player.COMPUTER;
@@ -493,11 +493,11 @@ public class Board : MonoBehaviour
                             turnUser = Player.USER;
                         }
                     },
-                    () => {
+                    check: () => {
                         int count = GetMoveAllCount();
                         return count == 0;
                     },
-                    () => {
+                    complete: () => {
                         State nextState = State.HANDS_SORT;
                         if (hands[(int)Player.COMPUTER].Count > 0 && turnUser == Player.COMPUTER)
                         {
@@ -519,13 +519,13 @@ public class Board : MonoBehaviour
 
             case State.GAME_OVER_TIE: // 무승부 상태 처리.
                 stateMachine.Process(
-                    () => {
+                    start: () => {
                     },
-                    () => {
+                    check: () => {
                         int count = GetMoveAllCount();
                         return count == 0;
                     },
-                    () => {
+                    complete: () => {
                         DestroyAllCards();
 
                         stateMachine.Init();
@@ -988,15 +988,16 @@ public class Board : MonoBehaviour
                                Count();
                 break;
         }
-        
+
+        float interval = 1f;
         var position = targetPosition + new Vector3(stack * 0.6f, stack * card.Height, 0);
-        card.MoveTo(position, ease: iTween.EaseType.easeInQuad, time: 0.1f, delay: count * 0.1f);
+        card.MoveTo(position, ease: iTween.EaseType.easeInQuad, time: interval, delay: count * 0.1f);
         card.SetPhysicDiable(false);
         scores[(int)turnUser].Add(card);
     }
 
     /// <summary>
-    /// 바닥 8장 뿌리기.
+    /// 획득 카드 체크.
     /// </summary>
     /// <returns></returns>
     private bool EatCheck()
@@ -1023,7 +1024,6 @@ public class Board : MonoBehaviour
                              list[1].Month == 13)
                     {
                         listTotal.Add(list[1]);
-
                         Debug.LogWarning("쌍피만 먹음.");
                     }
                     else if (list[0].Owner == Player.NONE &&
@@ -1091,6 +1091,19 @@ public class Board : MonoBehaviour
                         Debug.LogWarning("싼걸 먹는다.");
                     }
                     else if (list[0].Owner == Player.NONE &&
+                            list[1].Owner == Player.NONE &&
+                            list[2].Owner == turnUser &&
+                            list[3].Owner == turnUser)
+                    {
+                        foreach (var card in list)
+                        {
+                            listTotal.Add(card);
+                        }
+
+                        select.Clear();
+                        Debug.LogWarning("따닥.");
+                    }
+                    else if (list[0].Owner == Player.NONE &&
                             list[1].Owner == turnUser &&
                             list[2].Month == 13 &&
                             list[3].Month == 13)
@@ -1112,6 +1125,7 @@ public class Board : MonoBehaviour
         {
             var card = listTotal[i];
             EatScore(card, total - i); // 카드 획득.
+
             var slot = GetSlot(card);
             slot.Value.Remove(card); // 보드 슬롯에서 제거.           
         }
