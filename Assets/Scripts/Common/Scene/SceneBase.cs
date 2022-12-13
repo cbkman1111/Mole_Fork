@@ -10,7 +10,8 @@ public abstract class SceneBase : MonoBehaviour
         MENU,
         LOADING,
         GAME,
-        GAME_GOSTOP
+        GAME_GOSTOP,
+        GAME_TILEMAP,
     }
 
     public SCENES Scene { get; set; }

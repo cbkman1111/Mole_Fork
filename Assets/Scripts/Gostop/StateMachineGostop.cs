@@ -155,9 +155,9 @@ public class StateMachineGostop
     /// 시작, 트리거 리턴 ture, 완료 순으로 호출되며 상태를 처리합니다.
     /// </summary>
     /// <param name="start"></param>
-    /// <param name="trigger"></param>
-    /// <param name="compete"></param>
-    public void Process(Action start, Func<bool> trigger, Action compete)
+    /// <param name="check"></param>
+    /// <param name="complete"></param>
+    public void Process(Action start, Func<bool> check, Action complete)
     {
         var turn = GetCurrturnInfo();
         var info = turn.GetCurrentStateInfo();
@@ -175,14 +175,14 @@ public class StateMachineGostop
                     break;
 
                 case StateEvent.PROGRESS:
-                    if (trigger() == true)
+                    if (check() == true)
                     {
                         info.evt = StateEvent.DONE;
                     }
                     break;
 
                 case StateEvent.DONE:
-                    compete();
+                    complete();
                     break;
             }
         }
