@@ -22,6 +22,7 @@ public class AppManager : MonoSingleton<AppManager>
         scenes.Add("SceneLoading", SceneBase.SCENES.LOADING);
         scenes.Add("SceneGame", SceneBase.SCENES.GAME);
         scenes.Add("SceneGostop", SceneBase.SCENES.GAME_GOSTOP);
+        scenes.Add("SceneTileMap", SceneBase.SCENES.GAME_TILEMAP);
 
         SceneManager.sceneLoaded += OnSceneLoaded;
 
@@ -131,6 +132,9 @@ public class AppManager : MonoSingleton<AppManager>
                             break;
                         case SceneBase.SCENES.GAME_GOSTOP:
                             CurrScene = new GameObject(name).AddComponent<SceneGostop>();
+                            break;
+                        case SceneBase.SCENES.GAME_TILEMAP:
+                            CurrScene = new GameObject(name).AddComponent<SceneTileMap>();
                             break;
                     }
                 
