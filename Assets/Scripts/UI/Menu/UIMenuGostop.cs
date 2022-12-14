@@ -63,6 +63,15 @@ public class UIMenuGostop : MenuBase
         SetText($"Text - Pee Player {userIndex}", $"{pee}");
     }
 
+    public void SetDebug(string msg)
+    {
+        SetText("Text - Debug", msg);
+    }
+
+    public void SetDebugTrun()
+    { 
+    }
+
     protected override void OnClick(Button btn)
     {
         string name = btn.name;
