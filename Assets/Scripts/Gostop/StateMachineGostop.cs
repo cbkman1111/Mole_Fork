@@ -11,12 +11,15 @@ public enum State
 {
     WAIT = 0,
 
+    START_GAME,
+
     CREATE_DECK,
 
     SHUFFLE_8,
     SHUFFLE_10,
 
     OPEN_8,
+    OPEN_1_MORE,
 
     CHECK_JORKER,
 
@@ -28,6 +31,9 @@ public enum State
     CARD_POP, // 카드 뒤집기.
 
     EAT_CHECK, // 먹는 판정.
+    EAT, // 먹기.
+    STEAL, // 카드 뺏기.
+
     SCORE_UPDATE, // 점수 갱신.
     TURN_CHECK, // 턴 바꾸기.
 

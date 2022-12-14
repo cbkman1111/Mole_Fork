@@ -46,8 +46,8 @@ public class Board : MonoBehaviour
     private List<Card>[] scores = null;
     private Stack<Card> deck = null;
     private List<Card> select = null; // 선택해야 하는 카드.
-    List<Card> listEat = null; // 먹는패.
-
+    private List<Card> listEat = null; // 먹는패.
+    private int stealCount = 0; // 빼앗아올 패.
     private float cardWidth = 0;
     private float cardHeight = 0;
 
@@ -158,7 +158,7 @@ public class Board : MonoBehaviour
     /// </summary>
     public void StartGame()
     {
-        stateMachine.Change(State.CREATE_DECK);
+        stateMachine.Change(State.START_GAME);
     }
 
     public void DebugLog(string msg)
@@ -179,11 +179,6 @@ public class Board : MonoBehaviour
         foreach (var debug in listDebug)
         {
             messages += $"{debug.num}. {debug.msg}\n";
-        }
-
-        if (listDebug.Count > 10)
-        {
-            listDebug.Dequeue();
         }
 
         menu.SetDebug(messages);
@@ -209,6 +204,22 @@ public class Board : MonoBehaviour
                         return true;
                     },
                     complete:() => {});
+                break;
+
+            // 게임 시작.
+            case State.START_GAME:
+                stateMachine.Process(
+                     start: () => {
+                         listDebug.Clear();
+
+                         DebugLog("State.START_GAME");
+                     },
+                     check: () => {
+                         return true;
+                     },
+                     complete: () => {
+                         stateMachine.Change(State.CREATE_DECK);
+                     });
                 break;
 
             // 카드덱 생성.
@@ -294,6 +305,26 @@ public class Board : MonoBehaviour
                     });
                 break;
 
+            case State.OPEN_1_MORE:
+                stateMachine.Process(
+                    start: () => {
+                        DebugLog("State.OPEN_1_MORE");
+                        Pop1Cards((int)Player.NONE);
+                    },
+                    check: () => {
+                        int count = 0;
+                        foreach (var slot in bottoms)
+                        {
+                            count += slot.Value.Where(e => e.CompleteMove == false).ToList().Count;
+                        }
+
+                        return count == 0;
+                    },
+                    complete: () => {
+                        stateMachine.Change(State.CHECK_JORKER);
+                    });
+                break;
+
             case State.CHECK_JORKER:
                 stateMachine.Process(
                     start: () => {
@@ -305,40 +336,43 @@ public class Board : MonoBehaviour
                             for (int i = list.Count - 1; i >= 0; --i)
                             {
                                 var card = list[i];
-
-                                turnInfo.pop = Pop1Cards((int)turnUser);
-                                EatScore(card);
-                                list.Remove(card);
+            
+                                EatScore(card, list.Count - i);
+                                slot.Value.Remove(card);
                             }
                         }
                     },
                     check: () => {
-
-                        int count = 0;
+                        int countMove = 0;
                         foreach (var slot in bottoms)
                         {
-                            count += slot.Value.Where(e => e.Open == true).ToList().Count;
+                            countMove += slot.Value.Where(e => e.CompleteMove == false).ToList().Count;
                         }
 
-                        // 수량이 부족하면 다시 깔도록 INIT 상태로 되돌립니다.
-                        if (count < 8)
-                        {
-                            stateInfo.evt = StateEvent.INIT;
-                            return false;
-                        }
-                        else
-                        {
-                            int countMove = 0;
-                            foreach (var slot in bottoms)
-                            {
-                                countMove += slot.Value.Where(e => e.CompleteMove == false).ToList().Count;
-                            }
-
-                            return countMove == 0;
-                        }
+                        return countMove == 0;
                     },
                     complete: () => {
-                        stateMachine.Change(State.HANDS_UP);
+                        int Count = 0;
+                        int jockerCount = 0;
+                        foreach (var slot in bottoms)
+                        {
+                            int n = slot.Value.Where(e => e.Month == 13).ToList().Count;
+                            if (n > 0)
+                            {
+                                jockerCount += n;
+                            }
+
+                            Count += slot.Value.Count;
+                        }
+
+                        if (jockerCount > 0 || Count < 8)
+                        {
+                            stateMachine.Change(State.OPEN_1_MORE);
+                        }
+                        else 
+                        {
+                            stateMachine.Change(State.HANDS_UP);
+                        }
                     });
                 break;
 
@@ -484,12 +518,25 @@ public class Board : MonoBehaviour
                         }
                         else
                         {
-                            Eat();
-                            int count = GetMoveAllCount();
-                            count += scores[0].Where(card => card.CompleteMove == false).ToList().Count();
-                            count += scores[1].Where(card => card.CompleteMove == false).ToList().Count();
-                            return count == 0;
+                            return true;
                         }
+                    },
+                    complete: () => {
+
+
+                        select.Clear();
+                        stateMachine.Change(State.EAT);
+                    });
+                break;
+
+            case State.EAT: // 카드 획득.
+                stateMachine.Process(
+                    start: () => {
+                        DebugLog("State.EAT");
+                        Eat();
+                    },
+                    check: () => {
+                        return true;
                     },
                     complete: () => {
                         // 주인 없는 카드로 설정.
@@ -502,8 +549,74 @@ public class Board : MonoBehaviour
                             }
                         }
 
-                        select.Clear();
-                        stateMachine.Change(State.SCORE_UPDATE);
+                        if (stealCount == 0)
+                        {
+                            stateMachine.Change(State.SCORE_UPDATE);
+                        }
+                        else
+                        {
+                            stateMachine.Change(State.STEAL);
+                        }
+                    });
+                break;
+            case State.STEAL: // 카드 뺃기.
+                stateMachine.Process(
+                    start: () => {
+                        DebugLog("State.STEAL");
+
+                        int index = (int)Player.NONE;
+                        if (turnUser == Player.COMPUTER)
+                        {
+                            index = (int)Player.USER;
+                        }
+                        else if (turnUser == Player.USER)
+                        {
+                            index = (int)Player.COMPUTER;
+                        }
+
+                        var list = scores[index].Where(e =>
+                            e.KindOfCard == Card.KindOf.P ||
+                            e.KindOfCard == Card.KindOf.PP ||
+                            e.KindOfCard == Card.KindOf.PPP).OrderByDescending(e => e.KindOfCard).ToList();
+
+                        foreach (var card in list)
+                        {
+                            switch (card.KindOfCard)
+                            {
+                                case Card.KindOf.P:
+                                    break;
+                                case Card.KindOf.PP:
+                                    break;
+                                case Card.KindOf.PPP:
+                                    break;
+                            }
+                        }
+
+                        if (stealCount >= 3)
+                        {
+
+                        }
+                        else if (stealCount >= 2)
+                        {
+
+                        }
+                        else
+                        {
+                            
+                        }
+                    },
+                    check: () => {
+                        return true;
+                    },
+                    complete: () => {
+                        if (stealCount == 0)
+                        {
+                            stateMachine.Change(State.SCORE_UPDATE);
+                        }
+                        else
+                        {
+                            stateMachine.Change(State.STEAL);
+                        }
                     });
                 break;
 
@@ -574,7 +687,7 @@ public class Board : MonoBehaviour
                         DestroyAllCards();
 
                         stateMachine.Init();
-                        stateMachine.Change(State.CREATE_DECK);
+                        stateMachine.Change(State.START_GAME);
                     });
                 break;
         }
@@ -722,18 +835,22 @@ public class Board : MonoBehaviour
         for (int i = 0; i < nums.Count; i++)
         {
             int n = nums[i];
-            Sprite sp = sprites[n - 1];
             Card card = Instantiate<Card>(prefabCard);
-            card.Init(n, sp);
-            deck.Push(card);
-            
-            float height = card.Height * 0.5f;
-            card.transform.position = deckPosition.position;
-            card.MoveTo( new Vector3(deckPosition.position.x, height * i, deckPosition.position.z), delay: i * 0.01f);
+            if (card != null)
+            {
+                Sprite sprite = sprites[n - 1];
 
-            // 카드 크기를 저장해둡니다.
-            cardWidth = card.Width;
-            cardHeight = card.Height;
+                card.Init(n, sprite);
+                deck.Push(card);
+
+                float height = card.Height * 0.5f;
+                card.transform.position = deckPosition.position;
+                card.MoveTo(new Vector3(deckPosition.position.x, height * i, deckPosition.position.z), delay: i * 0.01f);
+
+                // 카드 크기를 저장해둡니다.
+                cardWidth = card.Width;
+                cardHeight = card.Height;
+            }
         }
 
         return true;
@@ -1035,9 +1152,9 @@ public class Board : MonoBehaviour
                 break;
         }
 
-        float interval = 1f;
+        float interval = 0.1f;
         var position = targetPosition + new Vector3(stack * 0.6f, stack * card.Height, 0);
-        card.MoveTo(position, ease: iTween.EaseType.easeInQuad, time: interval, delay: count * 0.1f);
+        card.MoveTo(position, ease: iTween.EaseType.easeInQuad, time: interval, delay: count * 0.05f);
         card.SetPhysicDiable(false);
         scores[(int)turnUser].Add(card);
     }
@@ -1061,7 +1178,14 @@ public class Board : MonoBehaviour
     private void Eat()
     {
         Debug.Log($"먹는 판정 패 : {listEat.Count}");
+
         int total = listEat.Count;
+        if (total == 0)
+        {
+            return;
+        }
+
+
         for (int i = listEat.Count - 1; i >= 0; --i)
         {
             var card = listEat[i];
@@ -1080,32 +1204,33 @@ public class Board : MonoBehaviour
     /// <returns></returns>
     private bool EatCheck()
     {
-        listEat.Clear();
-
+        bool possibleEat = false; 
         foreach (KeyValuePair<int, List<Card>> kindSlot in bottoms)
         {
-            var list = kindSlot.Value;
+            var list = kindSlot.Value.Where(c => c.Month != 13).ToList();
+            var listJocker = kindSlot.Value.Where(c => c.Month == 13).ToList();
+
             switch (list.Count)
             {
+                case 1:
+                    if (listJocker.Count > 0)
+                    {
+                        stealCount += listJocker.Count;
+                        listEat.AddRange(listJocker);
+                    }
+                    break;
                 case 2:
                     if (list[0].Owner == turnUser &&
-                        list[1].Owner == turnUser &&
-                        list[0].Month != 13 &&
-                        list[1].Month != 13)
+                        list[1].Owner == turnUser)
                     {
                         foreach (var card in list)
                         {
                             listEat.Add(card);
                         }
 
+                        possibleEat = true;
+                        stealCount++;
                         DebugLog($"{list[0].Month} - 귀신.");
-                    }
-                    else if (list[0].Owner == turnUser &&
-                             list[1].Month == 13)
-                    {
-                        listEat.Add(list[1]);
-
-                        DebugLog($"{list[0].Month} - 쌍피만.");
                     }
                     else if (list[0].Owner == Player.NONE &&
                              list[1].Owner == turnUser)
@@ -1115,6 +1240,7 @@ public class Board : MonoBehaviour
                             listEat.Add(card);
                         }
 
+                        possibleEat = true;
                         DebugLog($"{list[0].Month} - 두장.");
                     }
                     else
@@ -1127,7 +1253,13 @@ public class Board : MonoBehaviour
                         list[1].Owner == turnUser &&
                         list[2].Owner == Player.NONE)
                     {
-                        DebugLog($"{list[0].Month} - 쌋다.");
+                        DebugLog($"{list[0].Month} - 쌋다. 1");
+                    }
+                    else if (list[0].Owner == Player.NONE &&
+                              list[1].Owner == turnUser &&
+                              list[2].Owner == turnUser)
+                    {
+                        DebugLog($"{list[0].Month} - 쌋다. 2");
                     }
                     else if (list[0].Owner == Player.NONE &&
                             list[1].Owner == Player.NONE &&
@@ -1145,17 +1277,8 @@ public class Board : MonoBehaviour
                             }
                         }
 
+                        possibleEat = true;
                         DebugLog($"{list[0].Month} - 골르기. {select.Count}");
-                        EatLog(kindSlot);
-                    }
-                    else if (list[0].Owner == Player.NONE &&
-                        list[1].Owner == turnUser &&
-                        list[2].Month == 13)
-                    {
-                        foreach (var card in list)
-                        {
-                            listEat.Add(card);
-                        }
                     }
                     else
                     {
@@ -1166,21 +1289,16 @@ public class Board : MonoBehaviour
                 case 4:
                     if (list[0].Owner == Player.NONE &&
                         list[1].Owner == Player.NONE &&
-                        list[2].Owner == turnUser &&
-                        list[3].Owner == Player.NONE)
-                    {
-                        DebugLog($"{list[0].Month} - 쌋다.");
-                    }
-                    else if (list[0].Owner == Player.NONE &&
-                                list[1].Owner == Player.NONE &&
-                                list[2].Owner == Player.NONE &&
-                                list[3].Owner == turnUser)
+                        list[2].Owner == Player.NONE &&
+                        list[3].Owner == turnUser)
                     {
                         foreach (var card in list)
                         {
                             listEat.Add(card);
                         }
 
+                        possibleEat = true;
+                        stealCount++;
                         DebugLog($"{list[0].Month} - 아싸.");
                     }
                     else if (list[0].Owner == Player.NONE &&
@@ -1193,47 +1311,29 @@ public class Board : MonoBehaviour
                             listEat.Add(card);
                         }
 
+                        possibleEat = true;
+                        stealCount++;
                         select.Clear();
-                        DebugLog($"{list[0].Month} - 따닥.");
+                        DebugLog($"{list[0].Month} - 따닥. 1");
                     }
                     else if (list[0].Owner == Player.NONE &&
                             list[1].Owner == turnUser &&
-                            list[2].Month == 13 &&
-                            list[3].Month == 13)
+                            list[2].Owner == turnUser &&
+                            list[3].Owner == turnUser)
                     {
                         foreach (var card in list)
                         {
                             listEat.Add(card);
                         }
 
-                        DebugLog($"{list[0].Month} - 대박.");
+                        possibleEat = true;
+                        stealCount++;
+                        select.Clear();
+                        DebugLog($"{list[0].Month} - 따닥. 2");
                     }
                     else
                     {
                         EatLog(kindSlot);
-                    }
-                    break;
-                case 5:
-                case 6:
-                    if (list[0].Owner == Player.NONE &&
-                        list[1].Owner == Player.NONE)
-                    {
-                        foreach (var card in list)
-                        {
-                            listEat.Add(card);
-                        }
-                    }
-                    else if (list[0].Owner == Player.NONE &&
-                        list[1].Owner == Player.NONE &&
-                        list[2].Owner == Player.NONE &&
-                        list[3].Owner == turnUser)
-                    {
-                        foreach (var card in list)
-                        {
-                            listEat.Add(card);
-                        }
-
-                        DebugLog($"{list[0].Month} - 싼거 먹음.");
                     }
                     break;
                 default:
@@ -1242,9 +1342,13 @@ public class Board : MonoBehaviour
                     }
                     break;
             }
+
+            if (possibleEat == true)
+            {
+                stealCount += listJocker.Count;
+                listEat.AddRange(listJocker);
+            }
         }
-
-
 
         return true;
     }

@@ -65,7 +65,14 @@ public class UIMenuGostop : MenuBase
 
     public void SetDebug(string msg)
     {
-        SetText("Text - Debug", msg);
+        ScrollRect scroll = GetObject<ScrollRect>("Scroll View - Debug");
+        if (scroll != null)
+        {
+            var textDebug = scroll.content.GetComponent<Text>();
+            SetText(textDebug, msg);
+
+            scroll.verticalNormalizedPosition = 0f;
+        }
     }
 
     public void SetDebugTrun()

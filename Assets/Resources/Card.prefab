@@ -60,6 +60,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 649706916941490318}
+  spriteRendererBack: {fileID: 6273053064442819838}
   meshRenderer: {fileID: 7049704932113846458}
 --- !u!54 &6817480921922514462
 Rigidbody:

@@ -7,6 +7,7 @@ public class Card : MonoBehaviour
 {
     [SerializeField]
     public SpriteRenderer spriteRenderer = null;
+    public SpriteRenderer spriteRendererBack = null;
     public MeshRenderer meshRenderer = null;
 
     public Rigidbody rigid { get; set; }
@@ -47,7 +48,8 @@ public class Card : MonoBehaviour
         Owner = Board.Player.NONE;
 
         spriteRenderer.sprite = sprite;
-        
+        spriteRendererBack.sprite = sprite;
+
         var collider = GetComponent<BoxCollider>();
         Height = collider.size.y;
         Width = collider.size.x;
