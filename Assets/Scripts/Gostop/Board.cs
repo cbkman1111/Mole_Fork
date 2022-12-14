@@ -46,6 +46,7 @@ public class Board : MonoBehaviour
     private List<Card>[] scores = null;
     private Stack<Card> deck = null;
     private List<Card> select = null; // ¼±ÅÃÇØ¾ß ÇÏ´Â Ä«µå.
+    List<Card> listEat = null; // ¸Ô´ÂÆÐ.
 
     private float cardWidth = 0;
     private float cardHeight = 0;
@@ -53,6 +54,13 @@ public class Board : MonoBehaviour
     private Board.Player turnUser = 0;
 
     public UIMenuGostop menu = null;
+
+    public struct DebugInfo {
+        public int num;
+        public string msg;
+    }
+    private Queue<DebugInfo> listDebug = new Queue<DebugInfo>();
+    private int debugNumber = 0;
 
     public enum Player { 
         NONE = -1,
@@ -110,6 +118,7 @@ public class Board : MonoBehaviour
         scores[1] = new List<Card>();
         
         select = new List<Card>();
+        listEat = new List<Card>();
 
         bottoms = new Dictionary<int, List<Card>>();
         bottoms.Add(1, new List<Card>());
@@ -152,6 +161,34 @@ public class Board : MonoBehaviour
         stateMachine.Change(State.CREATE_DECK);
     }
 
+    public void DebugLog(string msg)
+    {
+        if (turnUser == Player.COMPUTER)
+        {
+            return;
+        }
+
+        debugNumber++;
+        DebugInfo info;
+        info.num = debugNumber;
+        info.msg = msg;
+
+        listDebug.Enqueue(info);
+
+        string messages = string.Empty;
+        foreach (var debug in listDebug)
+        {
+            messages += $"{debug.num}. {debug.msg}\n";
+        }
+
+        if (listDebug.Count > 10)
+        {
+            listDebug.Dequeue();
+        }
+
+        menu.SetDebug(messages);
+    }
+
     /// <summary>
     /// 
     /// </summary>
@@ -164,7 +201,10 @@ public class Board : MonoBehaviour
         {
             case State.WAIT:
                 stateMachine.Process(
-                    start: () => {},
+                    start: () => {
+                        DebugLog("State.WAIT");
+ 
+                    },
                     check: () => {
                         return true;
                     },
@@ -175,6 +215,8 @@ public class Board : MonoBehaviour
             case State.CREATE_DECK:
                 stateMachine.Process(
                     start: () => {
+                        DebugLog("State.CREATE_DECK");
+
                         SetCardCount();
                         CreateDeck();
                     },
@@ -191,7 +233,9 @@ public class Board : MonoBehaviour
             // ¹Ù´Ú 8Àå ±ò±â.
             case State.SHUFFLE_8:
                 stateMachine.Process(
-                    start: () => { 
+                    start: () => {
+                        DebugLog("State.SHUFFLE_8");
+
                         Pop8Cards(); 
                     },
                     check: () => {
@@ -213,6 +257,8 @@ public class Board : MonoBehaviour
             case State.SHUFFLE_10:
                 stateMachine.Process(
                     start: () => {
+                        DebugLog("State.SHUFFLE_10");
+
                         Pop10Cards();
                     },
                     check: () => {
@@ -230,6 +276,8 @@ public class Board : MonoBehaviour
             case State.OPEN_8:
                 stateMachine.Process(
                     start: () => {
+                        DebugLog("State.OPEN_8");
+
                         FlipCard8();
                     },
                     check: () => {
@@ -249,6 +297,8 @@ public class Board : MonoBehaviour
             case State.CHECK_JORKER:
                 stateMachine.Process(
                     start: () => {
+                        DebugLog("State.CHECK_JORKER");
+
                         foreach (var slot in bottoms)
                         {
                             var list = slot.Value.Where(e => e.Month == 13).ToList();
@@ -295,6 +345,8 @@ public class Board : MonoBehaviour
             case State.HANDS_UP:
                 stateMachine.Process(
                     start: () => {
+                        DebugLog("State.HANDS_UP");
+
                         HandsUp();
                     },
                     check: () => {
@@ -312,6 +364,8 @@ public class Board : MonoBehaviour
             case State.HANDS_OPEN: // ¼ÕÆÐ¸¦ µÚÁý½À´Ï´Ù.
                 stateMachine.Process(
                     start: () => {
+                        DebugLog("State.HANDS_OPEN");
+
                         HandOpen();
                     },
                     check: () => {
@@ -327,6 +381,8 @@ public class Board : MonoBehaviour
             case State.HANDS_SORT: // ¼ÕÆÐ¸¦ Á¤·ÄÇÕ´Ï´Ù.
                 stateMachine.Process(
                     start: () => {
+                        DebugLog("State.HANDS_SORT");
+
                         SortHand();
                     },
                     check: () => {
@@ -341,6 +397,8 @@ public class Board : MonoBehaviour
             case State.CARD_HIT:
                 stateMachine.Process(
                     start: () => {
+                        DebugLog("State.CARD_HIT");
+
                         menu.ShowScoreMenu(true);
                         if (turnUser == Player.COMPUTER)
                         {
@@ -369,6 +427,8 @@ public class Board : MonoBehaviour
             case State.CARD_POP:
                 stateMachine.Process(
                     start: () => {
+                        DebugLog("State.CARD_POP");
+
                         turnInfo.pop = Pop1Cards((int)turnUser); 
                     },
                     check: () => {
@@ -394,6 +454,7 @@ public class Board : MonoBehaviour
             case State.EAT_CHECK: // Ä«µå È¹µæ Ã³¸®.
                 stateMachine.Process(
                     start: () => {
+                        DebugLog("State.EAT_CHECK");
                         EatCheck();
                     },
                     check: () => {
@@ -402,18 +463,7 @@ public class Board : MonoBehaviour
                             if (turnUser == Player.COMPUTER)
                             {
                                 select[0].Owner = turnUser;
-
-                                var slot = GetSlot(select[0]);
-                                for (int i = slot.Value.Count - 1; i >= 0; --i)
-                                {
-                                    var slotCard = slot.Value[i];
-                                    if (slotCard.Owner == turnUser)
-                                    {
-                                        slot.Value.Remove(slotCard);
-                                        EatScore(slotCard);
-                                    }
-                                }
-
+                                listEat.Add(select[0]);
                                 select.Clear();
                             }
                             else 
@@ -424,28 +474,17 @@ public class Board : MonoBehaviour
                                     popup.Init(select[0], select[1], (Card selectCard) => {
 
                                         selectCard.Owner = turnUser;
-
-                                        var slot = GetSlot(selectCard);
-                                        for (int i = slot.Value.Count - 1; i >= 0; --i)
-                                        {
-                                            var slotCard = slot.Value[i];
-                                            if (slotCard.Owner == turnUser)
-                                            {
-                                                slot.Value.Remove(slotCard);
-                                                EatScore(slotCard);
-                                            }
-                                        }
-
+                                        listEat.Add(selectCard);
                                         select.Clear();
                                     });
                                 }
                             }
                             
-
                             return false;
                         }
                         else
                         {
+                            Eat();
                             int count = GetMoveAllCount();
                             count += scores[0].Where(card => card.CompleteMove == false).ToList().Count();
                             count += scores[1].Where(card => card.CompleteMove == false).ToList().Count();
@@ -471,6 +510,8 @@ public class Board : MonoBehaviour
             case State.SCORE_UPDATE: // Á¡¼ö Ã¼Å©.
                 stateMachine.Process(
                     start: () => {
+                        DebugLog("State.SCORE_UPDATE");
+
                         SetCardCount();
                     },
                     check: () => {
@@ -484,6 +525,8 @@ public class Board : MonoBehaviour
             case State.TURN_CHECK: // ÅÏ ¹Ù²Ù±â.
                 stateMachine.Process(
                     start: () => {
+                        DebugLog("State.TURN_CHECK");
+
                         if (turnUser == Player.USER)
                         {
                             turnUser = Player.COMPUTER;
@@ -520,6 +563,8 @@ public class Board : MonoBehaviour
             case State.GAME_OVER_TIE: // ¹«½ÂºÎ »óÅÂ Ã³¸®.
                 stateMachine.Process(
                     start: () => {
+                        DebugLog("State.GAME_OVER_TIE");
+
                     },
                     check: () => {
                         int count = GetMoveAllCount();
@@ -855,7 +900,8 @@ public class Board : MonoBehaviour
 
                 card.SetPhysicDiable(true);
                 card.SetShadow(true);
-                
+                card.Owner = (Player)user;
+
                 if (user == 0)
                 {
                     if (card.Month == 13)
@@ -996,14 +1042,47 @@ public class Board : MonoBehaviour
         scores[(int)turnUser].Add(card);
     }
 
+    private void EatLog(KeyValuePair<int, List<Card>> info)
+    {
+        if (info.Value.Where(c => c.Owner != Player.NONE).ToList().Count() == 0)
+        {
+            return;
+        }
+
+        foreach (var card in info.Value)
+        {  
+            DebugLog($"   > {card.Month}¿ù {card.KindOfCard} / {card.Owner}");
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    private void Eat()
+    {
+        Debug.Log($"¸Ô´Â ÆÇÁ¤ ÆÐ : {listEat.Count}");
+        int total = listEat.Count;
+        for (int i = listEat.Count - 1; i >= 0; --i)
+        {
+            var card = listEat[i];
+            EatScore(card, total - i); // Ä«µå È¹µæ.
+
+            var slot = GetSlot(card);
+            slot.Value.Remove(card); // º¸µå ½½·Ô¿¡¼­ Á¦°Å.           
+        }
+
+        listEat.Clear();
+    }
+
     /// <summary>
     /// È¹µæ Ä«µå Ã¼Å©.
     /// </summary>
     /// <returns></returns>
     private bool EatCheck()
     {
-        List<Card> listTotal = new List<Card>();
-        foreach (var kindSlot in bottoms)
+        listEat.Clear();
+
+        foreach (KeyValuePair<int, List<Card>> kindSlot in bottoms)
         {
             var list = kindSlot.Value;
             switch (list.Count)
@@ -1011,43 +1090,48 @@ public class Board : MonoBehaviour
                 case 2:
                     if (list[0].Owner == turnUser &&
                         list[1].Owner == turnUser &&
+                        list[0].Month != 13 &&
                         list[1].Month != 13)
                     {
                         foreach (var card in list)
                         {
-                            listTotal.Add(card);
+                            listEat.Add(card);
                         }
 
-                        Debug.LogWarning("±Í½Å.");
+                        DebugLog($"{list[0].Month} - ±Í½Å.");
                     }
                     else if (list[0].Owner == turnUser &&
                              list[1].Month == 13)
                     {
-                        listTotal.Add(list[1]);
-                        Debug.LogWarning("½ÖÇÇ¸¸ ¸ÔÀ½.");
+                        listEat.Add(list[1]);
+
+                        DebugLog($"{list[0].Month} - ½ÖÇÇ¸¸.");
                     }
                     else if (list[0].Owner == Player.NONE &&
-                                list[1].Owner == turnUser)
+                             list[1].Owner == turnUser)
                     {
                         foreach (var card in list)
                         {
-                            listTotal.Add(card);
+                            listEat.Add(card);
                         }
 
-                        Debug.LogWarning("¸ÔÀ½.");
+                        DebugLog($"{list[0].Month} - µÎÀå.");
                     }
-
+                    else
+                    {
+                        EatLog(kindSlot);
+                    }
                     break;
                 case 3:
                     if (list[0].Owner == Player.NONE &&
                         list[1].Owner == turnUser &&
                         list[2].Owner == Player.NONE)
                     {
-                        Debug.LogWarning("½Ó.");
+                        DebugLog($"{list[0].Month} - šü´Ù.");
                     }
                     else if (list[0].Owner == Player.NONE &&
-                                list[1].Owner == Player.NONE &&
-                                list[2].Owner == turnUser)
+                            list[1].Owner == Player.NONE &&
+                            list[2].Owner == turnUser)
                     {
                         foreach (var card in list)
                         {
@@ -1055,9 +1139,14 @@ public class Board : MonoBehaviour
                             {
                                 select.Add(card);
                             }
+                            else if (card.Owner == Player.USER)
+                            {
+                                listEat.Add(card);
+                            }
                         }
 
-                        Debug.LogWarning("°ñ¶ó ¸Ô±â.");
+                        DebugLog($"{list[0].Month} - °ñ¸£±â. {select.Count}");
+                        EatLog(kindSlot);
                     }
                     else if (list[0].Owner == Player.NONE &&
                         list[1].Owner == turnUser &&
@@ -1065,10 +1154,14 @@ public class Board : MonoBehaviour
                     {
                         foreach (var card in list)
                         {
-                            listTotal.Add(card);
+                            listEat.Add(card);
                         }
                     }
-                         
+                    else
+                    {
+                        EatLog(kindSlot);
+                    }
+
                     break;
                 case 4:
                     if (list[0].Owner == Player.NONE &&
@@ -1076,7 +1169,7 @@ public class Board : MonoBehaviour
                         list[2].Owner == turnUser &&
                         list[3].Owner == Player.NONE)
                     {
-                        Debug.LogWarning("½Ó.");
+                        DebugLog($"{list[0].Month} - šü´Ù.");
                     }
                     else if (list[0].Owner == Player.NONE &&
                                 list[1].Owner == Player.NONE &&
@@ -1085,10 +1178,10 @@ public class Board : MonoBehaviour
                     {
                         foreach (var card in list)
                         {
-                            listTotal.Add(card);
+                            listEat.Add(card);
                         }
-                            
-                        Debug.LogWarning("½Ñ°É ¸Ô´Â´Ù.");
+
+                        DebugLog($"{list[0].Month} - ¾Æ½Î.");
                     }
                     else if (list[0].Owner == Player.NONE &&
                             list[1].Owner == Player.NONE &&
@@ -1097,11 +1190,11 @@ public class Board : MonoBehaviour
                     {
                         foreach (var card in list)
                         {
-                            listTotal.Add(card);
+                            listEat.Add(card);
                         }
 
                         select.Clear();
-                        Debug.LogWarning("µû´Ú.");
+                        DebugLog($"{list[0].Month} - µû´Ú.");
                     }
                     else if (list[0].Owner == Player.NONE &&
                             list[1].Owner == turnUser &&
@@ -1110,25 +1203,48 @@ public class Board : MonoBehaviour
                     {
                         foreach (var card in list)
                         {
-                            listTotal.Add(card);
+                            listEat.Add(card);
                         }
+
+                        DebugLog($"{list[0].Month} - ´ë¹Ú.");
+                    }
+                    else
+                    {
+                        EatLog(kindSlot);
+                    }
+                    break;
+                case 5:
+                case 6:
+                    if (list[0].Owner == Player.NONE &&
+                        list[1].Owner == Player.NONE)
+                    {
+                        foreach (var card in list)
+                        {
+                            listEat.Add(card);
+                        }
+                    }
+                    else if (list[0].Owner == Player.NONE &&
+                        list[1].Owner == Player.NONE &&
+                        list[2].Owner == Player.NONE &&
+                        list[3].Owner == turnUser)
+                    {
+                        foreach (var card in list)
+                        {
+                            listEat.Add(card);
+                        }
+
+                        DebugLog($"{list[0].Month} - ½Ñ°Å ¸ÔÀ½.");
                     }
                     break;
                 default:
+                    {
+                        EatLog(kindSlot);
+                    }
                     break;
             }
         }
 
-        Debug.Log($"¸Ô´Â ÆÇÁ¤ ÆÐ : {listTotal.Count}");
-        int total = listTotal.Count;
-        for (int i = listTotal.Count - 1; i >= 0; --i)
-        {
-            var card = listTotal[i];
-            EatScore(card, total - i); // Ä«µå È¹µæ.
 
-            var slot = GetSlot(card);
-            slot.Value.Remove(card); // º¸µå ½½·Ô¿¡¼­ Á¦°Å.           
-        }
 
         return true;
     }
