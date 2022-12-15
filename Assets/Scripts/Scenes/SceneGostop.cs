@@ -71,8 +71,19 @@ public class SceneGostop : SceneBase
                     if (stateInfo.state == State.CARD_HIT &&
                         board.MyTurn() == true)
                     {
-                        board.HitCard((int)Board.Player.USER, card);
-                        stateInfo.evt = StateEvent.PROGRESS; // 카드 침.
+                        var list = board.GetSameMonthCard((int)Board.Player.USER, card);
+                        if (list .Count >= 3)
+                        {
+                            board.HitBomb((int)Board.Player.USER, list);
+        
+
+                            stateInfo.evt = StateEvent.PROGRESS; // 카드 침.
+                        }
+                        else 
+                        {
+                            board.HitCard((int)Board.Player.USER, card);
+                            stateInfo.evt = StateEvent.PROGRESS; // 카드 침.
+                        }
                     }
                 }
             }

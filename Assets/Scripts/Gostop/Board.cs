@@ -25,6 +25,27 @@ public class BoardPosition
     public Transform Hand = null;
 }
 
+public class Scores
+{
+    public int shake; // 흔듬 숫자.
+    public int go; // 고 숫자.
+    public bool peebak; // 피박.
+    public bool gwangbak; // 광박.
+    public bool mungbak; // 멍박.
+    public bool goback; // 고박.
+
+    public bool chungdan;
+    public bool hongdan;
+    public bool chodan;
+    public bool godori;
+
+    public int gawng;
+    public int mung;
+    public int pee;
+    public int thee;
+
+    public int total;
+}
 /// <summary>
 /// 
 /// </summary>
@@ -47,18 +68,21 @@ public class Board : MonoBehaviour
     private Stack<Card> deck = null;
     private List<Card> select = null; // 선택해야 하는 카드.
     private List<Card> listEat = null; // 먹는패.
-    private int stealCount = 0; // 빼앗아올 패.
+    
     private float cardWidth = 0;
     private float cardHeight = 0;
 
     private Board.Player turnUser = 0;
+    private int stealCount = 0; // 빼앗아올 패.
 
+    public Scores[] gameScore = null;
     public UIMenuGostop menu = null;
 
     public struct DebugInfo {
         public int num;
         public string msg;
     }
+
     private Queue<DebugInfo> listDebug = new Queue<DebugInfo>();
     private int debugNumber = 0;
 
@@ -134,6 +158,10 @@ public class Board : MonoBehaviour
         bottoms.Add(11, new List<Card>());
         bottoms.Add(12, new List<Card>());
         bottoms.Add(13, new List<Card>());
+
+        gameScore = new Scores[2];
+        gameScore[0] = new Scores();
+        gameScore[1] = new Scores();
 
         menu.SetPosition(this);
         return true;
@@ -228,7 +256,7 @@ public class Board : MonoBehaviour
                     start: () => {
                         DebugLog("State.CREATE_DECK");
 
-                        SetCardCount();
+                        ScoreUpdate();
                         CreateDeck();
                     },
                     check: () => {
@@ -436,7 +464,16 @@ public class Board : MonoBehaviour
                         menu.ShowScoreMenu(true);
                         if (turnUser == Player.COMPUTER)
                         {
-                            HitCard((int)Player.COMPUTER, hands[(int)Player.COMPUTER][0]);
+                            var list = GetSameMonthCard((int)Board.Player.USER, hands[(int)Player.COMPUTER][0]);
+                            if (list.Count >= 3)
+                            {
+                                HitBomb((int)Player.COMPUTER, list);
+                                stateInfo.evt = StateEvent.PROGRESS; // 카드 침.
+                            }
+                            else
+                            {
+                                HitCard((int)Player.COMPUTER, hands[(int)Player.COMPUTER][0]);
+                            }
                         }
                     },
                     check: () => {
@@ -585,7 +622,7 @@ public class Board : MonoBehaviour
                     start: () => {
                         DebugLog("State.SCORE_UPDATE");
 
-                        SetCardCount();
+                        ScoreUpdate();
                     },
                     check: () => {
                         return true;
@@ -823,18 +860,185 @@ public class Board : MonoBehaviour
         return true;
     }
 
-    private void SetCardCount()
+    /// <summary>
+    /// 스코어 처리.
+    /// </summary>
+    private void ScoreUpdate()
     {
         for (int user = 0; user < (int)Player.MAX; user++)
         {
             int gwang = scores[user].Where(card => card.KindOfCard == Card.KindOf.GWANG || card.KindOfCard == Card.KindOf.GWANG_B).ToList().Count();
             int mung = scores[user].Where(card => card.KindOfCard == Card.KindOf.MUNG || card.KindOfCard == Card.KindOf.MUNG_GODORI || card.KindOfCard == Card.KindOf.MUNG_KOO).ToList().Count();
             int thee = scores[user].Where(card => card.KindOfCard == Card.KindOf.CHO || card.KindOfCard == Card.KindOf.CHUNG || card.KindOfCard == Card.KindOf.HONG).ToList().Count();
-            int pee = scores[user].Where(card => card.KindOfCard == Card.KindOf.P || card.KindOfCard == Card.KindOf.PP || card.KindOfCard == Card.KindOf.PPP).ToList().Count();
+          
+            // 광점수
+            if (gwang == 5)
+            {
+                gameScore[user].gawng = 15;
+            }
+            else if (gwang == 4)
+            {
+                gameScore[user].gawng = 4;
+            }
+            else if (gwang == 3)
+            {
+                int bgwang = scores[user].Where(card => card.KindOfCard == Card.KindOf.GWANG_B).ToList().Count();
+                gameScore[user].gawng = bgwang == 1 ? 2 : 3;
+            }
 
-            menu.ScoreUpdate((Player)user, gwang, mung, thee, pee);
+            // 띠점수
+            if (thee >= 5)
+            {
+                gameScore[user].thee = thee - 4;
+
+                if (scores[user].Where(card => card.KindOfCard == Card.KindOf.CHO).ToList().Count == 3)
+                {
+                    gameScore[user].thee += 3;
+                    gameScore[user].chodan = true;
+                }
+
+                if (scores[user].Where(card => card.KindOfCard == Card.KindOf.CHUNG).ToList().Count == 3)
+                {
+                    gameScore[user].thee += 3;
+                    gameScore[user].chungdan = true;
+                }
+
+                if (scores[user].Where(card => card.KindOfCard == Card.KindOf.HONG).ToList().Count == 3)
+                {
+                    gameScore[user].thee += 3;
+                    gameScore[user].hongdan = true;
+                }
+            }
+
+            // 멍점수
+            if (mung >= 5)
+            {
+                gameScore[user].mung = mung - 4;
+                if (scores[user].Where(card => card.KindOfCard == Card.KindOf.MUNG_GODORI).ToList().Count == 3)
+                {
+                    gameScore[user].mung += 5;
+                    gameScore[user].godori = true;
+                }
+            }
+
+            // 피점수
+            var list = scores[user].Where(card => card.KindOfCard == Card.KindOf.P || card.KindOfCard == Card.KindOf.PP || card.KindOfCard == Card.KindOf.PPP).ToList();
+            int pee = 0;
+            foreach (var card in list)
+            {
+                switch (card.KindOfCard)
+                {
+                    case Card.KindOf.P:
+                        pee += 1;
+                        break;
+                    case Card.KindOf.PP:
+                        pee += 2;
+                        break;
+                    case Card.KindOf.PPP:
+                        pee += 3;
+                        break;
+                }
+            }
+            
+            if (pee >= 10)
+            {
+                gameScore[user].pee = pee - 9;
+            }
+        }
+
+        // 박 계산
+        for (int user = 0; user < (int)Player.MAX; user++)
+        {
+            int player = (int)user;
+            int enemy = (int)Player.COMPUTER;
+            if (player == (int)Player.USER)
+            {
+                enemy = (int)Player.COMPUTER;
+            }
+            else
+            {
+                enemy = (int)Player.USER;
+            }
+
+            if (gameScore[player].gawng > 0)
+            {
+                int gwang = scores[enemy].Where(card => card.KindOfCard == Card.KindOf.GWANG || card.KindOfCard == Card.KindOf.GWANG_B).ToList().Count();
+                if (gwang == 0)
+                {
+                    gameScore[player].gwangbak = true;
+                }
+                else
+                {
+                    gameScore[player].gwangbak = false;
+                }
+            }
+
+            if (gameScore[player].pee > 0)
+            {
+                int pee = 0;
+                var list = scores[enemy].Where(card => card.KindOfCard == Card.KindOf.P || card.KindOfCard == Card.KindOf.PP || card.KindOfCard == Card.KindOf.PPP).ToList();
+                foreach (var card in list)
+                {
+                    switch (card.KindOfCard)
+                    {
+                        case Card.KindOf.P:
+                            pee += 1;
+                            break;
+                        case Card.KindOf.PP:
+                            pee += 2;
+                            break;
+                        case Card.KindOf.PPP:
+                            pee += 3;
+                            break;
+                    }
+                }
+
+                if (pee < 6)
+                {
+                    gameScore[player].peebak = true;
+                }
+                else 
+                {
+                    gameScore[player].peebak = false;
+                }
+            }
+
+
+            if (gameScore[player].mung >= 7)
+            {
+                gameScore[player].mungbak = true;
+            }
+            else
+            {
+                gameScore[player].mungbak = false;
+            }
+
+            gameScore[player].total = gameScore[player].gawng + gameScore[player].mung + gameScore[player].thee + gameScore[player].pee + gameScore[player].go;
+            int multiCount = 0;
+            if (gameScore[player].peebak == true)
+            {
+                multiCount += 1;
+            }
+            if (gameScore[player].gwangbak == true)
+            {
+                multiCount += 1;
+            }
+            if (gameScore[player].mungbak == true)
+            {
+                multiCount += 1;
+            }
+            if (gameScore[player].go >= 3)
+            {
+                multiCount += gameScore[player].go - 3;
+            }
+            
+            float muti = Mathf.Pow(2, multiCount);
+            gameScore[player].total *= (int)muti;
+
+            menu.ScoreUpdate((Player)user, gameScore[user]);
         }
     }
+
     /// <summary>
     /// 
     /// </summary>
@@ -1007,10 +1211,37 @@ public class Board : MonoBehaviour
     }
 
     /// <summary>
+    /// 손에 보유한 카드 수량을 리턴합니다.
+    /// </summary>
+    /// <param name="user"></param>
+    /// <param name="card"></param>
+    /// <returns></returns>
+    public List<Card> GetSameMonthCard(int user, Card card)
+    {
+        return hands[user].Where(c => c.Month == card.Month && c.Month != 13).ToList();
+    }
+
+    /// <summary>
+    /// 폭탄.
+    /// </summary>
+    /// <param name="user"></param>
+    /// <param name="list"></param>
+    public void HitBomb(int user, List<Card> list)
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            HitCard((int)Board.Player.USER, list[i], i * 0.2f);
+        }
+
+        gameScore[user].shake += 1;
+        stealCount += 1;
+    }
+
+    /// <summary>
     /// 
     /// </summary>
     /// <param name="card"></param>
-    public void HitCard(int user, Card card)
+    public void HitCard(int user, Card card, float delay = 0)
     {
         var turnInfo = stateMachine.GetCurrturnInfo();
         var info = turnInfo.GetCurrentStateInfo();
@@ -1036,7 +1267,7 @@ public class Board : MonoBehaviour
                 card.SetShadow(true);
                 card.Owner = (Player)user;
 
-                if (user == 0)
+                if ((Player)user == Player.USER)
                 {
                     if (card.Month == 13)
                     {
@@ -1062,6 +1293,7 @@ public class Board : MonoBehaviour
                                     destination2,
                                     time: 0.2f,
                                     ease: iTween.EaseType.easeInQuint,
+                                    delay: delay,
                                     complete: () =>
                                     {
 
@@ -1101,6 +1333,7 @@ public class Board : MonoBehaviour
                                     destination2,
                                     time: 0.2f,
                                     ease: iTween.EaseType.easeInQuint,
+                                    delay: delay,
                                     complete: () =>
                                     {
 
