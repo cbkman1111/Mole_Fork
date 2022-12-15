@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Card : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class Card : MonoBehaviour
     public SpriteRenderer spriteRenderer = null;
     public SpriteRenderer spriteRendererBack = null;
     public MeshRenderer meshRenderer = null;
+    public SpriteRenderer spriteRendererDebug = null;
 
     public Rigidbody rigid { get; set; }
     public int Num { get; set; }
@@ -19,7 +21,24 @@ public class Card : MonoBehaviour
     public bool Open { get; set; }
     public bool CompleteMove { get; set; }
     private Action completeMove = null;
-    public Board.Player Owner { get; set; }
+
+    private Board.Player owner = Board.Player.NONE;
+    public Board.Player Owner {
+        get 
+        {
+            return owner;
+        } 
+        set 
+        {
+            owner = value;
+            if(owner == Board.Player.USER)
+                spriteRendererDebug.color = Color.blue;
+            else if(owner == Board.Player.COMPUTER)
+                spriteRendererDebug.color = Color.red;
+            else
+                spriteRendererDebug.color = Color.white;
+        } 
+    }
 
     public enum KindOf { 
         GWANG,

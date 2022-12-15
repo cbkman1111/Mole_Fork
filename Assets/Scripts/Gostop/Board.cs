@@ -305,26 +305,6 @@ public class Board : MonoBehaviour
                     });
                 break;
 
-            case State.OPEN_1_MORE:
-                stateMachine.Process(
-                    start: () => {
-                        DebugLog("State.OPEN_1_MORE");
-                        Pop1Cards((int)Player.NONE);
-                    },
-                    check: () => {
-                        int count = 0;
-                        foreach (var slot in bottoms)
-                        {
-                            count += slot.Value.Where(e => e.CompleteMove == false).ToList().Count;
-                        }
-
-                        return count == 0;
-                    },
-                    complete: () => {
-                        stateMachine.Change(State.CHECK_JORKER);
-                    });
-                break;
-
             case State.CHECK_JORKER:
                 stateMachine.Process(
                     start: () => {
@@ -373,6 +353,26 @@ public class Board : MonoBehaviour
                         {
                             stateMachine.Change(State.HANDS_UP);
                         }
+                    });
+                break;
+
+            case State.OPEN_1_MORE:
+                stateMachine.Process(
+                    start: () => {
+                        DebugLog("State.OPEN_1_MORE");
+                        Pop1Cards((int)Player.NONE);
+                    },
+                    check: () => {
+                        int count = 0;
+                        foreach (var slot in bottoms)
+                        {
+                            count += slot.Value.Where(e => e.CompleteMove == false).ToList().Count;
+                        }
+
+                        return count == 0;
+                    },
+                    complete: () => {
+                        stateMachine.Change(State.CHECK_JORKER);
                     });
                 break;
 
@@ -462,7 +462,6 @@ public class Board : MonoBehaviour
                 stateMachine.Process(
                     start: () => {
                         DebugLog("State.CARD_POP");
-
                         turnInfo.pop = Pop1Cards((int)turnUser); 
                     },
                     check: () => {
@@ -564,46 +563,7 @@ public class Board : MonoBehaviour
                     start: () => {
                         DebugLog("State.STEAL");
 
-                        int index = (int)Player.NONE;
-                        if (turnUser == Player.COMPUTER)
-                        {
-                            index = (int)Player.USER;
-                        }
-                        else if (turnUser == Player.USER)
-                        {
-                            index = (int)Player.COMPUTER;
-                        }
-
-                        var list = scores[index].Where(e =>
-                            e.KindOfCard == Card.KindOf.P ||
-                            e.KindOfCard == Card.KindOf.PP ||
-                            e.KindOfCard == Card.KindOf.PPP).OrderByDescending(e => e.KindOfCard).ToList();
-
-                        foreach (var card in list)
-                        {
-                            switch (card.KindOfCard)
-                            {
-                                case Card.KindOf.P:
-                                    break;
-                                case Card.KindOf.PP:
-                                    break;
-                                case Card.KindOf.PPP:
-                                    break;
-                            }
-                        }
-
-                        if (stealCount >= 3)
-                        {
-
-                        }
-                        else if (stealCount >= 2)
-                        {
-
-                        }
-                        else
-                        {
-                            
-                        }
+                        StealCard();
                     },
                     check: () => {
                         return true;
@@ -693,6 +653,63 @@ public class Board : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 상대의 패를 훔칩니다.
+    /// </summary>
+    private void StealCard()
+    {
+        int index = (int)Player.NONE;
+        if (turnUser == Player.COMPUTER)
+        {
+            index = (int)Player.USER;
+        }
+        else if (turnUser == Player.USER)
+        {
+            index = (int)Player.COMPUTER;
+        }
+
+        var listAll = scores[index].Where(e =>
+                     e.KindOfCard == Card.KindOf.P ||
+                     e.KindOfCard == Card.KindOf.PP ||
+                     e.KindOfCard == Card.KindOf.PPP).
+                     OrderBy(e => e.KindOfCard).ToList();
+        var list1 = listAll.Where(e => e.KindOfCard == Card.KindOf.P).ToList();
+        var list2 = listAll.Where(e => e.KindOfCard == Card.KindOf.PP).ToList();
+        var list3 = listAll.Where(e => e.KindOfCard == Card.KindOf.PPP).ToList();
+
+        if (listAll.Count == 0)
+        {
+            stealCount = 0;
+            return;
+        }
+
+        Card card = null;
+        if (stealCount >= 3 && list3.Count > 0)
+        {
+            card = list3[0];
+        }
+        else if (stealCount >= 2 && list2.Count > 0)
+        {
+            card = list2[0];
+        }
+        else
+        {
+            card = listAll[0];
+        }
+
+        if (listAll[0].KindOfCard == Card.KindOf.P)
+            stealCount -= 1;
+        else if (listAll[0].KindOfCard == Card.KindOf.PP)
+            stealCount -= 2;
+        else if (listAll[0].KindOfCard == Card.KindOf.PPP)
+            stealCount -= 3;
+
+        if (stealCount < 0)
+            stealCount = 0;
+
+        scores[index].Remove(card);
+        EatScore(card);
+    }
     /// <summary>
     /// 기존 카드를 제거합니다.
     /// </summary>
@@ -1023,7 +1040,9 @@ public class Board : MonoBehaviour
                 {
                     if (card.Month == 13)
                     {
-                        EatScore(card);
+                        EatScore(card, complete: () => {
+                            StealCard();
+                        });
 
                         var deckCard = deck.Pop();
                         deckCard.MoveTo(card.transform.position, time: 0.1f);
@@ -1056,8 +1075,10 @@ public class Board : MonoBehaviour
                 {
                     if (card.Month == 13)
                     {
-                        EatScore(card);
-
+                        EatScore(card, complete: () => {
+                            StealCard();
+                        });
+           
                         var deckCard = deck.Pop();
                         deckCard.MoveTo(card.transform.position);
                         deckCard.CardOpen();
@@ -1097,7 +1118,7 @@ public class Board : MonoBehaviour
     /// 
     /// </summary>
     /// <param name="card"></param>
-    private void EatScore(Card card, int count = 0)
+    private void EatScore(Card card, int count = 0, Action complete = null)
     {
         int index = (int)turnUser;
         int stack = 0;
@@ -1154,7 +1175,7 @@ public class Board : MonoBehaviour
 
         float interval = 0.1f;
         var position = targetPosition + new Vector3(stack * 0.6f, stack * card.Height, 0);
-        card.MoveTo(position, ease: iTween.EaseType.easeInQuad, time: interval, delay: count * 0.05f);
+        card.MoveTo(position, ease: iTween.EaseType.easeInQuad, time: interval, delay: count * 0.05f, complete: complete);
         card.SetPhysicDiable(false);
         scores[(int)turnUser].Add(card);
     }
@@ -1384,7 +1405,7 @@ public class Board : MonoBehaviour
                         new Vector3(randX, stackCount * card.Height, randZ);
 
             card.CardOpen();
-            card.Owner = turnUser;
+            card.Owner = (Player)user;
             card.MoveTo(
               position,
               time: 0.2f,
