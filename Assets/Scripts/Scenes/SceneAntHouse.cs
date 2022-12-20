@@ -32,6 +32,8 @@ public class SceneAntHouse : SceneBase
 
         var initPosition = grid.GetCellCenterLocal(coordinate);
         var prefabPlayer = ResourcesManager.Instance.LoadInBuild<Ant.Player>("Player");
+        initPosition.z = 0;
+
         player = Instantiate<Ant.Player>(prefabPlayer);
         player.transform.position = initPosition;
 
@@ -39,6 +41,7 @@ public class SceneAntHouse : SceneBase
         var position = camera.transform.position;
         position.x = player.transform.position.x;
         position.y = player.transform.position.y;
+
         camera.transform.position = position;
         /*
             Vector3 world = Camera.main.ScreenToWorldPoint(Input.mousePosition); //현재 마우스의 위치를 Vector3로 가져옴
