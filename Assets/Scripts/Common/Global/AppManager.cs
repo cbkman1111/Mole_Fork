@@ -23,6 +23,7 @@ public class AppManager : MonoSingleton<AppManager>
         scenes.Add("SceneGame", SceneBase.SCENES.GAME);
         scenes.Add("SceneGostop", SceneBase.SCENES.GAME_GOSTOP);
         scenes.Add("SceneTileMap", SceneBase.SCENES.GAME_TILEMAP);
+        scenes.Add("SceneAntHouse", SceneBase.SCENES.GAME_ANTHOUSE);
 
         SceneManager.sceneLoaded += OnSceneLoaded;
 
@@ -135,6 +136,9 @@ public class AppManager : MonoSingleton<AppManager>
                             break;
                         case SceneBase.SCENES.GAME_TILEMAP:
                             CurrScene = new GameObject(name).AddComponent<SceneTileMap>();
+                            break;
+                        case SceneBase.SCENES.GAME_ANTHOUSE:
+                            CurrScene = new GameObject(name).AddComponent<SceneAntHouse>();
                             break;
                     }
                 

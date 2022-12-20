@@ -30,5 +30,11 @@ public class UIMenu : MenuBase
         {
             AppManager.Instance.ChangeScene(SceneBase.SCENES.GAME_TILEMAP);
         }
+        else if (name == "Button - Start4")
+        {
+            AppManager.Instance.ChangeScene(SceneBase.SCENES.GAME_ANTHOUSE);
+        }
     }
+
+
 }

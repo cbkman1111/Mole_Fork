@@ -79,6 +79,7 @@ public class UIMenuGostop : MenuBase
 
     public void SetDebugTrun()
     { 
+
     }
 
     protected override void OnClick(Button btn)

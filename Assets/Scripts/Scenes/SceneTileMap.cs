@@ -26,8 +26,8 @@ public class SceneTileMap : SceneBase
         pigeon.transform.position = Vector3.zero;
         pigeon.transform.rotation = Quaternion.identity;
 
-        var prefabPlayer = ResourcesManager.Instance.LoadBundle<Player>("Player.prefab");
-        var player = Instantiate<Player>(prefabPlayer);
+        var prefabPlayer = ResourcesManager.Instance.LoadBundle<Skell.Player>("Player.prefab");
+        var player = Instantiate<Skell.Player>(prefabPlayer);
         player.transform.position = new Vector3(2,0,0);
 
         return true;

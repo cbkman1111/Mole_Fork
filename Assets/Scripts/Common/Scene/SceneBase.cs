@@ -12,6 +12,7 @@ public abstract class SceneBase : MonoBehaviour
         GAME,
         GAME_GOSTOP,
         GAME_TILEMAP,
+        GAME_ANTHOUSE,
     }
 
     public SCENES Scene { get; set; }
