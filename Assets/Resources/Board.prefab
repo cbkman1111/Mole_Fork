@@ -1844,6 +1844,7 @@ MonoBehaviour:
   - {fileID: 5125170831202582444, guid: bc2d18aae07db2744a0fec99d4e45062, type: 3}
   - {fileID: 7632975744399105376, guid: bc2d18aae07db2744a0fec99d4e45062, type: 3}
   - {fileID: -1304566618446825538, guid: bc2d18aae07db2744a0fec99d4e45062, type: 3}
+  spriteBomb: {fileID: 21300000, guid: 6944750fb75621b4ba9dde5ea8857a10, type: 3}
   deckPosition: {fileID: 6536961966032603695}
   cardPosition:
   - {fileID: 6536961965890557677}
@@ -1880,6 +1881,7 @@ MonoBehaviour:
     PeeScore: {fileID: 8210871978433835928}
     RecvieCard: {fileID: 4911207867596152381}
     Hand: {fileID: 667681622}
+  menu: {fileID: 0}
 --- !u!1 &6536961966352321534
 GameObject:
   m_ObjectHideFlags: 0

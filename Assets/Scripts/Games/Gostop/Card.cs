@@ -182,8 +182,9 @@ public class Card : MonoBehaviour
            "oncomplete", "OnMoveComplete"));
     }
 
-    public void CardOpen(iTween.EaseType ease = iTween.EaseType.linear, float interval = 0.1f, float delay = 0.0f)
+    public void CardOpen(iTween.EaseType ease = iTween.EaseType.linear, float interval = 0.1f, float delay = 0.0f, Action complete = null)
     {
+        completeMove = complete;
         Open = false;
         iTween.RotateTo(gameObject, iTween.Hash(
                 "x", 0,
@@ -197,8 +198,9 @@ public class Card : MonoBehaviour
                 "oncomplete", "OnOpenComplte"));
     }
 
-    public void ShowMe(iTween.EaseType ease = iTween.EaseType.linear, float interval = 0.1f, float delay = 0.0f)
+    public void ShowMe(iTween.EaseType ease = iTween.EaseType.linear, float interval = 0.1f, float delay = 0.0f, Action complete = null)
     {
+        completeMove = complete;
         Open = false;
         iTween.RotateTo(gameObject, iTween.Hash(
                 "x", -45,
@@ -212,8 +214,9 @@ public class Card : MonoBehaviour
                 "oncomplete", "OnOpenComplte"));
     }
 
-    public void ShowEnemy(iTween.EaseType ease = iTween.EaseType.linear, float interval = 0.1f, float delay = 0.0f)
+    public void ShowEnemy(iTween.EaseType ease = iTween.EaseType.linear, float interval = 0.1f, float delay = 0.0f, Action complete = null)
     {
+        completeMove = complete;
         Open = false;
         iTween.RotateTo(gameObject, iTween.Hash(
                 "x", -45,

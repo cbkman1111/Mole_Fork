@@ -56,6 +56,7 @@ public class Board : MonoBehaviour
     [SerializeField]
     public Card prefabCard = null;
     public Sprite[] sprites = null;
+    public Sprite spriteBomb = null;
 
     public Transform deckPosition;
     public List<Transform> cardPosition;
@@ -1230,9 +1231,27 @@ public class Board : MonoBehaviour
     {
         for (int i = 0; i < 3; i++)
         {
-            HitCard((int)Board.Player.USER, list[i], i * 0.2f);
-        }
+            HitCard(user, list[i], i * 0.2f);
 
+            // ÆøÅº Ä«µå¸¦ ¼Õ¿¡ Áã¾îÁÝ´Ï´Ù.
+            if (i > 0)
+            {
+                Card card = Instantiate<Card>(prefabCard);
+                if (card != null)
+                {
+                    card.Init(-1, spriteBomb);
+                    card.MoveTo(list[i - 1].transform.position, complete:()=> {
+                        card.CardOpen(complete:()=> {
+                            card.ShowMe(complete: () => {
+                            });
+                        });
+                    });
+
+                    hands[user].Add(card);
+                }
+            }
+        }
+         
         gameScore[user].shake += 1;
         stealCount += 1;
     }
