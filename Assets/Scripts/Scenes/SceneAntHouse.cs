@@ -2,11 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class SceneAntHouse : SceneBase
 {
     private Ant.Player player = null;
+    private Ant.Joystick joystick = null;
+
     private Grid grid = null;
+    private UIMenuAntHouse menu = null;
+    
 
     public SceneAntHouse(SCENES scene) : base(scene)
     {
@@ -18,12 +23,13 @@ public class SceneAntHouse : SceneBase
     /// <returns></returns>
     public override bool Init()
     {
-        UIMenuAntHouse menu = UIManager.Instance.OpenMenu<UIMenuAntHouse>("UIMenuAntHouse");
+        menu = UIManager.Instance.OpenMenu<UIMenuAntHouse>("UIMenuAntHouse");
         if (menu != null)
         {
-            menu.InitMenu();
+            menu.InitMenu((Vector3 angle) => {
+                OnMove(angle);
+            });
         }
-
 
         var prefabMap = ResourcesManager.Instance.LoadInBuild<Grid>("Map_001");
         grid = Instantiate<Grid>(prefabMap);
@@ -35,6 +41,7 @@ public class SceneAntHouse : SceneBase
         initPosition.z = 0;
 
         player = Instantiate<Ant.Player>(prefabPlayer);
+        player.Init();
         player.transform.position = initPosition;
 
         var camera = AppManager.Instance.CurrScene.MainCamera;
@@ -44,42 +51,63 @@ public class SceneAntHouse : SceneBase
 
         camera.transform.position = position;
         /*
-            Vector3 world = Camera.main.ScreenToWorldPoint(Input.mousePosition); //ÇöÀç ¸¶¿ì½ºÀÇ À§Ä¡¸¦ Vector3·Î °¡Á®¿È
-            Vector3Int gridPos = m_Grid.WorldToCell(world); //Vector3 positionÀ» Vector3Int·Î ¹Ù²ãÁÜ
+            Vector3 world = Camera.main.ScreenToWorldPoint(Input.mousePosition); //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ì½ºï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ Vector3ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+            Vector3Int gridPos = m_Grid.WorldToCell(world); //Vector3 positionï¿½ï¿½ Vector3Intï¿½ï¿½ ï¿½Ù²ï¿½ï¿½ï¿½
           */
 
         return true;
     }
 
-
-    /// <summary>
-    /// 
-    /// </summary>
-    private void Update()
+    private void OnMove(Vector3 angle)
     {
-
+        player.Move(angle);
     }
 
-    public override void OnTouchBean(Vector3 position)
+    public void RemoveTile()
     {
+        var position = player.GetHandPosition();
 
-    }
-
-    public override void OnTouchEnd(Vector3 position)
-    {
-        var world = MainCamera.ScreenToWorldPoint(position);
+        //var world = MainCamera.ScreenToWorldPoint(position);
         var direction = transform.forward;
 
-        var coordinate = grid.LocalToCell(world);
+        var coordinate = grid.LocalToCell(position);
 
-        var objects = grid.transform.FindChild("Objects");
+        var objects = grid.transform.Find("Objects");
         var tileMap = objects.GetComponent<UnityEngine.Tilemaps.Tilemap>();
 
         var sprite = tileMap.GetSprite(coordinate);
         var tile = tileMap.GetTile(coordinate);
 
         tileMap.SetTile(coordinate, null);
-        
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    private void Update()
+    {
+        Vector3 cameraPosition = MainCamera.transform.position;
+        cameraPosition.x = player.transform.position.x;
+        cameraPosition.y = player.transform.position.y;
+        MainCamera.transform.position = cameraPosition;
+    }
+
+    public override void OnTouchBean(Vector3 position)
+    {
+        menu.Joystick.TouchBegin(position);
+    }
+
+    public override void OnTouchEnd(Vector3 position)
+    {
+        menu.Joystick.TouchEnd(position);
+
+        if (EventSystem.current.IsPointerOverGameObject() == true)
+        {
+            return;
+        }
+
+
+        /*
         RaycastHit2D hit = Physics2D.Raycast(world, direction, Mathf.Infinity);
         if (hit.collider != null)
         {
@@ -89,10 +117,11 @@ public class SceneAntHouse : SceneBase
         {
             Debug.DrawRay(world, direction * 10, Color.blue, 0.3f);
         }
+        */
     }
 
     public override void OnTouchMove(Vector3 position)
     {
-
+        menu.Joystick.TouchMove(position);
     }
 }

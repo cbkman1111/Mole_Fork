@@ -251,22 +251,21 @@ public class AppManager : MonoSingleton<AppManager>
             BackKeyDown();
         }
 
-        if (phase > 0)
+        if (phase >= 0)
         {
-            if(!EventSystem.current.IsPointerOverGameObject())
+
+
+            switch ((TouchPhase)phase)
             {
-                switch ((TouchPhase)phase)
-                {
-                    case TouchPhase.Began:
-                        OnTouchBean(curr);
-                        break;
-                    case TouchPhase.Moved:
-                        OnTouchMove(curr);
-                        break;
-                    case TouchPhase.Ended:
-                        OnTouchEnd(curr);
-                        break;
-                }
+                case TouchPhase.Began:
+                    OnTouchBean(curr);
+                    break;
+                case TouchPhase.Moved:
+                    OnTouchMove(curr);
+                    break;
+                case TouchPhase.Ended:
+                    OnTouchEnd(curr);
+                    break;
             }
         }
     }

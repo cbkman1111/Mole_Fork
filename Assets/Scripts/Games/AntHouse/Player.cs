@@ -6,16 +6,33 @@ namespace Ant
 {
     public class Player : MonoBehaviour
     {
-        // Start is called before the first frame update
-        void Start()
-        {
+        public float speed = 0.01f;
 
+        private Rigidbody2D rigidBody = null;
+
+        public SpriteRenderer hand = null;
+        
+        public bool Init()
+        {
+            rigidBody = GetComponent<Rigidbody2D>();
+
+            return true;
         }
 
-        // Update is called once per frame
-        void Update()
+        public void Move(Vector3 direction)
         {
+            if(rigidBody != null)
+            {
+                var position = transform.position + direction * speed;
+                rigidBody.MovePosition(position);
 
+                hand.transform.position = transform.position + (direction * 0.6f);
+            }
+        }
+
+        public Vector3 GetHandPosition()
+        {
+            return hand.transform.position;
         }
     }
 
