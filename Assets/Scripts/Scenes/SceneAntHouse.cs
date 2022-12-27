@@ -1,17 +1,22 @@
+using NavMeshComponents.Extensions;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.EventSystems;
 
 public class SceneAntHouse : SceneBase
 {
-    private Ant.Player player = null;
+    private List<Ant.Monster> monsters = null;
+    private Ant.Monster player = null;
     private Ant.Joystick joystick = null;
 
     private Grid grid = null;
     private UIMenuAntHouse menu = null;
-    
+    private NavMeshSurface surface = null;
+
+    private int removeCount = 0;
 
     public SceneAntHouse(SCENES scene) : base(scene)
     {
@@ -34,15 +39,31 @@ public class SceneAntHouse : SceneBase
         var prefabMap = ResourcesManager.Instance.LoadInBuild<Grid>("Map_001");
         grid = Instantiate<Grid>(prefabMap);
 
+        var prefabBuilder = ResourcesManager.Instance.LoadInBuild<NavMeshSurface>("Builder");
+        surface = Instantiate<NavMeshSurface>(prefabBuilder);
+        surface.BuildNavMesh();
+
         Vector3Int coordinate = new Vector3Int(0, -2, 0);
 
         var initPosition = grid.GetCellCenterLocal(coordinate);
-        var prefabPlayer = ResourcesManager.Instance.LoadInBuild<Ant.Player>("Player");
+        var prefabPlayer = ResourcesManager.Instance.LoadInBuild<Ant.Monster>("Monster");
         initPosition.z = 0;
 
-        player = Instantiate<Ant.Player>(prefabPlayer);
+        player = Instantiate<Ant.Monster>(prefabPlayer);
         player.Init();
+        player.name = $"monster_player";
         player.transform.position = initPosition;
+        player.GetComponent<NavMeshAgent>().enabled = false;
+
+        monsters = new List<Ant.Monster>();
+        for (int i = 0; i < 1; i++)
+        {
+            var monster = Instantiate<Ant.Monster>(prefabPlayer);
+            monster.Init();
+            monster.transform.position = initPosition;
+            monster.name = $"monster_{i+1}";
+            monsters.Add(monster);
+        }
 
         var camera = AppManager.Instance.CurrScene.MainCamera;
         var position = camera.transform.position;
@@ -58,6 +79,10 @@ public class SceneAntHouse : SceneBase
         return true;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="angle"></param>
     private void OnMove(Vector3 angle)
     {
         player.Move(angle);
@@ -66,19 +91,19 @@ public class SceneAntHouse : SceneBase
     public void RemoveTile()
     {
         var position = player.GetHandPosition();
+        var coordinate = grid.WorldToCell(position);
+        coordinate.z = 0;
 
-        //var world = MainCamera.ScreenToWorldPoint(position);
-        var direction = transform.forward;
-
-        var coordinate = grid.LocalToCell(position);
-
-        var objects = grid.transform.Find("Objects");
+        var objects = grid.transform.Find("Walls");
         var tileMap = objects.GetComponent<UnityEngine.Tilemaps.Tilemap>();
-
         var sprite = tileMap.GetSprite(coordinate);
         var tile = tileMap.GetTile(coordinate);
-
         tileMap.SetTile(coordinate, null);
+
+        removeCount++;
+
+        //surface.BuildNavMeshAsync();
+        //surface.BuildNavMesh();
     }
 
     /// <summary>
@@ -90,6 +115,12 @@ public class SceneAntHouse : SceneBase
         cameraPosition.x = player.transform.position.x;
         cameraPosition.y = player.transform.position.y;
         MainCamera.transform.position = cameraPosition;
+
+        if (removeCount > 2)
+        {
+            removeCount = 0;
+            surface.BuildNavMeshAsync();
+        }
     }
 
     public override void OnTouchBean(Vector3 position)
@@ -106,6 +137,17 @@ public class SceneAntHouse : SceneBase
             return;
         }
 
+
+        var world = MainCamera.ScreenToWorldPoint(position);
+        //var direction = transform.forward;
+        var coordinate = grid.WorldToCell(world);
+        //var objects = grid.transform.Find("Objects");
+        //var tileMap = objects.GetComponent<UnityEngine.Tilemaps.Tilemap>();
+        var pos = grid.GetCellCenterWorld(coordinate);
+
+        //int rand = UnityEngine.Random.Range(0, monsters.Count);
+        var agent = monsters[0].GetComponent<NavMeshAgent>();
+        agent.SetDestination(pos);
 
         /*
         RaycastHit2D hit = Physics2D.Raycast(world, direction, Mathf.Infinity);
