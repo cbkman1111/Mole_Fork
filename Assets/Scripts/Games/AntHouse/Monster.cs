@@ -10,9 +10,9 @@ namespace Ant
         public SpriteRenderer hand = null;
         public float speed = 0.01f;
 
-        public PlayerData Data { get; set; }
+        public ObjectData Data { get; set; }
 
-        public bool Init(PlayerData data)
+        public bool Init(ObjectData data)
         {
             this.Data = data;
 
@@ -28,7 +28,6 @@ namespace Ant
             {
                 var position = transform.position + direction * speed;
                 rigidBody.MovePosition(position);
-
                 hand.transform.position = transform.position + (direction * 0.6f);
             }
         }

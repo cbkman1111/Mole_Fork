@@ -9,7 +9,7 @@ public class MapData
 {
     public int mapID = 0;
     public List<TileData> tiles = null;
-    
+    public List<ObjectData> monsters = null;
 
     public static string GetKey(int no)
     {
@@ -20,6 +20,7 @@ public class MapData
     {
         this.mapID = mapID;
         this.tiles = new List<TileData>();
+        this.monsters = new List<ObjectData>();
     }
 
     public List<TileData> GetTiles()
@@ -27,9 +28,20 @@ public class MapData
         return tiles;
     }
 
-    public void Add(TileData tile)
+    public List<ObjectData> GetMonsters()
+    {
+        return monsters;
+    }
+
+
+    public void AddTile(TileData tile)
     {
         tiles.Add(tile);
+    }
+
+    public void AddMonster(ObjectData data)
+    {
+        monsters.Add(data);
     }
 
     public void Save()

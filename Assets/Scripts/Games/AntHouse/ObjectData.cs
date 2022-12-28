@@ -5,22 +5,20 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [System.Serializable]
-public class PlayerData
+public class ObjectData
 {
-    public int exp = 0;
-    public int level = 0;
-    public ObjectData objectData = null;
+    public int id;
+    public Vector3 position;
 
-    public PlayerData()
+    public ObjectData()
     {
-        exp = 0;
-        level = 0;
-        objectData = new ObjectData();
+        id = 0;
+        position = new Vector3(0, 0, 0);
     }
 
     public static string GetKey()
     {
-        return $"player";
+        return $"monster";
     }
 
     public void Save()

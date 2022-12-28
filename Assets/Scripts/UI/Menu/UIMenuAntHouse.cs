@@ -8,6 +8,7 @@ public class UIMenuAntHouse : MenuBase
 {
     [SerializeField]
     public Ant.Joystick Joystick = null;
+    public Camera miniMapCamera = null;
 
     public override void OnInit()
     {
@@ -25,21 +26,31 @@ public class UIMenuAntHouse : MenuBase
             }
         });
 
+
+        var mainCamera = AppManager.Instance.CurrScene.MainCamera;
+        miniMapCamera.transform.SetParent(mainCamera.transform);
+        miniMapCamera.transform.position = new Vector3(0,0,-1);
+
         return true;
     }
 
-    
+
     protected override void OnClick(Button btn)
     {
         string name = btn.name;
-        if (name == "Button - Back")
+        if (name.CompareTo("Button - Back") == 0)
         {
             AppManager.Instance.ChangeScene(SceneBase.SCENES.MENU);
         }
-        else if (name == "Button - Ok")
+        else if (name.CompareTo("Button - Ok") == 0)
         {
             var scene = AppManager.Instance.CurrScene as SceneAntHouse;
             scene.RemoveTile();
+        }
+        else if (name.CompareTo("Button - Create") == 0)
+        {
+            var scene = AppManager.Instance.CurrScene as SceneAntHouse;
+            scene.CreateMonster();
         }
     }
 }
