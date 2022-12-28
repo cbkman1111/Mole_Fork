@@ -250,11 +250,41 @@ public class AppManager : MonoSingleton<AppManager>
         {
             BackKeyDown();
         }
+        else if (Input.GetKey(KeyCode.A))
+        {
+            SceneAntHouse scene = CurrScene as SceneAntHouse;
+            if (scene != null)
+            {
+                scene.OnMove(Vector3.left);
+            }
+        }
+        else if (Input.GetKey(KeyCode.D))
+        {
+            SceneAntHouse scene = CurrScene as SceneAntHouse;
+            if (scene != null)
+            {
+                scene.OnMove(Vector3.right);
+            }
+        }
+        else if (Input.GetKey(KeyCode.W))
+        {
+            SceneAntHouse scene = CurrScene as SceneAntHouse;
+            if (scene != null)
+            {
+                scene.OnMove(Vector3.up);
+            }
+        }
+        else if (Input.GetKey(KeyCode.S))
+        {
+            SceneAntHouse scene = CurrScene as SceneAntHouse;
+            if (scene != null)
+            {
+                scene.OnMove(Vector3.down);
+            }
+        }
 
         if (phase >= 0)
         {
-
-
             switch ((TouchPhase)phase)
             {
                 case TouchPhase.Began:

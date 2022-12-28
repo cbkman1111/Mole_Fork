@@ -6,15 +6,18 @@ namespace Ant
 {
     public class Monster : MonoBehaviour
     {
+        private Rigidbody2D rigidBody = null;
+        public SpriteRenderer hand = null;
         public float speed = 0.01f;
 
-        private Rigidbody2D rigidBody = null;
+        public PlayerData Data { get; set; }
 
-        public SpriteRenderer hand = null;
-        
-        public bool Init()
+        public bool Init(PlayerData data)
         {
+            this.Data = data;
+
             rigidBody = GetComponent<Rigidbody2D>();
+            transform.position = data.position;
 
             return true;
         }
@@ -33,6 +36,13 @@ namespace Ant
         public Vector3 GetHandPosition()
         {
             return hand.transform.position;
+        }
+
+        public void Save()
+        {
+            Data.position = transform.position;
+
+            Data.Save();
         }
     }
 
