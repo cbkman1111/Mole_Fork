@@ -1,5 +1,7 @@
 using Ant;
 using Newtonsoft.Json;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -18,9 +20,7 @@ public class SceneAntHouse : SceneBase
 
     private MapData mapData = null;
     private PlayerData playerData = null;
-
-
-    private int removeCount = 0;
+    private DateTime mapUpdateTime = DateTime.MinValue;
 
     const string KEY_TILES = "tiles";
 
@@ -35,6 +35,7 @@ public class SceneAntHouse : SceneBase
     public override bool Init()
     {
         monsters = new List<Monster>();
+        mapUpdateTime = DateTime.MinValue;
 
         menu = UIManager.Instance.OpenMenu<UIMenuAntHouse>("UIMenuAntHouse");
         if (menu != null)
@@ -79,8 +80,25 @@ public class SceneAntHouse : SceneBase
         InitMonster();
         InitTiles();
 
-
+        StartCoroutine("BuildNavMesh", gameObject);
         return true;
+    }
+
+    protected IEnumerator BuildNavMesh()
+    {
+        while (true)
+        {
+            if (mapUpdateTime != DateTime.MinValue)
+            {
+                if (mapUpdateTime <= DateTime.Now)
+                {
+                    mapUpdateTime = DateTime.MinValue;
+                    yield return surface.UpdateNavMesh(surface.navMeshData);
+                }
+            }
+
+            yield return new WaitForSeconds(0.5f);
+        }
     }
 
     /// <summary>
@@ -134,7 +152,7 @@ public class SceneAntHouse : SceneBase
             tileMap.SetTile(tile.Cordinate, null);
         }
 
-        surface.BuildNavMeshAsync();
+        mapUpdateTime = DateTime.Now.AddSeconds(1);
     }
 
     public void CreateMonster()
@@ -177,10 +195,7 @@ public class SceneAntHouse : SceneBase
         playerData.objectData.position = player.transform.position;
         playerData.Save();
 
-        removeCount++;
-
-        //surface.BuildNavMeshAsync();
-        //surface.BuildNavMesh();
+        mapUpdateTime = DateTime.Now.AddSeconds(5);
     }
 
     /// <summary>
@@ -193,12 +208,7 @@ public class SceneAntHouse : SceneBase
         cameraPosition.y = player.transform.position.y;
         MainCamera.transform.position = cameraPosition;
 
-        if (removeCount > 2)
-        {
-            removeCount = 0;
-            surface.BuildNavMeshAsync();
-            
-        }
+
     }
 
     public override void OnTouchBean(Vector3 position)
