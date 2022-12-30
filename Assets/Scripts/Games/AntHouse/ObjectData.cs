@@ -8,12 +8,12 @@ using UnityEngine.AI;
 public class ObjectData
 {
     public int id;
-    public Vector3 position;
+    
 
     public ObjectData()
     {
         id = 0;
-        position = new Vector3(0, 0, 0);
+        
     }
 
     public static string GetKey()

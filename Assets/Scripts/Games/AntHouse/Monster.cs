@@ -8,17 +8,11 @@ namespace Ant
     {
         private Rigidbody2D rigidBody = null;
         public SpriteRenderer hand = null;
-        public float speed = 0.01f;
+        public float speed = 0.005f;
 
-        public ObjectData Data { get; set; }
-
-        public bool Init(ObjectData data)
+        public bool Init()
         {
-            this.Data = data;
-
             rigidBody = GetComponent<Rigidbody2D>();
-            transform.position = data.position;
-
             return true;
         }
 
@@ -36,13 +30,5 @@ namespace Ant
         {
             return hand.transform.position;
         }
-
-        public void Save()
-        {
-            Data.position = transform.position;
-
-            Data.Save();
-        }
     }
-
 }

@@ -9,13 +9,11 @@ public class PlayerData
 {
     public int exp = 0;
     public int level = 0;
-    public ObjectData objectData = null;
 
     public PlayerData()
     {
         exp = 0;
         level = 0;
-        objectData = new ObjectData();
     }
 
     public static string GetKey()

@@ -13,7 +13,7 @@ public class MapData
 
     public static string GetKey(int no)
     {
-        return $"map_{no}";
+        return $"map_00_{no}";
     }
 
     public MapData(int mapID)

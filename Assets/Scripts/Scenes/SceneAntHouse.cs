@@ -45,7 +45,7 @@ public class SceneAntHouse : SceneBase
             });
         }
 
-        int mapId = 1;
+        int mapId = 3;
         string mapName = $"Map_00{mapId}";
         var prefabMap = ResourcesManager.Instance.LoadInBuild<Grid>(mapName);
         grid = Instantiate<Grid>(prefabMap);
@@ -112,14 +112,17 @@ public class SceneAntHouse : SceneBase
 
     public void InitPlayer()
     {
-        Vector3Int coordinate = new Vector3Int(0, -2, 0);
+        Vector3Int coordinate = new Vector3Int(0, 1, 0);
         var prefabMonster = ResourcesManager.Instance.LoadInBuild<Monster>("Monster");
         player = Instantiate<Monster>(prefabMonster);
         if (player != null)
         {
             var initPosition = grid.GetCellCenterLocal(coordinate);
+            initPosition.z = 0;
+
             player.GetComponent<NavMeshAgent>().enabled = false;
-            player.Init(playerData.objectData);
+            player.Init();
+            player.transform.position = initPosition;
             player.name = "monster_player";
         }
     }
@@ -133,7 +136,7 @@ public class SceneAntHouse : SceneBase
             var monster = Instantiate<Ant.Monster>(prefabMonster);
             monster.GetComponent<NavMeshAgent>().enabled = false;
 
-            monster.Init(monsterData);
+            monster.Init();
             monster.name = $"monster_{monsterData.id}";
             monsters.Add(monster);
 
@@ -163,7 +166,7 @@ public class SceneAntHouse : SceneBase
 
         ObjectData objData = new ObjectData();
         objData.id = monsters.Count;
-        objData.position = initPosition;
+        //objData.position = initPosition;
         mapData.AddMonster(objData);
         mapData.Save();
 
@@ -187,12 +190,12 @@ public class SceneAntHouse : SceneBase
 
         foreach (var mon in monsters)
         {
-            mon.Data.position = mon.transform.position;
+            //mon.Data.position = mon.transform.position;
         }
 
         mapData.Save();
 
-        playerData.objectData.position = player.transform.position;
+        //playerData.objectData.position = player.transform.position;
         playerData.Save();
 
         mapUpdateTime = DateTime.Now.AddSeconds(5);
@@ -236,7 +239,7 @@ public class SceneAntHouse : SceneBase
 
             int rand = UnityEngine.Random.Range(0, monsters.Count);
             var agent = monsters[rand].GetComponent<NavMeshAgent>();
-            monsters[rand].Data.position = pos;
+            //monsters[rand].Data.position = pos;
             agent.SetDestination(pos);
         }
 
