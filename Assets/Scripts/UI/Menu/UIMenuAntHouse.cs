@@ -52,5 +52,10 @@ public class UIMenuAntHouse : MenuBase
             var scene = AppManager.Instance.CurrScene as SceneAntHouse;
             scene.CreateMonster();
         }
+        else if(name.CompareTo("Button - SaveGame") == 0)
+        {
+            var scene = AppManager.Instance.CurrScene as SceneAntHouse;
+            scene.SaveGame();
+        }
     }
 }

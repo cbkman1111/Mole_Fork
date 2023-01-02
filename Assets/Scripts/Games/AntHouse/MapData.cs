@@ -10,10 +10,11 @@ public class MapData
     public int mapID = 0;
     public List<TileData> tiles = null;
     public List<ObjectData> monsters = null;
+    public ObjectData player = null;
 
     public static string GetKey(int no)
     {
-        return $"map_00_{no}";
+        return $"map_abcd_{no}";
     }
 
     public MapData(int mapID)
@@ -21,6 +22,7 @@ public class MapData
         this.mapID = mapID;
         this.tiles = new List<TileData>();
         this.monsters = new List<ObjectData>();
+        this.player = new ObjectData();
     }
 
     public List<TileData> GetTiles()
@@ -42,6 +44,11 @@ public class MapData
     public void AddMonster(ObjectData data)
     {
         monsters.Add(data);
+    }
+
+    public void AddPlayer(ObjectData data)
+    {
+        player = data;
     }
 
     public void Save()

@@ -8,22 +8,13 @@ using UnityEngine.AI;
 public class ObjectData
 {
     public int id;
-    
+    public Vector3 position;
+    public float speed = 0.01f;
 
     public ObjectData()
     {
         id = 0;
-        
-    }
-
-    public static string GetKey()
-    {
-        return $"monster";
-    }
-
-    public void Save()
-    {
-        PlayerPrefs.SetString(GetKey(), JsonUtility.ToJson(this));
-        PlayerPrefs.Save();
+        position = Vector3.zero;
+        speed = 0.01f;
     }
 }

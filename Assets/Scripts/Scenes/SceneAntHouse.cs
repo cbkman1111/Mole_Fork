@@ -10,9 +10,9 @@ using UnityEngine.EventSystems;
 public class SceneAntHouse : SceneBase
 {
     private List<Monster> monsters = null;
-    private Monster player = null;
+    private Player player = null;
 
-    private Ant.Joystick joystick = null;
+    private Joystick joystick = null;
 
     private Grid grid = null;
     private UIMenuAntHouse menu = null;
@@ -54,28 +54,7 @@ public class SceneAntHouse : SceneBase
         surface = Instantiate<NavMeshSurface>(prefabBuilder);
         surface.BuildNavMesh();
 
-        string key = MapData.GetKey(mapId);
-        string data = PlayerPrefs.GetString(key);
-        if (data != string.Empty)
-        {
-            mapData = JsonUtility.FromJson<MapData>(data);
-        }
-        else
-        {
-            mapData = new MapData(mapId);
-        }
-
-        key = PlayerData.GetKey();
-        data = PlayerPrefs.GetString(key);
-        if (data != string.Empty)
-        {
-            playerData = JsonUtility.FromJson<PlayerData>(data);
-        }
-        else
-        {
-            playerData = new PlayerData();
-        }
-
+        InitMapData(mapId);
         InitPlayer();
         InitMonster();
         InitTiles();
@@ -110,40 +89,72 @@ public class SceneAntHouse : SceneBase
         player.Move(angle);
     }
 
+    public void InitMapData(int mapId)
+    {
+        string key = MapData.GetKey(mapId);
+        string data = PlayerPrefs.GetString(key);
+        if (data != string.Empty)
+        {
+            mapData = JsonUtility.FromJson<MapData>(data);
+        }
+        else
+        {
+            var defaultPosition = grid.GetCellCenterLocal(new Vector3Int(0, 1, 0));
+
+            mapData = new MapData(mapId);
+            mapData.player.id = 0;
+            mapData.player.position = defaultPosition;
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
     public void InitPlayer()
     {
-        Vector3Int coordinate = new Vector3Int(0, 1, 0);
-        var prefabMonster = ResourcesManager.Instance.LoadInBuild<Monster>("Monster");
-        player = Instantiate<Monster>(prefabMonster);
+        string key = PlayerData.GetKey();
+        string data = PlayerPrefs.GetString(key);
+        if (data != string.Empty)
+        {
+            playerData = JsonUtility.FromJson<PlayerData>(data);
+        }
+        else
+        {
+            playerData = new PlayerData() { 
+                exp = 0,
+                level = 0
+            };
+        }
+
+        var prefab = ResourcesManager.Instance.LoadInBuild<GameObject>("Monster");
+        player = Monster.Create<Player>(prefab, mapData.player, enableAgent: false);
         if (player != null)
         {
-            var initPosition = grid.GetCellCenterLocal(coordinate);
-            initPosition.z = 0;
-
-            player.GetComponent<NavMeshAgent>().enabled = false;
-            player.Init();
-            player.transform.position = initPosition;
             player.name = "monster_player";
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public void InitMonster()
     {
-        var prefabMonster = ResourcesManager.Instance.LoadInBuild<Monster>("Monster");
+        var prefab = ResourcesManager.Instance.LoadInBuild<GameObject>("Monster");
         var listMonster = mapData.GetMonsters();
         foreach (var monsterData in listMonster)
         {
-            var monster = Instantiate<Ant.Monster>(prefabMonster);
-            monster.GetComponent<NavMeshAgent>().enabled = false;
-
-            monster.Init();
-            monster.name = $"monster_{monsterData.id}";
-            monsters.Add(monster);
-
-            monster.GetComponent<NavMeshAgent>().enabled = true;
+            var monster = Monster.Create<AntQueen>(prefab, monsterData);
+            if (monster != null)
+            {
+                monster.name = $"monster_{monsterData.id}";
+                monsters.Add(monster);
+            }
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public void InitTiles()
     {
         // 내가 보유한 타일 처리.
@@ -160,19 +171,29 @@ public class SceneAntHouse : SceneBase
 
     public void CreateMonster()
     {
-        var initPosition = grid.GetCellCenterLocal(new Vector3Int(0, 0, 0));
-        var prefabMonster = ResourcesManager.Instance.LoadInBuild<Monster>("Monster");
-        var monster = Instantiate<Monster>(prefabMonster);
-
+ 
+        var prefab = ResourcesManager.Instance.LoadInBuild<GameObject>("Monster");
+        
         ObjectData objData = new ObjectData();
-        objData.id = monsters.Count;
-        //objData.position = initPosition;
-        mapData.AddMonster(objData);
-        mapData.Save();
+        if (objData != null)
+        {
+            var defaultPosition = grid.GetCellCenterLocal(new Vector3Int(0, 1, 0));
 
-        monsters.Add(monster);
+            objData.id = monsters.Count;
+            objData.position = defaultPosition;
+            mapData.AddMonster(objData);
+
+            var monster = Monster.Create<Monster>(prefab, objData);
+            if (monster != null)
+            {
+                monsters.Add(monster);
+            }
+        }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public void RemoveTile()
     {
         var position = player.GetHandPosition();
@@ -187,18 +208,16 @@ public class SceneAntHouse : SceneBase
 
         var tile = new TileData(coordinate);
         mapData.AddTile(tile);
+        mapUpdateTime = DateTime.Now.AddSeconds(5);
+    }
 
-        foreach (var mon in monsters)
-        {
-            //mon.Data.position = mon.transform.position;
-        }
+    public void SaveGame()
+    {
+        player.UpdateData();
+        monsters.ForEach(m => m.UpdateData());
 
         mapData.Save();
-
-        //playerData.objectData.position = player.transform.position;
         playerData.Save();
-
-        mapUpdateTime = DateTime.Now.AddSeconds(5);
     }
 
     /// <summary>
@@ -210,15 +229,21 @@ public class SceneAntHouse : SceneBase
         cameraPosition.x = player.transform.position.x;
         cameraPosition.y = player.transform.position.y;
         MainCamera.transform.position = cameraPosition;
-
-
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="position"></param>
     public override void OnTouchBean(Vector3 position)
     {
         menu.Joystick.TouchBegin(position);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="position"></param>
     public override void OnTouchEnd(Vector3 position)
     {
         menu.Joystick.TouchEnd(position);
@@ -231,18 +256,11 @@ public class SceneAntHouse : SceneBase
         if (monsters != null && monsters.Count > 0)
         {
             var world = MainCamera.ScreenToWorldPoint(position);
-            //var direction = transform.forward;
             var coordinate = grid.WorldToCell(world);
-            //var objects = grid.transform.Find("Objects");
-            //var tileMap = objects.GetComponent<UnityEngine.Tilemaps.Tilemap>();
             var pos = grid.GetCellCenterWorld(coordinate);
-
             int rand = UnityEngine.Random.Range(0, monsters.Count);
-            var agent = monsters[rand].GetComponent<NavMeshAgent>();
-            //monsters[rand].Data.position = pos;
-            agent.SetDestination(pos);
+            monsters[rand].SetDestination(pos);
         }
-
 
         /*
         RaycastHit2D hit = Physics2D.Raycast(world, direction, Mathf.Infinity);
@@ -257,6 +275,10 @@ public class SceneAntHouse : SceneBase
         */
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="position"></param>
     public override void OnTouchMove(Vector3 position)
     {
         menu.Joystick.TouchMove(position);
