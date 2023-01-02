@@ -15,7 +15,7 @@ public class UIMenuAntHouse : MenuBase
 
     }
 
-    public bool InitMenu(Action<Vector3> move)
+    public bool InitMenu(Action<Vector3> move, Action stop)
     {
         Joystick.Init((Vector3 direct, float angle) => {
             SetText("Text - Debug", $"Angle : {angle}");
@@ -24,6 +24,12 @@ public class UIMenuAntHouse : MenuBase
             {
                 move(direct);
             }
+        },
+        () => {
+            if (stop != null)
+            {
+                stop();
+            }            
         });
 
 
@@ -52,10 +58,15 @@ public class UIMenuAntHouse : MenuBase
             var scene = AppManager.Instance.CurrScene as SceneAntHouse;
             scene.CreateMonster();
         }
-        else if(name.CompareTo("Button - SaveGame") == 0)
+        else if (name.CompareTo("Button - SaveGame") == 0)
         {
             var scene = AppManager.Instance.CurrScene as SceneAntHouse;
             scene.SaveGame();
+        }
+        else if (name.CompareTo("Button - CreateObject") == 0)
+        {
+            var scene = AppManager.Instance.CurrScene as SceneAntHouse;
+            scene.CreateObject();
         }
     }
 }

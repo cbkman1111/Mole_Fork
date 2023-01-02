@@ -22,6 +22,7 @@ public abstract class SceneBase : MonoBehaviour
         Scene = scene;
     }
 
+    public virtual void UnLoaded() { }
     public abstract bool Init();
     public abstract void OnTouchBean(Vector3 position);
     public abstract void OnTouchMove(Vector3 position);

@@ -541,7 +541,7 @@ public class Board : MonoBehaviour
                             {
                                 if (UIManager.Instance.FindPopup("PopupCardSelect") == false)
                                 {
-                                    PopupCardSelect popup = UIManager.Instance.OpenPopup<PopupCardSelect>("PopupCardSelect");
+                                    PopupCardSelect popup = UIManager.Instance.OpenPopup<PopupCardSelect>("UI/PopupCardSelect");
                                     popup.Init(select[0], select[1], (Card selectCard) => {
 
                                         selectCard.Owner = turnUser;

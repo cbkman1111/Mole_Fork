@@ -1,4 +1,5 @@
 using Singleton;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,8 +51,8 @@ public class AppManager : MonoSingleton<AppManager>
                 yield return null;
             }
 
-            
-            
+            CurrScene.UnLoaded();
+
             AsyncOperation asyncNext = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(name, LoadSceneMode.Single);
             asyncNext.allowSceneActivation = false;
             while (asyncNext.isDone == false)
@@ -97,21 +98,27 @@ public class AppManager : MonoSingleton<AppManager>
         Debug.Log($"{TAG} Scene Load Complete");
     }
 
-
-    public void OnSceneLoaded(Scene sceneLoaded, LoadSceneMode mode)
+    public void OnSceneUnLoaded(Scene scene)
     {
-        switch(mode)
+        if (CurrScene != null)
+        {
+            CurrScene.UnLoaded();
+        }
+    }
+
+    public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        string name = scene.name;
+        switch (mode)
         {
             case LoadSceneMode.Additive:
             case LoadSceneMode.Single:
-                if (scenes.TryGetValue(sceneLoaded.name, out SceneBase.SCENES index) == true)
+                if (scenes.TryGetValue(name, out SceneBase.SCENES index) == true)
                 {
                     if (CurrScene != null && CurrScene.Scene == index) // 동일씬 로드.
                     {
                         return;
                     }
-
-                    string name = sceneLoaded.name;
 
                     // UI 제거.
                     UIManager.Instance.Clear();
@@ -141,7 +148,7 @@ public class AppManager : MonoSingleton<AppManager>
                             CurrScene = new GameObject(name).AddComponent<SceneAntHouse>();
                             break;
                     }
-                
+
                     // 카메라를 미리 셋 초기화 전에 사용할 수 있도록.
                     CurrScene.MainCamera = Camera.main;
 
@@ -151,7 +158,7 @@ public class AppManager : MonoSingleton<AppManager>
                 break;
 
             default:
-                Debug.LogWarning($"{TAG} mode not exist. {sceneLoaded.name}/{mode}");
+                Debug.LogWarning($"{TAG} mode not exist. {name}/{mode}");
                 break;
         }
     }
@@ -282,6 +289,39 @@ public class AppManager : MonoSingleton<AppManager>
                 scene.OnMove(Vector3.down);
             }
         }
+        else if (Input.GetKeyUp(KeyCode.A))
+        {
+            SceneAntHouse scene = CurrScene as SceneAntHouse;
+            if (scene != null)
+            {
+                scene.OnStop();
+            }
+        }
+        else if (Input.GetKeyUp(KeyCode.D))
+        {
+            SceneAntHouse scene = CurrScene as SceneAntHouse;
+            if (scene != null)
+            {
+                scene.OnStop();
+            }
+        }
+        else if (Input.GetKeyUp(KeyCode.W))
+        {
+            SceneAntHouse scene = CurrScene as SceneAntHouse;
+            if (scene != null)
+            {
+                scene.OnStop();
+            }
+        }
+        else if (Input.GetKeyUp(KeyCode.S))
+        {
+            SceneAntHouse scene = CurrScene as SceneAntHouse;
+            if (scene != null)
+            {
+                scene.OnStop();
+            }
+        }
+
 
         if (phase >= 0)
         {

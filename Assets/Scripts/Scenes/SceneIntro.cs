@@ -8,7 +8,7 @@ public class SceneIntro : SceneBase
 
     public override bool Init()
     {
-        UIMenuIntro menu = UIManager.Instance.OpenMenu<UIMenuIntro>("UIMenuIntro");
+        UIMenuIntro menu = UIManager.Instance.OpenMenu<UIMenuIntro>("UI/UIMenuIntro");
         if(menu != null)
         {
             menu.InitMenu();

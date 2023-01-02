@@ -9,7 +9,8 @@ using UnityEngine.EventSystems;
 
 public class SceneAntHouse : SceneBase
 {
-    private List<Monster> monsters = null;
+    private List<MonsterBase> monsters = null;
+    private List<ObjectBase> objs = null;
     private Player player = null;
 
     private Joystick joystick = null;
@@ -34,33 +35,45 @@ public class SceneAntHouse : SceneBase
     /// <returns></returns>
     public override bool Init()
     {
-        monsters = new List<Monster>();
+        monsters = new List<MonsterBase>();
+        objs = new List<ObjectBase>();
+
         mapUpdateTime = DateTime.MinValue;
 
-        menu = UIManager.Instance.OpenMenu<UIMenuAntHouse>("UIMenuAntHouse");
+        menu = UIManager.Instance.OpenMenu<UIMenuAntHouse>("UI/UIMenuAntHouse");
         if (menu != null)
         {
-            menu.InitMenu((Vector3 angle) => {
-                OnMove(angle);
-            });
+            menu.InitMenu(
+                move: (Vector3 angle) => {
+                    OnMove(angle);
+                }, 
+                stop: () => {
+                    OnStop();
+                });
         }
 
         int mapId = 3;
-        string mapName = $"Map_00{mapId}";
+        string mapName = $"Ant/Map_00{mapId}";
         var prefabMap = ResourcesManager.Instance.LoadInBuild<Grid>(mapName);
         grid = Instantiate<Grid>(prefabMap);
 
-        var prefabBuilder = ResourcesManager.Instance.LoadInBuild<NavMeshSurface>("Builder");
+        var prefabBuilder = ResourcesManager.Instance.LoadInBuild<NavMeshSurface>("Ant/Builder");
         surface = Instantiate<NavMeshSurface>(prefabBuilder);
         surface.BuildNavMesh();
 
         InitMapData(mapId);
         InitPlayer();
         InitMonster();
+        InitObject();
         InitTiles();
 
         StartCoroutine("BuildNavMesh", gameObject);
         return true;
+    }
+    
+    public override void UnLoaded() 
+    {
+        SaveGame();
     }
 
     protected IEnumerator BuildNavMesh()
@@ -89,6 +102,14 @@ public class SceneAntHouse : SceneBase
         player.Move(angle);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    public void OnStop()
+    {
+        player.Stop();
+    }
+
     public void InitMapData(int mapId)
     {
         string key = MapData.GetKey(mapId);
@@ -100,10 +121,12 @@ public class SceneAntHouse : SceneBase
         else
         {
             var defaultPosition = grid.GetCellCenterLocal(new Vector3Int(0, 1, 0));
+            defaultPosition.z = 0;
 
             mapData = new MapData(mapId);
             mapData.player.id = 0;
             mapData.player.position = defaultPosition;
+            mapData.player.speed = 0.1f;
         }
     }
 
@@ -126,8 +149,7 @@ public class SceneAntHouse : SceneBase
             };
         }
 
-        var prefab = ResourcesManager.Instance.LoadInBuild<GameObject>("Monster");
-        player = Monster.Create<Player>(prefab, mapData.player, enableAgent: false);
+        player = Player.Create<Player>(mapData.player, enableAgent: false);
         if (player != null)
         {
             player.name = "monster_player";
@@ -139,15 +161,31 @@ public class SceneAntHouse : SceneBase
     /// </summary>
     public void InitMonster()
     {
-        var prefab = ResourcesManager.Instance.LoadInBuild<GameObject>("Monster");
         var listMonster = mapData.GetMonsters();
         foreach (var monsterData in listMonster)
         {
-            var monster = Monster.Create<AntQueen>(prefab, monsterData);
+            var monster = Ant.Pigeon.Create<Ant.Pigeon>(monsterData);
             if (monster != null)
             {
                 monster.name = $"monster_{monsterData.id}";
                 monsters.Add(monster);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public void InitObject()
+    {
+        var list = mapData.GetObjs();
+        foreach (var data in list)
+        {
+            var obj = ObjectTemp.Create<ObjectTemp>(data);
+            if (obj != null)
+            {
+                obj.name = $"object_{data.id}";
+                objs.Add(obj);
             }
         }
     }
@@ -169,21 +207,37 @@ public class SceneAntHouse : SceneBase
         mapUpdateTime = DateTime.Now.AddSeconds(1);
     }
 
+    public void CreateObject()
+    {
+        ObjectData objData = new ObjectData();
+        if (objData != null)
+        {
+            objData.id = monsters.Count;
+            objData.position = player.transform.position;
+            mapData.AddObject(objData);
+
+            var temp = ObjectTemp.Create<ObjectTemp>(objData);
+            if (temp != null)
+            {
+                objs.Add(temp);
+            }
+        }
+    }
+
     public void CreateMonster()
     {
- 
-        var prefab = ResourcesManager.Instance.LoadInBuild<GameObject>("Monster");
-        
-        ObjectData objData = new ObjectData();
+        MonsterData objData = new MonsterData();
         if (objData != null)
         {
             var defaultPosition = grid.GetCellCenterLocal(new Vector3Int(0, 1, 0));
 
             objData.id = monsters.Count;
             objData.position = defaultPosition;
+            objData.speed = 0.2f;
+
             mapData.AddMonster(objData);
 
-            var monster = Monster.Create<Monster>(prefab, objData);
+            var monster = Ant.Pigeon.Create<Ant.Pigeon>(objData);
             if (monster != null)
             {
                 monsters.Add(monster);
@@ -225,10 +279,13 @@ public class SceneAntHouse : SceneBase
     /// </summary>
     private void Update()
     {
-        Vector3 cameraPosition = MainCamera.transform.position;
-        cameraPosition.x = player.transform.position.x;
-        cameraPosition.y = player.transform.position.y;
-        MainCamera.transform.position = cameraPosition;
+        if (player != null)
+        {
+            Vector3 cameraPosition = MainCamera.transform.position;
+            cameraPosition.x = player.transform.position.x;
+            cameraPosition.y = player.transform.position.y;
+            MainCamera.transform.position = cameraPosition;
+        }
     }
 
     /// <summary>

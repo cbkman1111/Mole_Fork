@@ -18,7 +18,7 @@ public class SceneGostop : SceneBase
     /// <returns></returns>
     public override bool Init()
     {
-        UIMenuGostop menu = UIManager.Instance.OpenMenu<UIMenuGostop>("UIMenuGostop");
+        UIMenuGostop menu = UIManager.Instance.OpenMenu<UIMenuGostop>("UI/UIMenuGostop");
         if (menu != null)
         {
             menu.InitMenu();

@@ -18,12 +18,14 @@ namespace Ant
         private Vector3 center = Vector3.zero;
         
         public Action<Vector3, float> OnMove { get; set; }
+        public Action OnStop { get; set; }
 
-        public bool Init(Action<Vector3, float> move)
+        public bool Init(Action<Vector3, float> move, Action stop)
         {
             center = RectTrans.position;
             radius = RectTrans.rect.width * 0.5f;
             OnMove = move;
+            OnStop = stop;
 
             return true;
         }
@@ -69,6 +71,8 @@ namespace Ant
         {
             Handler.localPosition = Vector3.zero;
             clicked = false;
+
+            OnStop();
         }
     }
 }
