@@ -53,6 +53,15 @@ public class SceneAntHouse : SceneBase
         }
 
         int mapId = 3;
+        var param = GetParam();
+        if (param != null)
+        {
+            if (param.HasField("map_no") == true)
+            {
+                mapId = int.Parse(param.GetField("map_no").ToString());
+            }
+        }
+        
         string mapName = $"Ant/Map_00{mapId}";
         var prefabMap = ResourcesManager.Instance.LoadInBuild<Grid>(mapName);
         grid = Instantiate<Grid>(prefabMap);

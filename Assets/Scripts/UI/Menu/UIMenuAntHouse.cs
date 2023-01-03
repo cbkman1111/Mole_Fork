@@ -68,5 +68,17 @@ public class UIMenuAntHouse : MenuBase
             var scene = AppManager.Instance.CurrScene as SceneAntHouse;
             scene.CreateObject();
         }
+        else if (name.CompareTo("Button - Map 4") == 0)
+        {
+            JSONObject jsonParam = new JSONObject();
+            jsonParam.SetField("map_no", 4);
+            AppManager.Instance.ChangeScene(SceneBase.SCENES.GAME_ANTHOUSE, param: jsonParam);
+        }
+        else if (name.CompareTo("Button - Map 3") == 0)
+        {
+            JSONObject jsonParam = new JSONObject();
+            jsonParam.SetField("map_no", 3);
+            AppManager.Instance.ChangeScene(SceneBase.SCENES.GAME_ANTHOUSE, param: jsonParam);
+        }
     }
 }

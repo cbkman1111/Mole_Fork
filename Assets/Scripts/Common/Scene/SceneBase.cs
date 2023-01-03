@@ -23,6 +23,11 @@ public abstract class SceneBase : MonoBehaviour
     }
 
     public virtual void UnLoaded() { }
+    protected JSONObject GetParam()
+    {
+        return AppManager.Instance.Param;
+    }
+
     public abstract bool Init();
     public abstract void OnTouchBean(Vector3 position);
     public abstract void OnTouchMove(Vector3 position);

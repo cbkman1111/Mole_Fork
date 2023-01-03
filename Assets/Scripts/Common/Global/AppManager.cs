@@ -11,6 +11,7 @@ public class AppManager : MonoSingleton<AppManager>
 {
     private Dictionary<string, SceneBase.SCENES> scenes = null;
     public SceneBase CurrScene { get; set; }
+    public JSONObject Param { get; set; }
 
     private Vector3 begin = Vector3.zero;
     private Vector3 curr = Vector3.zero;
@@ -115,9 +116,14 @@ public class AppManager : MonoSingleton<AppManager>
             case LoadSceneMode.Single:
                 if (scenes.TryGetValue(name, out SceneBase.SCENES index) == true)
                 {
-                    if (CurrScene != null && CurrScene.Scene == index) // 동일씬 로드.
+                    if (CurrScene != null) // 동일씬 로드.
                     {
-                        return;
+                        if (CurrScene.Scene == index)
+                        {
+                            return;
+                        }
+
+                        CurrScene.UnLoaded();
                     }
 
                     // UI 제거.
@@ -163,10 +169,12 @@ public class AppManager : MonoSingleton<AppManager>
         }
     }
 
-    public void ChangeScene(SceneBase.SCENES scene, bool loading = true)
+    public void ChangeScene(SceneBase.SCENES scene, bool loading = true, JSONObject param = null)
     {
         var info = scenes.Where(e => e.Value == scene).First();
         var name = info.Key;
+        
+        Param = param; // 파라미터 설정.
 
         if (CurrScene != null && CurrScene.Scene == info.Value)
         {
