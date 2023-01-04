@@ -16,7 +16,7 @@ public class SceneGostop : SceneBase
     /// 
     /// </summary>
     /// <returns></returns>
-    public override bool Init()
+    public override bool Init(JSONObject param)
     {
         UIMenuGostop menu = UIManager.Instance.OpenMenu<UIMenuGostop>("UI/UIMenuGostop");
         if (menu != null)

@@ -35,6 +35,11 @@ public class AppManager : MonoSingleton<AppManager>
 
     private IEnumerator LoadScene(string name, bool loading)
     {
+        if (CurrScene != null) // 동일씬 로드.
+        {
+            CurrScene.UnLoaded();
+        }
+
         if (loading == true)
         {
             AsyncOperation async = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("SceneLoading", LoadSceneMode.Single);
@@ -52,8 +57,6 @@ public class AppManager : MonoSingleton<AppManager>
                 yield return null;
             }
 
-            CurrScene.UnLoaded();
-
             AsyncOperation asyncNext = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(name, LoadSceneMode.Single);
             asyncNext.allowSceneActivation = false;
             while (asyncNext.isDone == false)
@@ -66,7 +69,6 @@ public class AppManager : MonoSingleton<AppManager>
                     currScene.SetPercent(percent);
                 }
                 
-                //Debug.Log($"{TAG} loading percent {percent}");
                 yield return new WaitForSeconds(0.1f);
 
                 if (percent == 1.0)
@@ -99,14 +101,6 @@ public class AppManager : MonoSingleton<AppManager>
         Debug.Log($"{TAG} Scene Load Complete");
     }
 
-    public void OnSceneUnLoaded(Scene scene)
-    {
-        if (CurrScene != null)
-        {
-            CurrScene.UnLoaded();
-        }
-    }
-
     public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         string name = scene.name;
@@ -116,15 +110,6 @@ public class AppManager : MonoSingleton<AppManager>
             case LoadSceneMode.Single:
                 if (scenes.TryGetValue(name, out SceneBase.SCENES index) == true)
                 {
-                    if (CurrScene != null) // 동일씬 로드.
-                    {
-                        if (CurrScene.Scene == index)
-                        {
-                            return;
-                        }
-
-                        CurrScene.UnLoaded();
-                    }
 
                     // UI 제거.
                     UIManager.Instance.Clear();
@@ -159,7 +144,7 @@ public class AppManager : MonoSingleton<AppManager>
                     CurrScene.MainCamera = Camera.main;
 
                     // 초기화.
-                    CurrScene.Init();
+                    CurrScene.Init(Param);
                 }
                 break;
 

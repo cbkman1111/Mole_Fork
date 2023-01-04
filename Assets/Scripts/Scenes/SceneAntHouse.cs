@@ -33,7 +33,7 @@ public class SceneAntHouse : SceneBase
     /// 
     /// </summary>
     /// <returns></returns>
-    public override bool Init()
+    public override bool Init(JSONObject param)
     {
         monsters = new List<MonsterBase>();
         objs = new List<ObjectBase>();
@@ -53,7 +53,6 @@ public class SceneAntHouse : SceneBase
         }
 
         int mapId = 3;
-        var param = GetParam();
         if (param != null)
         {
             if (param.HasField("map_no") == true)

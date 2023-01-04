@@ -13,7 +13,7 @@ public class SceneTileMap : SceneBase
     /// 
     /// </summary>
     /// <returns></returns>
-    public override bool Init()
+    public override bool Init(JSONObject param)
     {
         UIMenuTileMap menu = UIManager.Instance.OpenMenu<UIMenuTileMap>("UI/UIMenuTileMap");
         if (menu != null)

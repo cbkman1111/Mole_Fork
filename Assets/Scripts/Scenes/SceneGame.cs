@@ -24,7 +24,7 @@ public class SceneGame : SceneBase
     {
     }
 
-    public override bool Init()
+    public override bool Init(JSONObject param)
     {
         SoundManager.Instance.PlayMusic("17856_1462216818");
         

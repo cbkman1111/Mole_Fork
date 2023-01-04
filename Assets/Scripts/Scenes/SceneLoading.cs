@@ -9,7 +9,7 @@ public class SceneLoading : SceneBase
     {
     }
 
-    public override bool Init()
+    public override bool Init(JSONObject param)
     {
         menu = UIManager.Instance.OpenMenu<UILoadingMenu>("UI/UILoadingMenu");
        

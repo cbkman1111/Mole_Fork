@@ -9,7 +9,7 @@ public class SceneMenu : SceneBase
 
     }
 
-    public override bool Init()
+    public override bool Init(JSONObject param)
     {
         UIMenu menu = UIManager.Instance.OpenMenu<UIMenu>("UI/UIMenu");
         if (menu != null)
