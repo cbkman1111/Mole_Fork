@@ -9,7 +9,7 @@ public class MonsterData
 {
     public int id;
     public Vector3 position;
-    public float speed = 0.01f;
+    public float speed = 0.5f;
 
     public MonsterData()
     {

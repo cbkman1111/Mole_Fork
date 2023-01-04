@@ -1,3 +1,4 @@
+using Spine;
 using Spine.Unity;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,7 +10,9 @@ namespace Ant
     public class Player : MonsterBase
     {
         public SkeletonAnimation skel = null;
-        protected enum SkellAnimationState { attack = 0, die, hit, idle, run, run_shoot };
+        private bool loop = false;
+
+        protected enum SkellAnimationState { die, idle, run, run_shoot };
         protected SkellAnimationState state = SkellAnimationState.idle;
 
         /// <summary>
@@ -30,7 +33,29 @@ namespace Ant
                 return false; 
             }
 
+            skel.AnimationState.Event += HandleEvent;
+            skel.AnimationState.Start += delegate (TrackEntry trackEntry) {
+                // You can also use an anonymous delegate.
+                Debug.Log(string.Format("track {0} started a new animation.", trackEntry.TrackIndex));
+            };
+            skel.AnimationState.End += delegate {
+                // ... or choose to ignore its parameters.
+                Debug.Log("An animation ended!");
+                if (loop == false)
+                {
+                    SetState(SkellAnimationState.idle);
+                }
+            };
             return true;
+        }
+
+        void HandleEvent(TrackEntry trackEntry, Spine.Event e)
+        {
+            // Play some sound if the event named "footstep" fired.
+            //if (e.Data.Name == footstepEventName)
+            {
+                Debug.Log($"HandleEvent {e.Data.Name}");
+            }
         }
 
         /// <summary>
@@ -63,7 +88,7 @@ namespace Ant
         /// </summary>
         public void Hit()
         {
-            SetState(SkellAnimationState.attack);
+            SetState(SkellAnimationState.run_shoot);
         }
 
         /// <summary>
@@ -75,21 +100,22 @@ namespace Ant
             if (s == state)
                 return;
 
+            state = s;
             string name = SkellAnimationState.idle.ToString();
             switch (state)
             {
                 case SkellAnimationState.idle:
-                case SkellAnimationState.attack:
-                case SkellAnimationState.die:
-                case SkellAnimationState.hit:
                 case SkellAnimationState.run:
+                case SkellAnimationState.die:
+                    loop = true;
+                    break;
                 case SkellAnimationState.run_shoot:
-                    name = s.ToString();
+                    loop = false;
                     break;
             }
 
-            state = s;
-            skel.state.SetAnimation(0, name, true);
+            name = state.ToString();
+            skel.state.SetAnimation(0, name, loop);
         }
     }
 }

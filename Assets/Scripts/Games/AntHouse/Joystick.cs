@@ -69,10 +69,13 @@ namespace Ant
 
         public void TouchEnd(Vector3 position)
         {
+            if (clicked == true)
+            {
+                OnStop();
+            }
+
             Handler.localPosition = Vector3.zero;
             clicked = false;
-
-            OnStop();
         }
     }
 }

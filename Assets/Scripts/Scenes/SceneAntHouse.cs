@@ -241,7 +241,7 @@ public class SceneAntHouse : SceneBase
 
             objData.id = monsters.Count;
             objData.position = defaultPosition;
-            objData.speed = 0.2f;
+            objData.speed = 1f;
 
             mapData.AddMonster(objData);
 
@@ -271,6 +271,8 @@ public class SceneAntHouse : SceneBase
         var tile = new TileData(coordinate);
         mapData.AddTile(tile);
         mapUpdateTime = DateTime.Now.AddSeconds(5);
+
+        player.Hit();
     }
 
     public void SaveGame()
