@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DG.Tweening;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,12 +12,11 @@ public class PopupScrollViewTest : PopupBase
     {
         transform.position = new Vector3(Screen.width * 0.5f, Screen.height * 2.0f);
 
-        var hash = iTween.Hash(
-                "y", Screen.height * 0.5f,
-                "time", 0.4f,
-                "easeType", "easeInOutExpo");
-
-        iTween.MoveTo(gameObject, hash);
+        transform.DOMove(
+            new Vector3(transform.position.x, Screen.height * 0.5f), 0.4f).
+            SetEase(Ease.OutExpo).
+            OnComplete(() => {
+            });
 
         // 
         List<ScrollData> list = new List<ScrollData>();
@@ -40,20 +40,14 @@ public class PopupScrollViewTest : PopupBase
 
     public override void Close()
     {
-        var hash = iTween.Hash(
-                   "y", Screen.height * 2,
-                   "time", 0.5f,
-                   "easeType", "easeInOutExpo",
-                   "oncompletetarget", gameObject,
-                   "oncomplete", "OnCloseComplete");
-
-        iTween.MoveTo(gameObject,hash);
+        transform.DOMove(
+            new Vector3(transform.position.x, Screen.height * 2f), 0.5f).
+            SetEase(Ease.InOutExpo).
+            OnComplete(() => {
+                base.Close();
+            });
     }
 
-    public void OnCloseComplete()
-    {
-        base.Close();
-    }
 
     protected override void OnClick(Button button)
     {

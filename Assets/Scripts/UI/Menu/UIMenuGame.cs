@@ -40,7 +40,7 @@ public class UIMenuGame : MenuBase
         string name = btn.name;
         if (name == "Button - A")
         {
-            UIManager.Instance.OpenPopup<PopupSample>("UI/PopupSample");
+            UIManager.Instance.OpenPopup<PopupSample>("PopupSample");
             SetText("Text - title", "a clicked");
         }
         else if (name == "Button - B")
@@ -54,7 +54,7 @@ public class UIMenuGame : MenuBase
             SoundManager.Instance.PlayEffect("single_coin_fall_on_wood");
             SetText("Text - title", "c clicked");
 
-            UIManager.Instance.OpenPopup<PopupScrollViewTest>("UI/PopupScrollViewTest");
+            UIManager.Instance.OpenPopup<PopupScrollViewTest>("PopupScrollViewTest");
         }
         else if (name == "Button - Exit")
         {

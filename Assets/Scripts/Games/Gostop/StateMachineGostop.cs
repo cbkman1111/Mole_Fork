@@ -9,6 +9,8 @@ using UnityEngine;
 /// 
 public enum State
 {
+    NONE = -1,
+
     WAIT = 0,
 
     START_GAME,

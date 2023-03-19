@@ -16,7 +16,7 @@ public class UIManager : MonoSingleton<UIManager>
 
     public override bool Init()
     {
-        const string PATH_UI_ROOT = "UI/UIRoot";
+        const string PATH_UI_ROOT = "UIRoot";
         GameObject prefab = ResourcesManager.Instance.LoadInBuild<GameObject>(PATH_UI_ROOT);
         
         GameObject root = Instantiate(prefab, transform);

@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class SceneGostop : SceneBase
 {
-
     private Board board = null;
 
     public SceneGostop(SCENES scene) : base(scene)
@@ -18,7 +17,7 @@ public class SceneGostop : SceneBase
     /// <returns></returns>
     public override bool Init(JSONObject param)
     {
-        UIMenuGostop menu = UIManager.Instance.OpenMenu<UIMenuGostop>("UI/UIMenuGostop");
+        UIMenuGostop menu = UIManager.Instance.OpenMenu<UIMenuGostop>("UIMenuGostop");
         if (menu != null)
         {
             menu.InitMenu();
@@ -32,10 +31,6 @@ public class SceneGostop : SceneBase
 
         return true;
     }
-
-    /*
-
-    */
 
     /// <summary>
     /// 
@@ -72,17 +67,20 @@ public class SceneGostop : SceneBase
                         board.MyTurn() == true)
                     {
                         var list = board.GetSameMonthCard((int)Board.Player.USER, card);
-                        if (list .Count >= 3)
+                        if (list.Count == 3)
                         {
-                            board.HitBomb((int)Board.Player.USER, list);
-        
-
-                            stateInfo.evt = StateEvent.PROGRESS; // 카드 침.
+                            board.HitBomb((int)Board.Player.USER, list, card);
+                            stateInfo.evt = StateEvent.PROGRESS; 
+                        }
+                        else if (list.Count == 4) // 총통
+                        {
+                            board.HitChongtong((int)Board.Player.USER, list, card);
+                            stateInfo.evt = StateEvent.PROGRESS;
                         }
                         else 
                         {
                             board.HitCard((int)Board.Player.USER, card);
-                            stateInfo.evt = StateEvent.PROGRESS; // 카드 침.
+                            stateInfo.evt = StateEvent.PROGRESS; 
                         }
                     }
                 }

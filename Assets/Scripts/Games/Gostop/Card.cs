@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DG.Tweening;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,7 +21,7 @@ public class Card : MonoBehaviour
     public float Width { get; set; }
     public bool Open { get; set; }
     public bool CompleteMove { get; set; }
-    private Action completeMove = null;
+    private Action OnComplete = null;
 
     private Board.Player owner = Board.Player.NONE;
     public Board.Player Owner {
@@ -74,7 +75,7 @@ public class Card : MonoBehaviour
         Width = collider.size.x;
 
         rigid = GetComponent<Rigidbody>();
-        gameObject.name = $"card_{num}";
+        gameObject.name = $"card_{Month}_{num}";
 
         switch (Num)
         {
@@ -167,67 +168,67 @@ public class Card : MonoBehaviour
         rigid.isKinematic = active;
     }
 
-    public void MoveTo(Vector3 position, iTween.EaseType ease = iTween.EaseType.linear, float time = 0.5f, float delay = 0f, Action complete = null)
+    public void MoveTo(Vector3 position, Ease ease = Ease.Linear, float time = 0.5f, float delay = 0f, Action complete = null)
     {
-        completeMove = complete;
+        OnComplete = complete;
         CompleteMove = false;
-        iTween.MoveTo(gameObject, iTween.Hash(
-           "x", position.x,
-           "y", position.y,
-           "z", position.z,
-           "delay", delay,
-           "time", time,
-           "easeType", ease,
-           "oncompletetarget", gameObject,
-           "oncomplete", "OnMoveComplete"));
+        transform.DOMove(position, time).
+            SetDelay(delay).
+            SetEase(ease).
+            OnComplete(() => {
+                CompleteMove = true;
+                OnComplete?.Invoke();
+                OnComplete = null;
+            });
+
     }
 
-    public void CardOpen(iTween.EaseType ease = iTween.EaseType.linear, float interval = 0.1f, float delay = 0.0f, Action complete = null)
+    public void CardOpen(float time = 0.1f, float delay = 0.0f, Action complete = null)
     {
-        completeMove = complete;
+        OnComplete = complete;
         Open = false;
-        iTween.RotateTo(gameObject, iTween.Hash(
-                "x", 0,
-                "y", 0,
-                "z", 360,
-                "delay", delay,
-                "time", interval,
-                "easeType",
-                ease,
-                "oncompletetarget", gameObject,
-                "oncomplete", "OnOpenComplte"));
+        transform.DORotate(
+            new Vector3(0,0,360), time).
+            SetDelay(delay).
+            SetEase(Ease.Linear).
+            OnComplete(() => {
+                Open = true;
+
+                OnComplete?.Invoke();
+                OnComplete = null;
+            });
     }
 
-    public void ShowMe(iTween.EaseType ease = iTween.EaseType.linear, float interval = 0.1f, float delay = 0.0f, Action complete = null)
+    public void ShowMe(float time = 0.1f, float delay = 0.0f, Action complete = null)
     {
-        completeMove = complete;
+        OnComplete = complete;
         Open = false;
-        iTween.RotateTo(gameObject, iTween.Hash(
-                "x", -45,
-                "y", 0,
-                "z", 360,
-                "delay", delay,
-                "time", interval,
-                "easeType",
-                ease,
-                "oncompletetarget", gameObject,
-                "oncomplete", "OnOpenComplte"));
+        transform.DORotate(
+            new Vector3(-45, 0, 360), time).
+            SetEase(Ease.Linear).
+            SetDelay(delay).
+            OnComplete(() => {
+                Open = true;
+
+                OnComplete?.Invoke();
+                OnComplete = null;
+            });
     }
 
-    public void ShowEnemy(iTween.EaseType ease = iTween.EaseType.linear, float interval = 0.1f, float delay = 0.0f, Action complete = null)
+    public void ShowEnemy(Ease ease = Ease.Linear, float time = 0.1f, float delay = 0.0f, Action complete = null)
     {
-        completeMove = complete;
+        OnComplete = complete;
         Open = false;
-        iTween.RotateTo(gameObject, iTween.Hash(
-                "x", -45,
-                "y", 0,
-                "z", 360,
-                "delay", delay,
-                "time", interval,
-                "easeType",
-                ease,
-                "oncompletetarget", gameObject,
-                "oncomplete", "OnOpenComplte"));
+        transform.DORotate(
+            new Vector3(-45, 0, 360), time).
+            SetEase(Ease.Linear).
+            SetDelay(delay).
+            OnComplete(() => {
+                Open = true;
+
+                OnComplete?.Invoke();
+                OnComplete = null;
+            });
     }
     
 
@@ -240,21 +241,6 @@ public class Card : MonoBehaviour
         else
         {
             meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-        }
-    }
-
-    private void OnOpenComplte()
-    {
-        Open = true;
-    }
-
-    private void OnMoveComplete()
-    {
-        CompleteMove = true;
-        if (completeMove != null)
-        {
-            completeMove();
-            completeMove = null;
         }
     }
 }

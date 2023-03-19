@@ -28,7 +28,7 @@ public class SceneGame : SceneBase
     {
         SoundManager.Instance.PlayMusic("17856_1462216818");
         
-        menu = UIManager.Instance.OpenMenu<UIMenuGame>("UI/UIMenuGame");
+        menu = UIManager.Instance.OpenMenu<UIMenuGame>("UIMenuGame");
         if(menu != null)
         {
             menu.InitMenu();
