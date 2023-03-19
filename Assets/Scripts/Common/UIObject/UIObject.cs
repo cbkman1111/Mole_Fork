@@ -63,6 +63,17 @@ public abstract class UIObject : MonoBehaviour
 
                 continue;
             }
+
+            ScrollRect scroll = child.GetComponent<ScrollRect>();
+            if (scroll != null)
+            {
+                if (list.ContainsKey(scroll.name) == false)
+                {
+                    list.Add(scroll.name, scroll);
+                }
+
+                continue;
+            }
         }
     }
 
@@ -90,6 +101,14 @@ public abstract class UIObject : MonoBehaviour
             {
                 text.text = str;
             }
+        }
+    }
+
+    protected void SetText(Text text, string str)
+    {
+        if (text != null)
+        {
+            text.text = str;
         }
     }
 

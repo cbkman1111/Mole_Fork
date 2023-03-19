@@ -26,5 +26,17 @@ public class UIMenu : MenuBase
         {
             AppManager.Instance.ChangeScene(SceneBase.SCENES.GAME_GOSTOP);
         }
+        else if (name == "Button - Start3")
+        {
+            AppManager.Instance.ChangeScene(SceneBase.SCENES.GAME_TILEMAP);
+        }
+        else if (name == "Button - Start4")
+        {
+            JSONObject jsonParam = new JSONObject();
+            jsonParam.SetField("map_no", 3);
+            AppManager.Instance.ChangeScene(SceneBase.SCENES.GAME_ANTHOUSE, param: jsonParam);
+        }
     }
+
+
 }

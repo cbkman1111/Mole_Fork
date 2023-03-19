@@ -7,7 +7,7 @@ using static UnitBase;
 
 public class SceneGame : SceneBase
 {
-    private Player player = null;
+    private Skell.Player player = null;
     private List<UnitBase> monsters = null;
     private Boat boat = null;
     private Magnatic magnatic = null;
@@ -15,7 +15,7 @@ public class SceneGame : SceneBase
 
     private Boat prefabBoat = null;
     private Magnatic prefabMagnatic = null;
-    private Player prefabPlayer = null;
+    private Skell.Player prefabPlayer = null;
     private Pigeon prefabPigeon = null;
     private PigeonQueen prefabPigeonQueen = null;
     private PropBase prefabProp = null;
@@ -24,11 +24,11 @@ public class SceneGame : SceneBase
     {
     }
 
-    public override bool Init()
+    public override bool Init(JSONObject param)
     {
         SoundManager.Instance.PlayMusic("17856_1462216818");
         
-        menu = UIManager.Instance.OpenMenu<UIMenuGame>("UIMenuGame");
+        menu = UIManager.Instance.OpenMenu<UIMenuGame>("UI/UIMenuGame");
         if(menu != null)
         {
             menu.InitMenu();
@@ -36,11 +36,11 @@ public class SceneGame : SceneBase
 
         prefabBoat = ResourcesManager.Instance.LoadBundle<Boat>("Boat.prefab");
         prefabMagnatic = ResourcesManager.Instance.LoadBundle<Magnatic>("Magnatic.prefab");
-        prefabPlayer = ResourcesManager.Instance.LoadBundle<Player>("Player.prefab");
+        prefabPlayer = ResourcesManager.Instance.LoadBundle<Skell.Player>("Player.prefab");
         prefabPigeon = ResourcesManager.Instance.LoadBundle<Pigeon>("Pigeon.prefab");
         prefabPigeonQueen = ResourcesManager.Instance.LoadBundle<PigeonQueen>("PigeonQueen.prefab");
         prefabProp = ResourcesManager.Instance.LoadBundle<PropBase>("Prop.prefab"); 
-        player = Instantiate<Player>(prefabPlayer);
+        player = Instantiate<Skell.Player>(prefabPlayer);
         player.transform.position = Vector3.zero;
 
         boat = Instantiate<Boat>(prefabBoat);

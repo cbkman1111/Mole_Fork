@@ -10,7 +10,9 @@ public abstract class SceneBase : MonoBehaviour
         MENU,
         LOADING,
         GAME,
-        GAME_GOSTOP
+        GAME_GOSTOP,
+        GAME_TILEMAP,
+        GAME_ANTHOUSE,
     }
 
     public SCENES Scene { get; set; }
@@ -20,7 +22,8 @@ public abstract class SceneBase : MonoBehaviour
         Scene = scene;
     }
 
-    public abstract bool Init();
+    public virtual void UnLoaded() { }
+    public abstract bool Init(JSONObject param);
     public abstract void OnTouchBean(Vector3 position);
     public abstract void OnTouchMove(Vector3 position);
     public abstract void OnTouchEnd(Vector3 position);

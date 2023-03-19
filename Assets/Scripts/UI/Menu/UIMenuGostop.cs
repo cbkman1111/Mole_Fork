@@ -49,7 +49,7 @@ public class UIMenuGostop : MenuBase
         SetActive("Image - Pee Player 2", active);
     }
 
-    public void ScoreUpdate(Board.Player user, int gwang, int mung, int thee, int pee)
+    public void ScoreUpdate(Board.Player user, Scores score)
     {
         int userIndex = 1;
         if (user == Board.Player.COMPUTER)
@@ -57,10 +57,29 @@ public class UIMenuGostop : MenuBase
             userIndex = 2;
         }
 
-        SetText($"Text - Gwang Player {userIndex}", $"{gwang}");
-        SetText($"Text - Mung Player {userIndex}", $"{mung}");
-        SetText($"Text - Thee Player {userIndex}", $"{thee}");
-        SetText($"Text - Pee Player {userIndex}", $"{pee}");
+        SetText($"Text - Gwang Player {userIndex}", $"{score.gawng}");
+        SetText($"Text - Mung Player {userIndex}", $"{score.mung}");
+        SetText($"Text - Thee Player {userIndex}", $"{score.thee}");
+        SetText($"Text - Pee Player {userIndex}", $"{score.pee}");
+
+        SetText($"Text - Total Score Player {userIndex}", $"{score.total}");
+    }
+
+    public void SetDebug(string msg)
+    {
+        ScrollRect scroll = GetObject<ScrollRect>("Scroll View - Debug");
+        if (scroll != null)
+        {
+            var textDebug = scroll.content.GetComponent<Text>();
+            SetText(textDebug, msg);
+
+            scroll.verticalNormalizedPosition = 0f;
+        }
+    }
+
+    public void SetDebugTrun()
+    { 
+
     }
 
     protected override void OnClick(Button btn)

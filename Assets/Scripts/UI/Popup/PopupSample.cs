@@ -29,7 +29,7 @@ public class PopupSample : PopupBase
         }
         else if (name == "Button - Other")
         {
-            PopupNormal popup = UIManager.Instance.OpenPopup<PopupNormal>("PopupNormal");
+            PopupNormal popup = UIManager.Instance.OpenPopup<PopupNormal>("UI/PopupNormal");
         }
     }
 }

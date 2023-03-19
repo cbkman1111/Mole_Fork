@@ -9,18 +9,20 @@ public class SceneLoading : SceneBase
     {
     }
 
-    public override bool Init()
+    public override bool Init(JSONObject param)
     {
-        menu = UIManager.Instance.OpenMenu<UILoadingMenu>("UILoadingMenu");
+        menu = UIManager.Instance.OpenMenu<UILoadingMenu>("UI/UILoadingMenu");
        
-
 
         return true;
     }
 
     public void SetPercent(float percent)
     {
-        menu.SetPercent(percent);
+        if (menu != null)
+        {
+            menu.SetPercent(percent);
+        }
     }
 
 

@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 734710393
+CRC: 3525374540
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 91e6c4343578dfde844811163b4d2df1
+    Hash: 2d020a316412e783a5b7c387b43e8129
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 583669d8e757d48a98daf50b1ac18d18
+    Hash: b1afb289fcf8a99d67fd608f49f11678
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -58,8 +58,6 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 6d54ce54a45eca84a8f964975b49f0c4, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: 0c0aba79c2ce6eb46baf763350aabb17, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: d3260faa3a2d7124b9fcd998e889e29c, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
@@ -83,6 +81,8 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 841e496f3bb53cc48b27d369a94249b5, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 44a77f3ad2e09b649b204d795d708061, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 073797afb82c5a1438f328866b10b3f0, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 128
@@ -138,24 +138,24 @@ Assets:
 - Assets/Sounds/18449_1464718821.mp3
 - Assets/Prefabs/Audio Source.prefab
 - Assets/Images/cards.png
-- Assets/Prefabs/UI/UILoadingMenu.prefab
-- Assets/Prefabs/Units/Player.prefab
-- Assets/Prefabs/UI/PopupNormal.prefab
+- Assets/Resources/UI/UILoadingMenu.prefab
+- Assets/Resources/Ant/Player.prefab
+- Assets/Resources/UI/PopupNormal.prefab
 - Assets/Prefabs/UI/CellTest.prefab
-- Assets/Prefabs/UI/PopupScrollViewTest.prefab
+- Assets/Resources/UI/PopupScrollViewTest.prefab
 - Assets/Prefabs/Prop.prefab
 - Assets/Sounds/16788_1460739422.mp3
-- Assets/Prefabs/UI/PopupSample.prefab
-- Assets/Prefabs/UI/UITest.prefab
+- Assets/Resources/UI/PopupSample.prefab
+- Assets/Resources/UI/UITest.prefab
 - Assets/Prefabs/Block.prefab
-- Assets/Resources/UILoading.prefab
+- Assets/Resources/UI/UILoading.prefab
 - Assets/Sounds/EFF_shoot.mp3
 - Assets/Sounds/17856_1462216818.mp3
 - Assets/Sounds/SFX_Storage_Close.mp3
 - Assets/Sounds/single_coin_fall_on_wood.mp3
-- Assets/Prefabs/Units/Pigeon.prefab
+- Assets/Resources/Ant/Pigeon.prefab
 - Assets/Prefabs/Boat.prefab
 - Assets/Prefabs/Grid.prefab
 - Assets/Prefabs/Magnatic.prefab
-- Assets/Prefabs/Units/PigeonQueen.prefab
+- Assets/Resources/Ant/PigeonQueen.prefab
 Dependencies: []

@@ -9,9 +9,9 @@ public class SceneMenu : SceneBase
 
     }
 
-    public override bool Init()
+    public override bool Init(JSONObject param)
     {
-        UIMenu menu = UIManager.Instance.OpenMenu<UIMenu>("UIMenu");
+        UIMenu menu = UIManager.Instance.OpenMenu<UIMenu>("UI/UIMenu");
         if (menu != null)
         {
             menu.InitMenu();
@@ -27,7 +27,16 @@ public class SceneMenu : SceneBase
 
     public override void OnTouchEnd(Vector3 position)
     {
+        var world = MainCamera.ScreenToWorldPoint(position);
 
+        Ray ray = MainCamera.ScreenPointToRay(world);
+        RaycastHit2D hit = Physics2D.Raycast(world, transform.forward);
+        if (hit.collider != null)
+        {
+
+        }
+
+        Debug.DrawRay(world, transform.forward * 100, Color.red, 1.3f);
     }
 
     public override void OnTouchMove(Vector3 position)
