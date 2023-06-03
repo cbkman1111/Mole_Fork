@@ -39,9 +39,12 @@ public class SceneGame : SceneBase
         prefabPlayer = ResourcesManager.Instance.LoadBundle<Skell.Player>("Player.prefab");
         prefabPigeon = ResourcesManager.Instance.LoadBundle<Pigeon>("Pigeon.prefab");
         prefabPigeonQueen = ResourcesManager.Instance.LoadBundle<PigeonQueen>("PigeonQueen.prefab");
-        prefabProp = ResourcesManager.Instance.LoadBundle<PropBase>("Prop.prefab"); 
-        player = Instantiate<Skell.Player>(prefabPlayer);
-        player.transform.position = Vector3.zero;
+        prefabProp = ResourcesManager.Instance.LoadBundle<PropBase>("Prop.prefab");
+        if (player != null)
+        {
+            player = Instantiate<Skell.Player>(prefabPlayer);
+            player.transform.position = Vector3.zero;
+        }
 
         boat = Instantiate<Boat>(prefabBoat);
         if (boat != null)

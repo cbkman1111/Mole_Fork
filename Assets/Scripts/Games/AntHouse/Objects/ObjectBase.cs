@@ -6,7 +6,7 @@ public class ObjectBase : MonoBehaviour
 {
     public static T Create<T>(ObjectData data, bool enableAgent = true) where T : ObjectBase
     {
-        var prefab = ResourcesManager.Instance.LoadInBuild<GameObject>("Ant/Object");
+        var prefab = ResourcesManager.Instance.LoadInBuild<GameObject>("Object");
         var obj = Instantiate<GameObject>(prefab);
         if (obj == null)
         {

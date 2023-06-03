@@ -22,7 +22,7 @@ namespace Ant
         /// <returns></returns>
         public static T Create<T>(MonsterData data, bool enableAgent = true) where T : MonsterBase
         {
-            var prefab = ResourcesManager.Instance.LoadInBuild<GameObject>("Ant/Monster");
+            var prefab = ResourcesManager.Instance.LoadInBuild<GameObject>("Monster");
             var obj = Instantiate<GameObject>(prefab);
             if (obj == null)
             {
