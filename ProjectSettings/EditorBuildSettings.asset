@@ -15,6 +15,9 @@ EditorBuildSettings:
     path: Assets/Scenes/SceneGame.unity
     guid: bb74305562969dc44a154397aae382f0
   - enabled: 1
+    path: Assets/Scenes/SceneAntHouse.unity
+    guid: c2c9d8401baf4334cbabe98cea2e5595
+  - enabled: 1
     path: Assets/Scenes/SceneGostop.unity
     guid: 596f783663ff4a54aaada7a1d1e68c88
   - enabled: 1
@@ -23,7 +26,4 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SceneTileMap.unity
     guid: be0b2091a6befbd46ae0f2a89ad5fdf7
-  - enabled: 1
-    path: Assets/Scenes/SceneAntHouse.unity
-    guid: c2c9d8401baf4334cbabe98cea2e5595
   m_configObjects: {}

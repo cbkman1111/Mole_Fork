@@ -27,8 +27,6 @@ public class AppManager : MonoSingleton<AppManager>
         scenes.Add("SceneTileMap", SceneBase.SCENES.GAME_TILEMAP);
         scenes.Add("SceneAntHouse", SceneBase.SCENES.GAME_ANTHOUSE);
 
-        SceneManager.sceneLoaded += OnSceneLoaded;
-
         gameObject.name = string.Format("singleton - {0}", TAG);
         return true;
     }
@@ -42,6 +40,7 @@ public class AppManager : MonoSingleton<AppManager>
 
         if (loading == true)
         {
+            SceneManager.sceneLoaded += OnSceneLoaded;
             AsyncOperation async = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("SceneLoading", LoadSceneMode.Single);
             async.allowSceneActivation = true;
             
@@ -57,6 +56,7 @@ public class AppManager : MonoSingleton<AppManager>
                 yield return null;
             }
 
+            SceneManager.sceneLoaded += OnSceneLoaded;
             AsyncOperation asyncNext = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(name, LoadSceneMode.Single);
             asyncNext.allowSceneActivation = false;
             while (asyncNext.isDone == false)
@@ -81,6 +81,7 @@ public class AppManager : MonoSingleton<AppManager>
         }
         else 
         {
+            SceneManager.sceneLoaded += OnSceneLoaded;
             AsyncOperation async = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(name, LoadSceneMode.Single);
             async.allowSceneActivation = false;
 
@@ -110,11 +111,9 @@ public class AppManager : MonoSingleton<AppManager>
             case LoadSceneMode.Single:
                 if (scenes.TryGetValue(name, out SceneBase.SCENES index) == true)
                 {
-
-                    // UI Á¦°Å.
+                    SceneManager.sceneLoaded -= OnSceneLoaded;
                     UIManager.Instance.Clear();
 
-                    // ¾À ½ºÅ©¸³Æ® ºÎÂø.
                     switch (index)
                     {
                         case SceneBase.SCENES.INTRO:

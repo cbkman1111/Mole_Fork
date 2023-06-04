@@ -1,0 +1,203 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6692a821894544af38c92ddac65002d3, type: 3}
+  m_Name: TargetEditorScriptable
+  m_EditorClassIdentifier: 
+  targets:
+  - name: CollectItems
+    localization:
+      description:
+        text: Collect the items
+        index: 55
+      failed:
+        text: You didn't collect the items
+        index: 56
+    collectAction: 0
+    setCount: 0
+    CanSwithSublevel: 0
+    defaultSprites:
+      array:
+      - sprites:
+          array:
+          - icon: {fileID: 21300000, guid: 3dda22942cfed4603a1e236fa67c317c, type: 3}
+            uiSprite: 0
+          - icon: {fileID: 21300000, guid: d5d12238ac86e4a1aad2ad7b08a654ea, type: 3}
+            uiSprite: 0
+          - icon: {fileID: 21300000, guid: 13093650104e244a5a2f80f6eaf02cd6, type: 3}
+            uiSprite: 0
+          - icon: {fileID: 21300000, guid: b7af2f2a1bfd34165a8bbc3151675e61, type: 3}
+            uiSprite: 0
+      - sprites:
+          array:
+          - icon: {fileID: 21300000, guid: 8604122af3f62472e95c261ef7b15478, type: 3}
+            uiSprite: 0
+          - icon: {fileID: 21300000, guid: 37f6b4815822f472dbb6e1121d3ef560, type: 3}
+            uiSprite: 0
+          - icon: {fileID: 21300000, guid: 76484204c1ee945419d016f44240797b, type: 3}
+            uiSprite: 0
+          - icon: {fileID: 21300000, guid: 25a7df250b1834167834d8eac6107271, type: 3}
+            uiSprite: 0
+      - sprites:
+          array:
+          - icon: {fileID: 21300000, guid: 0edf19301af4941ef8ab05726d03f78d, type: 3}
+            uiSprite: 0
+          - icon: {fileID: 21300000, guid: e3932d0f07fcb49a89f5e7d89b16d1ee, type: 3}
+            uiSprite: 0
+          - icon: {fileID: 21300000, guid: 80ad3bcfbfb8c4820888f9d27839f4c7, type: 3}
+            uiSprite: 0
+          - icon: {fileID: 21300000, guid: 602077c9fcbeb4dbcb982cf680370405, type: 3}
+            uiSprite: 0
+      - sprites:
+          array:
+          - icon: {fileID: 21300000, guid: 184e1f54b83be4d56bd5262c7c2395ff, type: 3}
+            uiSprite: 0
+          - icon: {fileID: 21300000, guid: ecb63978a2bb3412889e0abe385f7d7d, type: 3}
+            uiSprite: 0
+          - icon: {fileID: 21300000, guid: ed64c2a11ff36488d9cd29084bae6926, type: 3}
+            uiSprite: 0
+          - icon: {fileID: 21300000, guid: cb205e42864ca4a7493eb517454f965f, type: 3}
+            uiSprite: 0
+      - sprites:
+          array:
+          - icon: {fileID: 21300000, guid: 0f9770a23cda149a98876ec06ccb224c, type: 3}
+            uiSprite: 0
+          - icon: {fileID: 21300000, guid: 33773bc7a218749309b74aa85f7ce185, type: 3}
+            uiSprite: 0
+          - icon: {fileID: 21300000, guid: 785653637a49447bd92900c47e139a3c, type: 3}
+            uiSprite: 0
+          - icon: {fileID: 21300000, guid: e018d53dd700c47d1b4e5962299a2868, type: 3}
+            uiSprite: 0
+    prefabs:
+    - {fileID: 190504, guid: e83178387e3af4eb8aa2a7236fa058ed, type: 3}
+  - name: Ingredients
+    localization:
+      description:
+        text: Collect Ingredients
+        index: 57
+      failed:
+        text: You didn't collect the ingredients
+        index: 58
+    collectAction: 1
+    setCount: 0
+    CanSwithSublevel: 0
+    defaultSprites:
+      array:
+      - sprites:
+          array:
+          - icon: {fileID: 21300000, guid: ff22b17d043794cce91292f209a8076b, type: 3}
+            uiSprite: 0
+      - sprites:
+          array:
+          - icon: {fileID: 21300000, guid: b579f2532165c4d38afda6332b8af6cb, type: 3}
+            uiSprite: 0
+    prefabs:
+    - {fileID: 1258960060683140, guid: 48e79583038de4d07a085ff94b52d4d0, type: 3}
+  - name: SugarSquare
+    localization:
+      description:
+        text: Destroy sugar squares
+        index: 59
+      failed:
+        text: You didn't destroy the sugar squares
+        index: 60
+    collectAction: 0
+    setCount: 1
+    CanSwithSublevel: 0
+    defaultSprites:
+      array:
+      - sprites:
+          array:
+          - icon: {fileID: 21300000, guid: 37ae4fde7591847e4a078c72e64c27c5, type: 3}
+            uiSprite: 0
+          - icon: {fileID: 21300000, guid: b8cc82eb87b3d4696b8d1c904048a751, type: 3}
+            uiSprite: 0
+    prefabs:
+    - {fileID: 1055345148094608, guid: 4ebed1d82b94548d0ab47103e3f205e5, type: 3}
+  - name: JellyBlock
+    localization:
+      description:
+        text: Spread the jelly everywhere
+        index: 61
+      failed:
+        text: You didn't spread the jelly
+        index: 62
+    collectAction: 2
+    setCount: 1
+    CanSwithSublevel: 0
+    defaultSprites:
+      array:
+      - sprites:
+          array:
+          - icon: {fileID: 21300000, guid: 6e2aeb1a957644443a91a3a29b9bef43, type: 3}
+            uiSprite: 0
+    prefabs:
+    - {fileID: 1491958887448974, guid: a30bc3dfa7cc24355a551baa872b9b71, type: 3}
+  - name: SolidBlock
+    localization:
+      description:
+        text: Destroy solid blocks
+        index: 63
+      failed:
+        text: You didn't destroy all blocks
+        index: 64
+    collectAction: 0
+    setCount: 1
+    CanSwithSublevel: 0
+    defaultSprites:
+      array:
+      - sprites:
+          array:
+          - icon: {fileID: 21300000, guid: 0687c131a807044db9027e03ac01e977, type: 3}
+            uiSprite: 0
+          - icon: {fileID: 21300000, guid: 8f58ea5f63ea34647b2750b9160c85a3, type: 3}
+            uiSprite: 0
+          - icon: {fileID: 21300000, guid: 6eb7781fa2b45424f8321d8348b6f59f, type: 3}
+            uiSprite: 0
+    prefabs:
+    - {fileID: 1793582136509744, guid: 9dbfaa88340224d8eb06d56878decb22, type: 3}
+  - name: Stars
+    localization:
+      description:
+        text: Collect at least one star
+        index: 83
+      failed:
+        text: You didn't collect a star
+        index: 84
+    collectAction: 0
+    setCount: 0
+    CanSwithSublevel: 1
+    defaultSprites:
+      array:
+      - sprites:
+          array:
+          - icon: {fileID: 21300000, guid: d2ca30adfcc684ce8b15d3e4be9adc46, type: 3}
+            uiSprite: 0
+    prefabs: []
+  - name: Marshmello
+    localization:
+      description:
+        text: Collect at least one star
+        index: 83
+      failed:
+        text: You didn't collect a star
+        index: 84
+    collectAction: 3
+    setCount: 1
+    CanSwithSublevel: 0
+    defaultSprites:
+      array:
+      - sprites:
+          array:
+          - icon: {fileID: 21300000, guid: 2586ef599ebcd4a7f883f12bc8880884, type: 3}
+            uiSprite: 0
+    prefabs:
+    - {fileID: 153778, guid: b484238ce109246ff8df637295059e9b, type: 3}

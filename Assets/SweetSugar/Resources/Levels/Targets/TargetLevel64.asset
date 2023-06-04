@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07ae9d03b5324fe7a1ea84c9237fd627, type: 3}
+  m_Name: TargetLevel64
+  m_EditorClassIdentifier: 
+  targets:
+    array:
+    - targetType:
+        type: 4
+      sprites:
+        array:
+        - icon: {fileID: 21300000, guid: 0687c131a807044db9027e03ac01e977, type: 3}
+          uiSprite: 0
+        - icon: {fileID: 21300000, guid: 8f58ea5f63ea34647b2750b9160c85a3, type: 3}
+          uiSprite: 0
+        - icon: {fileID: 21300000, guid: 6eb7781fa2b45424f8321d8348b6f59f, type: 3}
+          uiSprite: 0
+      CountDrawer:
+        count: 10
+      NotFinishUntilMoveOut: 0
+      ShowTheScoreForStar:
+        ShowTheScore: 0
+    - targetType:
+        type: 5
+      sprites:
+        array:
+        - icon: {fileID: 21300000, guid: d2ca30adfcc684ce8b15d3e4be9adc46, type: 3}
+          uiSprite: 0
+      CountDrawer:
+        count: 1
+      NotFinishUntilMoveOut: 0
+      ShowTheScoreForStar:
+        ShowTheScore: 0

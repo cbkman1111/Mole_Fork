@@ -1,5 +1,9 @@
 fileFormatVersion: 2
-guid: 0dda319c82273d949908002a09b92582
+<<<<<<< HEAD:Assets/SweetSugar/Scripts/Localization.meta
+guid: ed5360d15790a584d9e8d9c34bfddeda
+=======
+guid: 1708331fee104935b7387af85e1cac65
+>>>>>>> Master_target:Assets/SweetSugar/Resources/Localization.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

@@ -3,7 +3,19 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Item
+  - FxTemporaire
+  - HORIZONTAL_STRIPED
+  - VERTICAL_STRIPED
+  - MARMALADE
+  - PACKAGE
+  - MULTICOLOR
+  - INGREDIENT
+  - SPIRAL
+  - MarmaladeAnimation
+  - Multicolor_firework
+  - Simple_firework
   layers:
   - Default
   - TransparentFX
@@ -11,12 +23,12 @@ TagManager:
   - 
   - Water
   - UI
-  - Block
-  - Tile
-  - Card
-  - Board
-  - Map
-  - Unit
+  - 
+  - 
+  - Item
+  - LevelPin
+  - Square
+  - 
   - 
   - 
   - 
@@ -40,4 +52,13 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Arrow
+    uniqueID: 2226258467
+    locked: 0
+  - name: Item mask
+    uniqueID: 1397149363
+    locked: 0
+  - name: UI
+    uniqueID: 58496801
     locked: 0

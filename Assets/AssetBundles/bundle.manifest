@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 3111262491
+CRC: 2875475191
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 65d942328f552aa5313128c386f74f2e
+    Hash: f62d7be659ffd0ccc95e3bd3ee55e8d4
   TypeTreeHash:
     serializedVersion: 2
-    Hash: d5fd5c57713f8f96f95e4a5eb6e3d418
+    Hash: e97cb0b7bec3afd7e96ff08ff8e06b63
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -36,8 +36,6 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
-- Class: 114
   Script: {fileID: 11500000, guid: 5e5db4494a841bb4ab9244870254cb5b, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: f17772e3189cd904ea057a0764c1c70d, type: 3}
@@ -65,6 +63,8 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: a360f3b57615226448426236344de815, type: 3}
 - Class: 114
@@ -110,6 +110,8 @@ ClassTypes:
 - Class: 1839735485
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers:
+- AssemblyName: Unity.RenderPipelines.Universal.Runtime
+  ClassName: UnityEngine.Rendering.Universal.LightUtility/LightMeshVertex
 - AssemblyName: UnityEngine.CoreModule
   ClassName: UnityEngine.Events.PersistentCallGroup
 - AssemblyName: UnityEngine.UI
@@ -138,24 +140,24 @@ Assets:
 - Assets/Sounds/18449_1464718821.mp3
 - Assets/Prefabs/Audio Source.prefab
 - Assets/Images/cards.png
-- Assets/Resources/UI/UILoadingMenu.prefab
-- Assets/Resources/Ant/Player.prefab
-- Assets/Resources/UI/PopupNormal.prefab
+- Assets/Resources/UILoadingMenu.prefab
+- Assets/GameAnt/Resources/Player.prefab
+- Assets/Resources/PopupNormal.prefab
 - Assets/Prefabs/UI/CellTest.prefab
-- Assets/Resources/UI/PopupScrollViewTest.prefab
+- Assets/Resources/PopupScrollViewTest.prefab
 - Assets/Prefabs/Prop.prefab
 - Assets/Sounds/16788_1460739422.mp3
-- Assets/Resources/UI/PopupSample.prefab
-- Assets/Resources/UI/UITest.prefab
+- Assets/Resources/PopupSample.prefab
+- Assets/Resources/UITest.prefab
 - Assets/Prefabs/Block.prefab
-- Assets/Resources/UI/UILoading.prefab
+- Assets/Resources/UILoading.prefab
 - Assets/Sounds/EFF_shoot.mp3
 - Assets/Sounds/17856_1462216818.mp3
 - Assets/Sounds/SFX_Storage_Close.mp3
 - Assets/Sounds/single_coin_fall_on_wood.mp3
-- Assets/Resources/Ant/Pigeon.prefab
+- Assets/GameAnt/Resources/Pigeon.prefab
 - Assets/Prefabs/Boat.prefab
 - Assets/Prefabs/Grid.prefab
 - Assets/Prefabs/Magnatic.prefab
-- Assets/Resources/Ant/PigeonQueen.prefab
+- Assets/GameAnt/Resources/PigeonQueen.prefab
 Dependencies: []
