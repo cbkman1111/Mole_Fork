@@ -1,5 +1,4 @@
 using Ant;
-using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -61,11 +60,11 @@ public class SceneAntHouse : SceneBase
             }
         }
         
-        string mapName = $"Ant/Map_00{mapId}";
+        string mapName = $"Map_00{mapId}";
         var prefabMap = ResourcesManager.Instance.LoadInBuild<Grid>(mapName);
         grid = Instantiate<Grid>(prefabMap);
 
-        var prefabBuilder = ResourcesManager.Instance.LoadInBuild<NavMeshSurface>("Ant/Builder");
+        var prefabBuilder = ResourcesManager.Instance.LoadInBuild<NavMeshSurface>("Builder");
         surface = Instantiate<NavMeshSurface>(prefabBuilder);
         surface.BuildNavMesh();
 

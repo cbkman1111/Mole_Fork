@@ -14,7 +14,7 @@ namespace Ant
         public SkeletonAnimation skel = null;
         protected override bool LoadSprite()
         {
-            var prefab = ResourcesManager.Instance.LoadInBuild<SkeletonAnimation>("Ant/SpinePigeon");
+            var prefab = ResourcesManager.Instance.LoadInBuild<SkeletonAnimation>("SpinePigeon");
             skel = Instantiate<SkeletonAnimation>(prefab, transform);
 
             return true;
