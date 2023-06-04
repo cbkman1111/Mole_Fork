@@ -9,6 +9,8 @@ using UnityEngine.EventSystems;
 
 public class SceneAntHouse : SceneBase
 {
+    public NavMeshSurface surface = null;
+
     private List<MonsterBase> monsters = null;
     private List<ObjectBase> objs = null;
     private Player player = null;
@@ -17,7 +19,6 @@ public class SceneAntHouse : SceneBase
 
     private Grid grid = null;
     private UIMenuAntHouse menu = null;
-    private NavMeshSurface surface = null;
 
     private MapData mapData = null;
     private PlayerData playerData = null;
@@ -52,7 +53,7 @@ public class SceneAntHouse : SceneBase
                 });
         }
 
-        int mapId = 3;
+        int mapId = 1;
         if (param != null)
         {
             if (param.HasField("map_no") == true)
@@ -65,8 +66,8 @@ public class SceneAntHouse : SceneBase
         var prefabMap = ResourcesManager.Instance.LoadInBuild<Grid>(mapName);
         grid = Instantiate<Grid>(prefabMap);
 
-        var prefabBuilder = ResourcesManager.Instance.LoadInBuild<NavMeshSurface>("Builder");
-        surface = Instantiate<NavMeshSurface>(prefabBuilder);
+        //var prefabBuilder = ResourcesManager.Instance.LoadInBuild<NavMeshSurface>("Builder");
+        //surface = Instantiate<NavMeshSurface>(prefabBuilder);
         surface.BuildNavMesh();
 
         InitMapData(mapId);
