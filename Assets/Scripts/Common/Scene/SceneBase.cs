@@ -6,13 +6,16 @@ public abstract class SceneBase : MonoBehaviour
 {
     public enum SCENES
     {
-        INTRO = 0,
-        MENU,
-        LOADING,
-        GAME,
-        GAME_GOSTOP,
-        GAME_TILEMAP,
-        GAME_ANTHOUSE,
+        Intro = 0,
+        Menu,
+        Loading,
+
+        Gostop,
+        TileMap,
+        AntHouse,
+        Match3,
+
+        Test,
     }
 
     public SCENES Scene { get; set; }

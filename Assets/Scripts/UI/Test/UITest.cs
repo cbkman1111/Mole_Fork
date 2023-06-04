@@ -23,11 +23,11 @@ public class UITest : MenuBase
 
         if(name == "Button - Get")
         {
-            AppManager.Instance.ChangeScene(SceneBase.SCENES.LOADING);
+            AppManager.Instance.ChangeScene(SceneBase.SCENES.Loading);
         }
         else if (name == "Button - Release")
         {
-            AppManager.Instance.ChangeScene(SceneBase.SCENES.GAME);
+            AppManager.Instance.ChangeScene(SceneBase.SCENES.Test);
             /*
             if(blocks.Count > 0)
             {

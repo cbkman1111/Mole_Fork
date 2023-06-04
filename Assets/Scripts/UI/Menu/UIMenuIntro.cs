@@ -20,7 +20,7 @@ public class UIMenuIntro : MenuBase
         string name = btn.name;
         if(name == "Button - Start")
         {
-            AppManager.Instance.ChangeScene(SceneBase.SCENES.MENU);
+            AppManager.Instance.ChangeScene(SceneBase.SCENES.Menu);
         }
     }
 }

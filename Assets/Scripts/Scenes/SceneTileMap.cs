@@ -22,13 +22,19 @@ public class SceneTileMap : SceneBase
         }
 
         var prefabPigeon = ResourcesManager.Instance.LoadBundle<Pigeon>("Pigeon.prefab");
-        var pigeon = Instantiate<Pigeon>(prefabPigeon);
-        pigeon.transform.position = Vector3.zero;
-        pigeon.transform.rotation = Quaternion.identity;
+        if (prefabPigeon != null)
+        {
+            var pigeon = Instantiate<Pigeon>(prefabPigeon);
+            pigeon.transform.position = Vector3.zero;
+            pigeon.transform.rotation = Quaternion.identity;
+        }
 
         var prefabPlayer = ResourcesManager.Instance.LoadBundle<Skell.Player>("Player.prefab");
-        var player = Instantiate<Skell.Player>(prefabPlayer);
-        player.transform.position = new Vector3(2,0,0);
+        if (prefabPlayer != null)
+        {
+            var player = Instantiate<Skell.Player>(prefabPlayer);
+            player.transform.position = new Vector3(2, 0, 0);
+        }
 
         return true;
     }

@@ -1297,7 +1297,7 @@ namespace SweetSugar.Scripts.Blocks
 
                 if (subSquare.GetComponent<TargetComponent>() == null)
                 {
-                    SoundBase.Instance.PlayOneShot(SoundBase.Instance.block_destroy);
+                    //SoundBase.Instance.PlayOneShot(SoundBase.Instance.block_destroy);
                     if (LevelManager.THIS.animateItems.Any(i => i.linkObjectHash == gameObject.GetHashCode())) return;
                     var itemAnim = new GameObject();
                     var animComp = itemAnim.AddComponent<AnimateItems>();

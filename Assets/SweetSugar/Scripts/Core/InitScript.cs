@@ -210,7 +210,7 @@ namespace SweetSugar.Scripts.Core
 
         public void SpendGems(int count)
         {
-            SoundBase.Instance.PlayOneShot(SoundBase.Instance.cash);
+            //SoundBase.Instance.PlayOneShot(SoundBase.Instance.cash);
             Gems -= count;
             PlayerPrefs.SetInt("Gems", Gems);
             PlayerPrefs.Save();
@@ -253,7 +253,7 @@ namespace SweetSugar.Scripts.Core
 
         public void PurchaseSucceded()
         {
-            SoundBase.Instance.PlayOneShot(SoundBase.Instance.cash);
+            //SoundBase.Instance.PlayOneShot(SoundBase.Instance.cash);
             AddGems(waitedPurchaseGems);
             waitedPurchaseGems = 0;
         }
@@ -328,7 +328,7 @@ namespace SweetSugar.Scripts.Core
                 !GameObject.Find("CanvasGlobal").transform.Find("GemsShop").gameObject.activeSelf &&
                 !GameObject.Find("CanvasGlobal").transform.Find("LiveShop").gameObject.activeSelf)
             {
-                SoundBase.Instance.PlayOneShot(SoundBase.Instance.click);
+                //SoundBase.Instance.PlayOneShot(SoundBase.Instance.click);
                 OpenMenuPlay(args.Number);
                 ShowLeadboard(args.Number);
             }

@@ -69,7 +69,7 @@ namespace SweetSugar.Scripts
 
         public void PlayOneShot(AudioClip audioClip)
         {
-            _audioSource.PlayOneShot(audioClip);
+            //_audioSource.PlayOneShot(audioClip);
         }
     
         public void PlaySoundsRandom(AudioClip[] clip)
