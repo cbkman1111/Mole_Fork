@@ -19,13 +19,14 @@ public class AppManager : MonoSingleton<AppManager>
     public override bool Init()
     {
         scenes = new Dictionary<string, SceneBase.SCENES>();
-        scenes.Add("SceneIntro", SceneBase.SCENES.INTRO);
-        scenes.Add("SceneMenu", SceneBase.SCENES.MENU);
-        scenes.Add("SceneLoading", SceneBase.SCENES.LOADING);
-        scenes.Add("SceneGame", SceneBase.SCENES.GAME);
-        scenes.Add("SceneGostop", SceneBase.SCENES.GAME_GOSTOP);
-        scenes.Add("SceneTileMap", SceneBase.SCENES.GAME_TILEMAP);
-        scenes.Add("SceneAntHouse", SceneBase.SCENES.GAME_ANTHOUSE);
+        scenes.Add("SceneIntro", SceneBase.SCENES.Intro);
+        scenes.Add("SceneMenu", SceneBase.SCENES.Menu);
+        scenes.Add("SceneLoading", SceneBase.SCENES.Loading);
+        scenes.Add("SceneTest", SceneBase.SCENES.Test);
+        scenes.Add("SceneGostop", SceneBase.SCENES.Gostop);
+        scenes.Add("SceneTileMap", SceneBase.SCENES.TileMap);
+        scenes.Add("SceneAntHouse", SceneBase.SCENES.AntHouse);
+        scenes.Add("game", SceneBase.SCENES.Match3);
 
         gameObject.name = string.Format("singleton - {0}", TAG);
         return true;
@@ -111,38 +112,52 @@ public class AppManager : MonoSingleton<AppManager>
             case LoadSceneMode.Single:
                 if (scenes.TryGetValue(name, out SceneBase.SCENES index) == true)
                 {
-                    SceneManager.sceneLoaded -= OnSceneLoaded;
-                    UIManager.Instance.Clear();
-
                     switch (index)
                     {
-                        case SceneBase.SCENES.INTRO:
+                        case SceneBase.SCENES.Intro:
                             CurrScene = new GameObject(name).AddComponent<SceneIntro>();
                             break;
-                        case SceneBase.SCENES.MENU:
+                        case SceneBase.SCENES.Menu:
                             CurrScene = new GameObject(name).AddComponent<SceneMenu>();
                             break;
-                        case SceneBase.SCENES.LOADING:
+                        case SceneBase.SCENES.Loading:
                             CurrScene = new GameObject(name).AddComponent<SceneLoading>();
                             break;
-                        case SceneBase.SCENES.GAME:
+                        case SceneBase.SCENES.Test:
                             CurrScene = new GameObject(name).AddComponent<SceneGame>();
                             break;
-                        case SceneBase.SCENES.GAME_GOSTOP:
+                        case SceneBase.SCENES.Gostop:
                             CurrScene = new GameObject(name).AddComponent<SceneGostop>();
                             break;
-                        case SceneBase.SCENES.GAME_TILEMAP:
+                        case SceneBase.SCENES.TileMap:
                             CurrScene = new GameObject(name).AddComponent<SceneTileMap>();
                             break;
-                        case SceneBase.SCENES.GAME_ANTHOUSE:
+                        case SceneBase.SCENES.AntHouse:
                             CurrScene = new GameObject(name).AddComponent<SceneAntHouse>();
+                            break;
+                        case SceneBase.SCENES.Match3:
+                            var activeScene = SceneManager.GetActiveScene();
+                            var objs = activeScene.GetRootGameObjects();
+                            foreach (var obj in objs)
+                            {
+                                CurrScene = obj.GetComponent<SceneMatch3>();
+                                if (CurrScene != null)
+                                {
+                                    break;
+                                }
+                            }
+
+                            if (CurrScene == null)
+                            {
+                                CurrScene = new GameObject(name).AddComponent<SceneMatch3>();
+                            }
                             break;
                     }
 
-                    // 카메라를 미리 셋 초기화 전에 사용할 수 있도록.
-                    CurrScene.MainCamera = Camera.main;
+                    SceneManager.sceneLoaded -= OnSceneLoaded;
 
-                    // 초기화.
+                    UIManager.Instance.Clear();
+                    CurrScene.MainCamera = Camera.main;
                     CurrScene.Init(Param);
                 }
                 break;

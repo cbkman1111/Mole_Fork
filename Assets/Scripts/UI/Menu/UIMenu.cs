@@ -20,21 +20,25 @@ public class UIMenu : MenuBase
         string name = btn.name;
         if(name == "Button - Start1")
         {
-            AppManager.Instance.ChangeScene(SceneBase.SCENES.GAME);
+            AppManager.Instance.ChangeScene(SceneBase.SCENES.TileMap);
         }
         else if (name == "Button - Start2")
         {
-            AppManager.Instance.ChangeScene(SceneBase.SCENES.GAME_GOSTOP);
+            AppManager.Instance.ChangeScene(SceneBase.SCENES.Gostop);
         }
         else if (name == "Button - Start3")
         {
-            AppManager.Instance.ChangeScene(SceneBase.SCENES.GAME_TILEMAP);
+            AppManager.Instance.ChangeScene(SceneBase.SCENES.Test);
         }
         else if (name == "Button - Start4")
         {
             JSONObject jsonParam = new JSONObject();
             jsonParam.SetField("map_no", 3);
-            AppManager.Instance.ChangeScene(SceneBase.SCENES.GAME_ANTHOUSE, param: jsonParam);
+            AppManager.Instance.ChangeScene(SceneBase.SCENES.AntHouse, param: jsonParam);
+        }
+        else if (name.CompareTo("Button - Start5") == 0)
+        {
+            AppManager.Instance.ChangeScene(SceneBase.SCENES.Match3);
         }
     }
 

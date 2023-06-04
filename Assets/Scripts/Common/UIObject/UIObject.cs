@@ -26,6 +26,21 @@ public abstract class UIObject : MonoBehaviour
                 }
             }
 
+            InputField input = child.GetComponent<InputField>();
+            if (input != null)
+            {
+                if (list.ContainsKey(input.name) == false)
+                {
+                    input.onValueChanged.AddListener((string str) =>
+                    {
+                        OnValueChanged(input, str);
+                    });
+
+                    list.Add(input.name, input);
+                    continue;
+                }
+            }
+
             Slider slider = child.GetComponent<Slider>();
             if (slider != null)
             {
@@ -176,6 +191,7 @@ public abstract class UIObject : MonoBehaviour
     public virtual void OnOpen() { }
     public virtual void OnClose() { }
     public virtual void OnValueChanged(Slider slider, float f) { }
+    public virtual void OnValueChanged(InputField input, string str) { }
     public abstract void OnInit();
     protected abstract void OnClick(Button btn);
     public abstract void Close();

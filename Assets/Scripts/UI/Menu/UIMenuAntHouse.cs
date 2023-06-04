@@ -46,7 +46,7 @@ public class UIMenuAntHouse : MenuBase
         string name = btn.name;
         if (name.CompareTo("Button - Back") == 0)
         {
-            AppManager.Instance.ChangeScene(SceneBase.SCENES.MENU);
+            AppManager.Instance.ChangeScene(SceneBase.SCENES.Menu);
         }
         else if (name.CompareTo("Button - Ok") == 0)
         {
@@ -72,13 +72,13 @@ public class UIMenuAntHouse : MenuBase
         {
             JSONObject jsonParam = new JSONObject();
             jsonParam.SetField("map_no", 4);
-            AppManager.Instance.ChangeScene(SceneBase.SCENES.GAME_ANTHOUSE, param: jsonParam);
+            AppManager.Instance.ChangeScene(SceneBase.SCENES.AntHouse, param: jsonParam);
         }
         else if (name.CompareTo("Button - Map 3") == 0)
         {
             JSONObject jsonParam = new JSONObject();
             jsonParam.SetField("map_no", 3);
-            AppManager.Instance.ChangeScene(SceneBase.SCENES.GAME_ANTHOUSE, param: jsonParam);
+            AppManager.Instance.ChangeScene(SceneBase.SCENES.AntHouse, param: jsonParam);
         }
     }
 }
