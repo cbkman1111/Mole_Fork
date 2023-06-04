@@ -110,11 +110,7 @@ public class AppManager : MonoSingleton<AppManager>
             case LoadSceneMode.Single:
                 if (scenes.TryGetValue(name, out SceneBase.SCENES index) == true)
                 {
-
-                    // UI 제거.
                     UIManager.Instance.Clear();
-
-                    // 씬 스크립트 부착.
                     switch (index)
                     {
                         case SceneBase.SCENES.INTRO:
@@ -136,14 +132,21 @@ public class AppManager : MonoSingleton<AppManager>
                             CurrScene = new GameObject(name).AddComponent<SceneTileMap>();
                             break;
                         case SceneBase.SCENES.GAME_ANTHOUSE:
-                            CurrScene = new GameObject(name).AddComponent<SceneAntHouse>();
+                            
+                            Scene activeScene = SceneManager.GetActiveScene();
+                            var children = activeScene.GetRootGameObjects();
+                            foreach (var child in children)
+                            {
+                                CurrScene = child.GetComponent<SceneAntHouse>();
+                                if (CurrScene != null)
+                                {
+                                    break;
+                                }
+                            }
                             break;
                     }
 
-                    // 카메라를 미리 셋 초기화 전에 사용할 수 있도록.
                     CurrScene.MainCamera = Camera.main;
-
-                    // 초기화.
                     CurrScene.Init(Param);
                 }
                 break;

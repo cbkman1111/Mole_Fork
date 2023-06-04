@@ -32,9 +32,7 @@ public class UIMenu : MenuBase
         }
         else if (name == "Button - Start4")
         {
-            JSONObject jsonParam = new JSONObject();
-            jsonParam.SetField("map_no", 3);
-            AppManager.Instance.ChangeScene(SceneBase.SCENES.GAME_ANTHOUSE, param: jsonParam);
+            AppManager.Instance.ChangeScene(SceneBase.SCENES.GAME_ANTHOUSE);
         }
     }
 
