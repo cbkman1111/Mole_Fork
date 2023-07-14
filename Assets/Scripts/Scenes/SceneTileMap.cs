@@ -5,9 +5,6 @@ using UnityEngine;
 
 public class SceneTileMap : SceneBase
 {
-    public SceneTileMap(SCENES scene) : base(scene)
-    {
-    }
 
     /// <summary>
     /// 

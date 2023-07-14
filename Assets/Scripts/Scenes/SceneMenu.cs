@@ -4,10 +4,7 @@ using UnityEngine;
 
 public class SceneMenu : SceneBase
 {
-    public SceneMenu(SCENES scene) : base(scene)
-    {
 
-    }
 
     public override bool Init(JSONObject param)
     {

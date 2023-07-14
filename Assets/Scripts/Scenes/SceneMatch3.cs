@@ -6,10 +6,6 @@ using UnityEngine;
 
 public class SceneMatch3 : SceneBase
 {
-    public SceneMatch3(SCENES scene) : base(scene)
-    {
-    }
-
     /// <summary>
     /// 
     /// </summary>

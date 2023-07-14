@@ -5,10 +5,6 @@ public class SceneLoading : SceneBase
 {
     private UILoadingMenu menu = null;
 
-    public SceneLoading(SCENES scene) : base(scene)
-    {
-    }
-
     public override bool Init(JSONObject param)
     {
         menu = UIManager.Instance.OpenMenu<UILoadingMenu>("UILoadingMenu");

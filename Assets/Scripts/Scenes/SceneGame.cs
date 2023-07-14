@@ -20,10 +20,6 @@ public class SceneGame : SceneBase
     private PigeonQueen prefabPigeonQueen = null;
     private PropBase prefabProp = null;
 
-    public SceneGame(SCENES scene) : base(scene)
-    {
-    }
-
     public override bool Init(JSONObject param)
     {
         SoundManager.Instance.PlayMusic("17856_1462216818");
