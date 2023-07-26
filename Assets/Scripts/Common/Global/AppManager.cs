@@ -27,6 +27,7 @@ public class AppManager : MonoSingleton<AppManager>
         scenes.Add("SceneTileMap", SceneBase.SCENES.TileMap);
         scenes.Add("SceneAntHouse", SceneBase.SCENES.AntHouse);
         scenes.Add("game", SceneBase.SCENES.Match3);
+        scenes.Add("SceneChattScroll", SceneBase.SCENES.ChattScroll);
 
         gameObject.name = string.Format("singleton - {0}", TAG);
         return true;
@@ -152,6 +153,9 @@ public class AppManager : MonoSingleton<AppManager>
                                 break;
                             case SceneBase.SCENES.Match3:
                                 CurrScene = new GameObject(name).AddComponent<SceneMatch3>();
+                                break;
+                            case SceneBase.SCENES.ChattScroll:
+                                CurrScene = new GameObject(name).AddComponent<SceneChattScroll>();
                                 break;
                         }
                     }

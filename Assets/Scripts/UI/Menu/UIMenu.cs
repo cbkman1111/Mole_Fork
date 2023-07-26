@@ -26,7 +26,7 @@ public class UIMenu : MenuBase
         {
             AppManager.Instance.ChangeScene(SceneBase.SCENES.Gostop);
         }
-        else if (name == "Button - Start3")
+        else if (name == "Button - Test")
         {
             AppManager.Instance.ChangeScene(SceneBase.SCENES.Test);
         }
@@ -39,6 +39,10 @@ public class UIMenu : MenuBase
         else if (name.CompareTo("Button - Start5") == 0)
         {
             AppManager.Instance.ChangeScene(SceneBase.SCENES.Match3);
+        }
+        else if (name.CompareTo("Button - ChattScroll") == 0)
+        {
+            AppManager.Instance.ChangeScene(SceneBase.SCENES.ChattScroll);
         }
     }
 

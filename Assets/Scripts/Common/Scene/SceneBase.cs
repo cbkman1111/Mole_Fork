@@ -17,6 +17,7 @@ public abstract class SceneBase : MonoBehaviour
         Match3,
 
         Test,
+        ChattScroll,
     }
 
     public SCENES Scene { get; set; }

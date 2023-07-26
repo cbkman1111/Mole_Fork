@@ -13,6 +13,8 @@ public class Pool<T> where T : Object
     private Queue<T> queue;
     private List<T> list; // 사용.
     private Transform parent;
+    public int Max => max;
+    public List<T> ActiveList => list;
 
     /// <summary>
     /// 오브젝트 풀.
@@ -104,12 +106,6 @@ public class Pool<T> where T : Object
             if (trans != null)
             {
                 trans.gameObject.SetActive(false);
-                /*
-                if (trans.parent != root)
-                {
-                    trans.SetParent(root);
-                }
-                */
             }
 
             return true;

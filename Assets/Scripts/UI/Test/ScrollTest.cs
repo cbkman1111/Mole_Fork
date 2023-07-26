@@ -6,9 +6,13 @@ using UnityEngine.UI;
 
 public class ScrollTest : ScrollBase<ScrollData>
 {
-    public bool Init(RectTransform prefab)
+    public override bool Init(RectTransform prefab)
     {
-        cellPrefab = prefab;
+        if (base.Init(prefab) == false)
+        {
+            return false;
+        }
+        
         return true;
     }
 
@@ -23,22 +27,22 @@ public class ScrollTest : ScrollBase<ScrollData>
         return true;
     }
 
-    protected override void UpdateCell(RectTransform transform, int index)
+    protected override void UpdateCell(ScrollData data, RectTransform receTrans)
     {
-        CellTest cell = transform.GetComponent<CellTest>();
+        if (receTrans == null)
+            return;
+
+        CellTest cell = receTrans.GetComponent<CellTest>();
         if(cell)
         {
-            var info = dataList[index];
-            
-            cell.SetUI(info.name);
+            cell.SetUI(data);
         }
     }
+
 }
 
 public class ScrollData
 {
-    public int no;
-    public int count;
     public string name;
 }
 

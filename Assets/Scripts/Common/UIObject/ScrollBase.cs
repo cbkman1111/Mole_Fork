@@ -1,236 +1,322 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public abstract class ScrollBase<T> : ScrollRect
 {
-    protected RectTransform cellPrefab = null;
+    private Pool<RectTransform> pool = null;
+    protected RectTransform prefab = null; // Ïä§ÌÅ¨Î°§ ÏïÑÏù¥ÌÖú.
+    protected List<Cell> CellList = null; // Ï†ÑÏ≤¥ Îç∞Ïù¥ÌÑ∞.
 
-    private List<GameObject> cellList = null; // ∫∏¿Ø«— ºø.
-    private List<int> indexList = null; // ºø¿« ¿Œµ¶Ω∫.
-    protected List<T> dataList = null; // ¿¸√º µ•¿Ã≈Õ.
-    
-    private bool limitTop = false;
-    private bool limitBottom = false;
-    public float paddingY = 2;
-    Vector2 velocity = Vector2.zero;
+    public int CurrIndex = -1;
 
-    protected override void Awake()
+    public enum State
     {
-        cellList = new List<GameObject>();
-        indexList = new List<int>();
-        dataList = new List<T>();
+        InSide = 0,
+        Out_Up,
+        Out_Down,
+    };
 
-        SetLayoutVertical();
-    }
-
-    protected abstract void UpdateCell(RectTransform transform, int index);
-
-    public override void OnInitializePotentialDrag(PointerEventData eventData)
+    /// <summary>
+    /// 
+    /// </summary>
+    public class Cell
     {
-        base.OnInitializePotentialDrag(eventData);
-    }
+        public int Index;
+        public T Data;
 
-    public override void OnBeginDrag(UnityEngine.EventSystems.PointerEventData eventData){}
-
-    public override void OnDrag(UnityEngine.EventSystems.PointerEventData eventData)
-    {
-        var deltaY = eventData.delta.y;
-        RectTransform contentTransform = content.GetComponent<RectTransform>();
-
-        var indexLast = contentTransform.childCount - 1;
-        var last = contentTransform.GetChild(indexLast).GetComponent<RectTransform>();
-        var first = contentTransform.GetChild(0).GetComponent<RectTransform>();
-        var size = last.rect.size;
-
-        Vector3 move = Vector3.zero;
-        move.y = deltaY;
-
-        bool upSide = (deltaY > 0) ? true : false;
-
-
-        // ∞¥√ºµÈ¿ª ø≈±Ë.
-        foreach (var cell in cellList)
+        public State State;
+        private RectTransform trans;
+        private float height;
+        public RectTransform RectTrans
         {
-            var rectTransform = cell.GetComponent<RectTransform>();
-            rectTransform.localPosition += move;
-        }
-     
-        // 
-        if(upSide == true)
-        {
-            // √÷ ªÛ¥‹ ≥ÎµÂ∞° ≈ª√‚.
-            Vector2 bottom = new Vector2(
-                first.localPosition.x,
-                first.localPosition.y - size.y * first.pivot.y);
-
-            Vector2 top = new Vector2(
-                first.localPosition.x,
-                first.localPosition.y + size.y * first.pivot.y);
-
-            if (contentTransform.rect.Contains(top) == false &&
-                contentTransform.rect.Contains(bottom) == false)
+            get
             {
-                int newIndex = indexList.Last() + 1;
-                if (newIndex < dataList.Count)
-                {
-                    indexList[0] = newIndex;
-                    indexList.Remove(newIndex);
-                    indexList.Add(newIndex);
-                    UpdateCell(first, newIndex);
-
-                    var localposition = first.localPosition;
-                    localposition.y = last.localPosition.y - (paddingY + size.y);
-                    first.localPosition = localposition;
-                    first.SetAsLastSibling();
-                }
-                else
-                {
-                    // πÿπŸ¥⁄¿”.
-                    limitBottom = true;
-                }
+                return trans;
             }
-        }
-        else
-        {   
-            // √÷ ªÛ¥‹ ≥ÎµÂ∞°  æ∆∑°∑Œ ≈ª√‚.
-            Vector2 bottom = new Vector2(
-                first.localPosition.x,
-                first.localPosition.y - size.y * first.pivot.y);
-
-            Vector2 top = new Vector2(
-                first.localPosition.x,
-                first.localPosition.y + size.y * first.pivot.y);
-
-            if (contentTransform.rect.Contains(top) == false &&
-                contentTransform.rect.Contains(bottom) == false)
+            set
             {
-                limitTop = true;
-                return;
-            }
-          
-            // √÷ «œ¥‹ ≥ÎµÂ∞° »≠∏È ≈ª√‚.
-            bottom = new Vector2(
-            last.localPosition.x,
-            last.localPosition.y - size.y * last.pivot.y);
-
-            top = new Vector2(
-            last.localPosition.x,
-            last.localPosition.y + size.y * last.pivot.y);
-
-            if (contentTransform.rect.Contains(top) == false &&
-                contentTransform.rect.Contains(bottom) == false)
-            {
-                int newIndex = indexList.First() - 1;
-                if (newIndex >= 0)
-                {
-                    indexList[indexList.Count - 1] = newIndex;
-                    indexList.Remove(newIndex);
-                    indexList.Insert(0, newIndex);
-                    UpdateCell(last, newIndex);
-
-                    var localposition = last.localPosition;
-                    localposition.y = first.localPosition.y + (paddingY + size.y);
-
-                    last.localPosition = localposition;
-                    last.SetAsFirstSibling();
-                }
-                else
-                {
-                    // ≤¿¥Î±‚¿”.
-                    limitTop = true;
-                }
+                trans = value;
             }
         }
 
-        //Debug.LogWarning($"limited 1 = {limited}");
-        //Debug.LogWarning($"limited 2 = {limited}");
-        //Debug.Log($"OnDrag {eventData.delta.y}");
-    }
+        /// <summary>
+        /// ÎÜíÏù¥.
+        /// </summary>
+        /// <returns></returns>
 
-    private void Update()
-    {
+        public float Height {
+            set 
+            {
+                height = value;
+            }
+            get 
+            {
+                return height;
+            } 
+        }
         
-    }
 
-    public override void OnEndDrag(UnityEngine.EventSystems.PointerEventData eventData)
-    {
-        Debug.Log($"OnEndDrag limitTop = {limitTop}, limitBottom = {limitBottom}");
-        if(limitBottom == true || limitTop == true)
-        {
-            if(limitTop == true)
+        /// <summary>
+        /// 
+        /// </summary>
+        Vector2 scrollPosition = Vector2.zero;
+        public Vector2 ScrollPosition {
+            get
             {
-                RectTransform r = content.GetChild(0).GetComponent<RectTransform>();
-                float positionY = -(r.pivot.y * r.rect.size.y);
-
-                Vector3 move = Vector3.zero;
-                move.y = positionY - r.localPosition.y;
-                foreach (var cell in cellList)
-                {
-                    var rectTransform = cell.GetComponent<RectTransform>();
-                    rectTransform.localPosition += move;
-                }
+                return scrollPosition;
             }
-            else if(limitBottom == true)
+            set
             {
-                RectTransform r = content.GetChild(content.childCount-1).GetComponent<RectTransform>();
-                float contentHeight = content.rect.height;
-                float positionY = -(contentHeight - r.pivot.y * r.rect.size.y);
-
-                Vector3 move = Vector3.zero;
-                move.y = positionY - r.localPosition.y;
-                foreach (var cell in cellList)
-                {
-                    var rectTransform = cell.GetComponent<RectTransform>();
-                    rectTransform.localPosition += move;
-                }
+                scrollPosition = value;
+                if (RectTrans != null)
+                    RectTrans.localPosition = oriPosition + scrollPosition;
             }
+        }
 
-            limitTop = false;
-            limitBottom = false;
+        /// <summary>
+        /// 
+        /// </summary>
+        Vector2 oriPosition = Vector2.zero;
+        public Vector2 Position {
+            get
+            {
+                return oriPosition;
+            }
+            set
+            {
+                oriPosition = value;
+                if (RectTrans != null)
+                    RectTrans.localPosition = oriPosition;// + scrollPosition;
+            }
         }
     }
 
+    // ÎÖ∏Îìú Ï†ïÎ≥¥.
+    public virtual bool Init(RectTransform prefab)
+    {
+        this.prefab = prefab;
+        this.CellList = new List<Cell>();
+        this.pool = Pool<RectTransform>.Create(prefab, content.transform, 10);
+   
+        SetLayoutVertical();
+        return true;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="list"></param>
+    /// <returns></returns>
     protected bool Set(List<T> list)
     {
-        if(list == null)
+        CellList.Clear();
+
+        if (list == null)
         {
             return false;
         }
 
-        cellList.Clear();
-        dataList.Clear();
-
-        dataList.AddRange(list);
-
-        float totalHeight = cellPrefab.rect.size.y * list.Count;
-        float contentHeight = content.rect.height;
-
-        int count = (int)(contentHeight / cellPrefab.sizeDelta.y) + 1;
-
-        for (int i = 0; i < count; i++)
+        var cell = pool.GetObject(); // ÌïòÎÇò Í∫ºÎÇ¥ÏÑú ÏÇ¨Ïù¥Ï¶à Í≥ÑÏÇ∞Ïóê ÏÇ¨Ïö©.
+        Vector2 size = Vector2.zero;
+        for (int i = 0; i < list.Count; i++)
         {
-            GameObject cell = Instantiate(cellPrefab.gameObject, content.transform);
+            Cell node = new Cell();
+            node.Index = i;
+            node.Data = list[i];
+            node.Position = Vector2.zero;
+            node.RectTrans = cell;
+            if (node.RectTrans != null)
+            {
+                CellUpdate(node);
+                size.y += node.Height;
+            }
+            
+            var frontNode = GetFront(node.Index);
+            if (frontNode == null)
+            {
+                node.Position = new Vector2(0, 0);
+            }
+            else
+            {
+                node.Position = new Vector2(0, frontNode.Position.y - frontNode.Height);
+            }
 
-            var rectTransform = cell.GetComponent<RectTransform>();
-            Vector2 cellSize = rectTransform.rect.size;
-            float positionY = (cellSize.y + paddingY) * -i - rectTransform.pivot.y * cellSize.y;
-            float positionX = rectTransform.pivot.x * cellSize.x;
-            rectTransform.localPosition = new Vector2(
-                positionX,
-                positionY);
-
-            cell.name = $"{cell.name}_{i}";
-
-            UpdateCell(rectTransform, i);
-
-            indexList.Add(i);
-            cellList.Add(cell);
+            node.RectTrans = null;
+            CellList.Add(node);
         }
 
-        normalizedPosition = new Vector2(0, 0);
+        pool.ReturnObject(cell); // Í≥ÑÏÇ∞ ÎÅùÎÇúÍ±¥ Îã§Ïãú ÎêòÎèåÎ¶º.
+        content.sizeDelta = size;
+        verticalNormalizedPosition = 0f;
+
+        for (int i = 0; i < CellList.Count; i++)
+        {
+            var node = CellList[i];
+            if (node == null)
+                continue;
+
+            CheckPosition(node, out State state);
+            if (state == State.Out_Down || state == State.Out_Up)
+            {
+                pool.ReturnObject(node.RectTrans);
+                node.RectTrans = null;
+            }
+            else
+            {
+                if(CurrIndex == -1 || CurrIndex > node.Index)
+                    CurrIndex = node.Index;
+            }
+        }
+
         return true;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="cell"></param>
+    private void CellUpdate(Cell cell)
+    {
+        UpdateCell(cell.Data, cell.RectTrans);
+        Canvas.ForceUpdateCanvases();
+
+        cell.Height = cell.RectTrans.rect.height;
+    }
+
+    /// <summary>
+    /// Îç∞Ïù¥ÌÑ∞ Ï∂îÍ∞Ä.
+    /// </summary>
+    /// <param name="data"></param>
+    public void InsertMessage(T data)
+    {
+        int last = CellList.Count - 1;
+        Cell lastNode = CellList[last];
+
+        Cell node = new Cell();
+        node.Index = lastNode.Index + 1;
+        node.Data = data;
+        node.Position = Vector2.zero;
+        node.RectTrans = pool.GetObject();
+        if (node.RectTrans != null)
+        {
+            CellUpdate(node);
+            content.sizeDelta += new Vector2(0, node.Height);
+        }
+
+        node.Position = new Vector2(0, lastNode.Position.y - lastNode.Height);
+        CellList.Add(node);
+
+        verticalNormalizedPosition = 0f;
+    }
+
+    /// <summary>
+    /// ÏÉÅÌÉú Ï≤òÎ¶¨.
+    /// </summary>
+    private void Update()
+    {  
+        if (CellList == null)
+            return;
+
+        int nextIndex = -1;
+        for (int i = CurrIndex - 1; i < CurrIndex + pool.Max; i++)
+        {
+            if (i < 0 || i >= CellList.Count)
+                continue;
+
+            var cell = CellList[i];
+            CheckPosition(cell, out State state);
+            if (state == State.Out_Down || state == State.Out_Up)
+            {
+                if (cell.RectTrans != null)
+                {
+                    pool.ReturnObject(cell.RectTrans);
+                    cell.RectTrans = null;
+                }
+            }
+            else if (state == State.InSide)
+            {
+                if(nextIndex == -1 || nextIndex > cell.Index)
+                    nextIndex = cell.Index;
+
+                if (cell.RectTrans == null)
+                {
+                    var newCell = pool.GetObject();
+                    if (newCell != null)
+                    {
+                        cell.RectTrans = newCell;
+                        CellUpdate(cell);
+                        Canvas.ForceUpdateCanvases();
+                        cell.Position = new Vector2(0, cell.Position.y);
+                    }
+                }
+            }
+        }
+
+        CurrIndex = nextIndex;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="cell"></param>
+    /// <returns></returns>
+    void CheckPosition(Cell cell, out State direction)
+    {
+        Vector2 contentPosition = content.localPosition;
+        Vector2 top = contentPosition + cell.Position;// + cell.ScrollPosition;
+        Vector2 bottom = new Vector2(
+            top.x,
+            top.y - cell.Height);
+        
+        if (viewport.rect.min.y <= top.y && viewport.rect.max.y >= bottom.y)
+        {
+            direction = State.InSide;
+        }
+        else
+        {
+            if (viewRect.rect.min.y > top.y)
+                direction = State.Out_Down;
+            else
+                direction = State.Out_Up;
+        }
+    }
+
+    protected Cell GetFront(int curr)
+    {
+        int front = curr - 1;
+        if (front < 0 || front >= CellList.Count)
+        {
+            return null;
+        }
+
+        return CellList[front];
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="data"></param>
+    /// <param name="rectTrans"></param>
+    protected abstract void UpdateCell(T data, RectTransform rectTrans);
+
+    public override void OnDrag(UnityEngine.EventSystems.PointerEventData eventData)
+    {
+        base.OnDrag(eventData); //Ìò∏Ï∂úÌïòÎ©¥ Ïª®ÌÖêÏ∏† Î∑∞Í∞Ä Ïä§ÌÅ¨Î°§ÎêòÎãàÍπå Ìò∏Ï∂ú ÏïàÌï®.
+    }
+
+    public override void OnBeginDrag(UnityEngine.EventSystems.PointerEventData eventData)
+    {
+        base.OnBeginDrag(eventData);
+    }
+
+    public override void OnEndDrag(UnityEngine.EventSystems.PointerEventData eventData)
+    {
+        base.OnEndDrag(eventData);
+    }
+
+    public override void OnScroll(UnityEngine.EventSystems.PointerEventData data)
+    {
+        base.OnScroll(data);
     }
 }
