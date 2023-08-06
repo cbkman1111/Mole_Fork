@@ -36,7 +36,7 @@ public class AppManager : MonoSingleton<AppManager>
 
     private IEnumerator LoadScene(string name, bool loading)
     {
-        if (CurrScene != null) // µ¿ÀÏ¾À ·Îµå.
+        if (CurrScene != null) // ï¿½ï¿½ï¿½Ï¾ï¿½ ï¿½Îµï¿½.
         {
             CurrScene.UnLoaded();
         }
@@ -73,7 +73,6 @@ public class AppManager : MonoSingleton<AppManager>
                 }
                 
                 yield return new WaitForSeconds(0.1f);
-
                 if (percent == 1.0)
                 {
                     asyncNext.allowSceneActivation = true;
@@ -112,58 +111,59 @@ public class AppManager : MonoSingleton<AppManager>
         {
             case LoadSceneMode.Additive:
             case LoadSceneMode.Single:
-                if (scenes.TryGetValue(name, out SceneBase.SCENES index) == true)
+                if (scenes.TryGetValue(name, out SceneBase.SCENES selectScene) == true)
                 {
-                    switch (index)
+                    var activeScene = SceneManager.GetActiveScene();
+                    var list = activeScene.GetRootGameObjects();
+                    foreach (var obj in list)
                     {
-                        case SceneBase.SCENES.Intro:
-                            CurrScene = new GameObject(name).AddComponent<SceneIntro>();
+                        CurrScene = obj.GetComponent<SceneBase>();
+                        if (CurrScene != null)
+                        {
                             break;
-                        case SceneBase.SCENES.Menu:
-                            CurrScene = new GameObject(name).AddComponent<SceneMenu>();
-                            break;
-                        case SceneBase.SCENES.Loading:
-                            CurrScene = new GameObject(name).AddComponent<SceneLoading>();
-                            break;
-                        case SceneBase.SCENES.Test:
-                            CurrScene = new GameObject(name).AddComponent<SceneGame>();
-                            break;
-                        case SceneBase.SCENES.Gostop:
-                            CurrScene = new GameObject(name).AddComponent<SceneGostop>();
-                            break;
-                        case SceneBase.SCENES.TileMap:
-                            CurrScene = new GameObject(name).AddComponent<SceneTileMap>();
-                            break;
-                        case SceneBase.SCENES.AntHouse:
-                            CurrScene = new GameObject(name).AddComponent<SceneAntHouse>();
-                            break;
-                        case SceneBase.SCENES.Match3:
-                            var activeScene = SceneManager.GetActiveScene();
-                            var objs = activeScene.GetRootGameObjects();
-                            foreach (var obj in objs)
-                            {
-                                CurrScene = obj.GetComponent<SceneMatch3>();
-                                if (CurrScene != null)
-                                {
-                                    break;
-                                }
-                            }
-
-                            if (CurrScene == null)
-                            {
-                                CurrScene = new GameObject(name).AddComponent<SceneMatch3>();
-                            }
-                            break;
-
-                        case SceneBase.SCENES.Match3Buyed:
-                            CurrScene = new GameObject(name).AddComponent<SceneMatch3Buyed>();
-                            break;
+                        }
                     }
+
+                    if (CurrScene == null)
+                    {
+                        switch (selectScene)
+                        {
+                            case SceneBase.SCENES.Intro:
+                                CurrScene = new GameObject(name).AddComponent<SceneIntro>();
+                                break;
+                            case SceneBase.SCENES.Menu:
+                                CurrScene = new GameObject(name).AddComponent<SceneMenu>();
+                                break;
+                            case SceneBase.SCENES.Loading:
+                                CurrScene = new GameObject(name).AddComponent<SceneLoading>();
+                                break;
+                            case SceneBase.SCENES.Boat:
+                                CurrScene = new GameObject(name).AddComponent<SceneGame>();
+                                break;
+                            case SceneBase.SCENES.Test:
+                                CurrScene = new GameObject(name).AddComponent<SceneTest>();
+                                break;
+                            case SceneBase.SCENES.Gostop:
+                                CurrScene = new GameObject(name).AddComponent<SceneGostop>();
+                                break;
+                            case SceneBase.SCENES.TileMap:
+                                CurrScene = new GameObject(name).AddComponent<SceneTileMap>();
+                                break;
+                            case SceneBase.SCENES.AntHouse:
+                                CurrScene = new GameObject(name).AddComponent<SceneAntHouse>();
+                                break;
+                            case SceneBase.SCENES.Match3:
+                                CurrScene = new GameObject(name).AddComponent<SceneMatch3>();
+                                break;
+                        }
+                    }
+                    
 
                     SceneManager.sceneLoaded -= OnSceneLoaded;
 
                     UIManager.Instance.Clear();
                     CurrScene.MainCamera = Camera.main;
+                    CurrScene.Scene = selectScene;
                     CurrScene.Init(Param);
                 }
                 break;
@@ -179,7 +179,7 @@ public class AppManager : MonoSingleton<AppManager>
         var info = scenes.Where(e => e.Value == scene).First();
         var name = info.Key;
         
-        Param = param; // ÆÄ¶ó¹ÌÅÍ ¼³Á¤.
+        Param = param; // ï¿½Ä¶ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
 
         if (CurrScene != null && CurrScene.Scene == info.Value)
         {

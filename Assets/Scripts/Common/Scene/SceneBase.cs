@@ -10,6 +10,7 @@ public abstract class SceneBase : MonoBehaviour
         Menu,
         Loading,
 
+        Boat,
         Gostop,
         TileMap,
         AntHouse,
@@ -21,10 +22,6 @@ public abstract class SceneBase : MonoBehaviour
 
     public SCENES Scene { get; set; }
     public Camera MainCamera { get; set; }
-    public SceneBase(SCENES scene)
-    {
-        Scene = scene;
-    }
 
     public virtual void UnLoaded() { }
     public abstract bool Init(JSONObject param);

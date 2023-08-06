@@ -40,7 +40,7 @@ public class SceneMatch3 : SceneBase
         if (ObjectPooler.Instance != null) 
             itemSprites = ObjectPooler.Instance.GetPooledObject("Item", this, false).GetComponent<IColorableComponent>();
 
-        // ·¹º§·Îµå.
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Îµï¿½.
         currentLevel = 10;
         levelData = LoadingManager.LoadForPlay(currentLevel, levelData);
         /*
@@ -52,7 +52,7 @@ public class SceneMatch3 : SceneBase
         levelData.InitTargetObjects(true);
         */
 
-        // ÇÊµå ·Îµå.
+        // ï¿½Êµï¿½ ï¿½Îµï¿½.
         var prefab = ResourcesManager.Instance.LoadInBuild<GameObject>("GameBoard");
         var fieldBoards = new List<FieldBoard>();
         foreach (var fieldData in levelData.fields)
@@ -64,7 +64,7 @@ public class SceneMatch3 : SceneBase
             fieldBoards.Add(fboard);
         }
 
-        // ÇÊµå ÇÁ¸®ÆÕ »ý¼º.
+        // ï¿½Êµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
         var fieldRoot = new GameObject("root");
         var fieldPos = new Vector3(-0.9f, 0, -10);
         var latestFieldPos = Vector3.right * ((fieldBoards.Count - 1) * 10) + Vector3.back * 10;

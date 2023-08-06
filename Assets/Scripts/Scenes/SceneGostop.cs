@@ -7,10 +7,6 @@ public class SceneGostop : SceneBase
 {
     private Board board = null;
 
-    public SceneGostop(SCENES scene) : base(scene)
-    {
-    }
-
     /// <summary>
     /// 
     /// </summary>

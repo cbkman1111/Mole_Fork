@@ -24,10 +24,6 @@ public class SceneAntHouse : SceneBase
 
     const string KEY_TILES = "tiles";
 
-    public SceneAntHouse(SCENES scene) : base(scene)
-    {
-    }
-
     /// <summary>
     /// 
     /// </summary>

@@ -2,10 +2,6 @@ using UnityEngine;
 
 public class SceneIntro : SceneBase
 {
-    public SceneIntro(SCENES scene) : base(scene)
-    {
-    }
-
     public override bool Init(JSONObject param)
     {
         UIMenuIntro menu = UIManager.Instance.OpenMenu<UIMenuIntro>("UIMenuIntro");
