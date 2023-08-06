@@ -158,7 +158,9 @@ namespace SweetSugar.Scripts
         /// <returns></returns>
         public IEnumerator CheckPossibleCombines()
         {
-            if(!itemSprites)InitSprites();
+            if(!itemSprites)
+                InitSprites();
+
             //waiting for 1 second just in case to be sure that field was built
             yield return new WaitForSeconds(1);
 
@@ -177,20 +179,22 @@ namespace SweetSugar.Scripts
             {
                 yield return new WaitForEndOfFrame();
             }
+
             //if game is not in Playing status - wait
-            while (LevelManager.THIS.gameStatus != GameState.Playing && LevelManager.THIS.gameStatus != GameState.Tutorial)
+            while (LevelManager.THIS.gameStatus != GameState.Playing && 
+                   LevelManager.THIS.gameStatus != GameState.Tutorial)
             {
                 yield return new WaitForEndOfFrame();
             }
 
             //if drag have not blocked and game status Playing - continue
-            if (!LevelManager.THIS.DragBlocked && (LevelManager.THIS.gameStatus == GameState.Playing || LevelManager.THIS.gameStatus == GameState.Tutorial))
+            if (!LevelManager.THIS.DragBlocked && 
+                (LevelManager.THIS.gameStatus == GameState.Playing || LevelManager.THIS.gameStatus == GameState.Tutorial))
             {
                 currentPreCombine = new List<Item>();
 
                 if (LevelManager.THIS.gameStatus != GameState.Playing && LevelManager.THIS.gameStatus != GameState.Tutorial)
                     yield break;
-
 
                 //Iteration for search possible combination 
                 if (itemSprites != null)
@@ -204,6 +208,7 @@ namespace SweetSugar.Scripts
                                 var square = LevelManager.THIS.GetSquare(col, row);
                                 if (square?.GetSubSquare().CanGoOut() == false || square.Item == null)
                                     continue;
+
                                 //current square called x
                                 //o-o-x
                                 //	  o

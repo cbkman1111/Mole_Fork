@@ -113,7 +113,10 @@ namespace SweetSugar.Scripts.Items
             set
             {
                 if (LevelManager.THIS.DebugSettings.BonusCombinesShowLog)
+                {
                     DebugLogKeeper.Log("set next " + value + " " + GetInstanceID(), DebugLogKeeper.LogType.BonusAppearance);
+                }
+                    
                 nextType = value;
             }
         }

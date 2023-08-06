@@ -4,13 +4,9 @@ using UnityEngine;
 
 namespace SweetSugar.Scripts.Level
 {
-    /// <summary>
-    /// Loading level 
-    /// </summary>
     public static class LoadingManager
     {
         private static LevelData levelData;
-        //static string levelPath = "Assets/SweetSugar/Resources/Levels/";
 
         public static LevelData LoadForPlay(int currentLevel, LevelData levelData)
         {
@@ -25,13 +21,9 @@ namespace SweetSugar.Scripts.Level
         {
             levelData = ScriptableLevelManager.LoadLevel(currentLevel);
             levelData.CheckLayers();
-            // LevelData.THIS = levelData;
             levelData.LoadTargetObject();
-            // levelData.InitTargetObjects();
-
             return levelData;
         }
-
 
         public static int GetLastLevelNum()
         {

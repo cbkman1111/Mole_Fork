@@ -26,7 +26,9 @@ public class AppManager : MonoSingleton<AppManager>
         scenes.Add("SceneGostop", SceneBase.SCENES.Gostop);
         scenes.Add("SceneTileMap", SceneBase.SCENES.TileMap);
         scenes.Add("SceneAntHouse", SceneBase.SCENES.AntHouse);
-        scenes.Add("game", SceneBase.SCENES.Match3);
+        scenes.Add("SceneMatch3", SceneBase.SCENES.Match3);
+
+        scenes.Add("game", SceneBase.SCENES.Match3Buyed);
 
         gameObject.name = string.Format("singleton - {0}", TAG);
         return true;
@@ -151,6 +153,10 @@ public class AppManager : MonoSingleton<AppManager>
                             {
                                 CurrScene = new GameObject(name).AddComponent<SceneMatch3>();
                             }
+                            break;
+
+                        case SceneBase.SCENES.Match3Buyed:
+                            CurrScene = new GameObject(name).AddComponent<SceneMatch3Buyed>();
                             break;
                     }
 

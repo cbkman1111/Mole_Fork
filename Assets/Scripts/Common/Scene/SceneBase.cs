@@ -15,6 +15,7 @@ public abstract class SceneBase : MonoBehaviour
         AntHouse,
         Match3,
 
+        Match3Buyed,
         Test,
     }
 

@@ -38,6 +38,10 @@ public class UIMenu : MenuBase
         }
         else if (name.CompareTo("Button - Start5") == 0)
         {
+            AppManager.Instance.ChangeScene(SceneBase.SCENES.Match3Buyed);
+        }
+        else if (name.CompareTo("Button - Start6") == 0)
+        {
             AppManager.Instance.ChangeScene(SceneBase.SCENES.Match3);
         }
     }
