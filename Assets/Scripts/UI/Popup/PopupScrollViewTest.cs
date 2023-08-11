@@ -17,7 +17,7 @@ public class PopupScrollViewTest : PopupBase
 
         List<ScrollData> list = new List<ScrollData>();
 
-        for (int i = 0; i < 100; i++)
+        for (int i = 0; i < 5; i++)
         {
             ScrollData data = new ScrollData();
             data.name = $"[{i}] message~~~";

@@ -27,7 +27,7 @@ public class UITest : MenuBase
         }
         else if (name == "Button - Release")
         {
-            AppManager.Instance.ChangeScene(SceneBase.SCENES.Test);
+            
             /*
             if(blocks.Count > 0)
             {

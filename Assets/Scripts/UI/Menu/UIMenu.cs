@@ -28,7 +28,7 @@ public class UIMenu : MenuBase
         }
         else if (name == "Button - Test")
         {
-            AppManager.Instance.ChangeScene(SceneBase.SCENES.Test);
+            
         }
         else if (name == "Button - Start4")
         {

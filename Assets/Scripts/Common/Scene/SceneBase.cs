@@ -16,7 +16,6 @@ public abstract class SceneBase : MonoBehaviour
         AntHouse,
         Match3,
 
-        Test,
         ChattScroll,
     }
 
