@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class UIMenuTest : MenuBase
 {
+    /*
     public GameObject from;
     public GameObject to;
     public GameObject result;
@@ -12,6 +13,7 @@ public class UIMenuTest : MenuBase
 
     public int x;
     public int y;
+    */
 
     public override void OnInit()
     {
@@ -23,6 +25,7 @@ public class UIMenuTest : MenuBase
         return true;
     }
 
+    /*
     private void Update()
     {
         float radius = 200;
@@ -38,7 +41,7 @@ public class UIMenuTest : MenuBase
 
         SetText(angle, $"{a}");
     }
-
+    */
     public static float CalculateAngle(Transform trans, Vector3 from, Vector3 to)
     {
         //Vector3 v = to - from;
@@ -54,6 +57,7 @@ public class UIMenuTest : MenuBase
 
     public override void OnValueChanged(InputField input, string str) 
     {
+        /*
         if (input.name.CompareTo("InputField - x") == 0)
         {
             x = int.Parse(str);
@@ -61,15 +65,15 @@ public class UIMenuTest : MenuBase
         else if (input.name.CompareTo("InputField - y") == 0)
         {
             y = int.Parse(str);
-        }
+        }*/
     }
 
     protected override void OnClick(Button btn)
     {
         string name = btn.name;
-        if(name == "Button - Exit")
+        if(name == "Button - Back")
         {
-            AppManager.Instance.ChangeScene(SceneBase.SCENES.Menu);
+            AppManager.Instance.ChangeScene(SceneBase.SCENES.SceneMenu);
         }
     }
 }

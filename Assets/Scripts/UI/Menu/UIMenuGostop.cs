@@ -87,7 +87,7 @@ public class UIMenuGostop : MenuBase
         string name = btn.name;
         if(name == "Button - Exit")
         {
-            AppManager.Instance.ChangeScene(SceneBase.SCENES.Menu);
+            AppManager.Instance.ChangeScene(SceneBase.SCENES.SceneMenu);
         }
     }
 

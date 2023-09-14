@@ -12,7 +12,6 @@ public class SceneMatch3 : SceneBase
     /// <returns></returns>
     public override bool Init(JSONObject param)
     {
-        /*
         UIMenuMatch3 menu = UIManager.Instance.OpenMenu<UIMenuMatch3>("UIMenuMatch3");
         if (menu != null)
         {
@@ -22,7 +21,6 @@ public class SceneMatch3 : SceneBase
                 //GUIUtils.THIS.StartGame();
             };
         }
-        */
 
         return true;
     }

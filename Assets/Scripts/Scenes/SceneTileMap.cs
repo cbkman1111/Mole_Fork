@@ -18,18 +18,18 @@ public class SceneTileMap : SceneBase
             menu.InitMenu();
         }
 
-        var prefabPigeon = ResourcesManager.Instance.LoadBundle<Pigeon>("Pigeon.prefab");
+        var prefabPigeon = ResourcesManager.Instance.LoadInBuild<Pigeon>("Pigeon");
         if (prefabPigeon != null)
         {
-            var pigeon = Instantiate<Pigeon>(prefabPigeon);
+            var pigeon = GameObject.Instantiate<Pigeon>(prefabPigeon);
             pigeon.transform.position = Vector3.zero;
             pigeon.transform.rotation = Quaternion.identity;
         }
 
-        var prefabPlayer = ResourcesManager.Instance.LoadBundle<Skell.Player>("Player.prefab");
+        var prefabPlayer = ResourcesManager.Instance.LoadInBuild<Skell.Player>("Player");
         if (prefabPlayer != null)
         {
-            var player = Instantiate<Skell.Player>(prefabPlayer);
+            var player = GameObject.Instantiate<Skell.Player>(prefabPlayer);
             player.transform.position = new Vector3(2, 0, 0);
         }
 

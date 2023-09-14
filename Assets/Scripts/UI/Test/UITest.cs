@@ -23,7 +23,7 @@ public class UITest : MenuBase
 
         if(name == "Button - Get")
         {
-            AppManager.Instance.ChangeScene(SceneBase.SCENES.Loading);
+            AppManager.Instance.ChangeScene(SceneBase.SCENES.SceneLoading);
         }
         else if (name == "Button - Release")
         {

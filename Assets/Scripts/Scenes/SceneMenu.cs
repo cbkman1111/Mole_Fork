@@ -27,13 +27,12 @@ public class SceneMenu : SceneBase
         var world = MainCamera.ScreenToWorldPoint(position);
 
         Ray ray = MainCamera.ScreenPointToRay(world);
-        RaycastHit2D hit = Physics2D.Raycast(world, transform.forward);
-        if (hit.collider != null)
-        {
+        //RaycastHit2D hit = Physics2D.Raycast(world, transform.forward);
+        //if (hit.collider != null)
+        //{
+        //}
 
-        }
-
-        Debug.DrawRay(world, transform.forward * 100, Color.red, 1.3f);
+        //Debug.DrawRay(world, transform.forward * 100, Color.red, 1.3f);
     }
 
     public override void OnTouchMove(Vector3 position)

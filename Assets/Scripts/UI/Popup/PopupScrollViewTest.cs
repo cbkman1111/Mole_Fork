@@ -8,6 +8,7 @@ public class PopupScrollViewTest : PopupBase
 {
     private ScrollTest scrollView = null;
 
+    public RectTransform[] prefabs;
     /// <summary>
     ///  
     /// </summary>
@@ -17,20 +18,19 @@ public class PopupScrollViewTest : PopupBase
 
         List<ScrollData> list = new List<ScrollData>();
 
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 50; i++)
         {
             ScrollData data = new ScrollData();
-            data.name = $"[{i}] message~~~";
+            data.msg = $"[{i}] message~~~";
+            data.type = (TestPrefabType)UnityEngine.Random.Range(0, 1);
             list.Add(data);
         }
     
         Transform trans = FindTransform(transform, "Scroll View - Test");
         if(trans != null)
         {
-            RectTransform prefab = ResourcesManager.Instance.LoadInBuild<RectTransform>("CellTest");
-
             scrollView = trans.GetComponent<ScrollTest>();
-            scrollView.Init(prefab);
+            scrollView.Init(prefabs);
             scrollView.SetItems(list);
         }
     }
@@ -67,9 +67,9 @@ public class PopupScrollViewTest : PopupBase
         }
         else if (name == "Button - Insert")
         {
-            ScrollData data = new ScrollData();
-            data.name = $"insert message~~~";
-            scrollView.InsertMessage(data);
+            //ScrollData data = new ScrollData();
+            //data.name = $"insert message~~~";
+            //scrollView.InsertMessage(data);
         }
     }
 }

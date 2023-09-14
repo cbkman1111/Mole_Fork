@@ -38,7 +38,7 @@ public class UIMenuMatch3 : MenuBase
         string name = btn.name;
         if (name == "Button - Back")
         {
-            AppManager.Instance.ChangeScene(SceneBase.SCENES.Menu);
+            AppManager.Instance.ChangeScene(SceneBase.SCENES.SceneMenu);
         }
         else if (name == "Button - StartGame")
         {

@@ -30,25 +30,25 @@ public class SceneGame : SceneBase
             menu.InitMenu();
         }
 
-        prefabBoat = ResourcesManager.Instance.LoadBundle<Boat>("Boat.prefab");
-        prefabMagnatic = ResourcesManager.Instance.LoadBundle<Magnatic>("Magnatic.prefab");
-        prefabPlayer = ResourcesManager.Instance.LoadBundle<Skell.Player>("Player.prefab");
-        prefabPigeon = ResourcesManager.Instance.LoadBundle<Pigeon>("Pigeon.prefab");
-        prefabPigeonQueen = ResourcesManager.Instance.LoadBundle<PigeonQueen>("PigeonQueen.prefab");
-        prefabProp = ResourcesManager.Instance.LoadBundle<PropBase>("Prop.prefab");
+        prefabBoat = ResourcesManager.Instance.LoadBundle<Boat>("Boat");
+        prefabMagnatic = ResourcesManager.Instance.LoadBundle<Magnatic>("Magnatic");
+        prefabPlayer = ResourcesManager.Instance.LoadBundle<Skell.Player>("Player");
+        prefabPigeon = ResourcesManager.Instance.LoadBundle<Pigeon>("Pigeon");
+        prefabPigeonQueen = ResourcesManager.Instance.LoadBundle<PigeonQueen>("PigeonQueen");
+        prefabProp = ResourcesManager.Instance.LoadBundle<PropBase>("Prop");
         if (player != null)
         {
-            player = Instantiate<Skell.Player>(prefabPlayer);
+            player = GameObject.Instantiate<Skell.Player>(prefabPlayer);
             player.transform.position = Vector3.zero;
         }
 
-        boat = Instantiate<Boat>(prefabBoat);
+        boat = GameObject.Instantiate<Boat>(prefabBoat);
         if (boat != null)
         {
             boat.GenerateNavmesh();
         }
 
-        magnatic = Instantiate<Magnatic>(prefabMagnatic);
+        magnatic = GameObject.Instantiate<Magnatic>(prefabMagnatic);
         if (magnatic != null)
         {
             magnatic.SetAngle(0);
@@ -56,7 +56,7 @@ public class SceneGame : SceneBase
 
         monsters = new List<UnitBase>();
 
-        StartCoroutine("Proc", gameObject);
+        //StartCoroutine("Proc", gameObject);
         return true;
     }
 
@@ -99,7 +99,7 @@ public class SceneGame : SceneBase
             if (monsters.Count < 100)
             {
                 Vector3 position = GeneratePosition(UnityEngine.Random.Range(0, 360));
-                PropBase mon = Instantiate<PropBase>(prefabProp);
+                PropBase mon = GameObject.Instantiate<PropBase>(prefabProp);
                 mon.transform.position = position;
             }
 

@@ -42,6 +42,9 @@ public class Pool<T> where T : Object
     /// <returns></returns>
     public bool Init(T prefab, Transform parent, int max) 
     {
+        if (prefab == null)
+            return false;
+
         this.prefab = prefab;
         this.max = max;
         this.queue = new Queue<T>();

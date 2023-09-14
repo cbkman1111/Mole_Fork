@@ -58,10 +58,10 @@ public class SceneAntHouse : SceneBase
         
         string mapName = $"Map_00{mapId}";
         var prefabMap = ResourcesManager.Instance.LoadInBuild<Grid>(mapName);
-        grid = Instantiate<Grid>(prefabMap);
+        grid = GameObject.Instantiate<Grid>(prefabMap);
 
         var prefabBuilder = ResourcesManager.Instance.LoadInBuild<NavMeshSurface>("Builder");
-        surface = Instantiate<NavMeshSurface>(prefabBuilder);
+        surface = GameObject.Instantiate<NavMeshSurface>(prefabBuilder);
         surface.BuildNavMesh();
 
         InitMapData(mapId);
@@ -70,16 +70,17 @@ public class SceneAntHouse : SceneBase
         InitObject();
         InitTiles();
 
-        StartCoroutine("BuildNavMesh", gameObject);
+        MEC.Timing.RunCoroutine(BuildNavMesh());
+        //player.StartCoroutine("BuildNavMesh", player.gameObject);
         return true;
     }
     
-    public override void UnLoaded() 
+    public override void UnLoad() 
     {
         SaveGame();
     }
 
-    protected IEnumerator BuildNavMesh()
+    private IEnumerator<float> BuildNavMesh()
     {
         while (true)
         {
@@ -88,12 +89,14 @@ public class SceneAntHouse : SceneBase
                 if (mapUpdateTime <= DateTime.Now)
                 {
                     mapUpdateTime = DateTime.MinValue;
-                    yield return surface.UpdateNavMesh(surface.navMeshData);
+                    var async = surface.UpdateNavMesh(surface.navMeshData);
+                    yield return MEC.Timing.WaitUntilDone(async);
                 }
             }
 
-            yield return new WaitForSeconds(0.5f);
+            yield return MEC.Timing.WaitForOneFrame;
         }
+  
     }
 
     /// <summary>
@@ -282,7 +285,7 @@ public class SceneAntHouse : SceneBase
     /// <summary>
     /// 
     /// </summary>
-    private void Update()
+    public override void OnUpdate()
     {
         if (player != null)
         {

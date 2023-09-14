@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class CellTest : UIObject
 {
     public Image color = null;
+    public Text msg = null;
 
     public override void OnInit()
     {
@@ -14,13 +15,14 @@ public class CellTest : UIObject
 
     public void SetUI(ScrollData data)
     {
-        SetText("Text - Number", data.name);
+        msg.text = data.GetName();
+        //SetText("Text - Number", data.GetName());
 
         float r = UnityEngine.Random.Range(0, 1f);
         float g = UnityEngine.Random.Range(0, 1f);
         float b = UnityEngine.Random.Range(0, 1f);
 
-        GetComponent<Image>().color = new Color(r, g, b);
+        SetColor( new Color(r, g, b));
     }
 
     public void SetColor(Color c)

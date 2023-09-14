@@ -2,29 +2,35 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class SceneBase : MonoBehaviour
+public abstract class SceneBase //: MonoBehaviour
 {
     public enum SCENES
     {
-        Intro = 0,
-        Menu,
-        Loading,
-
-        Boat,
-        Gostop,
-        TileMap,
-        AntHouse,
-        Match3,
-
-        ChattScroll,
+        SceneIntro = 0,
+        SceneMenu,
+        SceneLoading,
+        SceneGostop,
+        SceneTileMap,
+        SceneAntHouse,
+        game,
+        SceneChatScroll,
+        SceneTest,
     }
 
-    public SCENES Scene { get; set; }
+    public float Amount { get; set; } = 0;
+
     public Camera MainCamera { get; set; }
 
-    public virtual void UnLoaded() { }
+    public virtual void UnLoad() { }
+
+    public async virtual void Load()
+    {
+        Amount = 1f;
+    }
+
+    public virtual void OnUpdate() { }
     public abstract bool Init(JSONObject param);
-    public abstract void OnTouchBean(Vector3 position);
-    public abstract void OnTouchMove(Vector3 position);
-    public abstract void OnTouchEnd(Vector3 position);
+    public virtual void OnTouchBean(Vector3 position) { }
+    public virtual void OnTouchMove(Vector3 position) { }
+    public virtual void OnTouchEnd(Vector3 position) { }
 }

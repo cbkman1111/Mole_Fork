@@ -21,7 +21,7 @@ public class UIMenuTileMap : MenuBase
         string name = btn.name;
         if(name == "Button - Back")
         {
-            AppManager.Instance.ChangeScene(SceneBase.SCENES.Menu);
+            AppManager.Instance.ChangeScene(SceneBase.SCENES.SceneMenu);
         }
     }
 }
