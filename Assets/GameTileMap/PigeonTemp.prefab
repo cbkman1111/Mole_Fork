@@ -9,10 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7593702986436850531}
-  - component: {fileID: 989734118343475984}
-  - component: {fileID: 1561724341094739498}
+  - component: {fileID: 3843590916797140352}
   m_Layer: 0
-  m_Name: Pigeon
+  m_Name: PigeonTemp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -34,29 +33,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!195 &989734118343475984
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7593702986436850530}
-  m_Enabled: 0
-  m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 3.5
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 1
-  m_BaseOffset: 0
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
---- !u!114 &1561724341094739498
+--- !u!114 &3843590916797140352
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -65,7 +42,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7593702986436850530}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc94e31c985f88240a0627c250c9117c, type: 3}
+  m_Script: {fileID: 11500000, guid: 1801dd67be4fa394cb524adfb32ad417, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &7446135221540583633
