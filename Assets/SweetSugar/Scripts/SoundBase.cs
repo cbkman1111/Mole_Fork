@@ -46,15 +46,14 @@ namespace SweetSugar.Scripts
         // Use this for initialization
         void Awake()
         {
-            _audioSource = GetComponent<AudioSource>();
 
+            _audioSource = GetComponent<AudioSource>();
             audioMixer = _audioSource.outputAudioMixerGroup.audioMixer;
             if (transform.parent == null)
             {
                 transform.parent = Camera.main.transform;
                 transform.localPosition = Vector3.zero;
             }
-
             // DontDestroyOnLoad(gameObject);
             if (Instance == null)
                 Instance = this;
@@ -70,7 +69,7 @@ namespace SweetSugar.Scripts
 
         public void PlayOneShot(AudioClip audioClip)
         {
-            _audioSource.PlayOneShot(audioClip);
+            //_audioSource.PlayOneShot(audioClip);
         }
     
         public void PlaySoundsRandom(AudioClip[] clip)

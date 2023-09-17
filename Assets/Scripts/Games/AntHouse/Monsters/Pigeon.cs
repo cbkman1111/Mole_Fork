@@ -1,3 +1,4 @@
+using Spine;
 using Spine.Unity;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,44 +9,32 @@ namespace Ant
 {
     public class Pigeon : MonsterBase
     {
-        protected enum SkellAnimationState { attack = 0, die, hit, idle, run, run_shoot };
-        protected SkellAnimationState state = SkellAnimationState.idle;
-
-        public SkeletonAnimation skel = null;
         protected override bool LoadSprite()
         {
             var prefab = ResourcesManager.Instance.LoadInBuild<SkeletonAnimation>("SpinePigeon");
             skel = Instantiate<SkeletonAnimation>(prefab, transform);
 
+            if (skel == null)
+            {
+                return false;
+            }
+
+            skel.AnimationState.Event += HandleEvent;
+            skel.AnimationState.Start += delegate (TrackEntry trackEntry) {
+                // You can also use an anonymous delegate.
+                Debug.Log(string.Format("track {0} started a new animation.", trackEntry.TrackIndex));
+            };
+            skel.AnimationState.End += delegate {
+                // ... or choose to ignore its parameters.
+                Debug.Log("An animation ended!");
+                if (loop == false)
+                {
+                    SetState(SkellAnimationState.idle);
+                }
+            };
+
             return true;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="s"></param>
-        protected void SetState(SkellAnimationState s)
-        {
-            if (s == state)
-            {
-                return;
-            }
-
-            string name = SkellAnimationState.idle.ToString();
-            switch (state)
-            {
-                case SkellAnimationState.idle:
-                case SkellAnimationState.attack:
-                case SkellAnimationState.die:
-                case SkellAnimationState.hit:
-                case SkellAnimationState.run:
-                case SkellAnimationState.run_shoot:
-                    name = s.ToString();
-                    break;
-            }
-
-            state = s;
-            skel.state.SetAnimation(0, name, true);
-        }
     }
 }

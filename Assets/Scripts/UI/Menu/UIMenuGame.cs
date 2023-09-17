@@ -58,7 +58,7 @@ public class UIMenuGame : MenuBase
         }
         else if (name == "Button - Exit")
         {
-            AppManager.Instance.ChangeScene(SceneBase.SCENES.Menu);
+            AppManager.Instance.ChangeScene(SceneBase.SCENES.SceneMenu);
         }
     }
 }

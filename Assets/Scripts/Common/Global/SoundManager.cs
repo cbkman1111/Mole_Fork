@@ -17,7 +17,7 @@ public class SoundManager : MonoSingleton<SoundManager>
 
         mixer = ResourcesManager.Instance.LoadInBuild<AudioMixer>("AudioMixer");
 
-        AudioSource prefab = ResourcesManager.Instance.LoadBundle<AudioSource>("Audio Source");
+        AudioSource prefab = ResourcesManager.Instance.LoadInBuild<AudioSource>("Audio Source");
         musics = Pool<AudioSource>.Create(prefab, transform, 1);
         effect = Pool<AudioSource>.Create(prefab, transform, 10);
   

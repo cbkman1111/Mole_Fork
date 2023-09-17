@@ -30,6 +30,9 @@ EditorBuildSettings:
     path: Assets/Scenes/SceneMatch3.unity
     guid: dfd48550591e34644a7dc3ab26110a55
   - enabled: 1
+    path: Assets/Scenes/SceneChatScroll.unity
+    guid: b937e39710fa0d14b9405aedac89c950
+  - enabled: 1
     path: Assets/SweetSugar/Scenes/game.unity
     guid: e1598a256fd12c548bf8bcbe4d821fe7
   m_configObjects: {}

@@ -3,192 +3,231 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 public class AppManager : MonoSingleton<AppManager>
 {
-    private Dictionary<string, SceneBase.SCENES> scenes = null;
-    public SceneBase CurrScene { get; set; }
-    public JSONObject Param { get; set; }
+    private Dictionary<string, SceneBase> scenes = null;
+
+    //private Stack<SceneBase> stack = null;
+
+    public SceneBase CurrScene { get; set; } = null;
+    public JSONObject Param { get; set; } = null;
 
     private Vector3 begin = Vector3.zero;
     private Vector3 curr = Vector3.zero;
 
+    private LoadState State = LoadState.None;
+    public enum LoadState
+    {
+        None,
+
+        LoadingSceneLoad,
+        NextSceneLoad,
+        StartLoadPreData,
+        WaitComplete,
+        LoadComplete,
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public override bool Init()
     {
-        scenes = new Dictionary<string, SceneBase.SCENES>();
-        scenes.Add("SceneIntro", SceneBase.SCENES.Intro);
-        scenes.Add("SceneMenu", SceneBase.SCENES.Menu);
-        scenes.Add("SceneLoading", SceneBase.SCENES.Loading);
-        scenes.Add("SceneTest", SceneBase.SCENES.Test);
-        scenes.Add("SceneGostop", SceneBase.SCENES.Gostop);
-        scenes.Add("SceneTileMap", SceneBase.SCENES.TileMap);
-        scenes.Add("SceneAntHouse", SceneBase.SCENES.AntHouse);
-        scenes.Add("SceneMatch3", SceneBase.SCENES.Match3);
-
-        scenes.Add("game", SceneBase.SCENES.Match3Buyed);
+        scenes = new Dictionary<string, SceneBase>();
 
         gameObject.name = string.Format("singleton - {0}", TAG);
         return true;
     }
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="e"></param>
+    /// <returns></returns>
+    T StringToEnum<T>(string e)
+    {
+        return (T)Enum.Parse(typeof(T), e);
+    }
 
     private IEnumerator LoadScene(string name, bool loading)
     {
-        if (CurrScene != null) // ï¿½ï¿½ï¿½Ï¾ï¿½ ï¿½Îµï¿½.
+        if (CurrScene != null) 
         {
-            CurrScene.UnLoaded();
+            CurrScene.UnLoad();
         }
 
+        UIManager.Instance.Clear();
+        CurrScene = null;
         if (loading == true)
         {
-            SceneManager.sceneLoaded += OnSceneLoaded;
             AsyncOperation async = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("SceneLoading", LoadSceneMode.Single);
             async.allowSceneActivation = true;
-            
             float percent = 0;
-            while (async.isDone == false)
-            {
-                percent = Mathf.Clamp01(async.progress / 0.9f);
-                if (percent == 1.0)
-                {
-                    async.allowSceneActivation = true;
-                }
 
+            //SceneLoading sceneLoading = new SceneLoading();
+            while (async.isDone == false || async.progress < 1.0f)
+            {
                 yield return null;
             }
 
-            SceneManager.sceneLoaded += OnSceneLoaded;
+            SceneLoading sceneLoading = GetSceneLoading("SceneLoading");
             AsyncOperation asyncNext = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(name, LoadSceneMode.Single);
             asyncNext.allowSceneActivation = false;
-            while (asyncNext.isDone == false)
-            {
-                percent = Mathf.Clamp01(asyncNext.progress / 0.9f);
-                
-                var currScene = GetCurrentScene() as SceneLoading;
-                if (currScene == true)
-                {
-                    currScene.SetPercent(percent);
-                }
-                
-                yield return new WaitForSeconds(0.1f);
-                if (percent == 1.0)
-                {
-                    asyncNext.allowSceneActivation = true;
-                }
+            asyncNext.completed += (AsyncOperation operation) => {
+                CurrScene.MainCamera = Camera.main;
+                CurrScene.Init(Param);
+            };
 
+            // ´ÙÀ½ ¾ÀÀ» ·Îµù.
+            while (asyncNext.progress < 0.9f)
+            {
+                percent = asyncNext.progress * 0.1f;// Mathf.Clamp01(asyncNext.progress / 0.9f);
+                sceneLoading.SetPercent(percent);
                 yield return null;
             }
+
+            SceneBase changeScnene = null;
+            if (scenes.TryGetValue(name, out SceneBase scene) == true)
+            {
+                changeScnene = scene;
+            }
+            else 
+            {
+                changeScnene = CreateSceneObject(name);
+                scenes.Add(name, changeScnene);
+
+                var task = Task.Run(() => changeScnene.Load());
+                bool complete = false;
+                while (complete == false)
+                {
+                    percent = changeScnene.Amount;
+                    sceneLoading.SetPercent(percent);
+                    complete = percent == 1.0f && sceneLoading.Complete();
+                    yield return null;
+                }
+            }
+
+            sceneLoading.SetPercent(1);
+            while (sceneLoading.Complete() == false)
+            {
+                yield return null;
+            }
+   
+            asyncNext.allowSceneActivation = true;
+            CurrScene = changeScnene;
         }
         else 
         {
-            SceneManager.sceneLoaded += OnSceneLoaded;
             AsyncOperation async = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(name, LoadSceneMode.Single);
-            async.allowSceneActivation = false;
-
-            float percent = 0;
-            while (async.isDone == false)
-            {
-                percent = Mathf.Clamp01(async.progress / 0.9f);
-                if (percent == 1)
+            async.allowSceneActivation = true;
+            async.completed += (AsyncOperation operation) => {
+                SceneBase changeScnene = null;
+                if (scenes.TryGetValue(name, out SceneBase scene) == true)
                 {
-                    async.allowSceneActivation = true;
+                    changeScnene = scene;
                 }
-
-                yield return null;
-            }
+                else 
+                {
+                    changeScnene = CreateSceneObject(name);
+                    scenes.Add(name, changeScnene);
+                }
+              
+                CurrScene = changeScnene;
+                CurrScene.MainCamera = Camera.main;
+                CurrScene.Init(Param);
+            };
         }
-        
 
         Debug.Log($"{TAG} Scene Load Complete");
     }
 
-    public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+     
+    private SceneLoading GetSceneLoading(string name)
     {
-        string name = scene.name;
-        switch (mode)
+        var activeScene = SceneManager.GetActiveScene();
+        if (activeScene.name.CompareTo(name) != 0)
+            return null;
+
+        var list = activeScene.GetRootGameObjects();
+        foreach (var obj in list)
         {
-            case LoadSceneMode.Additive:
-            case LoadSceneMode.Single:
-                if (scenes.TryGetValue(name, out SceneBase.SCENES selectScene) == true)
-                {
-                    var activeScene = SceneManager.GetActiveScene();
-                    var list = activeScene.GetRootGameObjects();
-                    foreach (var obj in list)
-                    {
-                        CurrScene = obj.GetComponent<SceneBase>();
-                        if (CurrScene != null)
-                        {
-                            break;
-                        }
-                    }
-
-                    if (CurrScene == null)
-                    {
-                        switch (selectScene)
-                        {
-                            case SceneBase.SCENES.Intro:
-                                CurrScene = new GameObject(name).AddComponent<SceneIntro>();
-                                break;
-                            case SceneBase.SCENES.Menu:
-                                CurrScene = new GameObject(name).AddComponent<SceneMenu>();
-                                break;
-                            case SceneBase.SCENES.Loading:
-                                CurrScene = new GameObject(name).AddComponent<SceneLoading>();
-                                break;
-                            case SceneBase.SCENES.Boat:
-                                CurrScene = new GameObject(name).AddComponent<SceneGame>();
-                                break;
-                            case SceneBase.SCENES.Test:
-                                CurrScene = new GameObject(name).AddComponent<SceneTest>();
-                                break;
-                            case SceneBase.SCENES.Gostop:
-                                CurrScene = new GameObject(name).AddComponent<SceneGostop>();
-                                break;
-                            case SceneBase.SCENES.TileMap:
-                                CurrScene = new GameObject(name).AddComponent<SceneTileMap>();
-                                break;
-                            case SceneBase.SCENES.AntHouse:
-                                CurrScene = new GameObject(name).AddComponent<SceneAntHouse>();
-                                break;
-                            case SceneBase.SCENES.Match3:
-                                CurrScene = new GameObject(name).AddComponent<SceneMatch3>();
-                                break;
-                        }
-                    }
-                    
-
-                    SceneManager.sceneLoaded -= OnSceneLoaded;
-
-                    UIManager.Instance.Clear();
-                    CurrScene.MainCamera = Camera.main;
-                    CurrScene.Scene = selectScene;
-                    CurrScene.Init(Param);
-                }
-                break;
-
-            default:
-                Debug.LogWarning($"{TAG} mode not exist. {name}/{mode}");
-                break;
+            var scene = obj.GetComponent<SceneLoading>();
+            if (scene != null)
+            {
+                return scene;
+            }
         }
+        /*
+        //if (scenes.TryGetValue(name, out SceneBase.SCENES selectScene) == true)
+        {
+            if (activeScene.name.CompareTo(name) != 0)
+                return null;
+
+  
+        }
+        */
+
+        return null;
+    }
+
+    private SceneBase CreateSceneObject(string name)
+    {
+        if (scenes.TryGetValue(name, out SceneBase selectScene) == false)
+        {
+            SceneBase scene = null; //GetSceneComponent(name);
+            switch (StringToEnum<SceneBase.SCENES>(name))
+            {
+                case SceneBase.SCENES.SceneIntro:
+                    scene = new SceneIntro();
+                    break;
+                case SceneBase.SCENES.SceneMenu:
+                    scene = new SceneMenu();
+                    break;
+                case SceneBase.SCENES.SceneLoading:
+                    //CurrScene = new SceneLoading();
+                    break;
+
+                case SceneBase.SCENES.SceneGostop:
+                    scene = new SceneGostop();
+                    break;
+                case SceneBase.SCENES.SceneTileMap:
+                    scene = new SceneTileMap();
+                    break;
+                case SceneBase.SCENES.SceneAntHouse:
+                    scene = new SceneAntHouse();
+                    break;
+                case SceneBase.SCENES.game:
+                    scene = new SceneMatch3();
+                    break;
+                case SceneBase.SCENES.SceneChatScroll:
+                    scene = new SceneChatScroll();
+                    break;
+                case SceneBase.SCENES.SceneTest:
+                    scene = new SceneTest();
+                    break;
+            }
+
+            return scene;
+        }
+
+        return null;
     }
 
     public void ChangeScene(SceneBase.SCENES scene, bool loading = true, JSONObject param = null)
     {
-        var info = scenes.Where(e => e.Value == scene).First();
-        var name = info.Key;
-        
-        Param = param; // ï¿½Ä¶ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
+        //var info = scenes.Where(e => e.Value == scene).First();
+        //var name = info.Key;
+        Param = param; // ÆÄ¶ó¹ÌÅÍ ¼³Á¤.
 
-        if (CurrScene != null && CurrScene.Scene == info.Value)
-        {
-            Debug.LogWarning($"{TAG} Same Scene.");
-            return;
-        }
-
-        StartCoroutine(LoadScene(name, loading));
-        Debug.Log($"{TAG} ChangeScene. {name}, {info.Value}");
+        string sceneName = scene.ToString();
+        StartCoroutine(LoadScene(sceneName, loading));
+        //Debug.Log($"{TAG} ChangeScene. {name}, {info.Value}");
     }
 
     public SceneBase GetCurrentScene()
@@ -215,6 +254,11 @@ public class AppManager : MonoSingleton<AppManager>
     {
         var touches = Input.touches;
         int phase = -1;
+
+        if (CurrScene != null)
+        {
+            CurrScene.OnUpdate();
+        }
 
         if (touches.Count() == 1)
         {
