@@ -338,10 +338,8 @@ namespace SweetSugar.Scripts.Core
         {
             PlayerPrefs.SetInt("OpenLevel", num);
             PlayerPrefs.Save();
-            
             LevelManager.THIS.MenuPlayEvent();
             LevelManager.THIS.LoadLevel();
-
             openLevel = num;
             CrosssceneData.openNextLevel = false;
             MenuReference.THIS.MenuPlay.gameObject.SetActive(true);

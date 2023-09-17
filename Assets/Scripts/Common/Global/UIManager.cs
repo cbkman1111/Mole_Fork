@@ -196,13 +196,17 @@ public class CanvasController
         
         if(trans == null)
         {
+#if UNITY_EDITOR
+            T prefab = ResourcesManager.Instance.LoadInBuild<T>(name); 
+#else
             T prefab = ResourcesManager.Instance.LoadBundle<T>(name);
             if (prefab == null)
             {
                 prefab = ResourcesManager.Instance.LoadInBuild<T>(name);
             }
+#endif
 
-            if(prefab == null)
+            if (prefab == null)
             { 
                 return default(T); 
             }

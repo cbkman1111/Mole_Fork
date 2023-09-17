@@ -289,12 +289,13 @@ namespace SweetSugar.Scripts.Core
                         StartCoroutine(AI.THIS.CheckPossibleCombines());
                         CrosssceneData.passLevelCounter++;
                         PrepareGame();
-
+                        // var firstItemPrefab = THIS.levelData.target.prefabs.FirstOrDefault();
+                        // if (firstItemPrefab && firstItemPrefab.GetComponent<Item>() && !firstItemPrefab.GetComponent<ItemSimple>())
+                        //     collectIngredients = true;
                         GenerateLevel();
                         levelLoaded = true;
                         OnLevelLoaded?.Invoke();
                         break;
-
                     case GameState.WaitForPopup://waiting for pre game banners
                         StopCoroutine(IdleItemsDirection());
                         StartCoroutine(IdleItemsDirection());
@@ -303,12 +304,11 @@ namespace SweetSugar.Scripts.Core
                         OrientationGameCameraHandle.CameraParameters cameraParameters = orientationGameCameraHandle.GetCameraParameters();
                         Vector2 cameraCenter = orientationGameCameraHandle.GetCenterOffset();
                         StartCoroutine(AnimateField(field.GetPosition() + cameraCenter, cameraParameters.size));
-                        break;
 
+                        break;
                     case GameState.Tutorial://tutorial state
                         OnWaitForTutorial?.Invoke();
                         break;
-
                     case GameState.PreFailed://chance to continue the game, shows menu PreFailed
                         AdsManager.THIS.CacheRewarded();
                         LeanTween.Framework.LeanTween.delayedCall(1, ()=>FailedWord.SetActive(true));
@@ -319,7 +319,6 @@ namespace SweetSugar.Scripts.Core
                             preFailedGameObject.SetActive(true);
                         });
                         break;
-
                     case GameState.BombFailed:
                         LeanTween.Framework.LeanTween.delayedCall(0.3f, () =>
                         {
@@ -328,7 +327,6 @@ namespace SweetSugar.Scripts.Core
                             preFailedGameObject.SetActive(true);
                         });
                         break;
-
                     case GameState.Map://map state
                         //open map or test level
                         if (PlayerPrefs.GetInt("OpenLevelTest") <= 0 || FindObjectOfType<RestartLevel>())
@@ -353,21 +351,17 @@ namespace SweetSugar.Scripts.Core
                     case GameState.Playing://playing state
                         StartCoroutine(AI.THIS.CheckPossibleCombines());
                         break;
-
                     case GameState.GameOver://game over
                         MenuReference.THIS.MenuFailed.gameObject.SetActive(true);
                         OnLose?.Invoke();
                         break;
-
                     case GameState.PreWinAnimations://animations after win
                         StartCoroutine(PreWinAnimationsCor());
                         break;
-
                     case GameState.ChangeSubLevel://changing sub level state
                         if (CurrentSubLevel != GetLastSubLevel())
                             ChangeSubLevel();
                         break;
-
                     case GameState.Win://shows MenuComplete
                         OnMenuComplete?.Invoke();
                         MenuReference.THIS.MenuComplete.gameObject.SetActive(true);
@@ -380,6 +374,18 @@ namespace SweetSugar.Scripts.Core
             }
         }
         
+        /*static void ShowLeadboard(int levelNumber)
+        {
+            Debug.Log("levelNumber >>> " + levelNumber);
+#if EPSILON
+            var leadboardList = MenuReference.THIS.MenuComplete.GetComponentsInChildren<LeadboardManager>();
+            foreach (var obj in leadboardList)
+            {
+                obj.levelNumber = levelNumber;
+            }
+#endif
+        }*/
+
         //Combine manager reference
         public CombineManager CombineManager
         {
@@ -434,17 +440,14 @@ namespace SweetSugar.Scripts.Core
                 item.UnLockBoost();
             }
         }
-
         //Load the level from "OpenLevel" player pref
         public void LoadLevel()
         {
             currentLevel = PlayerPrefs.GetInt("OpenLevel");
             if (currentLevel == 0)
                 currentLevel = 1;
-
             LoadLevel(currentLevel);
         }
-
         //enable map
         public void EnableMap(bool enable)
         {

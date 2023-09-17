@@ -149,12 +149,7 @@ namespace SweetSugar.Scripts.System.Pool
                     }
                 }
             }
-
-            if (LevelManager.THIS &&
-                LevelManager.THIS.DebugSettings.FallingLog)
-            {
-                DebugLogKeeper.Log(obj + " unpooled by " + activatedBy, DebugLogKeeper.LogType.Falling);
-            }
+            if (LevelManager.THIS.DebugSettings.FallingLog) DebugLogKeeper.Log(obj + " unpooled by " + activatedBy, DebugLogKeeper.LogType.Falling );
 
             if (obj != null)
             {
@@ -172,7 +167,6 @@ namespace SweetSugar.Scripts.System.Pool
             //     Debug.Log("not play not editor - " + item.objectToPool);
             //     return null;
             // }
-
             GameObject obj = Instantiate(item.objectToPool);
             // Get the parent for this pooled object and assign the new object to it
             var parentPoolObject = GetParentPoolObject(item.poolName);

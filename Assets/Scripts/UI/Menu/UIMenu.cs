@@ -20,31 +20,29 @@ public class UIMenu : MenuBase
         string name = btn.name;
         if(name == "Button - Start1")
         {
-            AppManager.Instance.ChangeScene(SceneBase.SCENES.TileMap);
+            AppManager.Instance.ChangeScene(SceneBase.SCENES.SceneTileMap);
         }
         else if (name == "Button - Start2")
         {
-            AppManager.Instance.ChangeScene(SceneBase.SCENES.Gostop);
+            AppManager.Instance.ChangeScene(SceneBase.SCENES.SceneGostop);
         }
-        else if (name == "Button - Start3")
+        else if (name == "Button - Test")
         {
-            AppManager.Instance.ChangeScene(SceneBase.SCENES.Test);
+            AppManager.Instance.ChangeScene(SceneBase.SCENES.SceneTest);
         }
         else if (name == "Button - Start4")
         {
             JSONObject jsonParam = new JSONObject();
             jsonParam.SetField("map_no", 3);
-            AppManager.Instance.ChangeScene(SceneBase.SCENES.AntHouse, param: jsonParam);
+            AppManager.Instance.ChangeScene(SceneBase.SCENES.SceneAntHouse, param: jsonParam);
         }
         else if (name.CompareTo("Button - Start5") == 0)
         {
-            AppManager.Instance.ChangeScene(SceneBase.SCENES.Match3Buyed);
+            AppManager.Instance.ChangeScene(SceneBase.SCENES.game);
         }
-        else if (name.CompareTo("Button - Start6") == 0)
+        else if (name.CompareTo("Button - ChattScroll") == 0)
         {
-            AppManager.Instance.ChangeScene(SceneBase.SCENES.Match3);
+            AppManager.Instance.ChangeScene(SceneBase.SCENES.SceneChatScroll);
         }
     }
-
-
 }

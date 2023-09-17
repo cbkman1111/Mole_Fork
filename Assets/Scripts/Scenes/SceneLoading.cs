@@ -1,17 +1,9 @@
 using System.Collections;
 using UnityEngine;
 
-public class SceneLoading : SceneBase
+public class SceneLoading : MonoBehaviour
 {
-    private UILoadingMenu menu = null;
-
-    public override bool Init(JSONObject param)
-    {
-        menu = UIManager.Instance.OpenMenu<UILoadingMenu>("UILoadingMenu");
-       
-
-        return true;
-    }
+    public UILoadingMenu menu = null;
 
     public void SetPercent(float percent)
     {
@@ -21,19 +13,8 @@ public class SceneLoading : SceneBase
         }
     }
 
-
-    public override void OnTouchBean(Vector3 position)
+    public bool Complete()
     {
-
-    }
-
-    public override void OnTouchEnd(Vector3 position)
-    {
-
-    }
-
-    public override void OnTouchMove(Vector3 position)
-    {
-
+        return menu.Complete();
     }
 }

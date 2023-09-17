@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using Spine;
+using Spine.Unity;
 
 namespace Ant
 {
@@ -12,6 +14,12 @@ namespace Ant
         protected NavMeshAgent agent = null;
         
         protected MonsterData objData = null;
+
+        protected SkeletonAnimation skel = null;
+        protected bool loop = false;
+
+        protected enum SkellAnimationState { die, idle, run, run_shoot };
+        protected SkellAnimationState state = SkellAnimationState.idle;
 
         /// <summary>
         /// 
@@ -108,6 +116,74 @@ namespace Ant
         public void UpdateData()
         {
             objData.position = transform.position;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="direction"></param>
+        public void Move(Vector3 direction)
+        {
+            if (rigidBody != null)
+            {
+                hand.transform.position = transform.position + (direction * 0.6f);
+
+                var position = transform.position + (direction * objData.speed);
+                rigidBody.MovePosition(position);
+            }
+
+            SetState(SkellAnimationState.run);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void Stop()
+        {
+            SetState(SkellAnimationState.idle);
+        }
+
+        /// <summary>
+        /// Å¸ÀÏ ±ú±â
+        /// </summary>
+        public void Hit()
+        {
+            SetState(SkellAnimationState.run_shoot);
+        }
+        protected void HandleEvent(TrackEntry trackEntry, Spine.Event e)
+        {
+            // Play some sound if the event named "footstep" fired.
+            //if (e.Data.Name == footstepEventName)
+            {
+                Debug.Log($"HandleEvent {e.Data.Name}");
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="s"></param>
+        protected void SetState(SkellAnimationState s)
+        {
+            if (s == state)
+                return;
+
+            state = s;
+            string name = SkellAnimationState.idle.ToString();
+            switch (state)
+            {
+                case SkellAnimationState.idle:
+                case SkellAnimationState.run:
+                case SkellAnimationState.die:
+                    loop = true;
+                    break;
+                case SkellAnimationState.run_shoot:
+                    loop = false;
+                    break;
+            }
+
+            name = state.ToString();
+            skel.state.SetAnimation(0, name, loop);
         }
     }
 }

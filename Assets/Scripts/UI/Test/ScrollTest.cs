@@ -1,44 +1,114 @@
+using InfinityScroll;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+/// <summary>
+/// 채팅 스크롤에 사용되는 프리팹 타입.
+/// </summary>
+public enum TestPrefabType
+{
+	Test_Type_A = 0,
+	Test_Type_B,
+	Max
+}
+
 public class ScrollTest : ScrollBase<ScrollData>
 {
-    public bool Init(RectTransform prefab)
+	private RectTransform[] preLoaded = null;
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="arry"></param>
+	/// <returns></returns>
+	public override bool Init(RectTransform[] arry)
+	{
+		if (Initialized == true)
+			return true;
+
+		if (base.Init(arry) == false)
+			return false;
+
+		if (preLoaded == null)
+		{
+			preLoaded = new RectTransform[(int)TestPrefabType.Max];
+			for (int i = 0; i < arry.Length; i++)
+			{
+				preLoaded[i] = arry[i];
+				preLoaded[i].localPosition = new Vector3(0, 1000, 0);
+			}
+		}
+
+		verticalNormalizedPosition = 0;
+		Initialized = true;
+		return true;
+	}
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="type"></param>
+	/// <returns></returns>
+	private RectTransform GetObject(TestPrefabType type)
+	{
+		string name = preLoaded[(int)type].name;
+		return pool.GetObject(name);
+	}
+
+	protected override RectTransform GetObject(ScrollCell<ScrollData> cell)
     {
-        cellPrefab = prefab;
-        return true;
+		if (cell == null)
+			return null;
+
+		return GetObject(cell.Data.PrefabType());
+	}
+
+    protected override RectTransform GetPreLoaded(ScrollCell<ScrollData> cell)
+    {
+		return preLoaded[(int)cell.Data.PrefabType()];
+	}
+
+    protected override void OnDragScroll()
+    {
+        //throw new System.NotImplementedException();
     }
 
-    public bool SetItems(List<ScrollData> list)
+    protected override void UpdateCell(ScrollData data, RectTransform trans, int index = 0)
     {
-        if (list == null)
-        {
-            return false;
-        }
+		//throw new System.NotImplementedException();
+		if (trans == null)
+			return;
 
-        Set(list);
-        return true;
-    }
+		CellTest cell = trans.GetComponent<CellTest>();
+		if (cell != null)
+		{
+			cell.SetUI(data);
+		}
 
-    protected override void UpdateCell(RectTransform transform, int index)
-    {
-        CellTest cell = transform.GetComponent<CellTest>();
-        if(cell)
-        {
-            var info = dataList[index];
-            
-            cell.SetUI(info.name);
-        }
-    }
+		LayoutRebuilder.ForceRebuildLayoutImmediate(trans);
+	}
 }
+
+
 
 public class ScrollData
 {
-    public int no;
-    public int count;
-    public string name;
+	public int id;
+	public TestPrefabType type;
+	public string msg;
 }
 
+public static class ScrollDataExt
+{
+	public static TestPrefabType PrefabType(this ScrollData data)
+	{
+		return data.type;
+	}
+
+	public static string GetName(this ScrollData data)
+	{
+		return data.msg;
+	}
+}

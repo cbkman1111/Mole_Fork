@@ -111,7 +111,6 @@ using UnityEngine;
         {
             return GetBlock(vec.y, vec.x);
         }
-
         public FieldData AddNewField()
         {
             var fieldData = new FieldData();
@@ -124,7 +123,6 @@ using UnityEngine;
             FieldData field = fields.Last();
             fields.Remove(field);
         }
-
         public Sprite[] GetTargetSprites()
         {
             return GetTargetContainersForUI().Where(i => i.extraObject && i.extraObject is Sprite).Select(i => (Sprite) i.extraObject).ToArray();
