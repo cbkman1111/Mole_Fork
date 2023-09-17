@@ -2,13 +2,14 @@ using Ant;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TileMap;
 using UnityEngine;
 
 public class SceneTileMap : SceneBase
 {
     UIMenuTileMap menu = null;
 
-    Pigeon pigeon = null;
+    Pige pigeon = null;
     /// <summary>
     /// 
     /// </summary>
@@ -27,12 +28,12 @@ public class SceneTileMap : SceneBase
                 });
         }
 
-        var prefabPigeon = ResourcesManager.Instance.LoadInBuild<Pigeon>("PigeonTemp");
-        if (prefabPigeon != null)
+        var prefab = ResourcesManager.Instance.LoadInBuild<Pige>("PigeonTemp");
+        if (prefab != null)
         {
-            pigeon = GameObject.Instantiate<Pigeon>(prefabPigeon);
+            pigeon = GameObject.Instantiate<Pige>(prefab);
             pigeon.transform.position = Vector3.zero;
-            pigeon.transform.rotation = Quaternion.identity;
+            //pigeon.transform.rotation = Quaternion.identity;
         }
         /*
         var prefabPlayer = ResourcesManager.Instance.LoadInBuild<Skell.Player>("Player");
@@ -52,7 +53,7 @@ public class SceneTileMap : SceneBase
     /// <param name="angle"></param>
     public void OnMove(Vector3 angle)
     {
-        pigeon.Move(angle);
+        //pigeon.Move(angle);
     }
 
     /// <summary>
