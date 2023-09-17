@@ -178,6 +178,7 @@ GameObject:
   - component: {fileID: 699819813}
   - component: {fileID: 699819812}
   - component: {fileID: 699819811}
+  - component: {fileID: 699819814}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -244,56 +245,137 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 699819810}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -20}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1015648130
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1015648132}
-  - component: {fileID: 1015648131}
-  m_Layer: 0
-  m_Name: ObjectPooler
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1015648131
+--- !u!114 &699819814
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1015648130}
+  m_GameObject: {fileID: 699819810}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e7b31db5cb2c4b878557a1a48938f69, type: 3}
+  m_Script: {fileID: 11500000, guid: 639bbcaee2a8592429bb372ded78e875, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rootPoolName: Pooled Objects
-  pooledObjects: []
---- !u!4 &1015648132
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1015648130}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.891667, y: 0.9069182, z: -0.048828125}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  lifeShop: {fileID: 0}
+  enableInApps: 0
+  squareWidth: 1.2
+  lastDraggedItem: {fileID: 0}
+  lastSwitchedItem: {fileID: 0}
+  popupScore: {fileID: 0}
+  currentLevel: 1
+  FailedCost: 0
+  ExtraFailedMoves: 5
+  ExtraFailedSecs: 30
+  gemsProducts: []
+  InAppIDs: []
+  thrivingBlockDestroyed: 0
+  dispenserSpawner: {fileID: 0}
+  thrivingBlockMachine: 0
+  BoostColorfullBomb: 0
+  BoostPackage: 0
+  BoostStriped: 0
+  BoostMarmalade: 0
+  androidSharingPath: 
+  iosSharingPath: 
+  emptyBoostIcon: {fileID: 0}
+  DebugSettings: {fileID: 0}
+  AdditionalSettings: {fileID: 0}
+  activatedBoost: {fileID: 0}
+  stars: 0
+  stripesEffect: {fileID: 0}
+  showPopupScores: 0
+  scoresColors: []
+  scoresColorsOutline: []
+  gratzWords: []
+  Level: {fileID: 0}
+  LevelsMap: {fileID: 0}
+  FieldsParent: {fileID: 0}
+  NoMoreMatches: {fileID: 0}
+  CompleteWord: {fileID: 0}
+  FailedWord: {fileID: 0}
+  InGameBoosts: []
+  orientationGameCameraHandle: {fileID: 0}
+  animateItems: []
+  dragBlocked: 0
+  moveID: 0
+  onlyFalling: 0
+  levelLoaded: 0
+  FacebookEnable: 0
+  findMatchesStarted: 0
+  testByPlay: 0
+  fieldBoards: []
+  FieldBoardPrefab: {fileID: 0}
+  levelData:
+    SpawnerExits: 0
+    Name: 
+    levelNum: 0
+    fields: []
+    target:
+      name: 
+      localization:
+        description:
+          text: 
+          index: 0
+        failed:
+          text: 
+          index: 0
+      collectAction: 0
+      setCount: 0
+      CanSwithSublevel: 0
+      defaultSprites:
+        array: []
+      prefabs: []
+    targetIndex: 0
+    limitType: 0
+    ingrCountTarget: 
+    limit: 0
+    colorLimit: 0
+    star1: 0
+    star2: 0
+    star3: 0
+    enableMarmalade: 0
+    selectedTutorial: 0
+    currentSublevelIndex: 0
+    subTargetsContainers: []
+    generateIngredientOnlyFromSpawner: 0
+  animStarted: 0
+  winTrail: {fileID: 0}
+  movesTransform: {fileID: 0}
+  destLoopIterations: 0
+  combo: 0
+  fallingCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  waitAfterFall: 0.02
+  lastTouchedItem: {fileID: 0}
+  skipWin: 0
+  checkTarget: 0
