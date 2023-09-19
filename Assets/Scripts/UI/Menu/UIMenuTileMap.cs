@@ -1,45 +1,45 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using Common.Global;
+using Common.Scene;
+using Common.UIObject;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-public class UIMenuTileMap : MenuBase
+namespace UI.Menu
 {
-    [SerializeField]
-    public Ant.Joystick Joystick = null;
-
-    public override void OnInit()
+    public class UIMenuTileMap : MenuBase
     {
+        [FormerlySerializedAs("Joystick")] [SerializeField]
+        public Ant.Joystick joystick = null;
 
-    }
-
-    public bool InitMenu(Action<Vector3> move, Action stop)
-    {
-        Joystick.Init((Vector3 direct, float angle) => {
-            SetText("Text - Debug", $"Angle : {angle}");
-
-            if (move != null)
-            {
-                move(direct);
-            }
-        },
-        () => {
-            if (stop != null)
-            {
-                stop();
-            }
-        });
-
-        return true;
-    }
-
-    protected override void OnClick(Button btn)
-    {
-        string name = btn.name;
-        if(name == "Button - Back")
+        public override void OnInit()
         {
-            AppManager.Instance.ChangeScene(SceneBase.SCENES.SceneMenu);
+
+        }
+
+        public bool InitMenu(Action<Vector3> move, Action stop)
+        {
+            joystick.Init((Vector3 direct, float angle) => {
+                    SetText("Text - Debug", $"Angle : {angle}");
+
+                    move?.Invoke(direct);
+                },
+                () =>
+                {
+                    stop?.Invoke();
+                });
+
+            return true;
+        }
+
+        protected override void OnClick(Button btn)
+        {
+            string name = btn.name;
+            if(name == "Button - Back")
+            {
+                AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneMenu);
+            }
         }
     }
 }

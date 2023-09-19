@@ -1,6 +1,7 @@
 using Spine.Unity;
 using System.Collections;
 using System.Collections.Generic;
+using Common.Global;
 using UnityEngine;
 using UnityEngine.AI;
 

@@ -1,3 +1,5 @@
+using Common.Global;
+using Common.Scene;
 using UnityEngine;
 
 public class AppDelegate : MonoBehaviour
@@ -9,7 +11,7 @@ public class AppDelegate : MonoBehaviour
         
         SoundManager.Instance.Load();
 
-        AppManager.Instance.ChangeScene(SceneBase.SCENES.SceneIntro, false);
+        AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneIntro, false);
     }
 
     void OnApplicationPause(bool paused)

@@ -1,12 +1,16 @@
-﻿using UnityEngine.UI;
+﻿using Common.Global;
+using UnityEngine.UI;
 
-public abstract class MenuBase : UIObject
+namespace Common.UIObject
 {
-    public override void OnInit() { }
-    protected override void OnClick(Button button) { }
-
-    public override void Close()
+    public abstract class MenuBase : UIObject
     {
-        UIManager.Instance.CloseMenu(name);
+        public override void OnInit() { }
+        protected override void OnClick(Button button) { }
+
+        public override void Close()
+        {
+            UIManager.Instance.CloseMenu(name);
+        }
     }
 }

@@ -1,27 +1,31 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using Common.Global;
+using Common.Scene;
+using Common.UIObject;
+using UI.Popup;
 using UnityEngine.UI;
 
-public class UIMenuChat : MenuBase
+namespace UI.Menu
 {
-    public bool InitMenu()
+    public class UIMenuChat : MenuBase
     {
-        return true;
-    }
-
-    protected override void OnClick(Button btn)
-    {
-        string name = btn.name;
-        if (name == "Button - Exit")
+        public bool InitMenu()
         {
-            AppManager.Instance.ChangeScene(SceneBase.SCENES.SceneMenu);
+            return true;
         }
-        else if (name == "Button - OpenScroll")
-        {
-            UIManager.Instance.OpenPopup<PopupScrollViewTest>("PopupScrollViewTest");
-        }
-    }
 
-    public override void OnInit() { }
+        protected override void OnClick(Button btn)
+        {
+            string name = btn.name;
+            if (name == "Button - Exit")
+            {
+                AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneMenu);
+            }
+            else if (name == "Button - OpenScroll")
+            {
+                UIManager.Instance.OpenPopup<PopupScrollViewTest>("UI/PopupScrollViewTest");
+            }
+        }
+
+        public override void OnInit() { }
+    }
 }

@@ -1,64 +1,65 @@
-using Singleton;
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
+using Common.Global.Singleton;
 using UnityEngine;
 
-public class ResourcesManager : MonoSingleton<ResourcesManager>
+namespace Common.Global
 {
-    string path = "Assets/AssetBundles/bundle";
-    private AssetBundle bundle = null;
-    List<Object> list = null;
-
-    public override bool Init()
+    public class ResourcesManager : MonoSingleton<ResourcesManager>
     {
-        gameObject.name = string.Format("singleton - {0}", TAG);
-        list = new List<Object>();
+        string path = "Assets/AssetBundles/bundle";
+        private AssetBundle bundle = null;
+        List<Object> list = null;
 
-        Load();
-        return true;
-    }
-    public bool Load()
-    {
-        bundle = AssetBundle.LoadFromFile(path);
+        protected override bool Init()
+        {
+            gameObject.name = string.Format("singleton - {0}", Tag);
+            list = new List<Object>();
 
-        return bundle != null;
-    }
+            Load();
+            return true;
+        }
+        public bool Load()
+        {
+            bundle = AssetBundle.LoadFromFile(path);
 
-    public T LoadInBuild<T>(string path) where T : Object
-    {
-        return Resources.Load<T>(path);
-    }
+            return bundle != null;
+        }
+
+        public T LoadInBuild<T>(string path) where T : Object
+        {
+            return Resources.Load<T>(path);
+        }
     
-    public T[] LoadAllInBuild<T>(string path) where T : Object
-    {
-        return Resources.LoadAll<T>(path);
-    }
-
-    public T LoadBundle<T>(string path) where T : Object
-    {
-        T res = bundle.LoadAsset<T>(path);
-        if(res != null)
+        public T[] LoadAllInBuild<T>(string path) where T : Object
         {
-            return res;
+            return Resources.LoadAll<T>(path);
         }
 
-        GameObject obj = bundle.LoadAsset<GameObject>(path);
-        if(obj != null)
+        public T LoadBundle<T>(string path) where T : Object
         {
-            return obj.GetComponent<T>();
+            T res = bundle.LoadAsset<T>(path);
+            if(res != null)
+            {
+                return res;
+            }
+
+            GameObject obj = bundle.LoadAsset<GameObject>(path);
+            if(obj != null)
+            {
+                return obj.GetComponent<T>();
+            }
+
+            return default(T);
         }
 
-        return default(T);
-    }
+        public T[] LoadBudleAll<T>() where T : Object
+        {
+            return bundle.LoadAllAssets<T>();
+        }
 
-    public T[] LoadBudleAll<T>() where T : Object
-    {
-        return bundle.LoadAllAssets<T>();
-    }
-
-    public T[] LoadBudleAll<T>(string path) where T : Object
-    {
-        return bundle.LoadAssetWithSubAssets<T>(path);
+        public T[] LoadBudleAll<T>(string path) where T : Object
+        {
+            return bundle.LoadAssetWithSubAssets<T>(path);
+        }
     }
 }

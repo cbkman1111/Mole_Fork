@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Common.Global;
 using UnityEngine;
 using UnityEngine.AI;
 using Spine;
@@ -144,7 +145,7 @@ namespace Ant
         }
 
         /// <summary>
-        /// Å¸ÀÏ ±ú±â
+        /// íƒ€ì¼ ê¹¨ê¸°
         /// </summary>
         public void Hit()
         {

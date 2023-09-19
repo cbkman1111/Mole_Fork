@@ -1,203 +1,205 @@
-﻿using Singleton;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Common.Global.Singleton;
+using Common.UIObject;
 using UnityEngine;
-using UnityEngine.UI;
+using Object = UnityEngine.Object;
 
-public class UIManager : MonoSingleton<UIManager>
+namespace Common.Global
 {
-    private CanvasGroup canvasMain;
-    private CanvasController controllerMenu = null;
-    private CanvasController controllerHud = null;
-    private CanvasController controllerPopup = null;
-    private CanvasController controllerEtc = null;
-
-    private Transform cover = null;
-
-    public override bool Init()
+    public class UIManager : MonoSingleton<UIManager>
     {
-        const string PATH_UI_ROOT = "UIRoot";
-        GameObject prefab = ResourcesManager.Instance.LoadInBuild<GameObject>(PATH_UI_ROOT);
+        private CanvasGroup _canvasMain;
+        private CanvasController _controllerMenu;
+        private CanvasController _controllerHud;
+        private CanvasController _controllerPopup;
+        private CanvasController _controllerEtc;
+        private Transform _cover;
+
+        // ReSharper disable Unity.PerformanceAnalysis
+        protected override bool Init()
+        {
+            const string uiRoot = "UI/UIRoot";
+            var prefab = ResourcesManager.Instance.LoadInBuild<GameObject>(uiRoot);
+            var root = Instantiate(prefab, transform);
+            if(root == false)
+            {
+                Debug.LogError($"root is null.");
+                return false;
+            }
+
+            root.name = "UIRoot";
+            root.transform.position = new Vector3(100,0,0);
+
+            _canvasMain = root.GetComponent<CanvasGroup>();
         
-        GameObject root = Instantiate(prefab, transform);
-        if(root == null)
-        {
-            Debug.LogError($"root is null.");
-            return false;
+            _controllerMenu = new CanvasController();
+            _controllerMenu.Init(root.transform.Find("Canvas - menu"));
+            _controllerHud = new CanvasController();
+            _controllerHud.Init(root.transform.Find("Canvas - hud"));
+            _controllerPopup = new CanvasController();
+            _controllerPopup.Init(root.transform.Find("Canvas - popup"));
+            _controllerEtc = new CanvasController();
+            _controllerEtc.Init(root.transform.Find("Canvas - etc"));
+
+            _cover = root.transform.Find("Image - dim");
+            _cover.gameObject.SetActive(false);
+
+            gameObject.name = $"singleton - {Tag}";
+            return true;
         }
 
-        root.name = "UIRoot";
-        root.transform.position = new Vector3(100,0,0);
-
-        canvasMain = root.GetComponent<CanvasGroup>();
+        public T OpenMenu<T>(string menuName) where T : MenuBase
+        {
+            var ret = _controllerMenu.Open<T>(menuName);
+            if (ret != null)
+            {
+                ret.OnInit();
+            }
         
-        controllerMenu = new CanvasController();
-        controllerMenu.Init(root.transform.Find("Canvas - menu"));
-        controllerHud = new CanvasController();
-        controllerHud.Init(root.transform.Find("Canvas - hud"));
-        controllerPopup = new CanvasController();
-        controllerPopup.Init(root.transform.Find("Canvas - popup"));
-        controllerEtc = new CanvasController();
-        controllerEtc.Init(root.transform.Find("Canvas - etc"));
+            return ret;
+        }
 
-        cover = root.transform.Find("Image - dim");
-        cover.gameObject.SetActive(false);
+        public T OpenHud<T>(string hudName) where T : HudBase
+        {
+            var ret = _controllerPopup.Open<T>(hudName);
+            if (ret == true)
+            {
+                ret.OnInit();
+            }
 
-        gameObject.name = string.Format("singleton - {0}", TAG);
-        return true;
+            return ret;
+        }
+
+        public T OpenPopup<T>(string popupName) where T : PopupBase
+        {
+            var ret = _controllerPopup.Open<T>(popupName);
+            if (ret == true)
+            {
+                ret.OnInit();
+            }
+
+            CoverCheck();
+            return ret;
+        }
+
+        public T OpenEtc<T>(string etcName) where T : UIObject.UIObject
+        {
+            var ret = _controllerPopup.Open<T>(etcName);
+            if (ret == true)
+            {
+                ret.OnInit();
+            }
+
+            CoverCheck();
+            return ret;
+        }
+
+        public bool FindPopup(string popupName)
+        {
+            return _controllerPopup.Get(popupName) == true;
+        }
+
+        public void CloseMenu(string menuName)
+        {
+            _controllerMenu.Close(menuName);
+        }
+
+        public void CloseHud(string hudName)
+        {
+            _controllerHud.Close(hudName);
+        }
+
+        public void ClosePopup(string popupName)
+        {
+            _controllerPopup.Close(popupName);
+            CoverCheck();
+        }
+
+        public void CloseEtc(string etcName)
+        {
+            _controllerEtc.Close(etcName);
+            CoverCheck();
+        }
+
+        private void CoverCheck()
+        {
+            var countEtc = _controllerEtc.Count();
+            var countPopup = _controllerPopup.Count();
+
+            if(countEtc > 0)
+            {
+                _cover.SetParent(_controllerEtc.GetTransform());
+                _cover.SetSiblingIndex(countEtc - 1);
+                _cover.gameObject.SetActive(true);
+            }
+            else if(countPopup > 0)
+            {
+                _cover.SetParent(_controllerPopup.GetTransform());
+                _cover.SetSiblingIndex(countPopup - 1);
+                _cover.gameObject.SetActive(true);
+            }
+            else
+            {
+                _cover.SetParent(_canvasMain.transform);
+                _cover.SetSiblingIndex(0);
+                _cover.gameObject.SetActive(false);
+            }
+        }
+
+        public void Clear()
+        {
+            _controllerMenu.Clear();
+            _controllerHud.Clear();
+            _controllerPopup.Clear();
+            _controllerEtc.Clear();
+        }
+
+        public void BackKey()
+        {
+            if(_controllerEtc.Last() == true)
+            {
+                _controllerEtc.Close(_controllerEtc.Last());
+            }
+            else if (_controllerPopup.Last() == true)
+            {
+                _controllerPopup.Close(_controllerPopup.Last());
+            }
+            else
+            {
+                // 더이상 닫을 팝업이 없음.
+            }
+
+            CoverCheck();
+        }
     }
 
-    public T OpenMenu<T>(string name) where T : MenuBase
+    public class CanvasController
     {
-        T ret = controllerMenu.Open<T>(name);
-        if (ret != null)
+        private Canvas _canvas;
+        private readonly List<UIObject.UIObject> _list = new List<UIObject.UIObject>();
+
+        public void Init(Transform trans)
         {
-            ret.OnInit();
+            _canvas = trans.GetComponent<Canvas>();
         }
+
+        public Transform GetTransform()
+        {
+            return _canvas.transform;
+        }
+
+        // ReSharper disable Unity.PerformanceAnalysis
+        public T Open<T>(string name) where T : UIObject.UIObject
+        {
+            var trans = _canvas.transform.Find(name);
+            T ret;
         
-        return ret;
-    }
-
-    public T OpenHud<T>(string name) where T : HudBase
-    {
-        T ret = controllerPopup.Open<T>(name);
-        if (ret != null)
-        {
-            ret.OnInit();
-        }
-
-        return ret;
-    }
-
-    public T OpenPopup<T>(string name) where T : PopupBase
-    {
-        T ret = controllerPopup.Open<T>(name);
-        if (ret != null)
-        {
-            ret.OnInit();
-        }
-
-        CoverCheck();
-        return ret;
-    }
-
-    public T OpenEtc<T>(string name) where T : UIObject
-    {
-        T ret = controllerPopup.Open<T>(name);
-        if (ret != null)
-        {
-            ret.OnInit();
-        }
-
-        CoverCheck();
-        return ret;
-    }
-
-    public bool FindPopup(string name)
-    {
-        return controllerPopup.Get(name) != null;
-    }
-
-    public void CloseMenu(string name)
-    {
-        controllerMenu.Close(name);
-    }
-
-    public void CloseHud(string name)
-    {
-        controllerHud.Close(name);
-    }
-
-    public void ClosePopup(string name)
-    {
-        controllerPopup.Close(name);
-        CoverCheck();
-    }
-
-    public void CloseEtc(string name)
-    {
-        controllerEtc.Close(name);
-        CoverCheck();
-    }
-
-    private void CoverCheck()
-    {
-        int countEtc = controllerEtc.Count();
-        int countPopup = controllerPopup.Count();
-
-        if(countEtc > 0)
-        {
-            cover.SetParent(controllerEtc.GetTransform());
-            cover.SetSiblingIndex(countEtc - 1);
-            cover.gameObject.SetActive(true);
-        }
-        else if(countPopup > 0)
-        {
-            cover.SetParent(controllerPopup.GetTransform());
-            cover.SetSiblingIndex(countPopup - 1);
-            cover.gameObject.SetActive(true);
-        }
-        else
-        {
-            cover.SetParent(canvasMain.transform);
-            cover.SetSiblingIndex(0);
-            cover.gameObject.SetActive(false);
-        }
-    }
-
-    public void Clear()
-    {
-        controllerMenu.Clear();
-        controllerHud.Clear();
-        controllerPopup.Clear();
-        controllerEtc.Clear();
-    }
-
-    public void BackKey()
-    {
-        if(controllerEtc.Last() != null)
-        {
-            controllerEtc.Close(controllerEtc.Last());
-        }
-        else if (controllerPopup.Last() != null)
-        {
-            controllerPopup.Close(controllerPopup.Last());
-        }
-        else
-        {
-            // 더이상 닫을 팝업이 없음.
-        }
-
-        CoverCheck();
-    }
-}
-
-public class CanvasController
-{
-    private Canvas canvas = null;
-    private CanvasGroup group = null;
-    private List<UIObject> list = new List<UIObject>();
-
-    public void Init(Transform trans)
-    {
-        canvas = trans.GetComponent<Canvas>();
-        group = trans.GetComponent<CanvasGroup>();
-    }
-
-    public Transform GetTransform()
-    {
-        return canvas.transform;
-    }
-
-    public T Open<T>(string name) where T : UIObject
-    {
-        Transform trans = canvas.transform.Find(name);
-        T ret = default(T);
-        
-        if(trans == null)
-        {
+            if(trans == false)
+            {
 #if UNITY_EDITOR
-            T prefab = ResourcesManager.Instance.LoadInBuild<T>(name); 
+                var prefab = ResourcesManager.Instance.LoadInBuild<T>(name); 
 #else
             T prefab = ResourcesManager.Instance.LoadBundle<T>(name);
             if (prefab == null)
@@ -205,100 +207,92 @@ public class CanvasController
                 prefab = ResourcesManager.Instance.LoadInBuild<T>(name);
             }
 #endif
+                if (prefab == false)
+                { 
+                    return default(T); 
+                }
 
-            if (prefab == null)
-            { 
-                return default(T); 
+                var clone = Object.Instantiate(prefab, _canvas.transform);
+                if (clone == false)
+                {
+                    Debug.LogError($"clone is null.");
+                    return default(T);
+                }
+
+                clone.transform.SetAsLastSibling();
+                clone.name = name;
+                ret = clone;
             }
-
-            T clone = GameObject.Instantiate<T>(prefab, canvas.transform);
-            if (clone == null)
+            else
             {
-                Debug.LogError($"clone is null.");
-                return default(T);
+                ret = trans.GetComponent<T>();
             }
 
-            clone.transform.SetAsLastSibling();
-            clone.name = name;
-            ret = clone;
-        }
-        else
-        {
-            ret = trans.GetComponent<T>();
-        }
-
-        if(list.Contains(ret) == false)
-        {
-            list.Add(ret);
-        }
-
-        return ret;
-    }
-
-    public void Close(string name)
-    {
-        var trans = canvas.transform.Find(name);
-        if (trans != null)
-        {
-            UIObject obj = trans.GetComponent<UIObject>();
-            obj.OnClose();
-
-            if (list.Contains(obj) == true)
+            if(_list.Contains(ret) == false)
             {
-                list.Remove(obj);
+                _list.Add(ret);
             }
 
-            GameObject.Destroy(trans.gameObject);
-        }
-    }
-
-    public void Close(Transform transform)
-    {
-        Close(transform.name);
-    }
-
-    public Transform Get(string name)
-    {
-        var ret = list.Where(obj => obj.name.CompareTo(name) == 0).ToList();
-        if (ret != null && ret.Count == 1)
-        {
-            return ret[0].transform;
-        }
-        else 
-        {
-            return null;
-        }
-    }
-
-    public T Get<T>(string name) where T : UIObject
-    {
-        var obj = canvas.transform.Find(name);
-        return obj.GetComponent<T>();
-    }
-
-    public int Count()
-    {
-        return list.Count;
-    }
-
-    public Transform Last()
-    {
-        int index = canvas.transform.childCount - 1;
-        Transform trans = null;
-        if(index >= 0)
-        {
-            trans = canvas.transform.GetChild(index);
+            return ret;
         }
         
-        return trans;
-    }
-
-    public void Clear()
-    {
-        for (int i = 0; i < canvas.transform.childCount ;i++)
+        // ReSharper disable Unity.PerformanceAnalysis
+        public void Close(string name)
         {
-            Transform trans = canvas.transform.GetChild(0);
-            GameObject.Destroy(trans.gameObject);
+            var trans = _canvas.transform.Find(name);
+            if (trans != true) return;
+            var obj = trans.GetComponent<UIObject.UIObject>();
+            obj.OnClose();
+
+            if (_list != null && _list.Contains(obj))
+            {
+                _list.Remove(obj);
+            }
+
+            Object.Destroy(trans.gameObject);
+        }
+
+        public void Close(Transform transform)
+        {
+            Close(transform.name);
+        }
+
+        public Transform Get(string name)
+        {
+            var ret = _list.Where(obj => string.Compare(obj.name, name, StringComparison.Ordinal) == 0).ToList();
+            return ret.Count == 1 ? ret[0].transform : null;
+        }
+
+        public T Get<T>(string name) where T : UIObject.UIObject
+        {
+            var obj = _canvas.transform.Find(name);
+            return obj.GetComponent<T>();
+        }
+
+        public int Count()
+        {
+            return _list.Count;
+        }
+
+        public Transform Last()
+        {
+            var index = _canvas.transform.childCount - 1;
+            Transform trans = null;
+            if(index >= 0)
+            {
+                trans = _canvas.transform.GetChild(index);
+            }
+        
+            return trans;
+        }
+
+        public void Clear()
+        {
+            for (var i = 0; i < _canvas.transform.childCount ;i++)
+            {
+                var trans = _canvas.transform.GetChild(0);
+                Object.Destroy(trans.gameObject);
+            }
         }
     }
 }

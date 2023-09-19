@@ -6,6 +6,6 @@ namespace TileMap
 {
     public class Pige : Bird
     {
-
+        
     }
 }

@@ -1,48 +1,43 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using Common.UIObject;
 using UnityEngine.UI;
 
-public class PopupCardSelect : PopupBase
+namespace UI.Popup
 {
-    Action<Card> OnSelect = null;
-    Card cardA = null;
-    Card cardB = null;
-
-    public bool Init(Card a, Card b, Action<Card> select)
+    public class PopupCardSelect : PopupBase
     {
-        cardA = a;
-        cardB = b;
-        OnSelect = select;
+        Action<Card> OnSelect = null;
+        Card cardA = null;
+        Card cardB = null;
 
-        SetSprite("Image - Card A", cardA.GetSprite());
-        SetSprite("Image - Card B", cardB.GetSprite());
-
-        return true;
-    }
-
-    protected override void OnClick(Button button)
-    {
-        string name = button.name;
-
-        if (name == "Button - A")
+        public bool Init(Card a, Card b, Action<Card> select)
         {
-            if(OnSelect != null)
-            {
-                OnSelect(cardA);
-            }
+            cardA = a;
+            cardB = b;
+            OnSelect = select;
 
-            Close();
+            SetSprite("Image - Card A", cardA.GetSprite());
+            SetSprite("Image - Card B", cardB.GetSprite());
+
+            return true;
         }
-        else if (name == "Button - B")
-        {
-            if (OnSelect != null)
-            {
-                OnSelect(cardB);
-            }
 
-            Close();
+        protected override void OnClick(Button button)
+        {
+            string name = button.name;
+
+            if (name == "Button - A")
+            {
+                OnSelect?.Invoke(cardA);
+
+                Close();
+            }
+            else if (name == "Button - B")
+            {
+                OnSelect?.Invoke(cardB);
+
+                Close();
+            }
         }
     }
 }
