@@ -1,4 +1,5 @@
 using System;
+using Spine.Unity;
 using UnityEngine;
 
 namespace TileMap
@@ -8,6 +9,8 @@ namespace TileMap
     /// </summary>
     public class WorldObject : MonoBehaviour
     {
+        [SerializeField] protected SkeletonAnimation skel;
+        
         /// <summary>
         /// 타일의 좌표계.
         /// </summary>

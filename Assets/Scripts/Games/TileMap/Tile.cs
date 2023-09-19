@@ -1,3 +1,4 @@
+using Scenes;
 using UnityEngine;
 
 namespace Games.TileMap
@@ -8,14 +9,15 @@ namespace Games.TileMap
         public int _x;
         public int _z;
     
-        public bool Init(int x, int z)
+        public bool Init(SceneTileMap.MapTile data, int x, int z)
         {
             _x = x;
             _z = z;
             
-            var index = x + z;
-            SetColor(index % 2 == 0 ? Color.gray : Color.white);
-            
+            if(data== null)
+                SetColor(Color.black);
+            else
+                SetColor(data.Color);
             transform.position = new Vector3(x, -.5f, z);
             return true;
         }

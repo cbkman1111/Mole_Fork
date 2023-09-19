@@ -47,7 +47,7 @@ namespace Common.Global
         }
 
         // ReSharper disable Unity.PerformanceAnalysis
-        private IEnumerator LoadScene(string name, bool loading)
+        private IEnumerator LoadScene(string sceneName, bool loading)
         {
             CurrScene?.UnLoad();
 
@@ -66,7 +66,7 @@ namespace Common.Global
                 }
 
                 var sceneLoading = GetSceneLoading("SceneLoading");
-                var asyncNext = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(name, LoadSceneMode.Single);
+                var asyncNext = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
                 asyncNext.allowSceneActivation = false;
                 asyncNext.completed += (AsyncOperation operation) => {
                     if (CurrScene != null)
@@ -85,14 +85,14 @@ namespace Common.Global
                 }
             
                 SceneBase changeScene = null;
-                if (_scenes.TryGetValue(name, out var scene) == true)
+                if (_scenes.TryGetValue(sceneName, out var scene) == true)
                 {
                     changeScene = scene;
                 }
                 else 
                 {
-                    changeScene = CreateSceneObject(name);
-                    _scenes.Add(name, changeScene);
+                    changeScene = CreateSceneObject(sceneName);
+                    _scenes.Add(sceneName, changeScene);
                 
                     var task = Task.Run(() => changeScene.Load());
                     bool complete = false;
@@ -116,18 +116,18 @@ namespace Common.Global
             }
             else 
             {
-                var async = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(name, LoadSceneMode.Single);
+                var async = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
                 async.allowSceneActivation = true;
                 async.completed += (AsyncOperation operation) => {
                     SceneBase changeScnene = null;
-                    if (_scenes.TryGetValue(name, out SceneBase scene) == true)
+                    if (_scenes.TryGetValue(sceneName, out SceneBase scene) == true)
                     {
                         changeScnene = scene;
                     }
                     else 
                     {
-                        changeScnene = CreateSceneObject(name);
-                        _scenes.Add(name, changeScnene);
+                        changeScnene = CreateSceneObject(sceneName);
+                        _scenes.Add(sceneName, changeScnene);
                     }
               
                     CurrScene = changeScnene;
