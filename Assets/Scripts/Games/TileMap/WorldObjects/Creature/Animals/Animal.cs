@@ -25,7 +25,6 @@ namespace TileMap
             transform.DOMove(target, 0.1f).
                 OnUpdate(() =>
                 {
-                    
                 }).
                 SetEase(Ease.Linear).
                 OnComplete(() =>

@@ -31,8 +31,12 @@ namespace TileMap
             
             _onUpdatePosition = onUpdatePosition;
             transform.position = new Vector3((float)posX, 0f, (float)posZ);
+
+            UpdateSpriteRenderOrder();
             return true;
         }
+
+        protected virtual void UpdateSpriteRenderOrder() { }
     }
 }
 

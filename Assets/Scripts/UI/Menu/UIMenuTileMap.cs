@@ -13,12 +13,13 @@ namespace UI.Menu
         [FormerlySerializedAs("Joystick")] [SerializeField]
         public Ant.Joystick joystick = null;
 
+        private Action saveGame = null;
         public override void OnInit()
         {
 
         }
 
-        public bool InitMenu(Action<Vector3> move, Action stop)
+        public bool InitMenu(Action<Vector3> move, Action stop, Action save)
         {
             joystick.Init((Vector3 direct, float angle) => {
                     SetText("Text - Debug", $"Angle : {angle}");
@@ -30,6 +31,7 @@ namespace UI.Menu
                     stop?.Invoke();
                 });
 
+            saveGame = save;
             return true;
         }
 
@@ -39,6 +41,10 @@ namespace UI.Menu
             if(name == "Button - Back")
             {
                 AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneMenu);
+            }
+            else if (name == "Button - Save")
+            {
+                saveGame?.Invoke();
             }
         }
     }

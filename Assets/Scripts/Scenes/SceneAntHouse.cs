@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Ant;
 using Common.Global;
 using Common.Scene;
+using Games.AntHouse.Datas;
 using UI.Menu;
 using UnityEngine;
 using UnityEngine.AI;
@@ -291,9 +292,6 @@ namespace Scenes
         /// </summary>
         public override void OnUpdate()
         {
-         
-
-        
             if (Input.GetKey(KeyCode.A))
             {
                 OnMove(Vector3.left);
