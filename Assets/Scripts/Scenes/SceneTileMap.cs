@@ -16,7 +16,8 @@ namespace Scenes
         private static readonly System.Random random = new System.Random();
         private static readonly object synlock = new object();
         
-        private MapData _mapData = new MapData();
+        private MapData _mapData = null;
+        private bool gameLoaded = false;
         
         private UIMenuTileMap _menu = null;
         private Map _map = null;
@@ -75,72 +76,102 @@ namespace Scenes
                 return random.Next(min, max);
             }
         }
-        
+
+        public override void LoadBeforeAsync()
+        {
+            _mapData = MapData.Load();
+            if (_mapData == null)
+            {
+                _mapData = new MapData();
+                gameLoaded = false;
+            }
+            else
+            {
+                gameLoaded = true;
+            }
+        }
+
         /// <summary>
         /// 미리 로딩해야 할 데이터 처리.
         /// </summary>
         public async override void Load()
         {
-            /*
-            _mapData = MapData.Load();
-            if (_mapData != null)
+            if (gameLoaded == false)
             {
-                Amount = 1.0f;
-                return;
-            }
-            */
-            int w = _mapData.Width;
-            int h = _mapData.Height;
-            int loopCount = w * h;
-            int smoothCount = 5;
-            int total = loopCount * 2 * smoothCount;
+                int w = _mapData.Width;
+                int h = _mapData.Height;
+                int loopCount = w * h;
+                int smoothCount = 5;
+                int total = loopCount * 2 * smoothCount;
 
-            int index = 0;
-            for (int x = 0; x < w; x++)
-            {
-                for (int z = 0; z < h; z++)
+                int index = 0;
+                for (int x = 0; x < w; x++)
                 {
-                    var adress = x + z * w;
-                    var info = new TileData();
-                    info.Color = Color.gray;
-                    
-                    if (x == 0 || x == w - 1 || z == 0 || z == h - 1)
+                    for (int z = 0; z < h; z++)
                     {
-                        info.Color = Color.black;
-                    }
-                    else
-                    {
-                        var waterPercent = 50;
-                        var randColor = RandomNumber(0, 100);
-                        info.Color = (randColor < waterPercent) ? Color.blue : Color.gray; //비율에 따라 벽 혹은 빈 공간 생성
-                    }
-
-                    _mapData.TileData.TryAdd(adress, info);
-                    
-                    index++;
-                    Amount = (float)index / (float)total;
-                }
-            }
-
-            // 
-            for (var i = 0; i < smoothCount; i++)
-            {
-                for (int x = 0; x < _mapData.Width; x++) 
-                {
-                    for (int y = 0; y < _mapData.Height; y++) 
-                    {
-                        int adress = x + y * _mapData.Width;
-                        if (_mapData.TileData[adress].Color == Color.black)
-                            continue;
-                    
-                        int neighbourWallTiles = GetSurroundingWallCount(x, y);
-                        if (neighbourWallTiles > 4)//map[x, y] = WALL; //주변 칸 중 벽이 4칸을 초과할 경우 현재 타일을 벽으로 바꿈
+                        var adress = x + z * w;
+                        var info = new TileData();
+                        info.Color = Color.gray;
+                        
+                        if (x == 0 || x == w - 1 || z == 0 || z == h - 1)
                         {
-                            _mapData.TileData[adress].Color = Color.blue;
+                            info.Color = Color.black;
                         }
-                        else if (neighbourWallTiles < 4)//map[x, y] = ROAD; //주변 칸 중 벽이 4칸 미만일 경우 현재 타일을 빈 공간으로 바꿈
+                        else
                         {
-                            _mapData.TileData[adress].Color = Color.gray;
+                            var waterPercent = 50;
+                            var randColor = RandomNumber(0, 100);
+                            info.Color = (randColor < waterPercent) ? Color.blue : Color.gray; //비율에 따라 벽 혹은 빈 공간 생성
+                        }
+
+                        _mapData.TileData.Add(info);//[adress] = info;//adress, info);
+                        
+                        index++;
+                        Amount = (float)index / (float)total;
+                    }
+                }
+
+                // 
+                for (var i = 0; i < smoothCount; i++)
+                {
+                    for (int x = 0; x < _mapData.Width; x++) 
+                    {
+                        for (int z = 0; z < _mapData.Height; z++) 
+                        {
+                            int adress = x + z * _mapData.Width;
+                            if (_mapData.TileData[adress].Color == Color.black)
+                                continue;
+                        
+                            int neighbourWallTiles = GetSurroundingWallCount(x, z);
+                            if (neighbourWallTiles > 4)//map[x, y] = WALL; //주변 칸 중 벽이 4칸을 초과할 경우 현재 타일을 벽으로 바꿈
+                            {
+                                _mapData.TileData[adress].Color = Color.blue;
+                            }
+                            else if (neighbourWallTiles < 4)//map[x, y] = ROAD; //주변 칸 중 벽이 4칸 미만일 경우 현재 타일을 빈 공간으로 바꿈
+                            {
+                                _mapData.TileData[adress].Color = Color.gray;
+                            }
+                            
+                            index++;
+                            Amount = (float)index / (float)total;
+                        }
+                    }
+                }
+                
+                // 나무 심기.
+                for (var x = 0; x < w; x++)
+                {
+                    for (var z = 0; z < h; z++)
+                    {
+                        var adress = x + z * w;
+                        var tile = _mapData.TileData[adress];
+                        if (tile != null)
+                        {
+                            if (tile.Color == Color.gray)
+                            {
+                                var randTree = RandomNumber(0, 10);
+                                tile.Child = randTree;
+                            }
                         }
                         
                         index++;
@@ -149,25 +180,6 @@ namespace Scenes
                 }
             }
             
-            // 나무 심기.
-            for (var x = 0; x < w; x++)
-            {
-                for (var z = 0; z < h; z++)
-                {
-                    var adress = x + z * w;
-                    if (_mapData.TileData.TryGetValue(adress, out var tile) == true)
-                    {
-                        if (tile.Color == Color.gray)
-                        {
-                            var randTree = RandomNumber(0, 10);
-                            tile.Child = randTree;
-                        }
-                    }
-                    
-                    index++;
-                    Amount = (float)index / (float)total;
-                }
-            }
 
             Amount = 1f;
         }

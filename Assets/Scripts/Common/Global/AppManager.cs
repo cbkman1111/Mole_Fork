@@ -93,7 +93,7 @@ namespace Common.Global
                 {
                     changeScene = CreateSceneObject(sceneName);
                     _scenes.Add(sceneName, changeScene);
-                
+                    changeScene.LoadBeforeAsync();
                     var task = Task.Run(() => changeScene.Load());
                     bool complete = false;
                     while (complete == false)

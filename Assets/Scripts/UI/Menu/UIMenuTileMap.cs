@@ -37,12 +37,12 @@ namespace UI.Menu
 
         protected override void OnClick(Button btn)
         {
-            string name = btn.name;
-            if(name == "Button - Back")
+            string btnName = btn.name;
+            if(btnName == "Button - Back")
             {
                 AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneMenu);
             }
-            else if (name == "Button - Save")
+            else if (btnName == "Button - Save")
             {
                 saveGame?.Invoke();
             }

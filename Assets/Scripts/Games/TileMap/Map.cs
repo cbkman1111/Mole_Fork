@@ -48,8 +48,9 @@ namespace Games.TileMap
                     }
                     else
                     {
-                        int adress = x + z * _width;
-                        if(mapData.TileData.TryGetValue(adress, out var info) == true)
+                        var adress = x + z * _width;
+                        var info = mapData.TileData[adress];
+                        if(info != null)
                         {
                             tile.Init(info, x, z);    
                         }
@@ -102,7 +103,7 @@ namespace Games.TileMap
                         else
                         {
                             int adress = x + z * _width;
-                            mapData.TileData.TryGetValue(adress, out var info);
+                            var info = mapData.TileData[adress];
                             tile.Init(info, x, z);
                         }
                         

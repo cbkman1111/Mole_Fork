@@ -23,6 +23,10 @@ namespace Common.Scene
 
         public virtual void UnLoad() { }
 
+        public virtual void LoadBeforeAsync()
+        {
+        }
+
         public virtual async void Load()
         {
             Amount = 1f;
