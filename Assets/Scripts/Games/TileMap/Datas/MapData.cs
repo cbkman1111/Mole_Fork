@@ -1,14 +1,23 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Games.TileMap.Datas
 {
     [System.Serializable]
-    public class TileData
+    public class Coordinate
     {
+        public int X;
+        public int Z;
+
+        public TileData Tile;
+        public List<ObjectData> Objects;
+
+    }
+
+    [System.Serializable]
+    public class TileData
+    {   
         public Color Color;
-        public int Child;
     }
     
     [System.Serializable]
@@ -20,20 +29,20 @@ namespace Games.TileMap.Datas
     [System.Serializable]
     public class MapData
     {
-        public static int Id = 102;
+        public static int Id = 1000;
         
-        public int Width = 500;
-        public int Height = 500;
+        public int Width = 600;
+        public int Height = 600;
 
         public int X = 0;
         public int Z = 0;
 
-        public List<TileData> TileData;
-        //public Dictionary<int, ObjectData> ObjectData = new Dictionary<int, ObjectData>();
+        public List<Coordinate> Data;
 
         public MapData()
         {
-            TileData = new List<TileData>();
+            Data = new List<Coordinate>();
+            
             X = (int)(Width * 0.5f);
             Z = (int)(Height * 0.5f);
         }

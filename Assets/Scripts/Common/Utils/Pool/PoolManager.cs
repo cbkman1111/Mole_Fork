@@ -1,34 +1,31 @@
 using System.Collections.Generic;
+using Common.Global.Singleton;
 using UnityEngine;
 
 namespace Common.Utils.Pool
 {
-    [System.Serializable]
     public class PoolObject
     {
-        [SerializeField]  public Transform Prefab;
-        [SerializeField]  public int Count;
+        public Transform prefab;
     }
-
-    public class PoolManager : MonoBehaviour
+    
+    public class PoolManager : MonoSingleton<PoolManager>
     {
-        [SerializeField]
-        public PoolObject[] poolList;
-
         public Dictionary<string, Pool<Transform>> dic = null;
-
-        private void Awake()
+        
+        protected override bool Init()
         {
             dic = new Dictionary<string, Pool<Transform>>();
-
-            for (int i = 0; i < poolList.Length; i++)
+            return true;
+        }
+        
+        public void InitList(params Transform[] list)
+        {
+            dic.Clear();
+            foreach (var prefab in list)
             {
-                var info = poolList[i];
-                var key = info.Prefab.name;
-                var prefab = info.Prefab;
-                var size = info.Count;
-
-                dic.Add(key, Pool<Transform>.Create(prefab, transform, size));
+                var key = prefab.name;
+                dic.Add(key, Pool<Transform>.Create(prefab, transform, 1));
             }
         }
 
@@ -44,10 +41,18 @@ namespace Common.Utils.Pool
 
         public void ReturnObject(Transform obj)
         {
-            bool success = false;
             if (dic.TryGetValue(obj.name, out Pool<Transform> pool) == true)
             {
-                success = pool.ReturnObject(obj);
+                pool.ReturnObject(obj);
+            }
+        }
+
+        public void RemoveAll()
+        {
+            dic.Clear();
+            foreach (Transform child in transform)
+            {
+                Destroy(child.gameObject) ;
             }
         }
     }

@@ -12,7 +12,6 @@ namespace Common.Global
 
         protected override bool Init()
         {
-            gameObject.name = string.Format("singleton - {0}", Tag);
             list = new List<Object>();
 
             Load();

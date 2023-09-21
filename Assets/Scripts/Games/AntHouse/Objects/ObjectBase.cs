@@ -1,43 +1,42 @@
-using System.Collections;
-using System.Collections.Generic;
 using Common.Global;
+using Games.AntHouse.Datas;
 using UnityEngine;
 
-public class ObjectBase : MonoBehaviour
+namespace Games.AntHouse.Objects
 {
-    public static T Create<T>(ObjectData data, bool enableAgent = true) where T : ObjectBase
+    public class ObjectBase : MonoBehaviour
     {
-        var prefab = ResourcesManager.Instance.LoadInBuild<GameObject>("Object");
-        var obj = Instantiate<GameObject>(prefab);
-        if (obj == null)
+        public static T Create<T>(ObjectData data, bool enableAgent = true) where T : ObjectBase
         {
+            var prefab = ResourcesManager.Instance.LoadInBuild<GameObject>("Object");
+            var obj = Instantiate<GameObject>(prefab);
+            if (obj == null)
+            {
+                return default(T);
+            }
+
+            var monster = obj.AddComponent<T>();
+            if (monster != null && monster.Init(data) == true)
+            {
+                return monster;
+            }
+
             return default(T);
         }
 
-        var monster = obj.AddComponent<T>();
-        if (monster != null && monster.Init(data) == true)
+        protected bool Init(ObjectData data)
         {
-            return monster;
+            if(LoadSprite() == false)
+            {
+                return false;
+            }
+        
+            return true;
         }
 
-        return default(T);
-    }
-
-    protected bool Init(ObjectData data)
-    {
-        if(LoadSprite() == false)
+        protected virtual bool LoadSprite()
         {
-            return false;
+            return true;
         }
-
-
-        transform.position = data.position;
-
-        return true;
-    }
-
-    protected virtual bool LoadSprite()
-    {
-        return true;
     }
 }

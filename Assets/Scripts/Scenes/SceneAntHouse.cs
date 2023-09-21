@@ -4,6 +4,7 @@ using Ant;
 using Common.Global;
 using Common.Scene;
 using Games.AntHouse.Datas;
+using Games.AntHouse.Objects;
 using UI.Menu;
 using UnityEngine;
 using UnityEngine.AI;
@@ -195,7 +196,7 @@ namespace Scenes
                 var obj = ObjectTemp.Create<ObjectTemp>(data);
                 if (obj != null)
                 {
-                    obj.name = $"object_{data.id}";
+                    obj.name = $"object_{data.Id}";
                     objs.Add(obj);
                 }
             }
@@ -223,7 +224,7 @@ namespace Scenes
             ObjectData objData = new ObjectData();
             if (objData != null)
             {
-                objData.id = monsters.Count;
+                objData.Id = monsters.Count;
                 objData.position = player.transform.position;
                 mapData.AddObject(objData);
 

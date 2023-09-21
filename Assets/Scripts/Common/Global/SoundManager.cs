@@ -16,7 +16,7 @@ namespace Common.Global
 
         protected override bool Init()
         {
-            gameObject.name = string.Format("singleton - {0}", Tag);
+            //gameObject.name = string.Format("singleton - {0}", Tag);
 
             mixer = ResourcesManager.Instance.LoadInBuild<AudioMixer>("AudioMixer");
 

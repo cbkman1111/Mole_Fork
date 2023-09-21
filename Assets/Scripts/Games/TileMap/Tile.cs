@@ -10,7 +10,6 @@ namespace Games.TileMap
         [SerializeField] public SpriteRenderer _spriteRenderer;
         public int _x;
         public int _z;
-        private GameObject tree = null;
         
         public bool Init(TileData data, int x, int z)
         {
@@ -24,37 +23,10 @@ namespace Games.TileMap
                     _spriteRenderer.transform.localPosition = new Vector3(0, 0, 0);
                 else
                     _spriteRenderer.transform.localPosition = new Vector3(0, 0.5f, 0);
-                
-                string treeName = string.Empty;
-                switch (data.Child)
-                {
-                    case 1:
-                        treeName = "Bush";
-                        break;
-                    case 2:
-                        treeName = "PineTree";
-                        break;
-                }
-                
-                if(treeName != string.Empty)
-                {
-                    if (tree == false)
-                    {
-                        var prefab = ResourcesManager.Instance.LoadInBuild<GameObject>(treeName);
-                        var obj = Object.Instantiate(prefab, transform);
-                        obj.transform.localPosition = new Vector3(0, 1, 0);
-                        tree = obj;                        
-                    }
-
-                }
-                else
-                {
-                    tree?.gameObject.SetActive(false);
-                }
             }
             else
             {
-                tree?.gameObject.SetActive(false);
+                //tree?.gameObject.SetActive(false);
                 SetColor(Color.black);
             }
 

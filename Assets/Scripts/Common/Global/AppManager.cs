@@ -31,7 +31,6 @@ namespace Common.Global
         protected override bool Init()
         {
             _scenes = new Dictionary<string, SceneBase>();
-            gameObject.name = $"singleton - {Tag}";
             return true;
         }
         

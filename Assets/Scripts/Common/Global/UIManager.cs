@@ -45,8 +45,6 @@ namespace Common.Global
 
             _cover = root.transform.Find("Image - dim");
             _cover.gameObject.SetActive(false);
-
-            gameObject.name = $"singleton - {Tag}";
             return true;
         }
 

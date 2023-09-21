@@ -1,18 +1,11 @@
-using Ant;
-using System;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
-[System.Serializable]
-public class ObjectData
+namespace Games.AntHouse.Datas
 {
-    public int id;
-    public Vector3 position;
-
-    public ObjectData()
+    [System.Serializable]
+    public class ObjectData
     {
-        id = 0;
-        position = Vector3.zero;
+        public int Id;
+        public Vector3 position;
     }
 }

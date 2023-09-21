@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Common.Global;
 using Common.Scene;
+using Common.Utils.Pool;
 using DG.Tweening;
 using Games.TileMap;
 using Games.TileMap.Datas;
@@ -28,7 +29,8 @@ namespace Scenes
         /// </summary>
         /// <returns></returns>
         public override bool Init(JSONObject param)
-        {
+        {            
+           
             _menu = UIManager.Instance.OpenMenu<UIMenuTileMap>("UI/UIMenuTileMap");
             if (_menu != null)
             {
@@ -39,7 +41,7 @@ namespace Scenes
                     stop: () => {
                         OnStop();
                     },
-                    () =>
+                    save:() =>
                     {
                         _mapData.X = _pigeon.x;
                         _mapData.Z = _pigeon.z;
@@ -48,27 +50,39 @@ namespace Scenes
                     });
             }
 
-            int startX = _mapData.X;
-            int startZ = _mapData.Z;
+            PoolManager.Instance.InitList(
+                ResourcesManager.Instance.LoadInBuild<Transform>("Tile"),
+                ResourcesManager.Instance.LoadInBuild<Transform>("Bush"),
+                ResourcesManager.Instance.LoadInBuild<Transform>("PineTree"));
+            
+            var startX = _mapData.X;
+            var startZ = _mapData.Z;
+            
             // 맵 생성.
+            const int displayW = 12;
+            const int displayUpSide = 10;
+            const int displayDownSide = 4;
             var prefabMap = ResourcesManager.Instance.LoadInBuild<Map>("Map");
             _map = Object.Instantiate<Map>(prefabMap);
             _map.transform.position = Vector3.zero;
-            var displayW = 13;
-            var displayUpSide = 6;
-            var displayDownSide = 4;
-            _map.Init(_mapData, startX, startZ, _mapData.Width, _mapData.Height, displayW, displayUpSide, displayDownSide);
+            _map.Init(_mapData, startX, startZ, displayW, displayUpSide, displayDownSide);
             
             // 캐릭터 생성.
             var prefab = ResourcesManager.Instance.LoadInBuild<Pige>("PigeonTemp");
             _pigeon = Object.Instantiate<Pige>(prefab);
             _pigeon.Init(startX, startZ);
-            
+
             // 카메라 위치 초기화.
             MainCamera.transform.position = _pigeon.transform.position + _pigeon.transform.GetChild(0).forward * -10;
             return true;
         }
 
+        /// <summary>
+        /// Load 쓰레드에서 사용할 랜덤. 기존거는 메인 쓰레드만 된다.
+        /// </summary>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        /// <returns></returns>
         public static int RandomNumber(int min, int max)
         {
             lock (synlock)
@@ -76,9 +90,15 @@ namespace Scenes
                 return random.Next(min, max);
             }
         }
-
+        
+        /// <summary>
+        /// 저장된 데이터가 있으면 로드.
+        /// </summary>
         public override void LoadBeforeAsync()
-        {
+        {                
+            _mapData = new MapData();
+            gameLoaded = false;
+            /*
             _mapData = MapData.Load();
             if (_mapData == null)
             {
@@ -89,6 +109,17 @@ namespace Scenes
             {
                 gameLoaded = true;
             }
+            */
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public override void UnLoad()
+        {
+            base.UnLoad();
+            
+            PoolManager.Instance.RemoveAll();
         }
 
         /// <summary>
@@ -98,40 +129,44 @@ namespace Scenes
         {
             if (gameLoaded == false)
             {
-                int w = _mapData.Width;
-                int h = _mapData.Height;
-                int loopCount = w * h;
-                int smoothCount = 5;
-                int total = loopCount * 2 * smoothCount;
-
-                int index = 0;
+                var w = _mapData.Width;
+                var h = _mapData.Height;
+                var loopCount = w * h;
+                var smoothCount = 5;
+                var total = loopCount * 2 * smoothCount;
+                var index = 0;
+                
+                
+                // 타일 생성.
                 for (int x = 0; x < w; x++)
                 {
                     for (int z = 0; z < h; z++)
                     {
                         var adress = x + z * w;
-                        var info = new TileData();
-                        info.Color = Color.gray;
+                        var tileData = new TileData();
+                        tileData.Color = Color.gray;
                         
                         if (x == 0 || x == w - 1 || z == 0 || z == h - 1)
                         {
-                            info.Color = Color.black;
+                            tileData.Color = Color.black;
                         }
                         else
                         {
                             var waterPercent = 50;
                             var randColor = RandomNumber(0, 100);
-                            info.Color = (randColor < waterPercent) ? Color.blue : Color.gray; //비율에 따라 벽 혹은 빈 공간 생성
+                            tileData.Color = (randColor < waterPercent) ? Color.blue : Color.gray; //비율에 따라 벽 혹은 빈 공간 생성
                         }
 
-                        _mapData.TileData.Add(info);//[adress] = info;//adress, info);
+                        Coordinate data = new Coordinate();
+                        data.Tile = tileData;
+                        _mapData.Data.Add(data);
                         
                         index++;
                         Amount = (float)index / (float)total;
                     }
                 }
 
-                // 
+                // 스무스 처리.
                 for (var i = 0; i < smoothCount; i++)
                 {
                     for (int x = 0; x < _mapData.Width; x++) 
@@ -139,17 +174,17 @@ namespace Scenes
                         for (int z = 0; z < _mapData.Height; z++) 
                         {
                             int adress = x + z * _mapData.Width;
-                            if (_mapData.TileData[adress].Color == Color.black)
+                            if (_mapData.Data[adress].Tile.Color == Color.black)
                                 continue;
                         
                             int neighbourWallTiles = GetSurroundingWallCount(x, z);
                             if (neighbourWallTiles > 4)//map[x, y] = WALL; //주변 칸 중 벽이 4칸을 초과할 경우 현재 타일을 벽으로 바꿈
                             {
-                                _mapData.TileData[adress].Color = Color.blue;
+                                _mapData.Data[adress].Tile.Color = Color.blue;
                             }
                             else if (neighbourWallTiles < 4)//map[x, y] = ROAD; //주변 칸 중 벽이 4칸 미만일 경우 현재 타일을 빈 공간으로 바꿈
                             {
-                                _mapData.TileData[adress].Color = Color.gray;
+                                _mapData.Data[adress].Tile.Color = Color.gray;
                             }
                             
                             index++;
@@ -164,13 +199,23 @@ namespace Scenes
                     for (var z = 0; z < h; z++)
                     {
                         var adress = x + z * w;
-                        var tile = _mapData.TileData[adress];
-                        if (tile != null)
+                        var data = _mapData.Data[adress];
+                        if (data != null)
                         {
-                            if (tile.Color == Color.gray)
+                            if (data.Tile.Color == Color.gray)
                             {
-                                var randTree = RandomNumber(0, 10);
-                                tile.Child = randTree;
+                                int rand = RandomNumber(1, 10);
+                                if (rand <= 2)
+                                {                               
+                                    if (data.Objects == null)
+                                    {
+                                        data.Objects = new List<ObjectData>();
+                                        var obj = new ObjectData();
+                                        obj.Id = rand;
+                                        
+                                        data.Objects.Add(obj);
+                                    }
+                                }
                             }
                         }
                         
@@ -179,7 +224,6 @@ namespace Scenes
                     }
                 }
             }
-            
 
             Amount = 1f;
         }
@@ -196,7 +240,7 @@ namespace Scenes
                         if (neighbourX != gridX || neighbourY != gridY)
                         {
                             //wallCount += _mapData[adress]; //벽은 1이고 빈 공간은 0이므로 벽일 경우 wallCount 증가
-                            if (_mapData.TileData[adress].Color != Color.gray)
+                            if (_mapData.Data[adress].Tile.Color != Color.gray)
                             {
                                 wallCount += 1;
                             }
@@ -240,8 +284,11 @@ namespace Scenes
             if (_pigeon == true)
             {
                 var cameraPosition = _pigeon.transform.position + _pigeon.transform.GetChild(0).forward * -10;
-                //MainCamera.transform.position = cameraPosition;
-                MainCamera.transform.DOMove(cameraPosition, 1f);
+                if (Vector3.Distance(MainCamera.transform.position, cameraPosition) > 0.1f)
+                {                
+                    MainCamera.transform.DOKill();
+                    MainCamera.transform.DOMove(cameraPosition, 1f);
+                }
                 
                 if((int)_pigeon.transform.position.x != _pigeon.x ||
                    (int)_pigeon.transform.position.z != _pigeon.z)
