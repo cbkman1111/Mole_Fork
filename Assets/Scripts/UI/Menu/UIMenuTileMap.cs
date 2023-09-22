@@ -14,12 +14,14 @@ namespace UI.Menu
         public Ant.Joystick joystick = null;
 
         private Action saveGame = null;
+        private Action<float> zoomCamera = null;
+        
         public override void OnInit()
         {
 
         }
 
-        public bool InitMenu(Action<Vector3> move, Action stop, Action save)
+        public bool InitMenu(Action<Vector3> move, Action stop, Action save, Action<float> zoom)
         {
             joystick.Init((Vector3 direct, float angle) => {
                     SetText("Text - Debug", $"Angle : {angle}");
@@ -32,9 +34,15 @@ namespace UI.Menu
                 });
 
             saveGame = save;
+            zoomCamera = zoom;
             return true;
         }
 
+        public override void OnValueChanged(Slider slider, float f)
+        {
+            zoomCamera(f);
+        }
+        
         protected override void OnClick(Button btn)
         {
             string btnName = btn.name;

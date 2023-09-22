@@ -14,10 +14,18 @@ namespace Games.TileMap.Datas
 
     }
 
+    public enum TileType
+    {
+        Water, // 물.
+        Ground, // 일반 땅.
+        Wall, // 벽.
+    }
+
     [System.Serializable]
     public class TileData
-    {   
-        public Color Color;
+    {
+        public TileType type;
+        //public Color Color;
     }
     
     [System.Serializable]

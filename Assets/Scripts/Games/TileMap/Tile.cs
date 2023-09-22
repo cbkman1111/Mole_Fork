@@ -18,15 +18,21 @@ namespace Games.TileMap
             
             if (data != null)
             {
-                SetColor(data.Color);
-                if (data.Color == Color.blue)
-                    _spriteRenderer.transform.localPosition = new Vector3(0, 0, 0);
-                else
-                    _spriteRenderer.transform.localPosition = new Vector3(0, 0.5f, 0);
+                switch (data.type)
+                {
+                    case TileType.Ground:
+                        SetColor(Color.gray);
+                        break;
+                    case TileType.Water:
+                        SetColor(new Color(0.2117647f, 0.5686183f, 0.5450981f, 0.5f));
+                        break;
+                    case TileType.Wall:
+                        SetColor(Color.black);
+                        break;
+                }
             }
             else
             {
-                //tree?.gameObject.SetActive(false);
                 SetColor(Color.black);
             }
 

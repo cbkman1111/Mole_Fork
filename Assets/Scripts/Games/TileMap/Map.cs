@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Common.Utils.Pool;
+using Games.TileMap.Datas;
 using TileMap;
 using UnityEngine;
 using MapData = Games.TileMap.Datas.MapData;
@@ -30,64 +31,82 @@ namespace Games.TileMap
             {
                 for (var z = startZ - _diplayDownSide; z <= startZ + _diplayUpSide; z++)
                 {
-                    var obj =  PoolManager.Instance.GetObject("Tile");
-                    var tile = obj.GetComponent<Tile>();
-                    if (tile == false)
-                        continue;
-
                     if (x < 0 || x > _mapData.Width || z < 0 || z > _mapData.Height)
                     {
-                        tile.Init(null, x, z);
+
                     }
                     else
                     {
                         var adress = x + z * _mapData.Width;
                         var tileData = _mapData.Data[adress].Tile;
+                        var objList = _mapData.Data[adress].Objects;
+                        
+                        // 타일 리스트.
                         if(tileData != null)
                         {
-                            tile.Init(tileData, x, z);
-                        }
-                        else
-                        {
-                            tile.Init(null, x, z);
+                            var tile = GetTile(tileData);
+                            if (tile == true)
+                            {
+                                tile.Init(tileData, x, z);
+                                tiles.Add(tile);
+                            }
                         }
 
-                        var objList = _mapData.Data[adress].Objects;
+                        // 오브젝트 리스트.
                         if (objList != null)
                         {
-                            Transform trans = null;
-                            var objData = objList[0];
-                            switch (objData.Id)
+                            var obj = GetWorldObject(objList[0]);
+                            if (obj == true)
                             {
-                                case 1:
-                                    trans = PoolManager.Instance.GetObject("Bush");
-                                    var bush = trans.GetComponent<Bush>();
-                                    if (bush != null)
-                                    {                        
-                                        bush.transform.position = new Vector3(x ,0.5f, z);
-                                        objects.Add(bush);
-                                    }
-                                    break;
-                                case 2:
-                                    trans = PoolManager.Instance.GetObject("PineTree");
-                                    var pineTree = trans.GetComponent<PineTree>();
-                                    if (pineTree != null)
-                                    {
-                                        pineTree.transform.position = new Vector3(x ,0.5f, z);
-                                        objects.Add(pineTree);
-                                    }
-                                    break;
+                                obj.transform.position = new Vector3(x ,0.5f, z);
+                                objects.Add(obj);
                             }
                         }
                     }
-                   
-                    tiles.Add(tile);
                 }
             }
            
             return true;
         }
-        
+
+        private Tile GetTile(TileData data)
+        {                            
+            Transform trans = null;
+            if(data.type == TileType.Ground)
+                trans =  PoolManager.Instance.GetObject("TileGround");
+            else
+                trans =  PoolManager.Instance.GetObject("TileWater");
+                            
+            var tile = trans.GetComponent<Tile>();
+            return tile;
+        }
+
+        private WorldObject GetWorldObject(ObjectData data)
+        {                            
+            string[] names =
+            {
+                "SeaWeed",
+                
+                "Bush",
+                "PineTree",
+                "Sapling",
+                "Mushroom_empty",
+                "Mushroom_green",
+                "Mushroom_red",
+                "Mushroom_sky",
+                "Mushroom_seed",
+            };
+            
+            Transform trans = PoolManager.Instance.GetObject(names[data.Id - 1]);
+            if (trans == true)
+            {           
+                var obj = trans.GetComponent<WorldObject>();
+                return obj;
+            }
+
+            return null;
+        }
+
         /// <summary>
         /// 타일 정보 갱신.
         /// </summary>
@@ -124,16 +143,21 @@ namespace Games.TileMap
             {
                 for (var z = startZ - _diplayDownSide ; z < startZ + _diplayUpSide; z++)
                 {
+                    if(x < 0 || x > _mapData.Width)
+                        continue;
+                    
+                    if(z < 0 || z > _mapData.Height)
+                        continue;
+                    
                     int adress = x + z * _mapData.Width;
+                    var tileData = _mapData.Data[adress].Tile;
+                    
                     var iter = tiles.Where(t => t._x == x && t._z == z);
-                    if (iter.Count() == 0)
+                    if (iter.Count() == 0 )
                     {
-                        var obj = PoolManager.Instance.GetObject("Tile");
-                        var tile = obj.GetComponent<Tile>();
+                        var tile = GetTile(tileData);
                         if (tile == false)
-                        {
                             continue;
-                        }
                         
                         if (x < 0 || x > _mapData.Width || z < 0 || z > _mapData.Height)
                         {
@@ -141,9 +165,7 @@ namespace Games.TileMap
                         }
                         else
                         {
-                            
-                            var info = _mapData.Data[adress].Tile;
-                            tile.Init(info, x, z);
+                            tile.Init(tileData, x, z);
                         }
                         
                         tiles.Add(tile);
@@ -152,28 +174,11 @@ namespace Games.TileMap
                     var objList = _mapData.Data[adress].Objects;
                     if (objList != null)
                     {
-                        Transform trans = null;
-                        var objData = objList[0];
-                        switch (objData.Id)
-                        {
-                            case 1:
-                                trans = PoolManager.Instance.GetObject("Bush");
-                                var bush = trans.GetComponent<Bush>();
-                                if (bush != null)
-                                {                        
-                                    bush.transform.position = new Vector3(x ,0.5f, z);
-                                    objects.Add(bush);
-                                }
-                                break;
-                            case 2:
-                                trans = PoolManager.Instance.GetObject("PineTree");
-                                var pineTree = trans.GetComponent<PineTree>();
-                                if (pineTree != null)
-                                {
-                                    pineTree.transform.position = new Vector3(x ,0.5f, z);
-                                    objects.Add(pineTree);
-                                }
-                                break;
+                        WorldObject obj = GetWorldObject(objList[0]);
+                        if (obj == true)
+                        {                        
+                            obj.transform.position = new Vector3(x ,0.5f, z);
+                            objects.Add(obj);
                         }
                     }
                 }

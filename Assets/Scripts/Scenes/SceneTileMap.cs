@@ -11,12 +11,12 @@ using UnityEngine;
 
 namespace Scenes
 {
-
     public class SceneTileMap : SceneBase
     {
         private static readonly System.Random random = new System.Random();
         private static readonly object synlock = new object();
-        
+
+        public MapData MapData => _mapData;
         private MapData _mapData = null;
         private bool gameLoaded = false;
         
@@ -24,13 +24,16 @@ namespace Scenes
         private Map _map = null;
         private Pige _pigeon = null;
 
+        private float _ditanceCamera = 0;
+        
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
         public override bool Init(JSONObject param)
-        {            
-           
+        {
+            _ditanceCamera = 5;
+            
             _menu = UIManager.Instance.OpenMenu<UIMenuTileMap>("UI/UIMenuTileMap");
             if (_menu != null)
             {
@@ -47,20 +50,35 @@ namespace Scenes
                         _mapData.Z = _pigeon.z;
                         
                         _mapData.Save();
+                    },
+                    zoom: (float percent) =>
+                    {
+                        float amount = 6 * percent;
+                        _ditanceCamera = 5 + amount;
                     });
             }
 
             PoolManager.Instance.InitList(
-                ResourcesManager.Instance.LoadInBuild<Transform>("Tile"),
+                ResourcesManager.Instance.LoadInBuild<Transform>("TileGround"),
+                ResourcesManager.Instance.LoadInBuild<Transform>("TileWater"),
+                
                 ResourcesManager.Instance.LoadInBuild<Transform>("Bush"),
-                ResourcesManager.Instance.LoadInBuild<Transform>("PineTree"));
+                ResourcesManager.Instance.LoadInBuild<Transform>("PineTree"),
+                ResourcesManager.Instance.LoadInBuild<Transform>("Sapling"),
+                ResourcesManager.Instance.LoadInBuild<Transform>("SeaWeed"),
+                
+                ResourcesManager.Instance.LoadInBuild<Transform>("Mushroom_empty"),
+                ResourcesManager.Instance.LoadInBuild<Transform>("Mushroom_green"),
+                ResourcesManager.Instance.LoadInBuild<Transform>("Mushroom_red"),
+                ResourcesManager.Instance.LoadInBuild<Transform>("Mushroom_seed"),
+                ResourcesManager.Instance.LoadInBuild<Transform>("Mushroom_sky"));
             
             var startX = _mapData.X;
             var startZ = _mapData.Z;
             
             // 맵 생성.
-            const int displayW = 12;
-            const int displayUpSide = 10;
+            const int displayW = 13;
+            const int displayUpSide = 12;
             const int displayDownSide = 4;
             var prefabMap = ResourcesManager.Instance.LoadInBuild<Map>("Map");
             _map = Object.Instantiate<Map>(prefabMap);
@@ -73,7 +91,8 @@ namespace Scenes
             _pigeon.Init(startX, startZ);
 
             // 카메라 위치 초기화.
-            MainCamera.transform.position = _pigeon.transform.position + _pigeon.transform.GetChild(0).forward * -10;
+            MainCamera.transform.position = _pigeon.transform.position + new Vector3(0, 1, 0) + 
+                                            _pigeon.transform.GetChild(0).forward * -_ditanceCamera;
             return true;
         }
 
@@ -135,8 +154,10 @@ namespace Scenes
                 var smoothCount = 5;
                 var total = loopCount * 2 * smoothCount;
                 var index = 0;
-                
-                
+
+                var centerX = (int)(w * 0.5f);
+                var centerZ = (int)(w * 0.5f);
+                    
                 // 타일 생성.
                 for (int x = 0; x < w; x++)
                 {
@@ -144,17 +165,23 @@ namespace Scenes
                     {
                         var adress = x + z * w;
                         var tileData = new TileData();
-                        tileData.Color = Color.gray;
-                        
+                       
                         if (x == 0 || x == w - 1 || z == 0 || z == h - 1)
                         {
-                            tileData.Color = Color.black;
+                            tileData.type = TileType.Wall;
+                        }
+                        else if (x > centerX - 10 && x < centerX + 10 && z > centerZ - 10 && z < centerZ + 10)
+                        {
+                            tileData.type = TileType.Ground;
                         }
                         else
                         {
                             var waterPercent = 50;
                             var randColor = RandomNumber(0, 100);
-                            tileData.Color = (randColor < waterPercent) ? Color.blue : Color.gray; //비율에 따라 벽 혹은 빈 공간 생성
+                            if( randColor < waterPercent)
+                                tileData.type = TileType.Water;
+                            else
+                                tileData.type = TileType.Ground;
                         }
 
                         Coordinate data = new Coordinate();
@@ -165,7 +192,7 @@ namespace Scenes
                         Amount = (float)index / (float)total;
                     }
                 }
-
+                
                 // 스무스 처리.
                 for (var i = 0; i < smoothCount; i++)
                 {
@@ -174,17 +201,16 @@ namespace Scenes
                         for (int z = 0; z < _mapData.Height; z++) 
                         {
                             int adress = x + z * _mapData.Width;
-                            if (_mapData.Data[adress].Tile.Color == Color.black)
+                            if (_mapData.Data[adress].Tile.type == TileType.Wall)
                                 continue;
-                        
                             int neighbourWallTiles = GetSurroundingWallCount(x, z);
                             if (neighbourWallTiles > 4)//map[x, y] = WALL; //주변 칸 중 벽이 4칸을 초과할 경우 현재 타일을 벽으로 바꿈
                             {
-                                _mapData.Data[adress].Tile.Color = Color.blue;
+                                _mapData.Data[adress].Tile.type = TileType.Water;
                             }
                             else if (neighbourWallTiles < 4)//map[x, y] = ROAD; //주변 칸 중 벽이 4칸 미만일 경우 현재 타일을 빈 공간으로 바꿈
                             {
-                                _mapData.Data[adress].Tile.Color = Color.gray;
+                                _mapData.Data[adress].Tile.type = TileType.Ground;
                             }
                             
                             index++;
@@ -202,17 +228,30 @@ namespace Scenes
                         var data = _mapData.Data[adress];
                         if (data != null)
                         {
-                            if (data.Tile.Color == Color.gray)
+                            if (data.Tile.type == TileType.Ground)
                             {
-                                int rand = RandomNumber(1, 10);
-                                if (rand <= 2)
+                                int rand = RandomNumber(1, 50);
+                                if (rand < 10)
                                 {                               
                                     if (data.Objects == null)
                                     {
                                         data.Objects = new List<ObjectData>();
                                         var obj = new ObjectData();
-                                        obj.Id = rand;
-                                        
+                                        obj.Id = RandomNumber(2, 9);
+                                        data.Objects.Add(obj);
+                                    }
+                                }
+                            }
+                            else if (data.Tile.type == TileType.Water)
+                            {
+                                int rand = RandomNumber(1, 50);
+                                if (rand < 20)
+                                {                               
+                                    if (data.Objects == null)
+                                    {
+                                        data.Objects = new List<ObjectData>();
+                                        var obj = new ObjectData();
+                                        obj.Id = 1;
                                         data.Objects.Add(obj);
                                     }
                                 }
@@ -240,7 +279,7 @@ namespace Scenes
                         if (neighbourX != gridX || neighbourY != gridY)
                         {
                             //wallCount += _mapData[adress]; //벽은 1이고 빈 공간은 0이므로 벽일 경우 wallCount 증가
-                            if (_mapData.Data[adress].Tile.Color != Color.gray)
+                            if (_mapData.Data[adress].Tile.type != TileType.Ground)
                             {
                                 wallCount += 1;
                             }
@@ -283,7 +322,8 @@ namespace Scenes
         {
             if (_pigeon == true)
             {
-                var cameraPosition = _pigeon.transform.position + _pigeon.transform.GetChild(0).forward * -10;
+                var cameraPosition = _pigeon.transform.position + new Vector3(0, 1, 0) +
+                                     _pigeon.transform.GetChild(0).forward * -_ditanceCamera;
                 if (Vector3.Distance(MainCamera.transform.position, cameraPosition) > 0.1f)
                 {                
                     MainCamera.transform.DOKill();

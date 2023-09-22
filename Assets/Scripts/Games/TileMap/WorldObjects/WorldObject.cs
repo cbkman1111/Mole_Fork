@@ -30,7 +30,7 @@ namespace TileMap
             this.z = posZ;
             
             _onUpdatePosition = onUpdatePosition;
-            transform.position = new Vector3((float)posX, 0f, (float)posZ);
+            transform.position = new Vector3((float)posX, 0.5f, (float)posZ);
 
             UpdateSpriteRenderOrder();
             return true;
