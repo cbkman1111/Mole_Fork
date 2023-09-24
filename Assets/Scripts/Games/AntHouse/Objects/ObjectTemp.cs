@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Common.Global;
+using Games.AntHouse.Objects;
 using UnityEngine;
 
 public class ObjectTemp : ObjectBase

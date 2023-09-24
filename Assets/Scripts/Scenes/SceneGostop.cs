@@ -1,91 +1,94 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+using Common.Global;
+using Common.Scene;
+using UI.Menu;
 using UnityEngine;
 
-public class SceneGostop : SceneBase
+namespace Scenes
 {
-    private Board board = null;
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <returns></returns>
-    public override bool Init(JSONObject param)
+    public class SceneGostop : SceneBase
     {
-        UIMenuGostop menu = UIManager.Instance.OpenMenu<UIMenuGostop>("UIMenuGostop");
-        if (menu != null)
+        private Board _board = null;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override bool Init(JSONObject param)
         {
-            menu.InitMenu();
-        }
-
-        board = Board.Create(menu);
-        if (board != null)
-        {
-            board.StartGame();
-        }
-
-        return true;
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            
-        }
-    }
-
-    public override void OnTouchBean(Vector3 position)
-    {
-
-    }
-
-    public override void OnTouchEnd(Vector3 position)
-    {
-        Ray ray = MainCamera.ScreenPointToRay(position);
-        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
-        {
-            var layer = hit.collider.gameObject.layer;
-            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Card"))
+            UIMenuGostop menu = UIManager.Instance.OpenMenu<UIMenuGostop>("UI/UIMenuGostop");
+            if (menu != null)
             {
-                Card card = hit.collider.GetComponent<Card>();
-                if (card != null)
-                {
-                    var stateMachine = board.GetStateMachine();
-                    var turnInfo = stateMachine.GetCurrturnInfo();
-                    var stateInfo = turnInfo.GetCurrentStateInfo();
+                menu.InitMenu();
+            }
 
-                    if (stateInfo.state == State.CARD_HIT &&
-                        board.MyTurn() == true)
+            _board = Board.Create(menu);
+            if (_board != null)
+            {
+                _board.StartGame();
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+            
+            }
+        }
+
+        public override void OnTouchBean(Vector3 position)
+        {
+
+        }
+
+        public override void OnTouchEnd(Vector3 position)
+        {
+            Ray ray = MainCamera.ScreenPointToRay(position);
+            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
+            {
+                var layer = hit.collider.gameObject.layer;
+                if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Card"))
+                {
+                    Card card = hit.collider.GetComponent<Card>();
+                    if (card != null)
                     {
-                        var list = board.GetSameMonthCard((int)Board.Player.USER, card);
-                        if (list.Count == 3)
+                        var stateMachine = _board.GetStateMachine();
+                        var turnInfo = stateMachine.GetCurrturnInfo();
+                        var stateInfo = turnInfo.GetCurrentStateInfo();
+
+                        if (stateInfo.state == State.CARD_HIT &&
+                            _board.MyTurn() == true)
                         {
-                            board.HitBomb((int)Board.Player.USER, list, card);
-                            stateInfo.evt = StateEvent.PROGRESS; 
-                        }
-                        else if (list.Count == 4) // √—≈Î
-                        {
-                            board.HitChongtong((int)Board.Player.USER, list, card);
-                            stateInfo.evt = StateEvent.PROGRESS;
-                        }
-                        else 
-                        {
-                            board.HitCard((int)Board.Player.USER, card);
-                            stateInfo.evt = StateEvent.PROGRESS; 
+                            var list = _board.GetSameMonthCard((int)Board.Player.USER, card);
+                            if (list.Count == 3)
+                            {
+                                _board.HitBomb((int)Board.Player.USER, list, card);
+                                stateInfo.evt = StateEvent.PROGRESS; 
+                            }
+                            else if (list.Count == 4) // Ï¥ùÌÜµ
+                            {
+                                _board.HitChongtong((int)Board.Player.USER, list, card);
+                                stateInfo.evt = StateEvent.PROGRESS;
+                            }
+                            else 
+                            {
+                                _board.HitCard((int)Board.Player.USER, card);
+                                stateInfo.evt = StateEvent.PROGRESS; 
+                            }
                         }
                     }
                 }
             }
         }
-    }
 
-    public override void OnTouchMove(Vector3 position)
-    {
+        public override void OnTouchMove(Vector3 position)
+        {
 
+        }
     }
 }

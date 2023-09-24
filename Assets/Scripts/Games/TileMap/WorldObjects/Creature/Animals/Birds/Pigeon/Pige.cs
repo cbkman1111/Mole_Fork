@@ -6,6 +6,10 @@ namespace TileMap
 {
     public class Pige : Bird
     {
-
+        protected override void UpdateSpriteRenderOrder()
+        {
+            
+         
+        }
     }
 }

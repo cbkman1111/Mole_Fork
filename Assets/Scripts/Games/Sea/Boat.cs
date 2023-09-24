@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Games.Sea;
 using UnityEngine;
 
 public class Boat : MonoBehaviour

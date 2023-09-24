@@ -1,26 +1,29 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using Common.Global;
+using Common.Scene;
+using Common.UIObject;
 using UnityEngine.UI;
 
-public class UIMenuIntro : MenuBase
+namespace UI.Menu
 {
-    public override void OnInit()
+    public class UIMenuIntro : MenuBase
     {
-
-    }
-
-    public bool InitMenu()
-    {
-        return true;
-    }
-
-    protected override void OnClick(Button btn)
-    {
-        string name = btn.name;
-        if(name == "Button - Start")
+        public override void OnInit()
         {
-            AppManager.Instance.ChangeScene(SceneBase.SCENES.SceneMenu);
+
+        }
+
+        public bool InitMenu()
+        {
+            return true;
+        }
+
+        protected override void OnClick(Button btn)
+        {
+            string name = btn.name;
+            if(name == "Button - Start")
+            {
+                AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneMenu);
+            }
         }
     }
 }

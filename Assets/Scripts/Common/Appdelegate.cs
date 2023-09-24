@@ -1,3 +1,5 @@
+using Common.Global;
+using Common.Scene;
 using UnityEngine;
 
 public class AppDelegate : MonoBehaviour
@@ -7,9 +9,11 @@ public class AppDelegate : MonoBehaviour
     {
         Debug.Log("App Started. by AppDelegate.cs");
         
+        Application.targetFrameRate = 60;
+
         SoundManager.Instance.Load();
 
-        AppManager.Instance.ChangeScene(SceneBase.SCENES.SceneIntro, false);
+        AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneIntro, false);
     }
 
     void OnApplicationPause(bool paused)

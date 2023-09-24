@@ -51,9 +51,9 @@ namespace Ant
             {
                 Handler.position = position;
 
-                float distance = Mathf.Abs(Vector2.Distance(center, position));
-                float angle = GetAngle(center, position);
-                Vector3 newDirection = (position - center).normalized;
+                var distance = Mathf.Abs(Vector2.Distance(center, position));
+                var angle = GetAngle(center, position);
+                var newDirection = (position - center).normalized;
 
                 if (distance > radius)
                 {

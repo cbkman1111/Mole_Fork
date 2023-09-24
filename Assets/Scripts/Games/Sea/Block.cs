@@ -1,11 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Block : MonoBehaviour
+namespace Games.Sea
 {
-    public bool Init()
+    public class Block : MonoBehaviour
     {
-        return true;
+
     }
 }

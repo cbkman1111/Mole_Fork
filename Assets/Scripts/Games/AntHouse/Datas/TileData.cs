@@ -1,13 +1,15 @@
-using System;
 using UnityEngine;
 
-[System.Serializable]
-public class TileData
+namespace Games.AntHouse.Datas
 {
-    public Vector3Int Cordinate;
-
-    public TileData(Vector3Int cordinate)
+    [System.Serializable]
+    public class TileData
     {
-        Cordinate = cordinate;
+        public Vector3Int Cordinate;
+
+        public TileData(Vector3Int cordinate)
+        {
+            Cordinate = cordinate;
+        }
     }
 }

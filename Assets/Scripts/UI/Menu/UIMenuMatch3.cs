@@ -1,51 +1,50 @@
-using SweetSugar.Scripts.Core;
-using SweetSugar.Scripts.GUI;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
-using UnityEngine;
+using Common.Global;
+using Common.Scene;
+using Common.UIObject;
 using UnityEngine.UI;
 
-public class UIMenuMatch3 : MenuBase
+namespace UI.Menu
 {
-    int level = 1;
-
-    public Action<int> OnStartGame { get; set;}
-
-    public override void OnInit()
+    public class UIMenuMatch3 : MenuBase
     {
+        int level = 1;
 
-    }
+        public Action<int> OnStartGame { get; set;}
 
-    public bool InitMenu()
-    {
-
-        return true;
-    }
-
-    public override void OnValueChanged(InputField input, string str) 
-    {
-        string name = input.name;
-        if(name == "InputField - Level")
+        public override void OnInit()
         {
-            level = int.Parse(str);
+
         }
-    }
 
-    protected override void OnClick(Button btn)
-    {
-        string name = btn.name;
-        if (name == "Button - Back")
+        public bool InitMenu()
         {
-            AppManager.Instance.ChangeScene(SceneBase.SCENES.SceneMenu);
+
+            return true;
         }
-        else if (name == "Button - StartGame")
+
+        public override void OnValueChanged(InputField input, string str) 
         {
-            if (OnStartGame != null)
-                OnStartGame(level);
+            string name = input.name;
+            if(name == "InputField - Level")
+            {
+                level = int.Parse(str);
+            }
+        }
+
+        protected override void OnClick(Button btn)
+        {
+            string name = btn.name;
+            if (name == "Button - Back")
+            {
+                AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneMenu);
+            }
+            else if (name == "Button - StartGame")
+            {
+                OnStartGame?.Invoke(level);
 
 
+            }
         }
     }
 }

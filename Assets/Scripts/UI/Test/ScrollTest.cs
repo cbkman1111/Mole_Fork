@@ -1,12 +1,12 @@
-using InfinityScroll;
 using System.Collections.Generic;
 using System.Linq;
+using Common.UIObject.Scroll;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 /// <summary>
-/// Ã¤ÆÃ ½ºÅ©·Ñ¿¡ »ç¿ëµÇ´Â ÇÁ¸®ÆÕ Å¸ÀÔ.
+/// ì±„íŒ… ìŠ¤í¬ë¡¤ì— ì‚¬ìš©ë˜ëŠ” í”„ë¦¬íŒ¹ íƒ€ì….
 /// </summary>
 public enum TestPrefabType
 {
@@ -26,9 +26,6 @@ public class ScrollTest : ScrollBase<ScrollData>
 	/// <returns></returns>
 	public override bool Init(RectTransform[] arry)
 	{
-		if (Initialized == true)
-			return true;
-
 		if (base.Init(arry) == false)
 			return false;
 
@@ -43,7 +40,6 @@ public class ScrollTest : ScrollBase<ScrollData>
 		}
 
 		verticalNormalizedPosition = 0;
-		Initialized = true;
 		return true;
 	}
 	/// <summary>
@@ -54,7 +50,7 @@ public class ScrollTest : ScrollBase<ScrollData>
 	private RectTransform GetObject(TestPrefabType type)
 	{
 		string name = preLoaded[(int)type].name;
-		return pool.GetObject(name);
+		return Pool.GetObject(name);
 	}
 
 	protected override RectTransform GetObject(ScrollCell<ScrollData> cell)

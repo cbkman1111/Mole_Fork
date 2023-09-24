@@ -1,27 +1,26 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using Common.UIObject;
 
-namespace Singleton
+namespace Common.Global.Singleton
 {
     public abstract class Singleton<T> where T : class, new()
     {
-        public string TAG = "Singleton - ";
-        protected static object instanceLock = new object();
-        protected static volatile T instance;
+        public string Tag = "Singleton - ";
+        private static object _instanceLock = new object();
+        private static volatile T _instance;
         public static T Instance
         {
             get
             {
-                lock (instanceLock)
+                lock (_instanceLock)
                 {
-                    if(null == instance)
+                    if(null == _instance)
                     {
-                        instance = new T();
+                        _instance = new T();
                     }
                 }
 
-                return instance;
+                return _instance;
             }
         }
 
@@ -35,28 +34,28 @@ namespace Singleton
 
     public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T>
     {
-        private static T instance = null;
+        private static T _instance;
         public static T Instance
         {
             get
             {
-                if (instance == null)
-                {
-                    instance = GameObject.FindObjectOfType(typeof(T)) as T;
-                    if (instance == null)
-                    {
-                        instance = new GameObject(typeof(T).ToString()).AddComponent<T>();
-                        DontDestroyOnLoad(instance);
+                if (_instance != false) return _instance;
+                
+                // ReSharper disable once Unity.PerformanceCriticalCodeInvocation
+                _instance = GameObject.FindObjectOfType(typeof(T)) as T;
+                if (_instance != false) return _instance;
+                
+                // ReSharper disable once Unity.PerformanceCriticalCodeInvocation
+                _instance = new GameObject(typeof(T).ToString()).AddComponent<T>();
+                DontDestroyOnLoad(_instance);
 
-                        instance.Init();
-                    }
-                }
-
-                return instance;
+                // ReSharper disable once Unity.PerformanceCriticalCodeInvocation
+                _instance.Init();
+                return _instance;
             }
         }
 
-        public abstract bool Init();
-        public string TAG { get => name; }
+        protected abstract bool Init();
+        protected string Tag => name;
     }
 }

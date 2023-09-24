@@ -1,20 +1,22 @@
-using System.Collections;
 using UnityEngine;
 
-public class SceneLoading : MonoBehaviour
+namespace Scenes
 {
-    public UILoadingMenu menu = null;
-
-    public void SetPercent(float percent)
+    public class SceneLoading : MonoBehaviour
     {
-        if (menu != null)
+        public UILoadingMenu menu = null;
+
+        public void SetPercent(float percent)
         {
-            menu.SetPercent(percent);
+            if (menu != null)
+            {
+                menu.SetPercent(percent);
+            }
         }
-    }
 
-    public bool Complete()
-    {
-        return menu.Complete();
+        public bool Complete()
+        {
+            return menu.Complete();
+        }
     }
 }
