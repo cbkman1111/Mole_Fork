@@ -1,14 +1,16 @@
-﻿using System;
-using UnityEngine;
+﻿using Common.Global;
 using UnityEngine.UI;
 
-public class HudBase : UIObject
+namespace Common.UIObject
 {
-    public override void OnInit() { }
-    protected override void OnClick(Button button) { }
-    public override void Close()
+    public class HudBase : UIObject
     {
-        UIManager.Instance.CloseHud(name);
+        public override void OnInit() { }
+        protected override void OnClick(Button button) { }
+        public override void Close()
+        {
+            UIManager.Instance.CloseHud(name);
+        }
     }
 }
 

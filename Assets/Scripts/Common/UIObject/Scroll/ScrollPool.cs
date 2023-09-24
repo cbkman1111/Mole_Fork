@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
-namespace InfinityScroll
+namespace Common.UIObject.Scroll
 {
 	/// <summary>
 	/// 

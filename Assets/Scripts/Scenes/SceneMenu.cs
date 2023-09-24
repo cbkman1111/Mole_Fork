@@ -1,42 +1,46 @@
-using System.Collections;
-using System.Collections.Generic;
+using Common.Global;
+using Common.Scene;
+using UI.Menu;
 using UnityEngine;
 
-public class SceneMenu : SceneBase
+namespace Scenes
 {
-
-
-    public override bool Init(JSONObject param)
+    public class SceneMenu : SceneBase
     {
-        UIMenu menu = UIManager.Instance.OpenMenu<UIMenu>("UIMenu");
-        if (menu != null)
+
+
+        public override bool Init(JSONObject param)
         {
-            menu.InitMenu();
+            UIMenu menu = UIManager.Instance.OpenMenu<UIMenu>("UI/UIMenu");
+            if (menu != null)
+            {
+                menu.InitMenu();
+            }
+
+            return true;
         }
 
-        return true;
-    }
+        public override void OnTouchBean(Vector3 position)
+        {
 
-    public override void OnTouchBean(Vector3 position)
-    {
+        }
 
-    }
+        public override void OnTouchEnd(Vector3 position)
+        {
+            var world = MainCamera.ScreenToWorldPoint(position);
 
-    public override void OnTouchEnd(Vector3 position)
-    {
-        var world = MainCamera.ScreenToWorldPoint(position);
+            Ray ray = MainCamera.ScreenPointToRay(world);
+            //RaycastHit2D hit = Physics2D.Raycast(world, transform.forward);
+            //if (hit.collider != null)
+            //{
+            //}
 
-        Ray ray = MainCamera.ScreenPointToRay(world);
-        //RaycastHit2D hit = Physics2D.Raycast(world, transform.forward);
-        //if (hit.collider != null)
-        //{
-        //}
+            //Debug.DrawRay(world, transform.forward * 100, Color.red, 1.3f);
+        }
 
-        //Debug.DrawRay(world, transform.forward * 100, Color.red, 1.3f);
-    }
+        public override void OnTouchMove(Vector3 position)
+        {
 
-    public override void OnTouchMove(Vector3 position)
-    {
-
+        }
     }
 }

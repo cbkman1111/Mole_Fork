@@ -1,18 +1,16 @@
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
-using DG.Tweening;
 
-namespace InfinityScroll
+namespace Common.UIObject.Scroll
 {
 	public abstract class ScrollBase<T> : ScrollRect
 	{
-		protected List<int> DisplayList = null;
-		protected List<ScrollCell<T>> CellList = null;
+		private List<int> _displayList = null;
+		private List<ScrollCell<T>> _cellList = null;
 
-		protected ScrollPool pool = null;
-		protected bool Initialized = false;
-
+		protected ScrollPool Pool = null;
 		public int CurrIndex = -1; // 디스플레이하고 있는 첫번째 노드 인덱스.
 
 		/// <summary>
@@ -22,23 +20,23 @@ namespace InfinityScroll
 		/// <returns></returns>
 		public virtual bool Init(RectTransform[] arry)
 		{
-			if (pool == null)
+			if (Pool == null)
 			{
-				pool = new ScrollPool();
-				pool.Init(content, 1, arry);
+				Pool = new ScrollPool();
+				Pool.Init(content, 1, arry);
 			}
 
-			if (CellList == null)
+			if (_cellList == null)
 			{
-				CellList = new List<ScrollCell<T>>();
+				_cellList = new List<ScrollCell<T>>();
 			}
 
-			if (DisplayList == null)
+			if (_displayList == null)
 			{
-				DisplayList = new List<int>();
+				_displayList = new List<int>();
 			}
 
-			CellList.ForEach(cell => ReturnObject(cell));
+			_cellList.ForEach(cell => ReturnObject(cell));
 			SetLayoutVertical();
 			return true;
 		}
@@ -98,21 +96,21 @@ namespace InfinityScroll
 			if (enabled == false)
 				return;
 
-			if (CellList == null)
+			if (_cellList == null)
 				return;
 
 			CurrIndex = 0;
-			if (DisplayList.Count > 0)
-				CurrIndex = DisplayList[0];
+			if (_displayList.Count > 0)
+				CurrIndex = _displayList[0];
 
-			DisplayList.Clear();
+			_displayList.Clear();
 
-			for (int i = CurrIndex - 1; i < CellList.Count; i++)
+			for (int i = CurrIndex - 1; i < _cellList.Count; i++)
 			{
-				if (i < 0 || i >= CellList.Count)
+				if (i < 0 || i >= _cellList.Count)
 					continue;
 
-				var node = CellList[i];
+				var node = _cellList[i];
 				CheckPosition(node);
 
 				if (node.State == CellState.Out_Up)
@@ -133,7 +131,7 @@ namespace InfinityScroll
 					}
 
 					node.Position = new Vector2(0, node.Position.y);
-					DisplayList.Add(i);
+					_displayList.Add(i);
 				}
 			}
 		}
@@ -145,8 +143,8 @@ namespace InfinityScroll
 		/// <returns></returns>
 		private IEnumerator<float> CoSetItems(List<T> list)
 		{
-			CellList.ForEach(cell => ReturnObject(cell));
-			CellList.Clear();
+			_cellList.ForEach(cell => ReturnObject(cell));
+			_cellList.Clear();
 			enabled = false;
 
 			yield return MEC.Timing.WaitForOneFrame;
@@ -169,9 +167,9 @@ namespace InfinityScroll
 			}
 
 			yield return MEC.Timing.WaitForOneFrame;
-			for (int i = 0; i < CellList.Count; i++)
+			for (int i = 0; i < _cellList.Count; i++)
 			{
-				var node = CellList[i];
+				var node = _cellList[i];
 				var frontNode = GetFront(i);
 				if (frontNode == null)
 				{
@@ -202,7 +200,7 @@ namespace InfinityScroll
 			yield return MEC.Timing.WaitForOneFrame;
 
 			enabled = false;
-			ScrollCell<T> firstNode = CellList[0];
+			ScrollCell<T> firstNode = _cellList[0];
 			float AddHeight = 0;
 			for (int i = 0; i < list.Count; i++)
 			{
@@ -219,9 +217,9 @@ namespace InfinityScroll
 			}
 
 			yield return MEC.Timing.WaitForOneFrame;
-			for (int i = 0; i < CellList.Count; i++)
+			for (int i = 0; i < _cellList.Count; i++)
 			{
-				var node = CellList[i];
+				var node = _cellList[i];
 				var frontNode = GetFront(i);
 				if (frontNode == null)
 				{
@@ -250,8 +248,8 @@ namespace InfinityScroll
 
 			enabled = false;
 
-			int last = CellList.Count - 1;
-			ScrollCell<T> lastNode = CellList[last];
+			int last = _cellList.Count - 1;
+			ScrollCell<T> lastNode = _cellList[last];
 			bool bottom = false;
 			if (lastNode.RectTrans != null)
 			{
@@ -297,7 +295,7 @@ namespace InfinityScroll
 		private bool AddCell(ScrollCell<T> cell)
 		{
 			UpdateCell(cell.Data, cell.RectTrans);
-			CellList.Add(cell);
+			_cellList.Add(cell);
 			return true;
 		}
 
@@ -309,7 +307,7 @@ namespace InfinityScroll
 		private bool Insert(ScrollCell<T> cell)
 		{
 			UpdateCell(cell.Data, cell.RectTrans);
-			CellList.Insert(0, cell);
+			_cellList.Insert(0, cell);
 			return true;
 		}
 
@@ -347,12 +345,12 @@ namespace InfinityScroll
 		private ScrollCell<T> GetFront(int curr)
 		{
 			int front = curr - 1;
-			if (front < 0 || front >= CellList.Count)
+			if (front < 0 || front >= _cellList.Count)
 			{
 				return null;
 			}
 
-			return CellList[front];
+			return _cellList[front];
 		}
 
 		/// <summary>
@@ -383,7 +381,7 @@ namespace InfinityScroll
 			if (cell == null)
 				return false;
 
-			bool success = pool.ReturnObject(cell.RectTrans);
+			bool success = Pool.ReturnObject(cell.RectTrans);
 			if (success == true)
 			{
 				cell.RectTrans = null;

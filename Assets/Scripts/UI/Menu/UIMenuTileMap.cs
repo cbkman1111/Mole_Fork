@@ -1,45 +1,69 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using Common.Global;
+using Common.Scene;
+using Common.UIObject;
+using Common.Utils.Pool;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-public class UIMenuTileMap : MenuBase
+namespace UI.Menu
 {
-    [SerializeField]
-    public Ant.Joystick Joystick = null;
-
-    public override void OnInit()
+    public class UIMenuTileMap : MenuBase
     {
+        [FormerlySerializedAs("Joystick")] [SerializeField]
+        public Ant.Joystick joystick = null;
 
-    }
-
-    public bool InitMenu(Action<Vector3> move, Action stop)
-    {
-        Joystick.Init((Vector3 direct, float angle) => {
-            SetText("Text - Debug", $"Angle : {angle}");
-
-            if (move != null)
-            {
-                move(direct);
-            }
-        },
-        () => {
-            if (stop != null)
-            {
-                stop();
-            }
-        });
-
-        return true;
-    }
-
-    protected override void OnClick(Button btn)
-    {
-        string name = btn.name;
-        if(name == "Button - Back")
+        private Action saveGame = null;
+        private Action<float> zoomCamera = null;
+        
+        public override void OnInit()
         {
-            AppManager.Instance.ChangeScene(SceneBase.SCENES.SceneMenu);
+
+        }
+
+        public bool InitMenu(Action<Vector3> move, Action stop, Action save, Action<float> zoom)
+        {
+            joystick.Init((Vector3 direct, float angle) => {
+                    SetText("Text - Debug", $"Angle : {angle}");
+
+                    move?.Invoke(direct);
+                },
+                () =>
+                {
+                    stop?.Invoke();
+                });
+
+            saveGame = save;
+            zoomCamera = zoom;
+            return true;
+        }
+
+        public override void OnValueChanged(Slider slider, float f)
+        {
+            zoomCamera(f);
+        }
+
+        /*
+        private void Update()
+        {
+            int countGround = PoolManager.Instance.GetObjectCount("TileGround");
+            int countWater = PoolManager.Instance.GetObjectCount("TileWater");
+            SetText("Text - MapInfo", $"{countGround}/{countWater}/{countGround + countWater}");
+        }
+        */
+
+        protected override void OnClick(Button btn)
+        {
+            string btnName = btn.name;
+            if(btnName == "Button - Back")
+            {
+                AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneMenu);
+            }
+            else if (btnName == "Button - Save")
+            {
+                saveGame?.Invoke();
+            }
         }
     }
 }

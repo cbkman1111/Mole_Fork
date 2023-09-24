@@ -1,9 +1,6 @@
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-
-namespace InfinityScroll
+namespace Common.UIObject.Scroll
 {
 	public enum CellState
 	{

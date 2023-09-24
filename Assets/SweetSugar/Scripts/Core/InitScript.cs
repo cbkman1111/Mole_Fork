@@ -84,7 +84,7 @@ namespace SweetSugar.Scripts.Core
         // Use this for initialization
         void Awake()
         {
-            Application.targetFrameRate = 60;
+            
             Instance = this;
             RestLifeTimer = PlayerPrefs.GetFloat("RestLifeTimer");
             DateOfExit = PlayerPrefs.GetString("DateOfExit", "");

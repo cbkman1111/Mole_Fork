@@ -1,31 +1,37 @@
+using Common.Global;
+using Common.Scene;
+using UI.Menu;
 using UnityEngine;
 
-public class SceneIntro : SceneBase
+namespace Scenes
 {
-    public override bool Init(JSONObject param)
+    public class SceneIntro : SceneBase
     {
-        UIMenuIntro menu = UIManager.Instance.OpenMenu<UIMenuIntro>("UIMenuIntro");
-        if(menu != null)
+        public override bool Init(JSONObject param)
         {
-            menu.InitMenu();
+            UIMenuIntro menu = UIManager.Instance.OpenMenu<UIMenuIntro>("UI/UIMenuIntro");
+            if(menu != null)
+            {
+                menu.InitMenu();
+            }
+
+            return true;
         }
 
-        return true;
-    }
+        public override void OnTouchBean(Vector3 position)
+        {
 
-    public override void OnTouchBean(Vector3 position)
-    {
+        }
 
-    }
+        public override void OnTouchEnd(Vector3 position)
+        {
 
-    public override void OnTouchEnd(Vector3 position)
-    {
+        }
 
-    }
+        public override void OnTouchMove(Vector3 position)
+        {
 
-    public override void OnTouchMove(Vector3 position)
-    {
-
+        }
     }
 }
 

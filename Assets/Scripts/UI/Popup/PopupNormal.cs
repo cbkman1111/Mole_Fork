@@ -1,37 +1,40 @@
-﻿using DG.Tweening;
-using System;
+﻿using Common.UIObject;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PopupNormal : PopupBase
+namespace UI.Popup
 {
-    public override void OnInit() 
+    public class PopupNormal : PopupBase
     {
-        transform.position = new Vector3(Screen.width * 0.5f, Screen.height * 2.0f);
-        transform.DOMove(
-            new Vector3(transform.position.x, Screen.height * 0.5f), 0.4f).
-            SetEase(Ease.OutExpo).
-            OnComplete(() => { 
-            });
-    }
-
-    public override void Close()
-    {
-        transform.DOMove(
-            new Vector3(transform.position.x, Screen.height * 2), 0.4f).
-            SetEase(Ease.OutExpo).
-            OnComplete(() => {
-                base.Close();
-            });
-    }
-
-    protected override void OnClick(Button button)
-    {
-        string name = button.name;
-
-        if(name == "Button - Ok")
+        public override void OnInit() 
         {
-            Close();
+            transform.position = new Vector3(Screen.width * 0.5f, Screen.height * 2.0f);
+            transform.DOMove(
+                    new Vector3(transform.position.x, Screen.height * 0.5f), 0.4f).
+                SetEase(Ease.OutExpo).
+                OnComplete(() => { 
+                });
+        }
+
+        public override void Close()
+        {
+            transform.DOMove(
+                    new Vector3(transform.position.x, Screen.height * 2), 0.4f).
+                SetEase(Ease.OutExpo).
+                OnComplete(() => {
+                    base.Close();
+                });
+        }
+
+        protected override void OnClick(Button button)
+        {
+            string name = button.name;
+
+            if(name == "Button - Ok")
+            {
+                Close();
+            }
         }
     }
 }

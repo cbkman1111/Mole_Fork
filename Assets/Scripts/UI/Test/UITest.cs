@@ -1,5 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Common.Global;
+using Common.Scene;
+using Common.UIObject;
+using Games.Sea;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,7 +27,7 @@ public class UITest : MenuBase
 
         if(name == "Button - Get")
         {
-            AppManager.Instance.ChangeScene(SceneBase.SCENES.SceneLoading);
+            AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneLoading);
         }
         else if (name == "Button - Release")
         {

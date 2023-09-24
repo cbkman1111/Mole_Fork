@@ -1,199 +1,190 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public abstract class UIObject : MonoBehaviour
+namespace Common.UIObject
 {
-    protected Dictionary<string, Component> list = null;
-    private void Awake()
+    public abstract class UIObject : MonoBehaviour
     {
-        list = new Dictionary<string, Component>();
-
-        Transform[] children = GetComponentsInChildren<Transform>(true);
-        foreach (var child in children)
+        protected Dictionary<string, Component> List = null;
+        private void Awake()
         {
-            Button button = child.GetComponent<Button>();
-            if (button != null)
-            {
-                if (list.ContainsKey(button.name) == false)
-                {
-                    button.onClick.AddListener(() => {
-                        Click(button);
-                    });
+            List = new Dictionary<string, Component>();
 
-                    list.Add(button.name, button);
-                    continue;
-                }
-            }
-
-            InputField input = child.GetComponent<InputField>();
-            if (input != null)
+            var children = GetComponentsInChildren<Transform>(true);
+            foreach (var child in children)
             {
-                if (list.ContainsKey(input.name) == false)
+                Button button = child.GetComponent<Button>();
+                if (button != null)
                 {
-                    input.onValueChanged.AddListener((string str) =>
+                    if (List.ContainsKey(button.name) == false)
                     {
-                        OnValueChanged(input, str);
-                    });
+                        button.onClick.AddListener(() => {
+                            Click(button);
+                        });
 
-                    list.Add(input.name, input);
-                    continue;
+                        List.Add(button.name, button);
+                        continue;
+                    }
                 }
-            }
 
-            Slider slider = child.GetComponent<Slider>();
-            if (slider != null)
-            {
-                if (list.ContainsKey(slider.name) == false)
+                var input = child.GetComponent<InputField>();
+                if (input != null)
                 {
-                    slider.value = 0;
-                    slider.onValueChanged.AddListener((float f) =>
+                    if (List.ContainsKey(input.name) == false)
                     {
-                        OnValueChanged(slider, f);
-                    });
+                        input.onValueChanged.AddListener((string str) =>
+                        {
+                            OnValueChanged(input, str);
+                        });
 
-                    list.Add(slider.name, slider);
+                        List.Add(input.name, input);
+                        continue;
+                    }
+                }
+
+                var slider = child.GetComponent<Slider>();
+                if (slider != null)
+                {
+                    if (List.ContainsKey(slider.name) == false)
+                    {
+                        slider.value = 0;
+                        slider.onValueChanged.AddListener((float f) =>
+                        {
+                            OnValueChanged(slider, f);
+                        });
+
+                        List.Add(slider.name, slider);
+                        continue;
+                    }
+                }
+
+                var text = child.GetComponent<Text>();
+                if (text != null)
+                {
+                    List.TryAdd(text.name, text);
                     continue;
                 }
-            }
 
-            Text text = child.GetComponent<Text>();
-            if (text != null)
-            {
-                if (list.ContainsKey(text.name) == false)
+                var img = child.GetComponent<Image>();
+                if (img != null)
                 {
-                    list.Add(text.name, text);
+                    List.TryAdd(img.name, img);
+                    continue;
                 }
 
-                continue;
-            }
-
-            Image img = child.GetComponent<Image>();
-            if (img != null)
-            {
-                if (list.ContainsKey(img.name) == false)
+                var scroll = child.GetComponent<ScrollRect>();
+                if (scroll != null)
                 {
-                    list.Add(img.name, img);
+                    List.TryAdd(scroll.name, scroll);
+                    continue;
                 }
-
-                continue;
-            }
-
-            ScrollRect scroll = child.GetComponent<ScrollRect>();
-            if (scroll != null)
-            {
-                if (list.ContainsKey(scroll.name) == false)
-                {
-                    list.Add(scroll.name, scroll);
-                }
-
-                continue;
             }
         }
-    }
 
-    protected int CompareTo(string a, string b)
-    {
-        return a.CompareTo(b);
-    }
-
-    protected T GetObject<T>(string key)
-    {
-        if (list.TryGetValue(key, out Component obj) == true)
+        protected int CompareTo(string a, string b)
         {
-            return obj.GetComponent<T>();
+            return string.Compare(a, b, StringComparison.Ordinal);
         }
+
+        protected T GetObject<T>(string key)
+        {
+            if (List.TryGetValue(key, out Component obj) == true)
+            {
+                return obj.GetComponent<T>();
+            }
          
-        return default(T);
-    }
+            return default(T);
+        }
     
-    protected void SetText(string key, string str)
-    {
-        if (list.TryGetValue(key, out Component obj) == true)
+        protected void SetText(string key, string str)
         {
-            Text text = obj.GetComponent<Text>();
-            if(text != null)
+            if (List.TryGetValue(key, out Component obj) == true)
+            {
+                Text text = obj.GetComponent<Text>();
+                if(text != null)
+                {
+                    text.text = str;
+                }
+            }
+        }
+
+        protected void SetText(Text text, string str)
+        {
+            if (text != null)
             {
                 text.text = str;
             }
         }
-    }
 
-    protected void SetText(Text text, string str)
-    {
-        if (text != null)
+        protected void SetPosition(string key, Vector3 position)
         {
-            text.text = str;
+            if (List.TryGetValue(key, out Component obj) == true)
+            {
+                obj.transform.position = position;
+            }
         }
-    }
 
-    protected void SetPosition(string key, Vector3 position)
-    {
-        if (list.TryGetValue(key, out Component obj) == true)
+        protected void SetActive(string key, bool active)
         {
-            obj.transform.position = position;
+            if (List.TryGetValue(key, out var obj) == true)
+            {
+                obj.gameObject.SetActive(active);
+            }
         }
-    }
 
-    protected void SetActive(string key, bool active)
-    {
-        if (list.TryGetValue(key, out Component obj) == true)
+        protected void SetSprite(string key, Sprite sprite)
         {
-            obj.gameObject.SetActive(active);
-        }
-    }
-
-    protected void SetSprite(string key, Sprite sprite)
-    {
-        if (list.TryGetValue(key, out Component obj) == true)
-        {
+            if (List.TryGetValue(key, out var obj) != true) return;
+            
             Image img = obj.GetComponent<Image>();
-            if (img != null)
+            if (img == true)
             {
                 img.sprite = sprite;
             }
         }
-    }
 
-    public virtual Transform FindTransform(Transform node, string path)
-    {
-        if (node == false)
+        public virtual Transform FindTransform(Transform node, string path)
         {
-            return null;
+            if (node == false)
+            {
+                return null;
+            }
+
+            Transform trans = node;
+            string[] names = path.Split('/');
+            int index = 0;
+            int count = names.Length;
+
+            while (index < count)
+            {
+                trans = trans.Find(names[index]);
+                if (trans)
+                {
+                    index++;
+                }
+                else
+                {
+                    trans = null;
+                    break;
+                }
+            }
+
+            return trans;
         }
 
-        Transform trans = node;
-        string[] names = path.Split('/');
-        int index = 0;
-        int count = names.Length;
-
-        while (index < count)
+        private void Click(Button btn)
         {
-            trans = trans.Find(names[index]);
-            if (trans)
-            {
-                index++;
-            }
-            else
-            {
-                trans = null;
-                break;
-            }
+            OnClick(btn);
         }
+        public virtual void OnOpen() { }
+        public virtual void OnClose() { }
+        public virtual void OnValueChanged(Slider slider, float f) { }
+        public virtual void OnValueChanged(InputField input, string str) { }
+        public abstract void OnInit();
+        protected abstract void OnClick(Button btn);
+        public abstract void Close();
 
-        return trans;
     }
-
-    private void Click(Button btn)
-    {
-        OnClick(btn);
-    }
-    public virtual void OnOpen() { }
-    public virtual void OnClose() { }
-    public virtual void OnValueChanged(Slider slider, float f) { }
-    public virtual void OnValueChanged(InputField input, string str) { }
-    public abstract void OnInit();
-    protected abstract void OnClick(Button btn);
-    public abstract void Close();
-
 }
