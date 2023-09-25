@@ -92,7 +92,9 @@ namespace Games.TileMap
         }
 
         private WorldObject GetWorldObject(ObjectData data)
-        {                            
+        {
+            
+
             string[] names =
             {
                 "SeaWeed",
@@ -106,8 +108,30 @@ namespace Games.TileMap
                 "Mushroom_sky",
                 "Mushroom_seed",
             };
-            
-            Transform trans = PoolManager.Instance.GetObject(names[data.Id - 1]);
+
+            string path = "";
+            if (data.Id == 1000)
+            {
+                path = "Bee";
+            }
+            else if (data.Id == 1001)
+            {
+                path = "Spider";
+            }
+            else if (data.Id == 1002)
+            {
+                path = "FishMan";
+            }
+            else if (data.Id == 2000)
+            {
+                path = "FishA";
+            }
+            else
+            {
+                path = names[data.Id - 1];
+            }
+
+            Transform trans = PoolManager.Instance.GetObject(path);
             if (trans == true)
             {           
                 var obj = trans.GetComponent<WorldObject>();
