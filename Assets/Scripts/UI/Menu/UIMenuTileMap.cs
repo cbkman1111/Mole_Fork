@@ -2,6 +2,7 @@ using System;
 using Common.Global;
 using Common.Scene;
 using Common.UIObject;
+using Common.Utils.Pool;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -42,7 +43,16 @@ namespace UI.Menu
         {
             zoomCamera(f);
         }
-        
+
+        /*
+        private void Update()
+        {
+            int countGround = PoolManager.Instance.GetObjectCount("TileGround");
+            int countWater = PoolManager.Instance.GetObjectCount("TileWater");
+            SetText("Text - MapInfo", $"{countGround}/{countWater}/{countGround + countWater}");
+        }
+        */
+
         protected override void OnClick(Button btn)
         {
             string btnName = btn.name;

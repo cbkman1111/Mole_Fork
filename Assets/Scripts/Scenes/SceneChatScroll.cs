@@ -13,8 +13,6 @@ namespace Scenes
         /// <returns></returns>
         public override bool Init(JSONObject param)
         {
-            Application.targetFrameRate = 100;
-
             var menu = UIManager.Instance.OpenMenu<UIMenuChat>("UI/UIMenuChat");
             if (menu != null)
             {

@@ -55,5 +55,15 @@ namespace Common.Utils.Pool
                 Destroy(child.gameObject) ;
             }
         }
+
+        public int GetObjectCount(string key)
+        {
+            if (dic.TryGetValue(key, out Pool<Transform> pool) == true)
+            {
+                return pool.ActiveCount();
+            }
+
+            return 0;
+        }
     }
 }

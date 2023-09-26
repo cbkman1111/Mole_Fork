@@ -9,6 +9,8 @@ public class AppDelegate : MonoBehaviour
     {
         Debug.Log("App Started. by AppDelegate.cs");
         
+        Application.targetFrameRate = 100;
+
         SoundManager.Instance.Load();
 
         AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneIntro, false);

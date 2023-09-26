@@ -32,8 +32,6 @@ namespace Scenes
         /// <returns></returns>
         public override bool Init(JSONObject param)
         {
-            Application.targetFrameRate = 100;
-
             menu = UIManager.Instance.OpenMenu<UIMenuTest>("UI/UIMenuTest");
             if (menu != null)
             {

@@ -31,37 +31,44 @@ namespace Games.TileMap
             {
                 for (var z = startZ - _diplayDownSide; z <= startZ + _diplayUpSide; z++)
                 {
+                    var adress = x + z * _mapData.Width;
+                    if (adress < 0 || adress >= _mapData.Data.Count)
+                        continue;
+
+                    var tileData = _mapData.Data[adress].Tile;
+                    var objList = _mapData.Data[adress].Objects;
+
+                    // 타일 리스트.
+                    if (tileData != null)
+                    {
+                        var tile = GetTile(tileData);
+                        if (tile == true)
+                        {
+                            tileData.obj = tile;
+                            tile.Init(tileData, x, z);
+                            tiles.Add(tile);
+                        }
+                    }
+
+                    // 오브젝트 리스트.
+                    if (objList != null)
+                    {
+                        var obj = GetWorldObject(objList[0]);
+                        if (obj == true)
+                        {
+                            objList[0].obj = obj;
+                            obj.transform.position = new Vector3(x, 0.5f, z);
+                            objects.Add(obj);
+                        }
+                    }
+
                     if (x < 0 || x > _mapData.Width || z < 0 || z > _mapData.Height)
                     {
 
                     }
                     else
                     {
-                        var adress = x + z * _mapData.Width;
-                        var tileData = _mapData.Data[adress].Tile;
-                        var objList = _mapData.Data[adress].Objects;
-                        
-                        // 타일 리스트.
-                        if(tileData != null)
-                        {
-                            var tile = GetTile(tileData);
-                            if (tile == true)
-                            {
-                                tile.Init(tileData, x, z);
-                                tiles.Add(tile);
-                            }
-                        }
-
-                        // 오브젝트 리스트.
-                        if (objList != null)
-                        {
-                            var obj = GetWorldObject(objList[0]);
-                            if (obj == true)
-                            {
-                                obj.transform.position = new Vector3(x ,0.5f, z);
-                                objects.Add(obj);
-                            }
-                        }
+                       
                     }
                 }
             }
@@ -76,13 +83,18 @@ namespace Games.TileMap
                 trans =  PoolManager.Instance.GetObject("TileGround");
             else
                 trans =  PoolManager.Instance.GetObject("TileWater");
-                            
+
+            if (trans == null)
+                return null;
+
             var tile = trans.GetComponent<Tile>();
             return tile;
         }
 
         private WorldObject GetWorldObject(ObjectData data)
-        {                            
+        {
+            
+
             string[] names =
             {
                 "SeaWeed",
@@ -96,8 +108,30 @@ namespace Games.TileMap
                 "Mushroom_sky",
                 "Mushroom_seed",
             };
-            
-            Transform trans = PoolManager.Instance.GetObject(names[data.Id - 1]);
+
+            string path = "";
+            if (data.Id == 1000)
+            {
+                path = "Bee";
+            }
+            else if (data.Id == 1001)
+            {
+                path = "Spider";
+            }
+            else if (data.Id == 1002)
+            {
+                path = "FishMan";
+            }
+            else if (data.Id == 2000)
+            {
+                path = "FishA";
+            }
+            else
+            {
+                path = names[data.Id - 1];
+            }
+
+            Transform trans = PoolManager.Instance.GetObject(path);
             if (trans == true)
             {           
                 var obj = trans.GetComponent<WorldObject>();
@@ -107,79 +141,131 @@ namespace Games.TileMap
             return null;
         }
 
+        //private IEnumerator<float> UpdateTileObjects(int x, int y)
         /// <summary>
         /// 타일 정보 갱신.
         /// </summary>
         /// <param name="startX"></param>
         /// <param name="startZ"></param>
-        public void UpdateTiles(int startX, int startZ)
+        public IEnumerator<float> UpdateTiles(int startX, int startZ)
         {
-            var removeList = tiles.Where(t =>
-                    t._x < startX - _diplayWidth ||
-                    t._x > startX + _diplayWidth || 
-                    t._z < startZ - _diplayDownSide ||
-                    t._z > startZ + _diplayUpSide)
-                .ToList();
+            var listW = tiles.OrderBy(t => t._x);
+            var ListH = tiles.OrderBy(t => t._z);
+            var left = listW.First()._x;
+            var right = listW.Last()._x;
+            var down = ListH.First()._z;
+            var up = ListH.Last()._z;
 
-            var removeObjectList = objects.Where(t =>
-                t.x < startX - _diplayWidth ||
-                t.x > startX + _diplayWidth ||
-                t.z < startZ - _diplayDownSide ||
-                t.z > startZ + _diplayUpSide).ToList();
-                
-            foreach (var tile in removeList)
-            { 
-                PoolManager.Instance.ReturnObject(tile.transform);
-                tiles.Remove(tile);
-            }
-            
-            foreach (var obj in removeObjectList)
-            { 
-                PoolManager.Instance.ReturnObject(obj.transform);
-                objects.Remove(obj);
-            }
-            
-            for (var x = startX - _diplayWidth; x < startX + _diplayWidth; x++)
+            if (left > startX - _diplayWidth)
+                left = startX - _diplayWidth;
+            if (right < startX + _diplayWidth)
+                right = startX + _diplayWidth;
+
+            if (down > startZ - _diplayDownSide)
+                down = startZ - _diplayDownSide;
+            if (up < startZ + _diplayUpSide)
+                up = startZ + _diplayUpSide;
+
+            yield return MEC.Timing.WaitForOneFrame;
+
+            // 나간 리스트 처리.
+            for (var x = left; x <= right; x++)
             {
-                for (var z = startZ - _diplayDownSide ; z < startZ + _diplayUpSide; z++)
+                for (var z = down; z <= up; z++)
                 {
-                    if(x < 0 || x > _mapData.Width)
-                        continue;
-                    
-                    if(z < 0 || z > _mapData.Height)
-                        continue;
-                    
                     int adress = x + z * _mapData.Width;
+                    if (adress < 0 || _mapData.Data.Count <= adress)
+                        continue;
+
                     var tileData = _mapData.Data[adress].Tile;
-                    
-                    var iter = tiles.Where(t => t._x == x && t._z == z);
-                    if (iter.Count() == 0 )
+                    var objDataList = _mapData.Data[adress].Objects;
+                    // 바깥쪽.
+                    if (x < startX - _diplayWidth ||
+                        x > startX + _diplayWidth ||
+                        z < startZ - _diplayDownSide ||
+                        z > startZ + _diplayUpSide)
                     {
-                        var tile = GetTile(tileData);
-                        if (tile == false)
-                            continue;
-                        
-                        if (x < 0 || x > _mapData.Width || z < 0 || z > _mapData.Height)
+                        if (tileData.obj != null)
                         {
-                            tile.Init(null, x, z);
+                            PoolManager.Instance.ReturnObject(tileData.obj.transform);
+                            tiles.Remove(tileData.obj);
+                            tileData.obj = null;
                         }
-                        else
+
+                        if (objDataList != null)
                         {
-                            tile.Init(tileData, x, z);
+                            foreach (var objData in objDataList)
+                            {
+                                if (objData != null && objData.obj != null)
+                                {
+                                    PoolManager.Instance.ReturnObject(objData.obj.transform);
+                                    objects.Remove(objData.obj);
+                                    objData.obj = null;
+                                }
+                            }
                         }
-                        
-                        tiles.Add(tile);
                     }
-                    
-                    var objList = _mapData.Data[adress].Objects;
-                    if (objList != null)
+                }
+            }
+
+            yield return MEC.Timing.WaitForOneFrame;
+
+            left = startX - _diplayWidth;
+            right = startX + _diplayWidth;
+            down = startZ - _diplayDownSide;
+            up = startZ + _diplayUpSide;
+
+            for (var x = left; x <= right; x++)
+            {
+                for (var z = down; z <= up; z++)
+                {
+                    int adress = x + z * _mapData.Width;
+                    if (adress < 0 || _mapData.Data.Count <= adress)
+                        continue;
+
+                    var tileData = _mapData.Data[adress].Tile;
+                    var objDataList = _mapData.Data[adress].Objects;
+                    // 안쪽.
+                    if (x >= startX - _diplayWidth ||
+                        x <= startX + _diplayWidth ||
+                        z >= startZ - _diplayDownSide ||
+                        z <= startZ + _diplayUpSide)
                     {
-                        WorldObject obj = GetWorldObject(objList[0]);
-                        if (obj == true)
-                        {                        
-                            obj.transform.position = new Vector3(x ,0.5f, z);
-                            objects.Add(obj);
+                        if (tileData.obj == null)
+                        {
+                            var tile = GetTile(tileData);
+                            if (tile == false)
+                                continue;
+
+                            if (x < 0 || x > _mapData.Width || z < 0 || z > _mapData.Height)
+                            {
+                                tile.Init(null, x, z);
+                            }
+                            else
+                            {
+                                tile.Init(tileData, x, z);
+                            }
+
+                            tileData.obj = tile;
+                            tiles.Add(tile);
                         }
+
+                        if (objDataList != null)
+                        {
+                            foreach (var objData in objDataList)
+                            {
+                                if (objData.obj == null)
+                                {
+                                    WorldObject obj = GetWorldObject(objData);
+                                    if (obj == true)
+                                    {
+                                        obj.transform.position = new Vector3(x, 0.5f, z);
+                                        objData.obj = obj;
+                                        objects.Add(obj);
+                                    }
+                                }
+                            }
+                        };
                     }
                 }
             }

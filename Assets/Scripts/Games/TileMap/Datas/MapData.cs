@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TileMap;
 using UnityEngine;
 
 namespace Games.TileMap.Datas
@@ -11,7 +12,6 @@ namespace Games.TileMap.Datas
 
         public TileData Tile;
         public List<ObjectData> Objects;
-
     }
 
     public enum TileType
@@ -25,13 +25,16 @@ namespace Games.TileMap.Datas
     public class TileData
     {
         public TileType type;
-        //public Color Color;
+
+        [System.NonSerialized] public Tile obj;
     }
     
     [System.Serializable]
     public class ObjectData
     {
         public int Id;
+
+        [System.NonSerialized] public WorldObject obj;
     }
     
     [System.Serializable]
@@ -39,8 +42,8 @@ namespace Games.TileMap.Datas
     {
         public static int Id = 1000;
         
-        public int Width = 600;
-        public int Height = 600;
+        public int Width = 200;
+        public int Height = 200;
 
         public int X = 0;
         public int Z = 0;

@@ -42,7 +42,8 @@ namespace Games.TileMap
 
         public void SetColor(Color c)
         {
-            _spriteRenderer.color = c;
+            if(_spriteRenderer != null)
+                _spriteRenderer.color = c;
         }
     }
 }

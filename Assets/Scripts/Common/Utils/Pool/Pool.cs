@@ -130,5 +130,11 @@ namespace Common.Utils.Pool
 
             return false;
         }
+
+        public int ActiveCount()
+        {
+            return ActiveList.Count;
+        }
+
     }
 }
