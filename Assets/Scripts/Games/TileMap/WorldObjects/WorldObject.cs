@@ -1,42 +1,104 @@
 using System;
+using System.Collections.Generic;
+using DG.Tweening;
 using Spine.Unity;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace TileMap
-{
+{   
+    public enum ObjectState
+    {
+        None = 0,
+            
+        Idle,
+        Move,
+        Stop,
+
+        Hit,
+        Attack,
+        
+        Click, // 클릭했을때 테스트용.
+    }
+    
+    public class StateMachine<T>
+    {
+        private Stack<T> _stack = new Stack<T>();
+        public T State => _stack.Count > 0 ? _stack.Peek() : default(T);
+        
+        public Action<T, T> OnEnterState = null;
+        public Action<T> OnPopState = null;
+
+        public void PushState(T change)
+        {
+            if (_stack.Contains(change) == true)
+                return;
+
+            var before = PopState();
+            _stack.Push(change);
+            OnEnterState?.Invoke(before, change);
+        }
+
+        public T PopState()
+        {
+            if (_stack.Count > 0)
+            {            
+                T before = _stack.Pop();
+                OnPopState?.Invoke(before);
+                return before;
+            }
+            else
+            {
+                return default(T);
+            }
+        }
+    }
+
     /// <summary>
     /// 모든 맵위의 객체들의 기본값.
     /// </summary>
     public class WorldObject : MonoBehaviour
     {
-        [SerializeField] protected SkeletonAnimation skel;
-        
+        protected StateMachine<ObjectState> _stateMachine = new StateMachine<ObjectState>();
+       
         /// <summary>
         /// 타일의 좌표계.
         /// </summary>
         public int x;
         public int z;
-
-        /// <summary>
-        /// 타일 한개 내의 등분 좌표계.
-        /// </summary>
-        public Vector2 CordinateTileAdress { get; set; } = Vector2.zero;
         
-        private Action<int, int> _onUpdatePosition;
-        
-        public bool Init(int posX, int posZ, Action<int, int> onUpdatePosition = null)
+        public bool Init(int posX, int y, int posZ)
         {
-            this.x = posX;
-            this.z = posZ;
+            x = posX;
+            z = posZ;
             
-            _onUpdatePosition = onUpdatePosition;
-            transform.position = new Vector3((float)posX, 0.5f, (float)posZ);
-
-            UpdateSpriteRenderOrder();
+            transform.position = new Vector3(x, .5f, z);
+            _stateMachine.OnEnterState = OnEnterState;
+            _stateMachine.OnPopState = OnPopState;
+            
+            SetState(ObjectState.Idle);
             return true;
         }
 
-        protected virtual void UpdateSpriteRenderOrder() { }
+        public void SetState(ObjectState state)
+        {
+            _stateMachine.PushState(state);
+        }
+
+        protected virtual void OnEnterState(ObjectState before, ObjectState after)
+        {
+            if (after == ObjectState.Click)
+            {
+                transform.DOPunchScale(transform.forward, 0.1f).OnComplete(() =>
+                {
+                    SetState(ObjectState.Idle);
+                });
+            }
+        }
+        
+        protected virtual void OnPopState(ObjectState state)
+        {
+        }
     }
 }
 

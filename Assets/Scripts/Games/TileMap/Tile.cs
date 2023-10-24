@@ -35,7 +35,7 @@ namespace Games.TileMap
             {
                 SetColor(Color.black);
             }
-
+            
             transform.position = new Vector3(x, -.5f, z);
             return true;
         }

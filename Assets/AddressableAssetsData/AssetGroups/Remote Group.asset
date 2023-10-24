@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Remote Group
+  m_EditorClassIdentifier: 
+  m_GroupName: Remote Group
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 0d71febfdb6b45649837329cf9e3f8d1
+  m_SerializeEntries:
+  - m_GUID: be22c32257c33ec49a534dc3dd7d35fb
+    m_Address: TestBundle
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Test
+  - m_GUID: d54053f353999e9438e62142b2d32c6b
+    m_Address: TestAddressable2
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Test
+  - m_GUID: eac5b7139e38c514f9841933f520fe10
+    m_Address: TestAddressable3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Test
+  - m_GUID: 271f5d6d9ba684947aaeb645ea3ba18a
+    m_Address: TestAddressable4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Test
+  - m_GUID: 19a38100c382bdc458339f11c5a66d41
+    m_Address: TestAtlas
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+  - m_GUID: 98f02448d5ea3824dbbdf805e4ef637c
+    m_Address: no_atlas
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - default
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 7316e3f390a26024fbaa6fd7f1497b13, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 8f67bec95067da443b0588d206eca0ec, type: 2}
+    - {fileID: 11400000, guid: 55cbbdfa4973faa41bc1b52a1d7d7d8f, type: 2}

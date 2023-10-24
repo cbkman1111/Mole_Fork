@@ -28,12 +28,12 @@ TagManager:
   - Item
   - LevelPin
   - Square
+  - Tile
+  - WorldObject
   - 
   - 
   - 
-  - 
-  - 
-  - 
+  - PostProcess
   - 
   - 
   - 

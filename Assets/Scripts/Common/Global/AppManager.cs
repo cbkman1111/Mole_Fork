@@ -184,6 +184,12 @@ namespace Common.Global
                 case SceneBase.Scenes.SceneTest:
                     scene = new SceneTest();
                     break;
+                case SceneBase.Scenes.SceneBundle:
+                    scene = new SceneBundle();
+                    break;
+                case SceneBase.Scenes.Demo:
+                    scene = new SceneDemo();
+                    break;
             }
 
             return scene;

@@ -57,18 +57,9 @@ namespace Games.TileMap
                         if (obj == true)
                         {
                             objList[0].obj = obj;
-                            obj.transform.position = new Vector3(x, 0.5f, z);
+                            obj.Init(x, 1,z);
                             objects.Add(obj);
                         }
-                    }
-
-                    if (x < 0 || x > _mapData.Width || z < 0 || z > _mapData.Height)
-                    {
-
-                    }
-                    else
-                    {
-                       
                     }
                 }
             }
@@ -185,7 +176,7 @@ namespace Games.TileMap
                         z < startZ - _diplayDownSide ||
                         z > startZ + _diplayUpSide)
                     {
-                        if (tileData.obj != null)
+                        if (tileData.obj == true)
                         {
                             PoolManager.Instance.ReturnObject(tileData.obj.transform);
                             tiles.Remove(tileData.obj);
@@ -231,7 +222,7 @@ namespace Games.TileMap
                         z >= startZ - _diplayDownSide ||
                         z <= startZ + _diplayUpSide)
                     {
-                        if (tileData.obj == null)
+                        if (tileData.obj == false)
                         {
                             var tile = GetTile(tileData);
                             if (tile == false)
@@ -254,12 +245,12 @@ namespace Games.TileMap
                         {
                             foreach (var objData in objDataList)
                             {
-                                if (objData.obj == null)
+                                if (objData.obj == false)
                                 {
                                     WorldObject obj = GetWorldObject(objData);
                                     if (obj == true)
                                     {
-                                        obj.transform.position = new Vector3(x, 0.5f, z);
+                                        obj.Init(x, 1, z);
                                         objData.obj = obj;
                                         objects.Add(obj);
                                     }

@@ -46,6 +46,14 @@ namespace UI.Menu
             {
                 AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneChatScroll);
             }
+            else if (name.CompareTo("Button - Bundle") == 0)
+            {
+                AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneBundle);
+            }
+            else if (name == "Button - Spine")
+            {
+                AppManager.Instance.ChangeScene(SceneBase.Scenes.Demo);
+            }
         }
     }
 }

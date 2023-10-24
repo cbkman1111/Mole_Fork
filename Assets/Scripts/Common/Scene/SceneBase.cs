@@ -15,6 +15,9 @@ namespace Common.Scene
             game,
             SceneChatScroll,
             SceneTest,
+            
+            SceneBundle, // 번들 테스트 씬. 어드레스블번들, 에셋번들.
+            Demo
         }
 
         public float Amount { get; set; } = 0;

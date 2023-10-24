@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using Common.Global;
 using Common.Scene;
@@ -93,13 +94,13 @@ namespace Scenes
             _map.Init(_mapData, startX, startZ, displayW, displayUpSide, displayDownSide);
             
             // 캐릭터 생성.
-            var prefab = ResourcesManager.Instance.LoadInBuild<Pige>("PigeonTemp");
+            var prefab = ResourcesManager.Instance.LoadInBuild<Pige>("Player");
             _pigeon = Object.Instantiate<Pige>(prefab);
-            _pigeon.Init(startX, startZ);
+            _pigeon.Init(startX, 1, startZ);
 
             // 카메라 위치 초기화.
-            MainCamera.transform.position = _pigeon.transform.position + /*new Vector3(0, 1, 0) + */
-                                            _pigeon.transform.GetChild(0).forward * -_ditanceCamera;
+            MainCamera.transform.position = Vector3.zero;
+
             return true;
         }
 
@@ -146,6 +147,9 @@ namespace Scenes
             base.UnLoad();
             
             PoolManager.Instance.RemoveAll();
+            
+            MainCamera.transform.DOKill();
+            _pigeon.transform.DOKill();
         }
 
         /// <summary>
@@ -367,8 +371,36 @@ namespace Scenes
         {
             yield return MEC.Timing.WaitForOneFrame;
         }
-
-
+        
+        /*
+        IEnumerator LoadGameObjectAndMaterial()
+        {
+            //Load a GameObject
+            AsyncOperationHandle<GameObject> goHandle = Addressables.LoadAssetAsync<GameObject>("gameObjectKey");
+            yield return goHandle;
+            if(goHandle.Status == AsyncOperationStatus.Succeeded)
+            {
+                GameObject obj = goHandle.Result;
+                //etc...
+            }
+        
+            //Load a Material
+            AsyncOperationHandle<IList<IResourceLocation>> locationHandle = Addressables.LoadResourceLocationsAsync("materialKey");
+            yield return locationHandle;
+            AsyncOperationHandle<Material> matHandle = Addressables.LoadAssetAsync<Material>(locationHandle.Result[0]);
+            yield return matHandle;
+            if (matHandle.Status == AsyncOperationStatus.Succeeded)
+            {
+                Material mat = matHandle.Result;
+                //etc...
+            }
+        
+            //Use this only when the objects are no longer needed
+            Addressables.Release(goHandle);
+            Addressables.Release(matHandle);
+        }
+        */
+        
         /// <summary>
         /// 
         /// </summary>
@@ -380,9 +412,17 @@ namespace Scenes
                                      _pigeon.transform.GetChild(0).forward * -_ditanceCamera;
 
                 if (Vector3.Distance(MainCamera.transform.position, cameraPosition) > 0.1f)
-                {                
-                    MainCamera.transform.DOKill();
-                    MainCamera.transform.DOMove(cameraPosition, 1f);
+                {
+                    if (MainCamera.transform.position == Vector3.zero)
+                    {
+                        MainCamera.transform.position = _pigeon.transform.position + /*new Vector3(0, 1, 0) + */
+                                                        _pigeon.transform.GetChild(0).forward * -_ditanceCamera;
+                    }
+                    else
+                    {
+                        MainCamera.transform.DOKill();
+                        MainCamera.transform.DOMove(cameraPosition, 1f);
+                    }
                 }
                 
                 if((int)_pigeon.transform.position.x != _pigeon.x ||
@@ -433,6 +473,36 @@ namespace Scenes
 
         public override void OnTouchBean(Vector3 position)
         {
+            _menu.SetObjectInfo(string.Empty);
+            
+            Ray ray = MainCamera.ScreenPointToRay(position);
+            var hits = Physics.RaycastAll(ray.origin, ray.direction, Mathf.Infinity, LayerMask.NameToLayer("WorldObject"));
+            if (hits != null && hits.Length > 0)
+            {
+                var nearList = hits.OrderBy(h => Vector3.Distance(h.transform.position, position)).ToList();
+                var obj = nearList[0].collider.gameObject;
+                var worldObject = obj.GetComponent<WorldObject>();
+                worldObject.SetState(ObjectState.Click);
+                _menu.SetObjectInfo(obj.name);
+            }
+
+            /*
+            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
+            {
+                var layer = hit.collider.gameObject.layer;
+                if (layer == LayerMask.NameToLayer("WorldObject"))
+                {
+                    var obj = hit.collider.gameObject;
+                    var worldObject = obj.GetComponent<WorldObject>();
+                    worldObject.SetState(ObjectState.Click);
+                    _menu.SetObjectInfo(obj.name);
+                }
+
+                Debug.DrawRay(ray.origin, ray.direction * 20, Color.red, 5f);
+                Debug.Log(hit.point);
+            }
+            */
+            
             _menu.joystick.TouchBegin(position);
         }
 

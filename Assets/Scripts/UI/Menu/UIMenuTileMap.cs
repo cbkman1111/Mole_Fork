@@ -36,7 +36,23 @@ namespace UI.Menu
 
             saveGame = save;
             zoomCamera = zoom;
+
+            SetObjectInfo(string.Empty);
             return true;
+        }
+
+        public void SetObjectInfo(string objName)
+        {
+            if (objName == string.Empty)
+            {
+                SetText("Text - ObjectInfo", objName);
+                SetActive("Image - TopInfo", false);
+            }
+            else
+            {
+                SetActive("Image - TopInfo", true);
+                SetText("Text - ObjectInfo", objName);
+            }
         }
 
         public override void OnValueChanged(Slider slider, float f)
