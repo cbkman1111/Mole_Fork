@@ -87,6 +87,9 @@ namespace UI.Menu
                                 atlas = loadAtals.Result;
                                 //test.sprite = sprite;
                                 //test.SetNativeSize();
+                                
+                                var sprite = atlas.GetSprite("mango");
+                                test.sprite = sprite;
                                 break;
                         
                             case AsyncOperationStatus.Failed:
@@ -99,7 +102,7 @@ namespace UI.Menu
                 }
                 else
                 {
-                    var sprite = atlas.GetSprite("test");
+                    var sprite = atlas.GetSprite("mango");
                     test.sprite = sprite;
                 }
 
