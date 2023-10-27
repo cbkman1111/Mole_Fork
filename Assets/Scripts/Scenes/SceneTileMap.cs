@@ -29,6 +29,9 @@ namespace Scenes
         private float _ditanceCamera = 0;
 
         private MEC.CoroutineHandle handler;
+        
+        RaycastHit[] _hits = new RaycastHit[10];
+        
         /// <summary>
         /// 
         /// </summary>
@@ -476,14 +479,31 @@ namespace Scenes
             _menu.SetObjectInfo(string.Empty);
             
             Ray ray = MainCamera.ScreenPointToRay(position);
-            var hits = Physics.RaycastAll(ray.origin, ray.direction, Mathf.Infinity, LayerMask.NameToLayer("WorldObject"));
-            if (hits != null && hits.Length > 0)
+            Debug.DrawRay(ray.origin, ray.direction * 100, Color.green, 2f);
+            //, LayerMask.NameToLayer("WorldObject")
+            var count = Physics.RaycastNonAlloc(ray.origin, ray.direction, _hits,100f);
+            if (count > 0 && _hits.Length > 0)
             {
-                var nearList = hits.OrderBy(h => Vector3.Distance(h.transform.position, position)).ToList();
-                var obj = nearList[0].collider.gameObject;
+                int nearIndex = 0;
+                float nearDistance = 9999f;
+                for (int i = 0; i < count; i++)
+                {
+                    var distance = Vector3.Distance(_hits[i].transform.position, position);
+                    if (distance < nearDistance)
+                    {
+                        nearDistance = distance;
+                        nearIndex = i;
+                    }
+                }
+
+                //var nearList = _hits.OrderBy(h => Vector3.Distance(h.transform.position, position)).ToList();
+                var obj = _hits[nearIndex].collider.gameObject;
                 var worldObject = obj.GetComponent<WorldObject>();
-                worldObject.SetState(ObjectState.Click);
-                _menu.SetObjectInfo(obj.name);
+                if (worldObject != null)
+                {
+                    worldObject.SetState(ObjectState.Click);
+                    _menu.SetObjectInfo(obj.name);
+                }
             }
 
             /*
