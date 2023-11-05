@@ -1,3 +1,4 @@
+
 using Common.Global;
 using Common.Scene;
 using Common.Utils.Pool;
@@ -31,6 +32,9 @@ namespace Scenes
         public Transform[] pooled;
         public AudioClip[] soundList;
 
+        public Joystick joystick = null;
+        public Done_PlayerController playerController = null;
+
         public override bool Init(JSONObject param)
         {
             gameOver = false;
@@ -42,13 +46,26 @@ namespace Scenes
             UpdateScore();
             StartCoroutine(SpawnWaves());
 
-            
-
             SoundManager.Instance.InitList(transform, soundList);
             PoolManager.Instance.InitList(transform, pooled);
 
             
             SoundManager.Instance.PlayMusic("music_background");
+
+
+            joystick.Init((Vector3 direct, float angle) => {
+                //SetText("Text - Debug", $"Angle : {angle}");
+                //move?.Invoke(direct);
+                // 탑뷰 시점으로 변환.
+                direct.z = direct.y;
+                playerController.Direction = direct;
+            },
+            () =>
+            {
+                playerController.Direction = Vector3.zero;
+                //stop?.Invoke();
+            });
+
             return true;
         }
 
@@ -131,7 +148,25 @@ namespace Scenes
             gameOver = true;
         }
 
-        
 
+        public override void OnTouchBean(Vector3 position)
+        {
+            joystick.TouchBegin(position);   
+        }
+
+        public override void OnTouchMove(Vector3 position)
+        {
+            joystick.TouchMove(position);
+        }
+
+        public override void OnTouchEnd(Vector3 position)
+        {
+            joystick.TouchEnd(position);
+        }
+
+        public override void OnTouchStationary(Vector3 position)
+        {
+            joystick.TouchMove(position);
+        }
     }
 }

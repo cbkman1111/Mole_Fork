@@ -61,25 +61,17 @@ namespace Common.Global
 
             var async = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
             async.allowSceneActivation = true;
-            async.completed += (AsyncOperation operation) => {
+            while(!async.isDone)
+                yield return null;
 
-                var root = GetRoot();
-                var changeScnene = GetScene(sceneName);
-                UIManager.Instance.SetRoot(root);
+            var root = GetRoot();
+            var changeScnene = GetScene(sceneName);
+            UIManager.Instance.SetRoot(root);
 
-                CurrScene = changeScnene;
-                CurrScene.MainCamera = Camera.main;
-                CurrScene.Init(Param);
+            CurrScene = changeScnene;
+            CurrScene.MainCamera = Camera.main;
+            CurrScene.Init(Param);
 
-                if (Param != null)
-                {
-                    ChangeScene(SceneBase.Scenes.SceneLobby);
-                    ChangeScene(SceneBase.Scenes.SceneInGame);
-                    Param = null;
-                }
-            };
-
-            yield return null;
             Debug.Log($"{Tag} Scene Load Complete");
         }
 
@@ -253,6 +245,7 @@ namespace Common.Global
 
         private void OnTouchStationary(Vector3 position)
         {
+            CurrScene?.OnTouchStationary(position);
         }
         
         private void OnTouchCancle(Vector3 position)

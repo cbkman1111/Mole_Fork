@@ -22,6 +22,7 @@ public class Done_PlayerController : MonoBehaviour
 	 
 	private float nextFire;
 
+	public Vector3 Direction { get; set; } = Vector3.zero;
 	public SceneInGame scene;
 
 	public void Set(Done_Boundary bound)
@@ -63,8 +64,10 @@ public class Done_PlayerController : MonoBehaviour
 		float moveHorizontal = Input.GetAxis ("Horizontal");
 		float moveVertical = Input.GetAxis ("Vertical");
 
-		Vector3 movement = new Vector3 (moveHorizontal, 0.0f, moveVertical);
-		GetComponent<Rigidbody>().velocity = movement * speed;
+		//Vector3 movement = new Vector3 (moveHorizontal, 0.0f, moveVertical);
+
+		Vector3 movement = Direction;
+        GetComponent<Rigidbody>().velocity = movement * speed;
 		
 		GetComponent<Rigidbody>().position = new Vector3
 		(

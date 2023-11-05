@@ -1,3 +1,4 @@
+
 using Common.Global;
 using Common.Scene;
 using Common.UIObject;
@@ -7,6 +8,8 @@ namespace UI.Menu
 {
     public class UIMenuInGame : MenuBase
     {
+
+
         public override void OnInit()
         {
 
@@ -14,6 +17,8 @@ namespace UI.Menu
 
         public bool InitMenu()
         {
+            //joystick.Init();
+
             return true;
         }
 

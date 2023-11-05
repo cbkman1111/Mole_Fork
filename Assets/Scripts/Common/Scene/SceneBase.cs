@@ -27,5 +27,6 @@ namespace Common.Scene
         public virtual void OnTouchBean(Vector3 position) { }
         public virtual void OnTouchMove(Vector3 position) { }
         public virtual void OnTouchEnd(Vector3 position) { }
+        public virtual void OnTouchStationary(Vector3 position) { }
     }
 }
