@@ -36,19 +36,27 @@ public class Done_PlayerController : MonoBehaviour
     }
 
     void Update ()
-	{
-		if (Input.GetButton("Fire1") && Time.time > nextFire) 
-		{
-			nextFire = Time.time + fireRate;
-			var bolt = PoolManager.Instance.GetObject("Done_Bolt");
-            bolt.position = shotSpawn.position;
-			bolt.rotation = shotSpawn.rotation;
+    {
+        if (shotSpawn != null)
+        {
+       
+			if (/*Input.GetButton("Fire1") &&*/ Time.time > nextFire) 
+			{
+				nextFire = Time.time + fireRate;
+				var bolt = PoolManager.Instance.GetObject("Done_Bolt");
+				if (bolt != null)
+				{
+                    bolt.position = shotSpawn.position;
+                    bolt.rotation = shotSpawn.rotation;
 
-            //Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
-            SoundManager.Instance.PlayEffect("weapon_player");
-			//GetComponent<AudioSource>().Play ();
-		}
-	}
+                    //Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
+                    SoundManager.Instance.PlayEffect("weapon_player");
+                    //GetComponent<AudioSource>().Play ();
+                }
+
+            }
+        }
+    }
 
 	void FixedUpdate ()
 	{

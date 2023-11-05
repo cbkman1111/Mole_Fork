@@ -131,10 +131,24 @@ namespace Common.Utils.Pool
             return false;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public int ActiveCount()
         {
             return ActiveList.Count;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public void ReturnAll()
+        {
+            foreach (var obj in ActiveList)
+            {
+                ReturnObject(obj);
+            }
+        }
     }
 }

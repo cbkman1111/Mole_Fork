@@ -14,6 +14,7 @@ namespace Common.Global
     public class AppManager : MonoSingleton<AppManager>
     {
         private Dictionary<string, SceneBase> _scenes = null;
+
         [SerializeField] private SceneBase _currScene = null;
 
         public SceneBase CurrScene
@@ -53,29 +54,14 @@ namespace Common.Global
         /// <returns></returns>
         private IEnumerator LoadScene(string sceneName)
         {
-
             CurrScene = null;
             yield return null;
 
-            UIManager.Instance.Clear();
-            
+            //UIManager.Instance.Clear();
+
             var async = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
             async.allowSceneActivation = true;
             async.completed += (AsyncOperation operation) => {
-
-                /*
-                if (_scenes.TryGetValue(sceneName, out SceneBase scene) == true)
-                {
-                    changeScnene = scene;
-                }
-                else 
-                {
-                    changeScnene = GetScene(sceneName);
-                    _scenes.Add(sceneName, changeScnene);
-                }
-                */
-
-          
 
                 var root = GetRoot();
                 var changeScnene = GetScene(sceneName);
@@ -84,6 +70,13 @@ namespace Common.Global
                 CurrScene = changeScnene;
                 CurrScene.MainCamera = Camera.main;
                 CurrScene.Init(Param);
+
+                if (Param != null)
+                {
+                    ChangeScene(SceneBase.Scenes.SceneLobby);
+                    ChangeScene(SceneBase.Scenes.SceneInGame);
+                    Param = null;
+                }
             };
 
             yield return null;

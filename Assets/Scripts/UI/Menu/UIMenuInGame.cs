@@ -20,9 +20,11 @@ namespace UI.Menu
         protected override void OnClick(Button btn)
         {
             string name = btn.name;
-            if(name == "Button - Start")
+            if(name == "Button - Pause")
             {
-                AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneInGame);
+                MEC.Timing.KillCoroutines();
+                AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneLobby); 
+                //AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneInGame);
             }
         }
     }

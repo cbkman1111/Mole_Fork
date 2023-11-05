@@ -42,8 +42,12 @@ namespace Scenes
             UpdateScore();
             StartCoroutine(SpawnWaves());
 
+            
+
             SoundManager.Instance.InitList(transform, soundList);
             PoolManager.Instance.InitList(transform, pooled);
+
+            
             SoundManager.Instance.PlayMusic("music_background");
             return true;
         }
@@ -81,6 +85,18 @@ namespace Scenes
                         {
                             weapon.Init();
                         }
+
+                        /*
+                        var evasive = hazard.GetComponent<Done_EvasiveManeuver>();
+                        if (evasive != null)
+                        {
+                            evasive.boundary.xMin = -10;
+                            evasive.boundary.xMax = 10;
+                            evasive.boundary.zMin = -35;
+                            evasive.boundary.zMax = 20;
+                            //evasive.boundary = new Done_Boundary();
+                        }
+                        */
                     }
 
                     yield return new WaitForSeconds(spawnWait);
@@ -104,7 +120,7 @@ namespace Scenes
 
         void UpdateScore()
         {
-            scoreText.text = "Score: " + score;
+            //scoreText.text = "Score: " + score;
         }
 
         public void GameOver()
@@ -114,6 +130,8 @@ namespace Scenes
 
             gameOver = true;
         }
+
+        
 
     }
 }

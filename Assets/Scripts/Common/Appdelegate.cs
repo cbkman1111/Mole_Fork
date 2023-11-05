@@ -13,7 +13,7 @@ public class AppDelegate : MonoBehaviour
 
         //SoundManager.Instance.Load();
 
-        AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneIntro, false);
+        AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneIntro);
     }
 
     void OnApplicationPause(bool paused)

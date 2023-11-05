@@ -8,6 +8,8 @@ namespace Scenes
     public class SceneIntro : SceneBase
     {
         public UIMenuIntro menu = null;
+        public Animation idle = null;
+        public AudioClip[] clips = null;
 
         public override bool Init(JSONObject param)
         {
@@ -15,8 +17,12 @@ namespace Scenes
             {
                 menu.InitMenu();
             }
-            
 
+            
+            idle.Play();
+
+            SoundManager.Instance.InitList(transform, clips);
+            //SoundManager.Instance.PlayMusic("17856_1462216818");
             return true;
         }
 

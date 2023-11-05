@@ -14,7 +14,7 @@ public class Done_WeaponController : MonoBehaviour
 
 	public bool Init()
 	{
-        MEC.Timing.RunCoroutine(Fire(delay));
+        MEC.Timing.RunCoroutine(Fire(delay), gameObject);
         return true;
 	}
 

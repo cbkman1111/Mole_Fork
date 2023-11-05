@@ -28,8 +28,6 @@ namespace Scenes
 
             menu.SetPercent(1.0f);
             yield return MEC.Timing.WaitForSeconds(0.5f);
-
-            AppManager.Instance.ChangeScene(Scenes.SceneLobby);
         }
     }
 }

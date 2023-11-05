@@ -6,6 +6,8 @@ namespace Common.Scene
     {
         public enum Scenes
         {
+            None = -1,
+
             SceneIntro = 0, // 
 
             SceneLoading, // 게임 로딩.

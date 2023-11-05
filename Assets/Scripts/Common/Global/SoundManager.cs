@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using Common.Global.Singleton;
 using Common.Utils.Pool;
 using UnityEngine;
@@ -14,23 +15,25 @@ namespace Common.Global
         private Pool<AudioSource> effect = null;
         private AudioMixer mixer = null;
 
-        private Transform root = null;
+        //private Transform root = null;
 
+        
         protected override bool Init()
         {
             mixer = ResourcesManager.Instance.LoadInBuild<AudioMixer>("AudioMixer");
             AudioSource prefab = ResourcesManager.Instance.LoadInBuild<AudioSource>("Audio Source");
-            musics = Pool<AudioSource>.Create(prefab, transform, 1);
-            effect = Pool<AudioSource>.Create(prefab, transform, 10);
+            
+            musics = Pool<AudioSource>.Create(prefab, transform, 2);
+            effect = Pool<AudioSource>.Create(prefab, transform, 5);
   
+            
             return true;
         }
 
         public void InitList(Transform root, AudioClip[] list)
         {
             soundTable.Clear();
-
-            this.root = root;
+            //this.root = root;
 
             foreach (var clip in list)
             {
@@ -53,13 +56,15 @@ namespace Common.Global
 
         private IEnumerator ReturnEffect(AudioSource audio){
             yield return new WaitForSeconds(audio.clip.length);
+
             audio.gameObject.SetActive(false);
             effect.ReturnObject(audio);
         }
 
         public void StopAllSound()
         {
-   
+            musics.ReturnAll();
+            effect.ReturnAll();
         }
 
         public void PlayEffect(string name)
