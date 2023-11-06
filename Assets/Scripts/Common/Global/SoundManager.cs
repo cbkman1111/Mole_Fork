@@ -14,27 +14,23 @@ namespace Common.Global
         private Pool<AudioSource> musics = null;
         private Pool<AudioSource> effect = null;
         private AudioMixer mixer = null;
-
         //private Transform root = null;
 
         
         protected override bool Init()
         {
             mixer = ResourcesManager.Instance.LoadInBuild<AudioMixer>("AudioMixer");
-            AudioSource prefab = ResourcesManager.Instance.LoadInBuild<AudioSource>("Audio Source");
-            
-            musics = Pool<AudioSource>.Create(prefab, transform, 2);
-            effect = Pool<AudioSource>.Create(prefab, transform, 5);
-  
-            
+            AudioSource prefabBGM = ResourcesManager.Instance.LoadInBuild<AudioSource>("Audio Source - BGM");
+            AudioSource prefabEffect = ResourcesManager.Instance.LoadInBuild<AudioSource>("Audio Source - Effect");
+
+            musics = Pool<AudioSource>.Create(prefabBGM, transform, 1);
+            effect = Pool<AudioSource>.Create(prefabEffect, transform, 5);
             return true;
         }
 
         public void InitList(Transform root, AudioClip[] list)
         {
             soundTable.Clear();
-            //this.root = root;
-
             foreach (var clip in list)
             {
                 soundTable.Add(clip.name, clip);
@@ -63,8 +59,17 @@ namespace Common.Global
 
         public void StopAllSound()
         {
-            musics.ReturnAll();
-            effect.ReturnAll();
+            for (int i = 0; i < musics.ActiveList.Count; i++)
+            {
+                musics.ActiveList[i].transform.gameObject.SetActive(false);
+                musics.ReturnObject(musics.ActiveList[i]);
+            }
+
+            for (int i = 0; i < effect.ActiveList.Count; i++)
+            {                
+                effect.ActiveList[i].transform.gameObject.SetActive(false);
+                effect.ReturnObject(effect.ActiveList[i]);
+            }
         }
 
         public void PlayEffect(string name)

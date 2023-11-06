@@ -1,4 +1,5 @@
 
+using System;
 using Common.Global;
 using Common.Scene;
 using Common.Utils.Pool;
@@ -7,6 +8,7 @@ using UI.Menu;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace Scenes
 {
@@ -19,15 +21,11 @@ namespace Scenes
         public float startWait;
         public float waveWait;
 
-        public Text scoreText;
-        //public Text restartText;
-        public Text gameOverText;
-
-
+        public Camera cameraUI = null;
         public UIMenuInGame menu = null;
         private bool gameOver;
         private bool restart;
-        private int score;
+
 
         public Transform[] pooled;
         public AudioClip[] soundList;
@@ -39,24 +37,19 @@ namespace Scenes
         {
             gameOver = false;
             restart = false;
-            //restartText.text = "";
-            gameOverText.text = "";
-            score = 0;
 
             UpdateScore();
             StartCoroutine(SpawnWaves());
 
             SoundManager.Instance.InitList(transform, soundList);
             PoolManager.Instance.InitList(transform, pooled);
-
             
             SoundManager.Instance.PlayMusic("music_background");
-
 
             joystick.Init((Vector3 direct, float angle) => {
                 //SetText("Text - Debug", $"Angle : {angle}");
                 //move?.Invoke(direct);
-                // е╬╨Д ╫ца║ю╦╥н ╨╞х╞.
+                // е╬О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫х╞.
                 direct.z = direct.y;
                 playerController.Direction = direct;
             },
@@ -68,7 +61,6 @@ namespace Scenes
 
             return true;
         }
-
 
         void Update()
         {
@@ -131,7 +123,7 @@ namespace Scenes
 
         public void AddScore(int newScoreValue)
         {
-            score += newScoreValue;
+            //score += newScoreValue;
             UpdateScore();
         }
 
@@ -142,8 +134,6 @@ namespace Scenes
 
         public void GameOver()
         {
-            if(gameOverText != null)
-                gameOverText.text = "Game Over!";
 
             gameOver = true;
         }
@@ -151,21 +141,29 @@ namespace Scenes
 
         public override void OnTouchBean(Vector3 position)
         {
+            position.z = 100;
+            position = cameraUI.ScreenToWorldPoint(position);
             joystick.TouchBegin(position);   
         }
 
         public override void OnTouchMove(Vector3 position)
         {
+            position.z = 100;
+            position = cameraUI.ScreenToWorldPoint(position);
             joystick.TouchMove(position);
         }
 
         public override void OnTouchEnd(Vector3 position)
-        {
+        {           
+            position.z = 100;
+            position = cameraUI.ScreenToWorldPoint(position);
             joystick.TouchEnd(position);
         }
 
         public override void OnTouchStationary(Vector3 position)
         {
+            position.z = 100;
+            position = cameraUI.ScreenToWorldPoint(position);
             joystick.TouchMove(position);
         }
     }

@@ -1,5 +1,5 @@
 using System;
-
+using Common.Global;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -46,16 +46,15 @@ public class Joystick : MonoBehaviour
 
     public void TouchBegin(Vector3 position)
     {
-
-
+        
         RectTrans.position = position;
         center = RectTrans.position;
 
         float distance = Mathf.Abs(Vector3.Distance(center, position));
         if (distance <= radius)
-        {
-            if (EventSystem.current.IsPointerOverGameObject() == false)
-            {
+        {            
+            if(!EventSystem.current.IsPointerOverGameObject())
+            {  
                 if (PanelImage != null)
                 {
                     gameObject.SetActive(true);

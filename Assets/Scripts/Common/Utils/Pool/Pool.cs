@@ -13,7 +13,7 @@ namespace Common.Utils.Pool
         private Queue<T> _queue;
         private Transform _parent;
         public int Max { get; private set; } = 0;
-        private List<T> ActiveList { get; set; }
+        public List<T> ActiveList { get; set; }
 
         /// <summary>
         /// 오브젝트 풀.

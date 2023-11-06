@@ -57,8 +57,9 @@ namespace Common.Global
             CurrScene = null;
             yield return null;
 
-            //UIManager.Instance.Clear();
-
+            
+            SoundManager.Instance.StopAllSound();
+            
             var async = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
             async.allowSceneActivation = true;
             while(!async.isDone)
@@ -152,6 +153,8 @@ namespace Common.Global
         /// <param name="param"></param>
         public void ChangeScene(SceneBase.Scenes scene, bool loading = true, JSONObject param = null)
         {
+            
+            
             Param = param; 
 
             var sceneName = scene.ToString();
