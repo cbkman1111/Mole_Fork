@@ -16,7 +16,6 @@ namespace Common.Global
         private AudioMixer mixer = null;
         //private Transform root = null;
 
-        
         protected override bool Init()
         {
             mixer = ResourcesManager.Instance.LoadInBuild<AudioMixer>("AudioMixer");
@@ -72,20 +71,35 @@ namespace Common.Global
             }
         }
 
-        public void PlayEffect(string name)
+        public void PlayEffect(string name, Vector3 position)
         {
             if( soundTable.ContainsKey( name ) == false )
                 return;
 
+            int count = 0;
+            foreach (var obj in effect.ActiveList)
+            {
+                if (obj.name == name)
+                {
+                    count++;
+                }
+
+                if (count > 5)
+                {
+                    return;
+                }
+            }
+
             AudioClip clip = (AudioClip)soundTable[name];
             AudioSource audio = effect.GetObject();
-            if(audio != null)
-            {
+            if (audio != null)
+            {                 
                 audio.gameObject.SetActive(true);
                 audio.playOnAwake = false;
                 audio.loop = false;
                 audio.clip = clip;
                 audio.name = name;
+                audio.transform.position = position;
                 audio.Play();
                 StartCoroutine(ReturnEffect(audio));
             }

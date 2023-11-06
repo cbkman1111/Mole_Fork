@@ -51,7 +51,7 @@ public class Done_PlayerController : MonoBehaviour
                     bolt.rotation = shotSpawn.rotation;
 
                     //Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
-                    SoundManager.Instance.PlayEffect("weapon_player");
+                    SoundManager.Instance.PlayEffect("weapon_player", bolt.position);
                     //GetComponent<AudioSource>().Play ();
                 }
 

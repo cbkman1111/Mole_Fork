@@ -69,9 +69,7 @@ public class Joystick : MonoBehaviour
     {
         if (clicked == true)
         {
-            Handler.position = position;
-
-            var distance = Mathf.Abs(Vector2.Distance(center, position));
+            var distance = Mathf.Abs(Vector2.Distance(RectTrans.position, Handler.position));
             var angle = GetAngle(center, position);
             var newDirection = (position - center).normalized;
 
@@ -82,7 +80,9 @@ public class Joystick : MonoBehaviour
 
                 Debug.DrawRay(center, edge, Color.blue);
             }
-
+            else {
+                Handler.position = position;
+            }
             OnMove(newDirection, angle);
         }
     }

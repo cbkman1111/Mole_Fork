@@ -29,7 +29,7 @@ public class Done_WeaponController : MonoBehaviour
             fire.rotation = shotSpawn.rotation;
 			//Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
 			//GetComponent<AudioSource>().Play();
-			SoundManager.Instance.PlayEffect("weapon_enemy");
+			SoundManager.Instance.PlayEffect("weapon_enemy", fire.position);
             yield return MEC.Timing.WaitForSeconds(time);
         }
 	}
