@@ -16,9 +16,7 @@ namespace UI.Menu
 
         public bool InitMenu()
         {
-            //joystick.Init();
-
-            return true;
+              return true;
         }
 
         protected override void OnClick(Button btn)

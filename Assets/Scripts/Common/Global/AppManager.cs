@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Common.Global.Singleton;
 using Common.Scene;
 using Scenes;
@@ -13,14 +12,20 @@ namespace Common.Global
 {
     public class AppManager : MonoSingleton<AppManager>
     {
-        private Dictionary<string, SceneBase> _scenes = null;
+        private Stack<SceneBase> _stack = null;
+        //private Dictionary<string, SceneBase> _scenes = null;
+        //[SerializeField] private SceneBase _currScene = null;
+        private SceneBase LastStack()
+        {
+            if (_stack == null || _stack.Count == 0)
+                return null;
 
-        [SerializeField] private SceneBase _currScene = null;
+            return _stack?.Last();
+        }
 
         public SceneBase CurrScene
         {
-            get => _currScene;
-            set => _currScene = value;
+            get => LastStack();
         }
 
         private JSONObject Param { get; set; } = null;
@@ -31,7 +36,8 @@ namespace Common.Global
         /// <returns></returns>
         protected override bool Init()
         {
-            _scenes = new Dictionary<string, SceneBase>();
+            //_scenes = new Dictionary<string, SceneBase>();
+            _stack = new Stack<SceneBase>();
             return true;
         }
         
@@ -54,10 +60,9 @@ namespace Common.Global
         /// <returns></returns>
         private IEnumerator LoadScene(string sceneName)
         {
-            CurrScene = null;
+            //CurrScene = null;
             yield return null;
 
-            
             SoundManager.Instance.StopAllSound();
             
             var async = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
@@ -65,13 +70,30 @@ namespace Common.Global
             while(!async.isDone)
                 yield return null;
 
-            var root = GetRoot();
+            GameObject root = null;
+            SceneBase sceneObject = null;
+            var scene = SceneManager.GetActiveScene();
+            var objects = scene.GetRootGameObjects();
+            for (int i = 0; i < objects.Length; i++)
+            {
+                if (objects[i].name == "UIRoot")
+                {
+                    root = objects[i];
+                }
+                else if (objects[i].name == "Scene")
+                {
+                    sceneObject = objects[i].GetComponent<SceneBase>();
+                }
+            }
+
+
+            //var root = GetRoot();
             var changeScnene = GetScene(sceneName);
             UIManager.Instance.SetRoot(root);
 
-            CurrScene = changeScnene;
-            CurrScene.MainCamera = Camera.main;
-            CurrScene.Init(Param);
+            changeScnene.MainCamera = Camera.main;
+            changeScnene.Init(Param);
+            _stack.Push(changeScnene);
 
             Debug.Log($"{Tag} Scene Load Complete");
         }
@@ -89,11 +111,6 @@ namespace Common.Global
 
         private SceneBase GetScene(string name)
         {
-            if (_scenes.TryGetValue(name, out var selectScene) != false)
-            {
-                return selectScene;
-            }
-
             var scene = SceneManager.GetActiveScene();
             var objects = scene.GetRootGameObjects();
             SceneBase sceneObject = null;
@@ -128,11 +145,7 @@ namespace Common.Global
 
         private SceneBase CreateSceneObject(string sceneName)
         {
-            if (_scenes.TryGetValue(sceneName, out var selectScene) != false)
-            {
-                return null;
-            }
-            
+           
             SceneBase scene = null;
             switch (StringToEnum<SceneBase.Scenes>(sceneName))
             {
@@ -153,17 +166,10 @@ namespace Common.Global
         /// <param name="param"></param>
         public void ChangeScene(SceneBase.Scenes scene, bool loading = true, JSONObject param = null)
         {
-            
-            
             Param = param; 
 
             var sceneName = scene.ToString();
             StartCoroutine(LoadScene(sceneName));
-        }
-
-        public SceneBase GetCurrentScene()
-        {
-            return CurrScene;
         }
 
         public void OnAppPause(bool paused)
@@ -190,7 +196,10 @@ namespace Common.Global
             var touches = Input.touches;
             var phase = TouchPhase.Began;
 
-            CurrScene?.OnUpdate();
+            if (CurrScene == null)
+                return;
+
+            CurrScene.OnUpdate();
 
             if (touches.Count() == 1)
             {

@@ -1,6 +1,7 @@
 using Common.Global;
 using Common.Scene;
 using Common.UIObject;
+using TMPro;
 using UnityEngine.UI;
 
 namespace UI.Menu
@@ -23,7 +24,6 @@ namespace UI.Menu
             if(name == "Button - Start")
             {
                 //SoundManager.Instance.StopAllSound();
-
                 AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneLobby);
             }
         }

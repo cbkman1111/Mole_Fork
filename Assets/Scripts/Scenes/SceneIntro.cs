@@ -1,5 +1,6 @@
 using Common.Global;
 using Common.Scene;
+using System.Collections.Generic;
 using UI.Menu;
 using UnityEngine;
 
@@ -18,7 +19,6 @@ namespace Scenes
                 menu.InitMenu();
             }
 
-            
             idle.Play();
 
             SoundManager.Instance.InitList(transform, clips);

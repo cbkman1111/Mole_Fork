@@ -13,14 +13,12 @@ namespace Common.Scene
             SceneLoading, // 게임 로딩.
 
             SceneLobby, // 로비.
-            SceneInGame // 인게임.
+            SceneInGame, // 인게임.
+
+            SceneBehaviorDesign // 
         }
 
         public Camera MainCamera { get; set; }
-        public virtual void LoadBeforeAsync()
-        {
-        }
-
         public virtual void OnUpdate() { }
         public abstract bool Init(JSONObject param);
     
