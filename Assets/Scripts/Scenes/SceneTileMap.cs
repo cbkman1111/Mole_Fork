@@ -40,7 +40,7 @@ namespace Scenes
         {
             _ditanceCamera = 5;
             
-            _menu = UIManager.Instance.OpenMenu<UIMenuTileMap>("UI/UIMenuTileMap");
+            _menu = UIManager.Instance.OpenMenu<UIMenuTileMap>("UIMenuTileMap");
             if (_menu != null)
             {
                 _menu.InitMenu(

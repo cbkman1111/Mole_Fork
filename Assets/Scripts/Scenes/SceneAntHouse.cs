@@ -41,7 +41,7 @@ namespace Scenes
 
             mapUpdateTime = DateTime.MinValue;
 
-            menu = UIManager.Instance.OpenMenu<UIMenuAntHouse>("UI/UIMenuAntHouse");
+            menu = UIManager.Instance.OpenMenu<UIMenuAntHouse>("UIMenuAntHouse");
             if (menu != null)
             {
                 menu.InitMenu(

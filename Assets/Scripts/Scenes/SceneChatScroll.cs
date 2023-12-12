@@ -13,7 +13,7 @@ namespace Scenes
         /// <returns></returns>
         public override bool Init(JSONObject param)
         {
-            var menu = UIManager.Instance.OpenMenu<UIMenuChat>("UI/UIMenuChat");
+            var menu = UIManager.Instance.OpenMenu<UIMenuChat>("UIMenuChat");
             if (menu != null)
             {
                 menu.InitMenu();

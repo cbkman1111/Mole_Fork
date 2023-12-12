@@ -196,14 +196,15 @@ namespace Common.Global
         
             if(trans == false)
             {
+                string path = $"UI/{name}";
 #if UNITY_EDITOR
-                var prefab = ResourcesManager.Instance.LoadInBuild<T>(name); 
+                var prefab = ResourcesManager.Instance.LoadInBuild<T>(path);
 #else
-            T prefab = ResourcesManager.Instance.LoadBundle<T>(name);
-            if (prefab == null)
-            {
-                prefab = ResourcesManager.Instance.LoadInBuild<T>(name);
-            }
+                T prefab = ResourcesManager.Instance.LoadBundle<T>(path);
+                if (prefab == null)
+                {
+                    prefab = ResourcesManager.Instance.LoadInBuild<T>(path);
+                }
 #endif
                 if (prefab == false)
                 { 
@@ -234,11 +235,12 @@ namespace Common.Global
             return ret;
         }
         
-        // ReSharper disable Unity.PerformanceAnalysis
         public void Close(string name)
         {
             var trans = _canvas.transform.Find(name);
-            if (trans != true) return;
+            if (trans != true) 
+                return;
+
             var obj = trans.GetComponent<UIObject.UIObject>();
             obj.OnClose();
 

@@ -13,7 +13,7 @@ namespace Scenes
         /// <returns></returns>
         public override bool Init(JSONObject param)
         {
-            UIMenuMatch3 menu = UIManager.Instance.OpenMenu<UIMenuMatch3>("UI/UIMenuMatch3");
+            UIMenuMatch3 menu = UIManager.Instance.OpenMenu<UIMenuMatch3>("UIMenuMatch3");
             if (menu != null)
             {
                 menu.InitMenu();

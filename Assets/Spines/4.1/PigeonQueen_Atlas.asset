@@ -13,5 +13,4 @@ MonoBehaviour:
   m_Name: PigeonQueen_Atlas
   m_EditorClassIdentifier: 
   atlasFile: {fileID: 4900000, guid: 26a297bfc6217cf489c5e7fc8b8cef98, type: 3}
-  materials:
-  - {fileID: 2100000, guid: 77ff63d6dcacb6e42a2cd34c04d47185, type: 2}
+  materials: []

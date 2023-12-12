@@ -13,5 +13,4 @@ MonoBehaviour:
   m_Name: player_Atlas
   m_EditorClassIdentifier: 
   atlasFile: {fileID: 4900000, guid: 1a72c8b82be76614699cdeefa9d3330a, type: 3}
-  materials:
-  - {fileID: 2100000, guid: 15ca4b9d28d18c24084ec6f69e4cc257, type: 2}
+  materials: []

@@ -20,7 +20,7 @@ namespace UI.Menu
         protected override void OnClick(Button btn)
         {
             string name = btn.name;
-            if(name == "Button - Start1")
+            if (name == "Button - Start1")
             {
                 AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneTileMap);
             }
@@ -53,6 +53,10 @@ namespace UI.Menu
             else if (name == "Button - Spine")
             {
                 AppManager.Instance.ChangeScene(SceneBase.Scenes.Demo);
+            }
+            else if (name == "Button - Maze")
+            {
+                AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneMaze);
             }
         }
     }

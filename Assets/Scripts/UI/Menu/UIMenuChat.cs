@@ -22,7 +22,7 @@ namespace UI.Menu
             }
             else if (name == "Button - OpenScroll")
             {
-                UIManager.Instance.OpenPopup<PopupScrollViewTest>("UI/PopupScrollViewTest");
+                UIManager.Instance.OpenPopup<PopupScrollViewTest>("PopupScrollViewTest");
             }
         }
 

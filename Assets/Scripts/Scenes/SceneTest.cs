@@ -32,7 +32,7 @@ namespace Scenes
         /// <returns></returns>
         public override bool Init(JSONObject param)
         {
-            menu = UIManager.Instance.OpenMenu<UIMenuTest>("UI/UIMenuTest");
+            menu = UIManager.Instance.OpenMenu<UIMenuTest>("UIMenuTest");
             if (menu != null)
             {
                 menu.InitMenu();

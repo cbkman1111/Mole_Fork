@@ -48,6 +48,9 @@ namespace Common.Global
         // ReSharper disable Unity.PerformanceAnalysis
         private IEnumerator LoadScene(string sceneName, bool loading)
         {
+            yield return null;
+            yield return null;
+
             CurrScene?.UnLoad();
 
             UIManager.Instance.Clear();
@@ -162,6 +165,7 @@ namespace Common.Global
                 case SceneBase.Scenes.SceneMenu:
                     scene = new SceneMenu();
                     break;
+
                 case SceneBase.Scenes.SceneLoading:
                     //CurrScene = new SceneLoading();
                     break;
@@ -189,6 +193,9 @@ namespace Common.Global
                     break;
                 case SceneBase.Scenes.Demo:
                     scene = new SceneDemo();
+                    break;
+                case SceneBase.Scenes.SceneMaze:
+                    scene = new SceneMaze();
                     break;
             }
 
