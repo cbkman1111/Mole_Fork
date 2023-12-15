@@ -58,6 +58,10 @@ namespace UI.Menu
             {
                 AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneMaze);
             }
+            else if (name == "Button - Behavior")
+            {
+                AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneBehaviorTree);
+            }
         }
     }
 }

@@ -21,22 +21,22 @@ namespace UI.Menu
         }
 
         /*
-    private void Update()
-    {
-        float radius = 200;
-        float a = CalculateAngle(from.transform, to.transform.position, from.transform.position);
+        private void Update()
+        {
+            float radius = 200;
+            float a = CalculateAngle(from.transform, to.transform.position, from.transform.position);
 
-        float x = (Mathf.Sin(a * (Mathf.PI / 180)) * radius);
-        float y = (Mathf.Cos(a * (Mathf.PI / 180)) * radius);
+            float x = (Mathf.Sin(a * (Mathf.PI / 180)) * radius);
+            float y = (Mathf.Cos(a * (Mathf.PI / 180)) * radius);
 
-        Vector3 dest = from.transform.position;
-        dest.x += x;
-        dest.y += y;
-        result.transform.position = dest;
+            Vector3 dest = from.transform.position;
+            dest.x += x;
+            dest.y += y;
+            result.transform.position = dest;
 
-        SetText(angle, $"{a}");
-    }
-    */
+            SetText(angle, $"{a}");
+        }
+        */
         public static float CalculateAngle(Transform trans, Vector3 from, Vector3 to)
         {
             //Vector3 v = to - from;
