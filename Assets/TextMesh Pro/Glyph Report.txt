@@ -1,0 +1,15 @@
+Font: MARU Buri Beta  Style: Regular
+Point Size: 78   SP/PD Ratio: 6.4%
+
+Characters included: 2485/2487
+Missing characters: 2
+Excluded characters: 0
+
+Characters missing from font file:
+----------------------------------------
+ID: 13	Hex: D	Char []
+ID: 10	Hex: A	Char [
+]
+
+Characters excluded from packing:
+----------------------------------------
