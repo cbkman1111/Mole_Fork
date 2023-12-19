@@ -1,5 +1,6 @@
 using Common.Global;
 using Common.Scene;
+using System;
 using UI.Menu;
 
 namespace Scenes
@@ -26,9 +27,14 @@ namespace Scenes
         /// <summary>
         /// 미리 로딩해야 할 데이터 처리.
         /// </summary>
-        public async override void Load()
+  
+        public async override void Load(Action<float> update)
         {
-            Amount = 1f;
+            //Amount = 1f;
+
+
+            update(0.1f);
         }
+   
     }
 }

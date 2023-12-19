@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Common.Global;
 using Common.Scene;
@@ -44,21 +45,19 @@ namespace Scenes
         /// <summary>
         /// 미리 로딩해야 할 데이터 처리.
         /// </summary>
-        public async override void Load()
+        public async override void Load(Action<float> update)
         {
-            int total = 10000 * 10000;
-            //int total = 400000000;
-            Amount = 0f;
+            int total = 1000000;
             List<int> list = new List<int>();
             for (int i = 0; i < total; i++)
             {
-                Amount = (float)i / (float)total;
+                float percent = (float)i / (float)total;
                 list.Add(i);
+
+                update(percent);
             }
 
-
-
-            Amount = 1f;
+            update(1f);
         }
 
         public override void OnTouchBean(Vector3 position)

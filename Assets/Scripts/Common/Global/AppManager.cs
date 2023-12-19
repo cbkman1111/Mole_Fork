@@ -16,6 +16,8 @@ namespace Common.Global
         //private Dictionary<string, SceneBase> _scenes = null;
         [SerializeField] private SceneBase _currScene = null;
 
+        float loadingPercent = 0f;
+
         public SceneBase CurrScene
         {
             get => _currScene;
@@ -45,116 +47,113 @@ namespace Common.Global
             return (T)Enum.Parse(typeof(T), e);
         }
 
-        // ReSharper disable Unity.PerformanceAnalysis
+        private IEnumerator UpdateLoadPercent(UILoadingMenu loading)
+        {
+            bool done = false;
+            while (!done)
+            {
+                loading?.SetPercent(loadingPercent);
+
+                if (loadingPercent >= 1.0f) {
+                    done = true;
+                }
+
+                yield return null;
+            }
+        }
+
+        private IEnumerator InitScene(UILoadingMenu loading)
+        {
+            // 나머지 부족한 게이지를 1.0까지 채움.
+            while (loading.Complete() == false)
+            {
+                loadingPercent += 0.1f;
+                if (loadingPercent >= 1.0f)
+                    loadingPercent = 1.0f;
+
+                loading.SetPercent(loadingPercent);
+                yield return null;
+            }
+
+            loading.Close();
+            CurrScene.Init(Param);
+            yield return null;
+        }
+
+        /// <summary>
+        /// 로딩중 팝업을 출력하고 대상 씬을 로드합니다.
+        /// </summary>
+        /// <param name="sceneName"></param>
+        /// <param name="loading"></param>
+        /// <returns></returns>
         private IEnumerator LoadScene(string sceneName, bool loading)
         {
-            yield return null;
-            yield return null;
-
             CurrScene?.UnLoad();
-
-            UIManager.Instance.Clear();
             CurrScene = null;
 
+            UIManager.Instance.Clear();
+            AsyncOperation asyncNextOperator = null;
             if (loading == true)
             {
-                var loadScene = SceneBase.Scenes.SceneLoading.ToString();
-                var async = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(loadScene, LoadSceneMode.Single);
-                async.allowSceneActivation = true;
-                float percent = 0;
+                loadingPercent = 0f;
 
-                while (async.isDone == false || async.progress < 1.0f)
-                {
-                    yield return null;
-                }
+                // 로딩 메뉴를 띄우고 수치를 갱신.
+                var loadingMenu = UIManager.Instance.OpenMenu<UILoadingMenu>("UILoadingMenu") as UILoadingMenu;
+                var handle = StartCoroutine(UpdateLoadPercent(loadingMenu));
 
-                var sceneLoading = GetSceneLoading(loadScene);
-                var asyncNext = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
-                asyncNext.allowSceneActivation = false;
-                asyncNext.completed += (AsyncOperation operation) => {
-                    if (CurrScene != null)
-                    {
-                        CurrScene.MainCamera = Camera.main;
-                        CurrScene.Init(Param);
-                    }
+                // 다음 씬을 로드 시작.
+                asyncNextOperator = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
+                asyncNextOperator.allowSceneActivation = false;
+                asyncNextOperator.completed += (AsyncOperation operation) => {
+                    CurrScene = CreateSceneObject(sceneName);
+                    CurrScene.MainCamera = Camera.main;
+                    
+                    // 비동기로 데이터 로드를 하고, 완료되면 초기화.
+                    Task.Run(() => {
+                        CurrScene.Load((percent) => {
+                            loadingPercent = percent;
+                        });
+                    }).
+                    // 테스크 완료후 동기로 받음.
+                    ContinueWith(preTask => {
+                        StopCoroutine(handle);
+                        StartCoroutine(InitScene(loadingMenu));
+                    }, TaskScheduler.FromCurrentSynchronizationContext());
                 };
-
-                while (asyncNext.progress < 0.9f)
+                
+                // 다음 씬 로드 게이지를 갱신.
+                while (asyncNextOperator.progress < 0.9f)
                 {
-                    percent = asyncNext.progress * 0.1f;// Mathf.Clamp01(asyncNext.progress / 0.9f);
-                    sceneLoading.SetPercent(percent);
+                    loadingPercent = asyncNextOperator.progress;
                     yield return null;
                 }
 
-                SceneBase changeScene = CreateSceneObject(sceneName);
-                //_scenes.Add(sceneName, changeScene);
-                changeScene.LoadBeforeAsync();
-                var task = Task.Run(() => changeScene.Load());
-                bool complete = false;
-                while (complete == false)
-                {
-                    percent = changeScene.Amount;
-                    sceneLoading.SetPercent(percent);
-                    complete = percent == 1.0f && sceneLoading.Complete();
-                    yield return null;
-                }
-
-                /*
-                if (_scenes.TryGetValue(sceneName, out var scene) == true)
-                {
-                    changeScene = scene;
-                }
-                else
-                {
-                    changeScene = CreateSceneObject(sceneName);
-                    //_scenes.Add(sceneName, changeScene);
-                    changeScene.LoadBeforeAsync();
-                    var task = Task.Run(() => changeScene.Load());
-                    bool complete = false;
-                    while (complete == false)
-                    {
-                        percent = changeScene.Amount;
-                        sceneLoading.SetPercent(percent);
-                        complete = percent == 1.0f && sceneLoading.Complete();
-                        yield return null;
-                    }
-                }
-                */
-
-                sceneLoading.SetPercent(1);
-                while (sceneLoading.Complete() == false)
-                {
-                    yield return null;
-                }
-
-                asyncNext.allowSceneActivation = true;
-                CurrScene = changeScene;
+                // Activation on.
+                asyncNextOperator.allowSceneActivation = true;
             }
             else
             {
-                var async = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
-                async.allowSceneActivation = true;
-                async.completed += (AsyncOperation operation) => {
+                asyncNextOperator = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
+                asyncNextOperator.allowSceneActivation = true;
+                asyncNextOperator.completed += (AsyncOperation operation) => {
                     SceneBase changeScnene = CreateSceneObject(sceneName);
-                    /*
-                    if (_scenes.TryGetValue(sceneName, out SceneBase scene) == true)
-                    {
-                        changeScnene = scene;
-                    }
-                    else
-                    {
-                        changeScnene = CreateSceneObject(sceneName);
-                        _scenes.Add(sceneName, changeScnene);
-                    }
-                    */
-
                     CurrScene = changeScnene;
                     CurrScene.MainCamera = Camera.main;
-                    CurrScene.Init(Param);
-                };
-            }
 
-            Debug.Log($"{Tag} Scene Load Complete");
+                    Task.Run(() => {
+                        CurrScene.Load((percent) => {
+                            loadingPercent = percent;
+                        });
+                    }).
+                    ContinueWith(preTask => {
+                        CurrScene.Init(Param);
+                    }, TaskScheduler.FromCurrentSynchronizationContext());
+                };
+
+                yield return null;
+            }
+            
+            //Debug.Log($"{Tag} Scene Load Complete");
         }
 
 
@@ -168,74 +167,80 @@ namespace Common.Global
             return list.Select(obj => obj.GetComponent<SceneLoading>()).FirstOrDefault(scene => scene != null);
         }
 
+        /// <summary>
+        /// 씬객체를 붙이거나, 있으면 참조 시켜줍니다.
+        /// </summary>
+        /// <param name="sceneName"></param>
+        /// <returns>참조된 씬 객체</returns>
         private SceneBase CreateSceneObject(string sceneName)
         {
-            /*
-            if (_scenes.TryGetValue(sceneName, out var selectScene) != false) 
-                return null;
-            */
+            SceneBase scene = null; //GetSceneComponent(name);
+            var activeScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
+            var root = activeScene.GetRootGameObjects()[0];
 
-            //new GameObject().AddComponent<>
             GameObject sceneObject = GameObject.Find(sceneName);
             if (sceneObject == null)
             {
-                var a = new GameObject(sceneName).AddComponent<SceneIntro>();
+                var obj = new GameObject(sceneName);
+                obj.transform.SetParent(root.transform.parent);
+
+                switch (StringToEnum<SceneBase.Scenes>(sceneName))
+                {
+                    case SceneBase.Scenes.SceneIntro:
+                        scene = obj.AddComponent<SceneIntro>(); //new SceneIntro();
+                        break;
+                    case SceneBase.Scenes.SceneMenu:
+                        scene = obj.AddComponent<SceneMenu>();
+                        break;
+                    case SceneBase.Scenes.SceneGostop:
+                        scene = obj.AddComponent<SceneGostop>();
+                        break;
+                    case SceneBase.Scenes.SceneTileMap:
+                        scene = obj.AddComponent<SceneTileMap>();
+                        break;
+                    case SceneBase.Scenes.SceneAntHouse:
+                        scene = obj.AddComponent<SceneAntHouse>();
+                        break;
+                    case SceneBase.Scenes.game:
+                        scene = obj.AddComponent<SceneMatch3>();
+                        break;
+                    case SceneBase.Scenes.SceneChatScroll:
+                        scene = obj.AddComponent<SceneChatScroll>();
+                        break;
+                    case SceneBase.Scenes.SceneTest:
+                        scene = obj.AddComponent<SceneTest>();
+                        break;
+                    case SceneBase.Scenes.SceneBundle:
+                        scene = obj.AddComponent<SceneBundle>();
+                        break;
+                    case SceneBase.Scenes.Demo:
+                        scene = obj.AddComponent<SceneDemo>();
+                        break;
+                    case SceneBase.Scenes.SceneMaze:
+                        scene = obj.AddComponent<SceneMaze>();
+                        break;
+                    case SceneBase.Scenes.SceneBehaviorTree:
+                        scene = obj.AddComponent<SceneBehaviorTree>();
+                        break;
+
+                    default:
+                        break;
+                }
             }
             else 
             {
-                var s = sceneObject.GetComponent<SceneBase>();
+                scene = sceneObject.GetComponent<SceneBase>();
             }
-
             
-            SceneBase scene = null; //GetSceneComponent(name);
-            switch (StringToEnum<SceneBase.Scenes>(sceneName))
-            {
-                case SceneBase.Scenes.SceneIntro:
-                    scene = new SceneIntro();
-                    break;
-                case SceneBase.Scenes.SceneMenu:
-                    scene = new SceneMenu();
-                    break;
-                case SceneBase.Scenes.SceneGostop:
-                    scene = new SceneGostop();
-                    break;
-                case SceneBase.Scenes.SceneTileMap:
-                    scene = new SceneTileMap();
-                    break;
-                case SceneBase.Scenes.SceneAntHouse:
-                    scene = new SceneAntHouse();
-                    break;
-                case SceneBase.Scenes.game:
-                    scene = new SceneMatch3();
-                    break;
-                case SceneBase.Scenes.SceneChatScroll:
-                    scene = new SceneChatScroll();
-                    break;
-                case SceneBase.Scenes.SceneTest:
-                    scene = new SceneTest();
-                    break;
-                case SceneBase.Scenes.SceneBundle:
-                    scene = new SceneBundle();
-                    break;
-                case SceneBase.Scenes.Demo:
-                    scene = new SceneDemo();
-                    break;
-                case SceneBase.Scenes.SceneMaze:
-                    scene = new SceneMaze();
-                    break;
-                case SceneBase.Scenes.SceneBehaviorTree:
-                    scene = new SceneBehaviorTree();
-                    break;
-
-                default:
-                    // 로딩씬은 따로 없음.
-                    break;
-            }
-
             return scene;
-
         }
 
+        /// <summary>
+        /// 씬 전환.
+        /// </summary>
+        /// <param name="scene"></param>
+        /// <param name="loading"></param>
+        /// <param name="param"></param>
         public void ChangeScene(SceneBase.Scenes scene, bool loading = true, JSONObject param = null)
         {
             Param = param; 

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Common.Scene
@@ -22,21 +23,17 @@ namespace Common.Scene
             Demo
         }
 
-        public float Amount { get; set; } = 0;
+        //public float Amount { get; set; } = 0;
 
         public Camera MainCamera { get; set; }
 
         public virtual void UnLoad() { }
 
-        public virtual void LoadBeforeAsync()
+        public virtual async void Load(Action<float> update)
         {
+            update(1f);
         }
-
-        public virtual async void Load()
-        {
-            Amount = 1f;
-        }
-
+  
         public virtual void OnUpdate() { }
         public abstract bool Init(JSONObject param);
     

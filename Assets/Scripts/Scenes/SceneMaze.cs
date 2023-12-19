@@ -9,6 +9,8 @@ using System;
 using System.Collections.Generic;
 using Scenes.EllersAlgorithm;
 using UI.Popup;
+using Unity.Jobs;
+using Unity.Collections;
 
 namespace Scenes
 {
@@ -543,11 +545,30 @@ namespace Scenes
             }
         }
     }
+
+    public struct MyJob : IJob
+    {
+        public long b;
+        public NativeArray<long> result;
+
+        public void Execute()
+        {
+            for (long i = 0; i < 990000000; i++)
+            {
+                b = i;
+            }
+
+            result[0] = b;
+        }
+    }
+
     public class SceneMaze : SceneBase
     {
         private UIMenuMaze menu = null;
         private int rows = 10;
         private int cols = 10;
+        
+        //NativeArray<long> result = new NativeArray<long>(1, Allocator.TempJob);
 
         //MazeGenerator mazeGenerator = null;
         public Maze mazeGenerator = null;
@@ -562,6 +583,24 @@ namespace Scenes
             {
                 menu.InitMenu();
             }
+
+            /*
+            MyJob jobData = new MyJob();
+            jobData.b = 10;
+            jobData.result = result;
+
+            Debug.Log($"111111111111111111111111111111- start");
+            // Schedule the job
+            JobHandle handle = jobData.Schedule();
+            
+            //handle.IsCompleted() == true
+            // Wait for the job to complete
+            handle.Complete();
+            Debug.Log($"111111111111111111111111111111 - end {result[0]}");
+
+            // Free the memory allocated by the result array
+            result.Dispose();
+            */
 
             mazeGenerator = new Maze();
             mazeGenerator.GenerateMaze(rows, cols);
@@ -699,11 +738,15 @@ namespace Scenes
         /// <summary>
         /// 미리 로딩해야 할 데이터 처리.
         /// </summary>
-        public async override void Load()
-        {
-            Amount = 1f;
-        }
 
+
+        public async override void Load(Action<float> update)
+        {
+            //Amount = 1f;
+
+            update(0.1f);
+        }
+       
         public void OnGameOver()
         {
             var popup = UIManager.Instance.OpenPopup<PopupNormal>("PopupNormal");

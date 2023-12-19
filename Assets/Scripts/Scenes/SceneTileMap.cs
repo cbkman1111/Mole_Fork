@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -38,6 +39,9 @@ namespace Scenes
         /// <returns></returns>
         public override bool Init(JSONObject param)
         {
+            _mapData = new MapData();
+            gameLoaded = false;
+
             _ditanceCamera = 5;
             
             _menu = UIManager.Instance.OpenMenu<UIMenuTileMap>("UIMenuTileMap");
@@ -92,13 +96,13 @@ namespace Scenes
             const int displayUpSide = 12;
             const int displayDownSide = 5;
             var prefabMap = ResourcesManager.Instance.LoadInBuild<Map>("Map");
-            _map = Object.Instantiate<Map>(prefabMap);
+            _map = GameObject.Instantiate<Map>(prefabMap);
             _map.transform.position = Vector3.zero;
             _map.Init(_mapData, startX, startZ, displayW, displayUpSide, displayDownSide);
             
             // 캐릭터 생성.
             var prefab = ResourcesManager.Instance.LoadInBuild<Pige>("Player");
-            _pigeon = Object.Instantiate<Pige>(prefab);
+            _pigeon = GameObject.Instantiate<Pige>(prefab);
             _pigeon.Init(startX, 1, startZ);
 
             // 카메라 위치 초기화.
@@ -120,27 +124,6 @@ namespace Scenes
                 return random.Next(min, max);
             }
         }
-        
-        /// <summary>
-        /// 저장된 데이터가 있으면 로드.
-        /// </summary>
-        public override void LoadBeforeAsync()
-        {                
-            _mapData = new MapData();
-            gameLoaded = false;
-            /*
-            _mapData = MapData.Load();
-            if (_mapData == null)
-            {
-                _mapData = new MapData();
-                gameLoaded = false;
-            }
-            else
-            {
-                gameLoaded = true;
-            }
-            */
-        }
 
         /// <summary>
         /// 
@@ -158,7 +141,7 @@ namespace Scenes
         /// <summary>
         /// 미리 로딩해야 할 데이터 처리.
         /// </summary>
-        public async override void Load()
+        public async override void Load(Action<float> update)
         {
             if (gameLoaded == false)
             {
@@ -203,7 +186,7 @@ namespace Scenes
                         _mapData.Data.Add(data);
 
                         index++;
-                        Amount = (float)index / (float)total;
+                        //Amount = (float)index / (float)total;
                     }
                 }
 
@@ -228,7 +211,7 @@ namespace Scenes
                             }
 
                             index++;
-                            Amount = (float)index / (float)total;
+                            //Amount = (float)index / (float)total;
                         }
                     }
                 }
@@ -273,7 +256,7 @@ namespace Scenes
                         }
 
                         index++;
-                        Amount = (float)index / (float)total;
+                        //Amount = (float)index / (float)total;
                     }
                 }
 
@@ -319,7 +302,8 @@ namespace Scenes
                 }
             }
 
-            Amount = 1f;
+            update(0.1f);
+            //Amount = 1f;
         }
         
         private int GetSurroundingWallCount(int gridX, int gridY)

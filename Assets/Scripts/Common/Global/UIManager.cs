@@ -10,42 +10,31 @@ namespace Common.Global
 {
     public class UIManager : MonoSingleton<UIManager>
     {
-        private CanvasGroup _canvasMain;
-        private CanvasController _controllerMenu;
-        private CanvasController _controllerHud;
-        private CanvasController _controllerPopup;
-        private CanvasController _controllerEtc;
-        private Transform _cover;
+        private UIRoot rootObject = null;
+        
+        private CanvasGroup _canvasMain { get => rootObject._canvasMain; }
+        private CanvasController _controllerMenu { get => rootObject._controllerMenu; }
+        private CanvasController _controllerHud { get => rootObject._controllerHud; }
+        private CanvasController _controllerPopup { get => rootObject._controllerPopup; }
+        private CanvasController _controllerEtc { get => rootObject._controllerEtc; }
+        private Transform _cover { get => rootObject._cover; }
 
-        // ReSharper disable Unity.PerformanceAnalysis
+        // ReSharper disable Unity.PerformanceAnalysic
         protected override bool Init()
         {
             const string uiRoot = "UI/UIRoot";
             var prefab = ResourcesManager.Instance.LoadInBuild<GameObject>(uiRoot);
-            var root = Instantiate(prefab, transform);
-            if(root == false)
+            var obj = Instantiate(prefab, transform);
+            if(obj == false)
             {
                 Debug.LogError($"root is null.");
                 return false;
             }
 
-            root.name = "UIRoot";
-            root.transform.position = new Vector3(100,0,0);
-
-            _canvasMain = root.GetComponent<CanvasGroup>();
-        
-            _controllerMenu = new CanvasController();
-            _controllerMenu.Init(root.transform.Find("Canvas - menu"));
-            _controllerHud = new CanvasController();
-            _controllerHud.Init(root.transform.Find("Canvas - hud"));
-            _controllerPopup = new CanvasController();
-            _controllerPopup.Init(root.transform.Find("Canvas - popup"));
-            _controllerEtc = new CanvasController();
-            _controllerEtc.Init(root.transform.Find("Canvas - etc"));
-
-            _cover = root.transform.Find("Image - dim");
-            _cover.gameObject.SetActive(false);
-            return true;
+            obj.name = "UIRoot";
+            obj.transform.position = new Vector3(100,0,0);
+            rootObject = obj.GetComponent<UIRoot>();
+return true;
         }
 
         public T OpenMenu<T>(string menuName) where T : MenuBase
@@ -146,12 +135,15 @@ namespace Common.Global
             }
         }
 
+        /// <summary>
+        /// UI 모두 제거.
+        /// </summary>
         public void Clear()
         {
-            _controllerMenu.Clear();
-            _controllerHud.Clear();
-            _controllerPopup.Clear();
-            _controllerEtc.Clear();
+            _controllerMenu?.Clear();
+            _controllerHud?.Clear();
+            _controllerPopup?.Clear();
+            _controllerEtc?.Clear();
         }
 
         public void BackKey()
@@ -170,129 +162,6 @@ namespace Common.Global
             }
 
             CoverCheck();
-        }
-    }
-
-    public class CanvasController
-    {
-        private Canvas _canvas;
-        private readonly List<UIObject.UIObject> _list = new List<UIObject.UIObject>();
-
-        public void Init(Transform trans)
-        {
-            _canvas = trans.GetComponent<Canvas>();
-        }
-
-        public Transform GetTransform()
-        {
-            return _canvas.transform;
-        }
-
-        // ReSharper disable Unity.PerformanceAnalysis
-        public T Open<T>(string name) where T : UIObject.UIObject
-        {
-            var trans = _canvas.transform.Find(name);
-            T ret;
-        
-            if(trans == false)
-            {
-                string path = $"UI/{name}";
-#if UNITY_EDITOR
-                var prefab = ResourcesManager.Instance.LoadInBuild<T>(path);
-#else
-                T prefab = ResourcesManager.Instance.LoadBundle<T>(path);
-                if (prefab == null)
-                {
-                    prefab = ResourcesManager.Instance.LoadInBuild<T>(path);
-                }
-#endif
-                if (prefab == false)
-                { 
-                    return default(T); 
-                }
-
-                var clone = Object.Instantiate(prefab, _canvas.transform);
-                if (clone == false)
-                {
-                    Debug.LogError($"clone is null.");
-                    return default(T);
-                }
-
-                clone.transform.SetAsLastSibling();
-                clone.name = name;
-                ret = clone;
-            }
-            else
-            {
-                ret = trans.GetComponent<T>();
-            }
-
-            if(_list.Contains(ret) == false)
-            {
-                _list.Add(ret);
-            }
-
-            return ret;
-        }
-        
-        public void Close(string name)
-        {
-            var trans = _canvas.transform.Find(name);
-            if (trans != true) 
-                return;
-
-            var obj = trans.GetComponent<UIObject.UIObject>();
-            obj.OnClose();
-
-            if (_list != null && _list.Contains(obj))
-            {
-                _list.Remove(obj);
-            }
-
-            Object.Destroy(trans.gameObject);
-        }
-
-        public void Close(Transform transform)
-        {
-            Close(transform.name);
-        }
-
-        public Transform Get(string name)
-        {
-            var ret = _list.Where(obj => string.Compare(obj.name, name, StringComparison.Ordinal) == 0).ToList();
-            return ret.Count == 1 ? ret[0].transform : null;
-        }
-
-        public T Get<T>(string name) where T : UIObject.UIObject
-        {
-            var obj = _canvas.transform.Find(name);
-            return obj.GetComponent<T>();
-        }
-
-        public int Count()
-        {
-            return _list.Count;
-        }
-
-        public Transform Last()
-        {
-            var index = _canvas.transform.childCount - 1;
-            Transform trans = null;
-            if(index >= 0)
-            {
-                trans = _canvas.transform.GetChild(index);
-            }
-        
-            return trans;
-        }
-
-        public void Clear()
-        {
-            for (var i = 0; i < _canvas.transform.childCount ;i++)
-            {
-                var trans = _canvas.transform.GetChild(0);
-                Object.Destroy(trans.gameObject);
-            }
         }
     }
 }
