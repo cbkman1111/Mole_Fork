@@ -39,8 +39,6 @@ namespace Scenes
         /// <returns></returns>
         public override bool Init(JSONObject param)
         {
-            _mapData = new MapData();
-            gameLoaded = false;
 
             _ditanceCamera = 5;
             
@@ -143,6 +141,9 @@ namespace Scenes
         /// </summary>
         public async override void Load(Action<float> update)
         {
+            _mapData = new MapData();
+            gameLoaded = false;
+
             if (gameLoaded == false)
             {
                 var w = _mapData.Width;

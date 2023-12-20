@@ -22,7 +22,7 @@ public class UnitBase : MonoBehaviour
 
     public virtual void SetAngle()
     {
-        var scene = AppManager.Instance.GetCurrentScene();
+        var scene = AppManager.Instance.CurrScene;
         Vector3 v = scene.MainCamera.transform.position - transform.position;
         v.z = 0;
         v.y = 0;

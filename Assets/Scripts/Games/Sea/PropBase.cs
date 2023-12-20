@@ -9,7 +9,7 @@ public class PropBase : MonoBehaviour
     
     private void Start()
     {
-        var scene = AppManager.Instance.GetCurrentScene();
+        var scene = AppManager.Instance.CurrScene;
         Vector3 v = scene.MainCamera.transform.position - transform.position;
         v.z = 0;
         v.y = 0;

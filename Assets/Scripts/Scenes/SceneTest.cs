@@ -47,7 +47,7 @@ namespace Scenes
         /// </summary>
         public async override void Load(Action<float> update)
         {
-            int total = 1000000;
+            int total = 99000000;
             List<int> list = new List<int>();
             for (int i = 0; i < total; i++)
             {

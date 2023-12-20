@@ -29,7 +29,7 @@ namespace UI.Menu
             string name = slider.name;
             if(name.CompareTo("Slider - Camera") == 0)
             {
-                SceneBase scene = AppManager.Instance.GetCurrentScene();
+                SceneBase scene = AppManager.Instance.CurrScene;
                 const int FOV_MIN = 10;
                 const int FOV_AMOUNT = 50;
 
