@@ -13,15 +13,14 @@ namespace Common.Global
 {
     public class AppManager : MonoSingleton<AppManager>
     {
-        private float loadingPercent = 0f;
-
+        private float _loadingPercent = 0f;
         private SceneBase _currScene = null;
         public SceneBase CurrScene
         {
             get => _currScene;
         }
 
-        private JSONObject Param { get; set; } = null;
+        private JSONObject _param { get; set; } = null;
 
         /// <summary>
         /// 
@@ -53,9 +52,9 @@ namespace Common.Global
             bool done = false;
             while (!done)
             {
-                loading?.SetPercent(loadingPercent);
+                loading.SetPercent(_loadingPercent);
 
-                if (loadingPercent >= 1.0f) {
+                if (_loadingPercent >= 1.0f) {
                     done = true;
                 }
 
@@ -70,19 +69,21 @@ namespace Common.Global
         /// <returns></returns>
         private IEnumerator InitScene(UILoadingMenu loading)
         {
+            yield return new WaitForSeconds(0.2f);
+
             // 나머지 부족한 게이지를 1.0까지 채움.
             while (loading.Complete() == false)
             {
-                loadingPercent += 0.1f;
-                if (loadingPercent >= 1.0f)
-                    loadingPercent = 1.0f;
+                _loadingPercent += 0.1f;
+                if (_loadingPercent >= 1.0f)
+                    _loadingPercent = 1.0f;
 
-                loading.SetPercent(loadingPercent);
+                loading.SetPercent(_loadingPercent);
                 yield return null;
             }
 
             loading.Close();
-            CurrScene.Init(Param);
+            CurrScene.Init(_param);
             yield return null;
         }
 
@@ -94,7 +95,7 @@ namespace Common.Global
         /// <returns></returns>
         private IEnumerator LoadScene(string sceneName, bool loading)
         {
-            loadingPercent = 0f;
+            _loadingPercent = 0f;
             if (_currScene != null)
             {
                 _currScene.UnLoad();
@@ -119,7 +120,7 @@ namespace Common.Global
                     // 비동기로 데이터 로드를 하고, 완료되면 초기화.
                     Task.Run(() => {
                         CurrScene.Load((percent) => {
-                            loadingPercent = percent;
+                            _loadingPercent = percent;
                         });
                     }).
                     // 테스크 완료후 동기로 받음.
@@ -140,11 +141,11 @@ namespace Common.Global
 
                     Task.Run(() => {
                         _currScene.Load((percent) => {
-                            loadingPercent = percent;
+                            _loadingPercent = percent;
                         });
                     }).
                     ContinueWith(preTask => {
-                        _currScene.Init(Param);
+                        _currScene.Init(_param);
                     }, TaskScheduler.FromCurrentSynchronizationContext());
                 };
 
@@ -207,6 +208,9 @@ namespace Common.Global
                     case SceneBase.Scenes.SceneBehaviorTree:
                         scene = obj.AddComponent<SceneBehaviorTree>();
                         break;
+                    case SceneBase.Scenes.ScenePuzzle:
+                        scene = obj.AddComponent<ScenePuzzle>();
+                        break;
 
                     default:
                         break;
@@ -228,8 +232,7 @@ namespace Common.Global
         /// <param name="param"></param>
         public void ChangeScene(SceneBase.Scenes scene, bool loading = true, JSONObject param = null)
         {
-            Param = param; 
-
+            _param = param; 
             var sceneName = scene.ToString();
             StartCoroutine(LoadScene(sceneName, loading));
         }

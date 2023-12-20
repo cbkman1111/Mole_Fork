@@ -20,6 +20,8 @@ namespace Common.Scene
             SceneBundle, // 번들 테스트 씬. 어드레스블번들, 에셋번들.
             SceneMaze, // Behavior Design 테스트용 미로 찾기.
             SceneBehaviorTree, // Behavior Design 테스트용.
+            ScenePuzzle, // 퍼즐.
+
             Demo
         }
 

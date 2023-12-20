@@ -21,7 +21,6 @@ namespace Scenes
 
         public MapData MapData => _mapData;
         private MapData _mapData = null;
-        private bool gameLoaded = false;
         
         private UIMenuTileMap _menu = null;
         private Map _map = null;
@@ -39,7 +38,6 @@ namespace Scenes
         /// <returns></returns>
         public override bool Init(JSONObject param)
         {
-
             _ditanceCamera = 5;
             
             _menu = UIManager.Instance.OpenMenu<UIMenuTileMap>("UIMenuTileMap");
@@ -105,7 +103,6 @@ namespace Scenes
 
             // 카메라 위치 초기화.
             MainCamera.transform.position = Vector3.zero;
-
             return true;
         }
 
@@ -142,160 +139,156 @@ namespace Scenes
         public async override void Load(Action<float> update)
         {
             _mapData = new MapData();
-            gameLoaded = false;
 
-            if (gameLoaded == false)
+            var w = _mapData.Width;
+            var h = _mapData.Height;
+            var loopCount = w * h;
+            var smoothCount = 5;
+            var total = loopCount * 2 * smoothCount;
+            var index = 0;
+
+            var centerX = (int)(w * 0.5f);
+            var centerZ = (int)(w * 0.5f);
+
+            // 타일 생성.
+            for (int x = 0; x < w; x++)
             {
-                var w = _mapData.Width;
-                var h = _mapData.Height;
-                var loopCount = w * h;
-                var smoothCount = 5;
-                var total = loopCount * 2 * smoothCount;
-                var index = 0;
-
-                var centerX = (int)(w * 0.5f);
-                var centerZ = (int)(w * 0.5f);
-
-                // 타일 생성.
-                for (int x = 0; x < w; x++)
+                for (int z = 0; z < h; z++)
                 {
-                    for (int z = 0; z < h; z++)
-                    {
-                        var adress = x + z * w;
-                        var tileData = new TileData();
+                    var adress = x + z * w;
+                    var tileData = new TileData();
 
-                        if (x == 0 || x == w - 1 || z == 0 || z == h - 1)
-                        {
-                            tileData.type = TileType.Wall;
-                        }
-                        else if (x > centerX - 10 && x < centerX + 10 && z > centerZ - 10 && z < centerZ + 10)
-                        {
-                            tileData.type = TileType.Ground;
-                        }
+                    if (x == 0 || x == w - 1 || z == 0 || z == h - 1)
+                    {
+                        tileData.type = TileType.Wall;
+                    }
+                    else if (x > centerX - 10 && x < centerX + 10 && z > centerZ - 10 && z < centerZ + 10)
+                    {
+                        tileData.type = TileType.Ground;
+                    }
+                    else
+                    {
+                        var waterPercent = 50;
+                        var randColor = RandomNumber(0, 100);
+                        if (randColor < waterPercent)
+                            tileData.type = TileType.Water;
                         else
-                        {
-                            var waterPercent = 50;
-                            var randColor = RandomNumber(0, 100);
-                            if (randColor < waterPercent)
-                                tileData.type = TileType.Water;
-                            else
-                                tileData.type = TileType.Ground;
-                        }
-
-                        Coordinate data = new Coordinate();
-                        data.Tile = tileData;
-                        _mapData.Data.Add(data);
-
-                        index++;
-                        //Amount = (float)index / (float)total;
+                            tileData.type = TileType.Ground;
                     }
+
+                    Coordinate data = new Coordinate();
+                    data.Tile = tileData;
+                    _mapData.Data.Add(data);
+
+                    index++;
+                    //Amount = (float)index / (float)total;
                 }
+            }
 
-                // 스무스 처리.
-                for (var i = 0; i < smoothCount; i++)
+            // 스무스 처리.
+            for (var i = 0; i < smoothCount; i++)
+            {
+                for (int x = 0; x < _mapData.Width; x++)
                 {
-                    for (int x = 0; x < _mapData.Width; x++)
+                    for (int z = 0; z < _mapData.Height; z++)
                     {
-                        for (int z = 0; z < _mapData.Height; z++)
+                        int adress = x + z * _mapData.Width;
+                        if (_mapData.Data[adress].Tile.type == TileType.Wall)
+                            continue;
+                        int neighbourWallTiles = GetSurroundingWallCount(x, z);
+                        if (neighbourWallTiles > 4)//map[x, y] = WALL; //주변 칸 중 벽이 4칸을 초과할 경우 현재 타일을 벽으로 바꿈
                         {
-                            int adress = x + z * _mapData.Width;
-                            if (_mapData.Data[adress].Tile.type == TileType.Wall)
-                                continue;
-                            int neighbourWallTiles = GetSurroundingWallCount(x, z);
-                            if (neighbourWallTiles > 4)//map[x, y] = WALL; //주변 칸 중 벽이 4칸을 초과할 경우 현재 타일을 벽으로 바꿈
-                            {
-                                _mapData.Data[adress].Tile.type = TileType.Water;
-                            }
-                            else if (neighbourWallTiles < 4)//map[x, y] = ROAD; //주변 칸 중 벽이 4칸 미만일 경우 현재 타일을 빈 공간으로 바꿈
-                            {
-                                _mapData.Data[adress].Tile.type = TileType.Ground;
-                            }
-
-                            index++;
-                            //Amount = (float)index / (float)total;
+                            _mapData.Data[adress].Tile.type = TileType.Water;
                         }
-                    }
-                }
-
-                // 나무 심기.
-                for (var x = 0; x < w; x++)
-                {
-                    for (var z = 0; z < h; z++)
-                    {
-                        var adress = x + z * w;
-                        var data = _mapData.Data[adress];
-                        if (data != null)
+                        else if (neighbourWallTiles < 4)//map[x, y] = ROAD; //주변 칸 중 벽이 4칸 미만일 경우 현재 타일을 빈 공간으로 바꿈
                         {
-                            if (data.Tile.type == TileType.Ground)
-                            {
-                                int rand = RandomNumber(1, 50);
-                                if (rand < 10)
-                                {
-                                    if (data.Objects == null)
-                                    {
-                                        data.Objects = new List<ObjectData>();
-                                        var obj = new ObjectData();
-                                        obj.Id = RandomNumber(2, 9);
-                                        data.Objects.Add(obj);
-                                    }
-                                }
-                            }
-                            else if (data.Tile.type == TileType.Water)
-                            {
-                                int rand = RandomNumber(1, 50);
-                                if (rand < 20)
-                                {
-                                    if (data.Objects == null)
-                                    {
-                                        data.Objects = new List<ObjectData>();
-                                        var obj = new ObjectData();
-                                        obj.Id = 1;
-                                        data.Objects.Add(obj);
-                                    }
-                                }
-                            }
+                            _mapData.Data[adress].Tile.type = TileType.Ground;
                         }
 
                         index++;
                         //Amount = (float)index / (float)total;
                     }
                 }
+            }
 
-                // 벌 소환.
-                for (var x = 0; x < w; x++)
+            // 나무 심기.
+            for (var x = 0; x < w; x++)
+            {
+                for (var z = 0; z < h; z++)
                 {
-                    for (var z = 0; z < h; z++)
+                    var adress = x + z * w;
+                    var data = _mapData.Data[adress];
+                    if (data != null)
                     {
-                        var adress = x + z * w;
-                        var data = _mapData.Data[adress];
-                        if (data != null)
+                        if (data.Tile.type == TileType.Ground)
                         {
-                            if (data.Tile.type == TileType.Ground)
+                            int rand = RandomNumber(1, 50);
+                            if (rand < 10)
                             {
-                                int rand = RandomNumber(1, 50);
-                                if (rand < 20)
+                                if (data.Objects == null)
                                 {
-                                    if (data.Objects == null)
-                                    {
-                                        data.Objects = new List<ObjectData>();
-                                        var obj = new ObjectData();
-                                        obj.Id = 1000 + RandomNumber(0, 3);
-                                        data.Objects.Add(obj);
-                                    }
+                                    data.Objects = new List<ObjectData>();
+                                    var obj = new ObjectData();
+                                    obj.Id = RandomNumber(2, 9);
+                                    data.Objects.Add(obj);
                                 }
                             }
-                            else if (data.Tile.type == TileType.Water)
+                        }
+                        else if (data.Tile.type == TileType.Water)
+                        {
+                            int rand = RandomNumber(1, 50);
+                            if (rand < 20)
                             {
-                                int rand = RandomNumber(1, 50);
-                                if (rand < 10)
+                                if (data.Objects == null)
                                 {
-                                    if (data.Objects == null)
-                                    {
-                                        data.Objects = new List<ObjectData>();
-                                        var obj = new ObjectData();
-                                        obj.Id = 2000;
-                                        data.Objects.Add(obj);
-                                    }
+                                    data.Objects = new List<ObjectData>();
+                                    var obj = new ObjectData();
+                                    obj.Id = 1;
+                                    data.Objects.Add(obj);
+                                }
+                            }
+                        }
+                    }
+
+                    index++;
+                    //Amount = (float)index / (float)total;
+                }
+            }
+
+            // 벌 소환.
+            for (var x = 0; x < w; x++)
+            {
+                for (var z = 0; z < h; z++)
+                {
+                    var adress = x + z * w;
+                    var data = _mapData.Data[adress];
+                    if (data != null)
+                    {
+                        if (data.Tile.type == TileType.Ground)
+                        {
+                            int rand = RandomNumber(1, 50);
+                            if (rand < 20)
+                            {
+                                if (data.Objects == null)
+                                {
+                                    data.Objects = new List<ObjectData>();
+                                    var obj = new ObjectData();
+                                    obj.Id = 1000 + RandomNumber(0, 3);
+                                    data.Objects.Add(obj);
+                                }
+                            }
+                        }
+                        else if (data.Tile.type == TileType.Water)
+                        {
+                            int rand = RandomNumber(1, 50);
+                            if (rand < 10)
+                            {
+                                if (data.Objects == null)
+                                {
+                                    data.Objects = new List<ObjectData>();
+                                    var obj = new ObjectData();
+                                    obj.Id = 2000;
+                                    data.Objects.Add(obj);
                                 }
                             }
                         }
@@ -303,7 +296,8 @@ namespace Scenes
                 }
             }
 
-            update(0.1f);
+
+            update(1f);
             //Amount = 1f;
         }
         

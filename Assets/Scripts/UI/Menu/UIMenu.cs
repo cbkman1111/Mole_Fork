@@ -62,6 +62,10 @@ namespace UI.Menu
             {
                 AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneBehaviorTree);
             }
+            else if (name == "Button - Puzzle")
+            {
+                AppManager.Instance.ChangeScene(SceneBase.Scenes.ScenePuzzle);
+            }
         }
     }
 }
