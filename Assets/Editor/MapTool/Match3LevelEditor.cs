@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public enum SquareTypes
+public enum PuzzleSquareTypes
 {
     NONE = 0,
     EmptySquare,
@@ -124,6 +124,7 @@ public class LevelEditor : EditorWindow
                 GUILayout.Label("Tools:", EditorStyles.boldLabel);
                 GUILayout.BeginHorizontal();
                 {
+                    /*
                     UnityEngine.GUI.color = new Color(1, 1, 1, 1f);
                     foreach (SquareTypes squareTypeItem in _squareTypeItems)
                     {
@@ -145,12 +146,15 @@ public class LevelEditor : EditorWindow
 
                         UnityEngine.GUI.backgroundColor = Color.white;
                     }
+                    */
 
                     UnityEngine.GUI.color = new Color(1, 1, 1, 1f);
                 }
+
                 GUILayout.EndHorizontal();
                 GUILayout.BeginHorizontal();
                 {
+                    /*
                     if (separateBarBrush)
                         UnityEngine.GUI.backgroundColor = Color.gray;
                     if (GUILayout.Button(
@@ -194,7 +198,7 @@ public class LevelEditor : EditorWindow
                         deleteBlock = !deleteBlock;
                         separateBarBrush = false;
                     }
-
+                    */
                     UnityEngine.GUI.backgroundColor = Color.white;
                 }
                 GUILayout.EndHorizontal();

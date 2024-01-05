@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Common.Global.Singleton;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace Common.Global
 {
@@ -71,5 +72,26 @@ namespace Common.Global
         {
             return bundle.LoadAssetWithSubAssets<T>(path);
         }
+
+        /*
+        public static AsyncOperationHandle<GameObject> InstantiateAsync(string path, Transform parent, Vector3 position, Quaternion rotation, bool isLocalRes = false)
+        {
+          return null;
+
+          var rootPath = isLocalRes == false ? RemoteRootPath : LocalRootPath;
+          var handle = Addressables.InstantiateAsync($"{rootPath}{path}", position, rotation, parent);
+
+#if UNITY_EDITOR
+          if (handle.IsValid())
+              handle.Completed += (op => 
+              {
+                  GameObject go = op.Result;
+              });
+#endif
+          return handle;
+  
+        }
+        */
+
     }
 }

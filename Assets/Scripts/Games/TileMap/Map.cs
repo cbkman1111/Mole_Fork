@@ -84,8 +84,6 @@ namespace Games.TileMap
 
         private WorldObject GetWorldObject(ObjectData data)
         {
-            
-
             string[] names =
             {
                 "SeaWeed",
