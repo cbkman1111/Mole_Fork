@@ -383,7 +383,7 @@ namespace Scenes
         /// 
         /// </summary>
         /// <param name="position"></param>
-        public override void OnTouchMove(Vector3 position)
+        public override void OnTouchMove(Vector3 position, Vector2 deltaPosition)
         {
             menu.Joystick.TouchMove(position);
         }

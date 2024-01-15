@@ -24,8 +24,8 @@ namespace Scenes
             Max
         };
 
-        static public int width = 12;
-        static public int height = 24;
+        static public int width = 12; // 좌우 하나씩더
+        static public int height = 28; // 위아래 4개씩더
 
         private TetrisTile[,] boardArray = new TetrisTile[width, height];
         public GameObject board = null;
@@ -76,7 +76,7 @@ namespace Scenes
 
         public void OnLeft() 
         {
-            if (!Possible(currShape.Rotate, currShape.Coordinate.x - 1, currShape.Coordinate.y))
+            if (!Possiable(currShape.Rotate, currShape.Coordinate.x - 1, currShape.Coordinate.y))
             {
                 return;
             }
@@ -87,7 +87,7 @@ namespace Scenes
 
         public void OnRight() 
         {
-            if (!Possible(currShape.Rotate, currShape.Coordinate.x + 1, currShape.Coordinate.y))
+            if (!Possiable(currShape.Rotate, currShape.Coordinate.x + 1, currShape.Coordinate.y))
             {
                 return;
             }
@@ -97,7 +97,7 @@ namespace Scenes
         }
         public void OnDown() 
         {
-            if (!Possible(currShape.Rotate, currShape.Coordinate.x, currShape.Coordinate.y - 1))
+            if (!Possiable(currShape.Rotate, currShape.Coordinate.x, currShape.Coordinate.y - 1))
             {
                 return;
             }
@@ -108,7 +108,7 @@ namespace Scenes
 
         public void OnUp()
         {
-            if (!Possible(currShape.Rotate, currShape.Coordinate.x, currShape.Coordinate.y + 1))
+            if (!Possiable(currShape.Rotate, currShape.Coordinate.x, currShape.Coordinate.y + 1))
             {
                 return;
             }
@@ -120,7 +120,7 @@ namespace Scenes
         public void OnRotateShape()
         {
             var nextRotate = (currShape.Rotate + 1) % 4;
-            if (!Possible(nextRotate, currShape.Coordinate.x, currShape.Coordinate.y))
+            if (!Possiable(nextRotate, currShape.Coordinate.x, currShape.Coordinate.y))
             {
                 return;
             }
@@ -155,12 +155,11 @@ namespace Scenes
             Destroy(currShape.gameObject);
             currShape = null;
 
-            //CreateNewShape(Shapes.T);
             var shape = UnityEngine.Random.Range(0, (int)Shapes.Max);
             CreateNewShape((Shapes)shape);
         }
 
-        private bool Possible(int rotate, float x, float y)
+        private bool Possiable(int rotate, float x, float y)
         {
             var arry = currShape.GetArray(rotate);
 
@@ -205,7 +204,7 @@ namespace Scenes
                     obj.SetValue(0);
                     
                     // 외곽 영역
-                    if (x == 0 || x == width - 1 || y == 0 || y >= 20)
+                    if (x == 0 || x == width - 1 || y <= 4 || y >= 24)
                     {
                         obj.SetValue(-1);
                     }
@@ -216,6 +215,8 @@ namespace Scenes
         }
 
         public override void OnTouchBean(Vector3 position) {
+
+            /*
             Ray ray = MainCamera.ScreenPointToRay(position);
  
             if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
@@ -227,7 +228,7 @@ namespace Scenes
                     var tile = obj.GetComponent<TetrisTile>();
                     if (tile != null)
                     {
-                        if (Possible(currShape.Rotate, tile.Coordnate.x, tile.Coordnate.y) == true)
+                        if (Possiable(currShape.Rotate, tile.Coordnate.x, tile.Coordnate.y) == true)
                         {
                             currShape.Coordinate = tile.Coordnate;
                             currShape.transform.position = GetPosition(tile.Coordnate.x, tile.Coordnate.y);
@@ -238,9 +239,40 @@ namespace Scenes
                     Debug.Log(hit.collider.gameObject.name);
                 }
             }
+            */
+
+            movedPosition = Vector2.zero;
         }
-        
-        public override void OnTouchMove(Vector3 position) {
+
+        private Vector2 movedPosition = Vector2.zero;
+
+        public override void OnTouchMove(Vector3 position, Vector2 deltaPosition) {
+
+            movedPosition += deltaPosition;
+            var diff = Vector2.zero - movedPosition;
+
+            if (diff.x < -10.0)
+            {
+                movedPosition = Vector2.zero;
+                OnLeft();
+            }
+            else if (diff.x >= 10.0)
+            {
+                movedPosition = Vector2.zero;
+                OnRight();
+            }
+            else if (diff.y < -10.0)
+            {
+                movedPosition = Vector2.zero;
+                OnDown();
+            }
+            else if (diff.y >= 10.0)
+            {
+                movedPosition = Vector2.zero;
+                OnUp();
+            }
+
+            /*
             Ray ray = MainCamera.ScreenPointToRay(position);
             if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
             {
@@ -251,7 +283,7 @@ namespace Scenes
                     var tile = obj.GetComponent<TetrisTile>();
                     if (tile != null)
                     {
-                        if (Possible(currShape.Rotate, tile.Coordnate.x, tile.Coordnate.y) == true)
+                        if (Possiable(currShape.Rotate, tile.Coordnate.x, tile.Coordnate.y) == true)
                         {
                             currShape.Coordinate = tile.Coordnate;
                             currShape.transform.position = GetPosition(tile.Coordnate.x, tile.Coordnate.y);
@@ -262,9 +294,11 @@ namespace Scenes
                     Debug.Log(hit.collider.gameObject.name);
                 }
             }
+            */
         }
         
-        public override void OnTouchEnd(Vector3 position) { 
+        public override void OnTouchEnd(Vector3 position) {
+            movedPosition = Vector3.zero;
         }
     }
 }

@@ -111,7 +111,7 @@ namespace Scenes
 
         }
 
-        public override void OnTouchMove(Vector3 position)
+        public override void OnTouchMove(Vector3 position, Vector2 deltaPosition)
         {
 
         }

@@ -38,7 +38,7 @@ namespace Scenes
             //Debug.DrawRay(world, transform.forward * 100, Color.red, 1.3f);
         }
 
-        public override void OnTouchMove(Vector3 position)
+        public override void OnTouchMove(Vector3 position, Vector2 deltaPosition)
         {
 
         }

@@ -43,7 +43,7 @@ namespace Common.Scene
         // ReSharper disable Unity.PerformanceAnalysis
         public virtual void OnTouchBean(Vector3 position) { }
         // ReSharper disable Unity.PerformanceAnalysis
-        public virtual void OnTouchMove(Vector3 position) { }
+        public virtual void OnTouchMove(Vector3 position, Vector2 deltaPosition) { }
         // ReSharper disable Unity.PerformanceAnalysis
         public virtual void OnTouchEnd(Vector3 position) { }
     }

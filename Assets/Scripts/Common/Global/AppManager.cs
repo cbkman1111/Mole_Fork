@@ -258,6 +258,8 @@ namespace Common.Global
             Debug.Log($"{Tag} OnAppQuit.");
         }
 
+        private Vector3 lastMousePosition = Vector3.zero;
+
         private void Update()
         {
             var touches = Input.touches;
@@ -269,11 +271,12 @@ namespace Common.Global
             {
                 var touch = touches[0]; 
                 phase = touch.phase;
+
                 var position = touch.position;
                 if (phase == TouchPhase.Began)
                     OnTouchBean(position);
                 else if (phase == TouchPhase.Moved)
-                    OnTouchMove(position);
+                    OnTouchMove(position, touch.deltaPosition);
                 else if (phase == TouchPhase.Stationary)
                     OnTouchStationary(position);
                 else if (phase == TouchPhase.Ended)
@@ -289,14 +292,17 @@ namespace Common.Global
             else if (Input.GetMouseButtonDown(0))
             {
                 OnTouchBean(Input.mousePosition);
+                lastMousePosition = Input.mousePosition;
             }
             else if (Input.GetMouseButton(0))
             {
-                OnTouchMove(Input.mousePosition);
+                OnTouchMove(Input.mousePosition, lastMousePosition - Input.mousePosition);
+                lastMousePosition = Input.mousePosition;
             }
             else if (Input.GetMouseButtonUp(0))
             {
                 OnTouchEnd(Input.mousePosition);
+                lastMousePosition = Vector3.zero;
             }
             else if (Input.GetKeyDown(KeyCode.Escape))
             {
@@ -309,9 +315,9 @@ namespace Common.Global
             CurrScene?.OnTouchBean(position);
         }
 
-        private void OnTouchMove(Vector3 position)
+        private void OnTouchMove(Vector3 position, Vector2 deltaPosition)
         {
-            CurrScene?.OnTouchMove(position);
+            CurrScene?.OnTouchMove(position, deltaPosition);
         }
 
         private void OnTouchEnd(Vector3 position)
