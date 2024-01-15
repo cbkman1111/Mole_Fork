@@ -211,7 +211,9 @@ namespace Common.Global
                     case SceneBase.Scenes.ScenePuzzle:
                         scene = obj.AddComponent<ScenePuzzle>();
                         break;
-
+                    case SceneBase.Scenes.SceneTetris:
+                        scene = obj.AddComponent<SceneTetris>();
+                        break;
                     default:
                         break;
                 }
@@ -236,6 +238,11 @@ namespace Common.Global
             var sceneName = scene.ToString();
             StartCoroutine(LoadScene(sceneName, loading));
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="paused"></param>
         public void OnAppPause(bool paused)
         {
             Debug.Log($"{Tag} OnAppPause. {paused}");

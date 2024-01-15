@@ -21,6 +21,7 @@ namespace Common.Scene
             SceneMaze, // Behavior Design 테스트용 미로 찾기.
             SceneBehaviorTree, // Behavior Design 테스트용.
             ScenePuzzle, // 퍼즐.
+            SceneTetris, // 테트리스.
 
             Demo
         }
