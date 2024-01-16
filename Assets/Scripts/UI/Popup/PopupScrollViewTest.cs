@@ -20,7 +20,7 @@ namespace UI.Popup
             base.OnInit();
 
             var list = new List<ScrollData>();
-            for (var i = 0; i < 50; i++)
+            for (var i = 0; i < 200; i++)
             {
                 var data = new ScrollData();
                 data.msg = $"[{i}] message~~~";

@@ -147,8 +147,8 @@ namespace Common.UIObject.Scroll
 			_cellList.Clear();
 			enabled = false;
 
-			yield return MEC.Timing.WaitForOneFrame;
-			yield return MEC.Timing.WaitForOneFrame;
+			//yield return MEC.Timing.WaitForOneFrame;
+			//yield return MEC.Timing.WaitForOneFrame;
 
 			float totalHeight = 0f;
 			for (int i = 0; i < list.Count; i++)
@@ -159,7 +159,6 @@ namespace Common.UIObject.Scroll
 				node.RectTrans = GetPreLoaded(node);
 
 				AddCell(node);
-				yield return MEC.Timing.WaitForOneFrame;
 
 				float height = node.RectTrans.rect.height;
 				node.Height = height;
@@ -171,6 +170,17 @@ namespace Common.UIObject.Scroll
 			{
 				var node = _cellList[i];
 				var frontNode = GetFront(i);
+				/*
+				if (node != null && node.Height == 0)
+				{
+					node.Height = node.RectTrans.rect.height;
+				}
+				
+				if(frontNode != null && frontNode.Height == 0)
+				{
+					frontNode.Height = frontNode.RectTrans.rect.height;
+				}
+				*/
 				if (frontNode == null)
 				{
 					node.Position = new Vector2(0, 0);
@@ -186,7 +196,7 @@ namespace Common.UIObject.Scroll
 			content.sizeDelta = new Vector2(content.sizeDelta.x, totalHeight);
 			verticalNormalizedPosition = 0f;
 			enabled = true;
-			yield return MEC.Timing.WaitForOneFrame;
+			//yield return MEC.Timing.WaitForOneFrame;
 		}
 
 

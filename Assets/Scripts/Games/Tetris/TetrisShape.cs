@@ -3,126 +3,140 @@ using Scenes;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static Scenes.SceneTetris;
 
-public partial class TetrisShape : MonoBehaviour
+namespace tetris
 {
-    public SpriteRenderer square = null;
-    public Vector2 Coordinate;
-    public int Rotate = 0;
-
-    private SpriteRenderer[,] sprites = new SpriteRenderer[Width, Height];
-    public int[,,] Arr { get; set; }
-
-    public bool Init(Shapes shape, Vector2 coor)
+    public partial class TetrisShape : MonoBehaviour
     {
-        switch (shape)
+        public enum Shapes
         {
-            case Shapes.Square:
-                Arr = arraySquare;
-                break;
-            case Shapes.T:
-                Arr = arrayT;
-                break;
-            case Shapes.L:
-                Arr = arrayL;
-                break;
-            case Shapes.J:
-                Arr = arrayJ;
-                break;
-            case Shapes.Z:
-                Arr = arrayZ;
-                break;
-            case Shapes.S:
-                Arr = arrayS;
-                break;
-            case Shapes.I:
-                Arr = arrayI;
-                break;
-        }
+            Square = 0,
+            T,
+            L,
+            J,
+            Z,
+            S,
+            I,
 
-        Coordinate = coor;
-        Rotate = 0;
+            Max
+        };
 
-        for (int col = 0; col < Width; col++) 
+        public SpriteRenderer square = null;
+        public Vector2 Coordinate;
+        public int Rotate = 0;
+
+        private SpriteRenderer[,] sprites = new SpriteRenderer[Width, Height];
+        public int[,,] Arr { get; set; }
+
+        public bool Init(Shapes shape, Vector2 coor)
         {
-            for (int row = 0; row < Height; row++)
+            switch (shape)
             {
-                var obj = Instantiate<SpriteRenderer>(square, transform);
-                if (obj == null)
+                case Shapes.Square:
+                    Arr = arraySquare;
                     break;
-
-                var posX = col * 1;
-                //var posY = (Height - 1) - row * 1;
-                var posY = row * 1;
-                obj.transform.localPosition = new Vector3(posX, posY);
-                obj.sortingOrder = 10;
-
-                if (Arr[Rotate, row, col] == 1)
-                    obj.color = Color.red;
-                else if (Arr[Rotate, row, col] == 2)
-                    obj.color = Color.blue;
-                else
-                {
-                    var color = obj.color;
-                    color = Color.magenta;
-                    color.a = 0.5f;
-                    obj.color = color;
-                    obj.sortingOrder = 0;
-                }
-
-                sprites[col,row] = obj;
-                obj.name = $"{row},{col}";
-            }
-        }
-        
-        return true;
-    }
-
-    public void RotateShape()
-    {
-        Rotate = (Rotate + 1) % 4;
-
-        for (int col = 0; col < Width; col++)
-        {
-            for (int row = 0; row < Height; row++)
-            {
-                var obj = sprites[col, row];
-                if (obj == null)
+                case Shapes.T:
+                    Arr = arrayT;
                     break;
-
-                obj.sortingOrder = 10;
-                if (Arr[Rotate, row, col] == 1)
-                    obj.color = Color.red;
-                else if (Arr[Rotate, row, col] == 2)
-                    obj.color = Color.blue;
-                else
-                {
-                    var color = obj.color;
-                    color = Color.magenta;
-                    color.a = 0.5f;
-                    obj.color = color;
-                    obj.sortingOrder = 0;
-                }
-
-                obj.name = $"{row},{col}";
+                case Shapes.L:
+                    Arr = arrayL;
+                    break;
+                case Shapes.J:
+                    Arr = arrayJ;
+                    break;
+                case Shapes.Z:
+                    Arr = arrayZ;
+                    break;
+                case Shapes.S:
+                    Arr = arrayS;
+                    break;
+                case Shapes.I:
+                    Arr = arrayI;
+                    break;
             }
-        }
-    }
-     
-    public int[,] GetArray(int rotate)
-    {
-        int[,] selectedTwoDimensionalArray = new int[Width, Height];
-        for (int row = 0; row < Height; row++)
-        {
+
+            Coordinate = coor;
+            Rotate = 0;
+
             for (int col = 0; col < Width; col++)
             {
-                int convertRow = (Height - 1) - row;
-                //selectedTwoDimensionalArray[row, col] = arr[rotate, convertRow, col];
-                selectedTwoDimensionalArray[row, col] = Arr[rotate, row, col];
+                for (int row = 0; row < Height; row++)
+                {
+                    var obj = Instantiate<SpriteRenderer>(square, transform);
+                    if (obj == null)
+                        break;
+
+                    var posX = col * 1;
+                    //var posY = (Height - 1) - row * 1;
+                    var posY = row * 1;
+                    obj.transform.localPosition = new Vector3(posX, posY);
+                    obj.sortingOrder = 10;
+
+                    if (Arr[Rotate, row, col] == 1)
+                        obj.color = Color.red;
+                    else if (Arr[Rotate, row, col] == 2)
+                        obj.color = Color.blue;
+                    else
+                    {
+                        var color = obj.color;
+                        color = Color.magenta;
+                        color.a = 0.5f;
+                        obj.color = color;
+                        obj.sortingOrder = 0;
+                    }
+
+                    sprites[col, row] = obj;
+                    obj.name = $"{row},{col}";
+                }
+            }
+
+            return true;
+        }
+
+        public void RotateShape()
+        {
+            Rotate = (Rotate + 1) % 4;
+
+            for (int col = 0; col < Width; col++)
+            {
+                for (int row = 0; row < Height; row++)
+                {
+                    var obj = sprites[col, row];
+                    if (obj == null)
+                        break;
+
+                    obj.sortingOrder = 10;
+                    if (Arr[Rotate, row, col] == 1)
+                        obj.color = Color.red;
+                    else if (Arr[Rotate, row, col] == 2)
+                        obj.color = Color.blue;
+                    else
+                    {
+                        var color = obj.color;
+                        color = Color.magenta;
+                        color.a = 0.5f;
+                        obj.color = color;
+                        obj.sortingOrder = 0;
+                    }
+
+                    obj.name = $"{row},{col}";
+                }
             }
         }
 
-        return selectedTwoDimensionalArray;
+        public int[,] GetArray(int rotate)
+        {
+            int[,] array = new int[Width, Height];
+            for (int row = 0; row < Height; row++)
+            {
+                for (int col = 0; col < Width; col++)
+                {
+                    array[row, col] = Arr[rotate, row, col];
+                }
+            }
+
+            return array;
+        }
     }
+
 }

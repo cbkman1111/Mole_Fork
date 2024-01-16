@@ -140,6 +140,8 @@ return true;
         /// </summary>
         public void Clear()
         {
+            _cover.SetParent(rootObject.transform);
+
             _controllerMenu?.Clear();
             _controllerHud?.Clear();
             _controllerPopup?.Clear();

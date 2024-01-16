@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 109774568}
   - component: {fileID: 109774567}
   m_Layer: 0
-  m_Name: Square
+  m_Name: BackGround
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -183,7 +183,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6,
     type: 3}
-  m_Color: {r: 0.2985048, g: 0.49056602, b: 0.46189088, a: 1}
+  m_Color: {r: 0.4716981, g: 0.4716981, b: 0.4716981, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -217,6 +217,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 596252679}
+  - component: {fileID: 596252680}
   m_Layer: 0
   m_Name: Board
   m_TagString: Untagged
@@ -239,6 +240,24 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &596252680
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 596252678}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a72d28b223b50de43a98bcb135c9f1de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  width: 10
+  height: 24
+  tilePrefab: {fileID: 5973361832457998465, guid: 1fb11cbe96214a542bf36973ee03bf34,
+    type: 3}
+  shapePrefab: {fileID: 3649266225224385111, guid: e5da56f3cfeebd343a2f4288433d1f43,
+    type: 3}
 --- !u!1 &1041438037
 GameObject:
   m_ObjectHideFlags: 0
@@ -401,8 +420,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ae06aefc112e19419ffc75b6da7dab3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tilePrefab: {fileID: 5973361832457998465, guid: 1fb11cbe96214a542bf36973ee03bf34,
-    type: 3}
   shapePrefab: {fileID: 3649266225224385111, guid: e5da56f3cfeebd343a2f4288433d1f43,
     type: 3}
-  board: {fileID: 596252678}
+  board: {fileID: 596252680}
