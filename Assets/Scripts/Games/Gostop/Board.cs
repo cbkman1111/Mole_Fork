@@ -226,6 +226,9 @@ public class Board : MonoBehaviour
     /// <returns></returns>
     private void Update()
     {
+        if (stateMachine == null)
+            return;
+
         var turnInfo = stateMachine.GetCurrturnInfo();
         var stateInfo = stateMachine.GetCurrStateInfo();
 
@@ -843,12 +846,12 @@ public class Board : MonoBehaviour
             {
                 var card = hands[user][index];
 
-                float x = startX + index * cardWidth + cardWidth * 0.5f;
-                var handPosition = boardPositions[user].Hand.position;
-                Vector3 position = handPosition + new Vector3(x, 0, 0);
+                var handPosition = boardPositions[user].Hand.GetChild(index).transform.position;
+                var handRotation = boardPositions[user].Hand.transform.rotation;
+
                 card.SetPhysicDiable(true);
                 card.MoveTo(
-                    position, 
+                    handPosition, 
                     time: 0.1f, 
                     delay: index * 0.0f);
             }
@@ -1062,7 +1065,7 @@ public class Board : MonoBehaviour
                 card.Init(n, sprite);
                 deck.Push(card);
 
-                float height = card.Height * 0.5f;
+                float height = card.Height;
                 card.transform.position = deckPosition.position;
                 card.MoveTo(new Vector3(deckPosition.position.x, height * i, deckPosition.position.z), delay: i * 0.01f);
 
@@ -1164,20 +1167,21 @@ public class Board : MonoBehaviour
             var list = hands[user];
             list.Reverse();
 
-            int index = 0;
-            foreach (var card in list)
+            for(int i = 0; i < list.Count; i++)
             {
-                float x = startX + index * cardWidth + cardWidth * 0.5f;
-                var handPosition = boardPositions[user].Hand.position;
-                Vector3 position = handPosition + new Vector3(x, 0, 0);
+                var card = list[i];
+                var slot = boardPositions[user].Hand.transform.GetChild(i);
+                var rotate = boardPositions[user].Hand.rotation;
+                card.transform.rotation = rotate;
+                //card.transform.DORotate(handRotation.eulerAngles, 0.1f);
+
                 card.SetPhysicDiable(true);
                 card.MoveTo(
-                    position, 
+                    slot.position, 
                     time: 0.1f, 
-                    delay: index * 0.05f);
+                    delay: i * 0.05f);
 
                 card.SetOpen(false);
-                index++;
             }
         }
 

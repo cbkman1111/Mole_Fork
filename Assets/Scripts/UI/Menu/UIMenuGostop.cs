@@ -13,7 +13,6 @@ namespace UI.Menu
             ShowScoreMenu(false);
             return true;
         }
-
         public void SetPosition(Board board)
         {
             var cam = AppManager.Instance.CurrScene.MainCamera;

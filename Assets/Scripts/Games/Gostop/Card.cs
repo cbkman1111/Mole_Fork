@@ -180,9 +180,7 @@ public class Card : MonoBehaviour
                 OnComplete?.Invoke();
                 OnComplete = null;
             });
-
     }
-
     public void CardOpen(float time = 0.1f, float delay = 0.0f, Action complete = null)
     {
         OnComplete = complete;
@@ -204,7 +202,7 @@ public class Card : MonoBehaviour
         OnComplete = complete;
         Open = false;
         transform.DORotate(
-            new Vector3(-45, 0, 360), time).
+            new Vector3(0, 0, 360), time).
             SetEase(Ease.Linear).
             SetDelay(delay).
             OnComplete(() => {

@@ -6,34 +6,41 @@ namespace tetris
 {
     public class TetrisTile : MonoBehaviour
     {
-        public SpriteRenderer spriteRenderer = null;
+        [SerializeField]
+        private SpriteRenderer spriteRenderer = null;
         public Vector2 Coordnate { get; set; } = Vector2.zero;
-
         public int Value { get; private set; }
 
-        public bool SetValue(int value)
+        public bool Init(int x, int y, int value)
         {
-            this.Value = value;
+            Value = value;
+            Coordnate = new Vector2(x, y);
 
-            SetColor();
-            return true;
-        }
-
-        private void SetColor()
-        {
             if (Value == -1)
             {
-                spriteRenderer.color = Color.green;
+                SetColor(Color.green);
             }
+            /*
             else if (Value == 0)
             {
-                spriteRenderer.color = Color.white;
+                SetColor(Color.white);
             }
             else
             {
-                spriteRenderer.color = Color.black;
+                SetColor(Color.black);
             }
+            */
+            return true;
+        }
+
+        public void SetValue(int value)
+        {
+            this.Value = value;
+        }
+
+        public void SetColor(Color color)
+        {
+            spriteRenderer.color = color;
         }
     }
-
 }

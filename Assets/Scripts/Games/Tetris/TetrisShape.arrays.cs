@@ -5,6 +5,10 @@ using static Scenes.SceneTetris;
 
 namespace tetris
 {
+    /// <summary>
+    /// https://sbrngm.tistory.com/143
+    /// 블럭 모양 배열로 다시 잡아야함.
+    /// </summary>
     public partial class TetrisShape : MonoBehaviour
     {
         static public int Width = 4;

@@ -7,7 +7,8 @@ namespace Scenes
 {
     public class SceneGostop : SceneBase
     {
-        private Board _board = null;
+        [SerializeField]
+        public Board board = null;
 
         /// <summary>
         /// 
@@ -21,11 +22,8 @@ namespace Scenes
                 menu.InitMenu();
             }
 
-            _board = Board.Create(menu);
-            if (_board != null)
-            {
-                _board.StartGame();
-            }
+            board.Init(menu);
+            board.StartGame();
 
             return true;
         }
@@ -57,27 +55,27 @@ namespace Scenes
                     Card card = hit.collider.GetComponent<Card>();
                     if (card != null)
                     {
-                        var stateMachine = _board.GetStateMachine();
+                        var stateMachine = board.GetStateMachine();
                         var turnInfo = stateMachine.GetCurrturnInfo();
                         var stateInfo = turnInfo.GetCurrentStateInfo();
 
                         if (stateInfo.state == State.CARD_HIT &&
-                            _board.MyTurn() == true)
+                            board.MyTurn() == true)
                         {
-                            var list = _board.GetSameMonthCard((int)Board.Player.USER, card);
+                            var list = board.GetSameMonthCard((int)Board.Player.USER, card);
                             if (list.Count == 3)
                             {
-                                _board.HitBomb((int)Board.Player.USER, list, card);
+                                board.HitBomb((int)Board.Player.USER, list, card);
                                 stateInfo.evt = StateEvent.PROGRESS; 
                             }
                             else if (list.Count == 4) // 총통
                             {
-                                _board.HitChongtong((int)Board.Player.USER, list, card);
+                                board.HitChongtong((int)Board.Player.USER, list, card);
                                 stateInfo.evt = StateEvent.PROGRESS;
                             }
                             else 
                             {
-                                _board.HitCard((int)Board.Player.USER, card);
+                                board.HitCard((int)Board.Player.USER, card);
                                 stateInfo.evt = StateEvent.PROGRESS; 
                             }
                         }

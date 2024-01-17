@@ -33,15 +33,16 @@ namespace tetris
                     if (obj == null)
                         continue;
 
-                    obj.transform.position = GetPosition(x, y);
-                    obj.name = $"{x},{y}";
-                    obj.Coordnate = new Vector2(x, y);
-                    obj.SetValue(0);
+                    int value = 0;
                     if (y >= 20)
                     {
-                        obj.SetValue(-1);
+                        value = -1;
                     }
-                    
+
+                    obj.name = $"{x},{y}";
+                    obj.Coordnate = new Vector2(x, y);
+                    obj.Init(x, y, value);
+                    obj.transform.position = GetPosition(x, y);
                     boardArray[x, y] = obj;
                 }
             }
@@ -95,6 +96,7 @@ namespace tetris
                         if (tile.Value == 0)
                         {
                             tile.SetValue(arry[rotate, row, col]);
+                            tile.SetColor(Color.black);
                         }
                     }
                 }
