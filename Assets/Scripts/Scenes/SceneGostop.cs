@@ -2,6 +2,7 @@ using Common.Global;
 using Common.Scene;
 using UI.Menu;
 using UnityEngine;
+using Gostop;
 
 namespace Scenes
 {

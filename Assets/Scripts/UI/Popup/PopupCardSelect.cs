@@ -1,6 +1,7 @@
 using System;
 using Common.UIObject;
 using UnityEngine.UI;
+using Gostop;
 
 namespace UI.Popup
 {

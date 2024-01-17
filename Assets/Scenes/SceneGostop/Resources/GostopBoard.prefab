@@ -103,6 +103,7 @@ MonoBehaviour:
   - {fileID: 7632975744399105376, guid: bc2d18aae07db2744a0fec99d4e45062, type: 3}
   - {fileID: -1304566618446825538, guid: bc2d18aae07db2744a0fec99d4e45062, type: 3}
   spriteBomb: {fileID: 21300000, guid: 6944750fb75621b4ba9dde5ea8857a10, type: 3}
+  hitPosition: {fileID: 7399607192810065807}
   deckPosition: {fileID: 5455190041610652726}
   cardPosition:
   - {fileID: 5455190042018975988}
@@ -1425,6 +1426,12 @@ Transform:
 --- !u!4 &5455190043119785928 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 424589482077080281, guid: f387028c5041b8d40a5f6b2fb4960bad,
+    type: 3}
+  m_PrefabInstance: {fileID: 5643234163587112209}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7399607192810065807 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2945464227255276190, guid: f387028c5041b8d40a5f6b2fb4960bad,
     type: 3}
   m_PrefabInstance: {fileID: 5643234163587112209}
   m_PrefabAsset: {fileID: 0}

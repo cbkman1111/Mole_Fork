@@ -3,6 +3,7 @@ using Common.Scene;
 using Common.UIObject;
 using UnityEngine;
 using UnityEngine.UI;
+using Gostop;
 
 namespace UI.Menu
 {
