@@ -22,11 +22,12 @@ namespace Gostop
         public int Month { get; set; }
         public float Height { get; set; }
         public float Width { get; set; }
-        public bool Open { get; set; }
-        public bool CompleteMove { get; set; }
         private Action OnComplete = null;
 
         private Board.Player owner = Board.Player.NONE;
+
+        public List<Tween> ListTween { get; set; } = new List<Tween>();
+
         public Board.Player Owner
         {
             get
@@ -68,18 +69,16 @@ namespace Gostop
         {
             Num = num;
             Month = GetMonth(num);
-            Open = false;
-            CompleteMove = false;
+            
             Owner = Board.Player.NONE;
 
             spriteRenderer.sprite = sprite;
+            spriteRenderer.sortingOrder = 1;
             //spriteRendererBack.sprite = sprite; // 치트용.
-
 
             Height = boxCollider.size.y;
             Width = boxCollider.size.x;
-
-            gameObject.name = $"card_{Month}_{num}";
+            gameObject.name = $"{Month}/{num}";
 
             switch (Num)
             {
@@ -138,15 +137,19 @@ namespace Gostop
                     break;
             }
 
-
             SetOpen(false);
-            SetPhysicDiable(false);
+            SetEnablePhysics(false);
             return true;
         }
 
         public Sprite GetSprite()
         {
             return spriteRenderer.sprite;
+        }
+
+        public void SetSortOrder(int order)
+        {
+            spriteRenderer.sortingOrder = order;
         }
 
         public int GetMonth(int num)
@@ -156,8 +159,7 @@ namespace Gostop
 
         public void SetOpen(bool open)
         {
-            Open = open;
-            if (Open == true)
+            if (open == true)
             {
                 transform.rotation = Quaternion.Euler(0, 0, 180);
             }
@@ -167,75 +169,78 @@ namespace Gostop
             }
         }
 
-        public void SetPhysicDiable(bool active)
+        public void SetEnablePhysics(bool enable)
         {
-            rigidBody.isKinematic = active;
+            rigidBody.isKinematic = !enable;
+        }
+
+        private void LateUpdate()
+        {
+            if (ListTween.Count == 0)
+                return;
+
+            for (int i = 0; i < ListTween.Count; i++)
+            {
+                var tween = ListTween[i];
+
+                if (tween == null)
+                    continue;
+
+                if (tween.active == false || tween.IsComplete() == true)
+                {
+                    ListTween.Remove(tween);
+                    break;
+                }
+            }
         }
 
         public void MoveTo(Vector3 position, Ease ease = Ease.Linear, float time = 0.5f, float delay = 0f, Action complete = null)
         {
             OnComplete = complete;
-            CompleteMove = false;
-
-            transform.DOMove(position, time).
+            var tween = transform.DOMove(position, time).
                 SetDelay(delay).
                 SetEase(ease).
                 OnComplete(() => {
-                    CompleteMove = true;
                     OnComplete?.Invoke();
                     OnComplete = null;
                 });
+
+            ListTween.Add(tween);
         }
+
         public void CardOpen(float time = 0.1f, float delay = 0.0f, Action complete = null)
         {
             OnComplete = complete;
-            Open = false;
 
-            transform.DORotate(
+            var tween = transform.DORotate(
                 new Vector3(0, 0, 180), time).
                 SetDelay(delay).
                 SetEase(Ease.Linear).
                 OnComplete(() => {
-                    Open = true;
 
                     OnComplete?.Invoke();
                     OnComplete = null;
                 });
+
+            ListTween.Add(tween);
         }
 
         public void ShowMe(float time = 0.1f, float delay = 0.0f, Action complete = null)
         {
             OnComplete = complete;
-            Open = false;
-            transform.DORotate(
+
+            var tween = transform.DORotate(
                 new Vector3(0, 0, 180), time).
                 SetEase(Ease.Linear).
                 SetDelay(delay).
                 OnComplete(() => {
-                    Open = true;
 
                     OnComplete?.Invoke();
                     OnComplete = null;
                 });
-        }
 
-        /*
-        public void ShowEnemy(Ease ease = Ease.Linear, float time = 0.1f, float delay = 0.0f, Action complete = null)
-        {
-            OnComplete = complete;
-            Open = false;
-            transform.DORotate(
-                new Vector3(-45, 0, 360), time).
-                SetEase(Ease.Linear).
-                SetDelay(delay).
-                OnComplete(() => {
-                    Open = true;
-
-                    OnComplete?.Invoke();
-                    OnComplete = null;
-                });
+            ListTween.Add(tween);
         }
-        */
 
         public void SetShadow(bool active)
         {
@@ -249,5 +254,4 @@ namespace Gostop
             }
         }
     }
-
 }

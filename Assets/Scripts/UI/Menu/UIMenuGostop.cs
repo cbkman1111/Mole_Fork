@@ -12,8 +12,14 @@ namespace UI.Menu
         public bool InitMenu()
         {
             ShowScoreMenu(false);
+            
+            var slider = GetObject<Slider>("Slider - TimeScale");
+            if(slider != null)
+                slider.value = Time.timeScale;
+
             return true;
         }
+
         public void SetPosition(Board board)
         {
             var cam = AppManager.Instance.CurrScene.MainCamera;
@@ -41,6 +47,7 @@ namespace UI.Menu
 
         public void ShowScoreMenu(bool active)
         {
+            /*
             SetActive("Image - Gwang Player 1", active);
             SetActive("Image - Mung Player 1", active);
             SetActive("Image - Thee Player 1", active);
@@ -50,6 +57,7 @@ namespace UI.Menu
             SetActive("Image - Mung Player 2", active);
             SetActive("Image - Thee Player 2", active);
             SetActive("Image - Pee Player 2", active);
+            */
         }
 
         public void ScoreUpdate(Board.Player user, Scores score)
@@ -83,6 +91,15 @@ namespace UI.Menu
         public void SetDebugTrun()
         { 
 
+        }
+
+        public override void OnValueChanged(Slider slider, float f)
+        {
+            //base.OnValueChanged(slider, f);
+            if (slider.name == "Slider - TimeScale")
+            {
+                Time.timeScale = f;
+            }
         }
 
         protected override void OnClick(Button btn)

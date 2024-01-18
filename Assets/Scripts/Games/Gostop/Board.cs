@@ -66,7 +66,7 @@ namespace Gostop
         public Sprite[] sprites = null;
         public Sprite spriteBomb = null;
 
-        public Transform hitPosition = null;
+        public Transform[] hitPosition = null;
         public Transform deckPosition = null;
         public List<Transform> cardPosition = null;
         public BoardPosition[] boardPositions = null;
@@ -78,16 +78,11 @@ namespace Gostop
         private List<Card> select = null; // 선택해야 하는 카드.
         private List<Card> listEat = null; // 먹는패.
 
-        private float cardWidth = 0;
-        private float cardHeight = 0;
-
         private Board.Player turnUser = 0;
         private int stealCount = 0; // 빼앗아올 패.
 
         public Scores[] gameScore = null;
         public UIMenuGostop menu = null;
-
-        private float turnChangeStartTime = 0;
 
         public struct DebugInfo
         {
@@ -226,6 +221,24 @@ namespace Gostop
             menu.SetDebug(messages);
         }
 
+        private int GetMoveCount(Stack<Card> stack)
+        {
+            int count = stack.Where(card => card.ListTween.Count != 0).ToList().Count;
+            return count;
+        }
+
+        private int GetMoveCount(List<Card> list)
+        {
+            int count = list.Where(card => card.ListTween.Count != 0).ToList().Count;
+            return count;
+        }
+
+        private int GetStopCount(Stack<Card> stack)
+        {
+            int count = stack.Where(card => card.ListTween.Count == 0).ToList().Count;
+            return count;
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -278,8 +291,8 @@ namespace Gostop
                             CreateDeck();
                         },
                         check: () => {
-                            int count = deck.Where(card => card.CompleteMove == true).ToList().Count;
-                            return count == 52;
+                            int count = GetMoveCount(deck); //deck.Where(card => card.ListTween.Count == 0).ToList().Count;
+                            return count == 0;
                         },
                         complete: () => {
                             stateMachine.Change(State.SHUFFLE_8);
@@ -295,12 +308,11 @@ namespace Gostop
                         },
                         check: () => {
                             int count = 0;
-                            foreach (var slot in bottoms)
-                            {
-                                count += slot.Value.Where(card => card.CompleteMove == true).ToList().Count;
+                            foreach (var slot in bottoms){
+                                count += GetMoveCount(slot.Value);// slot.Value.Where(card => card.ListTween.Count == 0).ToList().Count;
                             }
 
-                            return count == 8;
+                            return count == 0;
                         },
                         complete: () => {
                             stateMachine.Change(State.SHUFFLE_10);
@@ -316,9 +328,9 @@ namespace Gostop
                         },
                         check: () => {
                             int count = 0;
-                            count += hands[0].Where(e => e.CompleteMove == true).ToList().Count;
-                            count += hands[1].Where(e => e.CompleteMove == true).ToList().Count;
-                            return count == 20;
+                            count += GetMoveCount(hands[0]);// hands[0].Where(e => e.ListTween.Count == 0).ToList().Count;
+                            count += GetMoveCount(hands[1]);// hands[1].Where(e => e.ListTween.Count == 0).ToList().Count;
+                            return count == 0;
                         },
                         complete: () => {
                             stateMachine.Change(State.OPEN_8);
@@ -333,12 +345,11 @@ namespace Gostop
                         },
                         check: () => {
                             int count = 0;
-                            foreach (var slot in bottoms)
-                            {
-                                count += slot.Value.Where(e => e.Open == true).ToList().Count;
+                            foreach (var slot in bottoms) {
+                                count += GetMoveCount(slot.Value);// slot.Value.Where(e => e.ListTween.Count == 0).ToList().Count;
                             }
 
-                            return count == 8;
+                            return count == 0;
                         },
                         complete: () => {
                             stateMachine.Change(State.CHECK_JORKER);
@@ -349,14 +360,12 @@ namespace Gostop
                 case State.CHECK_JORKER:
                     stateMachine.Process(
                         start: () => {
-                            foreach (var slot in bottoms)
-                            {
+                            foreach (var slot in bottoms) {
                                 var list = slot.Value.Where(e => e.Month == 13).ToList();
                                 for (int i = list.Count - 1; i >= 0; --i)
                                 {
                                     var card = list[i];
-
-                                    EatScore(card, list.Count - i);
+                                    EatCard(card, list.Count - i);
                                     slot.Value.Remove(card);
                                 }
                             }
@@ -365,7 +374,7 @@ namespace Gostop
                             int countMove = 0;
                             foreach (var slot in bottoms)
                             {
-                                countMove += slot.Value.Where(e => e.CompleteMove == false).ToList().Count;
+                                countMove += GetMoveCount(slot.Value);
                             }
 
                             return countMove == 0;
@@ -404,7 +413,7 @@ namespace Gostop
                             int count = 0;
                             foreach (var slot in bottoms)
                             {
-                                count += slot.Value.Where(e => e.CompleteMove == false).ToList().Count;
+                                count += GetMoveCount(slot.Value);
                             }
 
                             return count == 0;
@@ -421,10 +430,10 @@ namespace Gostop
                         },
                         check: () => {
                             int count = 0;
-                            count += hands[0].Where(e => e.CompleteMove == true).ToList().Count;
-                            count += hands[1].Where(e => e.CompleteMove == true).ToList().Count;
+                            count += GetMoveCount(hands[0]);
+                            count += GetMoveCount(hands[1]);
 
-                            return count == 20;
+                            return count == 0;
                         },
                         complete: () => {
                             stateMachine.Change(State.HANDS_OPEN);
@@ -437,7 +446,7 @@ namespace Gostop
                             HandOpen();
                         },
                         check: () => {
-                            int count = hands[0].Where(e => e.Open == false).ToList().Count;
+                            int count = GetMoveCount(hands[0]);//.Where(e => e.Open == false).ToList().Count;
                             return count == 0;
                         },
                         complete: () => {
@@ -452,7 +461,7 @@ namespace Gostop
                             SortHand();
                         },
                         check: () => {
-                            int count = hands[0].Where(e => e.Open == false).ToList().Count;
+                            int count = GetMoveCount(hands[0]);//.Where(e => e.Open == false).ToList().Count;
                             return count == 0;
                         },
                         complete: () => {
@@ -564,7 +573,6 @@ namespace Gostop
                         },
                         complete: () => {
 
-
                             select.Clear();
                             stateMachine.Change(State.EAT);
                         });
@@ -583,8 +591,7 @@ namespace Gostop
                         foreach (var kindSlot in bottoms)
                             {
                                 var list = kindSlot.Value;
-                                foreach (var card in list)
-                                {
+                                foreach (var card in list) {
                                     card.Owner = Player.NONE;
                                 }
                             }
@@ -635,52 +642,41 @@ namespace Gostop
                 case State.TURN_CHECK: // 턴 바꾸기.
                     stateMachine.Process(
                         start: () => {
-                            if (turnUser == Player.USER)
-                            {
-                                turnUser = Player.COMPUTER;
-                            }
-                            else
-                            {
-                                turnUser = Player.USER;
-                            }
-
-                            turnChangeStartTime = 0;
+                            SortHand();
                         },
                         check: () => {
-
-                            turnChangeStartTime += Time.deltaTime;
-                            if (turnChangeStartTime < 0.1f) // 약간 기다리고 턴 바꿉니다.
-                        {
-                                return false;
-                            }
-
                             int count = GetMoveAllCount();
                             return count == 0;
                         },
                         complete: () => {
                             State nextState = State.HANDS_SORT;
-                            if (hands[(int)Player.COMPUTER].Count > 0 && turnUser == Player.COMPUTER)
-                            {
-                                nextState = State.HANDS_SORT;
-                            }
-                            else if (hands[(int)Player.USER].Count > 0 && turnUser == Player.USER)
-                            {
-                                nextState = State.HANDS_SORT;
-                            }
-                            else
+
+                            // 현재 턴유저의 카드가 0개라면.
+                            if (hands[(int)Player.COMPUTER].Count == 0 && hands[(int)Player.USER].Count == 0)
                             {
                                 nextState = State.GAME_OVER_TIE;
                             }
+                            else 
+                            {
+                                if (turnUser == Player.USER)
+                                {
+                                    turnUser = Player.COMPUTER;
+                                }
+                                else
+                                {
+                                    turnUser = Player.USER;
+                                }
 
-                            stateMachine.AddTurn(turnUser); // 턴을 증가.
-                        stateMachine.Change(nextState);
+                                stateMachine.AddTurn(turnUser); // 턴을 증가.
+                            }
+
+                            stateMachine.Change(nextState);
                         });
                     break;
 
                 case State.GAME_OVER_TIE: // 무승부 상태 처리.
                     stateMachine.Process(
                         start: () => {
-
                         },
                         check: () => {
                             int count = GetMoveAllCount();
@@ -751,7 +747,7 @@ namespace Gostop
                 stealCount = 0;
 
             scores[index].Remove(card);
-            EatScore(card);
+            EatCard(card);
         }
         /// <summary>
         /// 기존 카드를 제거합니다.
@@ -846,22 +842,17 @@ namespace Gostop
 
             for (int user = 0; user < (int)Player.MAX; user++)
             {
-                float startX = cardWidth * 10f * -0.5f;
                 for (int index = 0; index < hands[user].Count; index++)
                 {
                     var card = hands[user][index];
-
                     var handPosition = boardPositions[user].Hand.GetChild(index).transform.position;
                     var handRotation = boardPositions[user].Hand.transform.rotation;
-
-      
                     card.MoveTo(
                         handPosition,
                         time: 0.1f,
                         delay: index * 0.0f);
                 }
             }
-
 
             return true;
         }
@@ -1058,7 +1049,6 @@ namespace Gostop
             }
 
             nums = ShuffleList(nums);
-
             for (int i = 0; i < nums.Count; i++)
             {
                 int n = nums[i];
@@ -1066,18 +1056,12 @@ namespace Gostop
                 if (card != null)
                 {
                     Sprite sprite = sprites[n - 1];
-
                     card.Init(n, sprite);
-                  
                     deck.Push(card);
 
                     float height = card.Height;
                     card.transform.position = deckPosition.position;
                     card.MoveTo(new Vector3(deckPosition.position.x, height * i, deckPosition.position.z), delay: i * 0.01f);
-
-                    // 카드 크기를 저장해둡니다.
-                    cardWidth = card.Width;
-                    cardHeight = card.Height;
                 }
             }
 
@@ -1093,19 +1077,22 @@ namespace Gostop
             for (int i = 0; i < 8; i++)
             {
                 Card card = deck.Pop();
-                
 
                 KeyValuePair<int, List<Card>> slot = GetSlot(card);
-
                 float randX = UnityEngine.Random.Range(0.2f, 0.3f);
                 float randZ = UnityEngine.Random.Range(0.1f, 0.15f);
 
-                Vector3 position = cardPosition[slot.Key - 1].position + new Vector3(i * randX, 0, i * randZ);
+                var stack = slot.Value.Count;
+                var y = card.Height * stack;
+                Vector3 position = cardPosition[slot.Key - 1].position + new Vector3(i * randX, y, i * randZ);
   
                 card.MoveTo(
                     position,
                     time: 0.08f,
-                    delay: i * 0.025f);
+                    delay: i * 0.025f, 
+                    complete: () => {
+                        card.SetEnablePhysics(true);
+                    });
 
                 slot.Value.Add(card);
             }
@@ -1154,8 +1141,8 @@ namespace Gostop
             {
                 foreach (var card in slot.Value)
                 {
-        
-                    card.CardOpen();
+                    card.CardOpen(0.2f);
+                    card.SetEnablePhysics(true);
                 }
             }
 
@@ -1168,7 +1155,6 @@ namespace Gostop
         /// <returns></returns>
         private bool HandsUp()
         {
-            float startX = cardWidth * 10f * -0.5f;
             for (int user = 0; user < 2; user++)
             {
                 var list = hands[user];
@@ -1179,15 +1165,12 @@ namespace Gostop
                     var card = list[i];
                     var slot = boardPositions[user].Hand.transform.GetChild(i);
                     var rotate = boardPositions[user].Hand.rotation;
-                    //card.transform.rotation = rotate;
-                
+                    //card.SetPhysicDiable(true);
+                    card.CardOpen(0.1f);
                     card.MoveTo(
                         slot.position,
                         time: 0.1f,
                         delay: i * 0.05f);
-
-                    card.SetPhysicDiable(true);
-                    card.SetOpen(true);
                 }
             }
 
@@ -1275,7 +1258,6 @@ namespace Gostop
                             card.Month = 100;
                             card.transform.position = list[i].transform.position;
                             card.transform.rotation = list[i].transform.rotation;
-                            card.Open = true;
                             hands[user].Add(card);
                         }
                     }
@@ -1298,7 +1280,6 @@ namespace Gostop
         {
             var turnInfo = stateMachine.GetCurrturnInfo();
             var info = turnInfo.GetCurrentStateInfo();
-            
             KeyValuePair<int, List<Card>> slot = GetSlot(card);
             bool success = hands[user].Remove(card);
             if (success == true)
@@ -1312,92 +1293,66 @@ namespace Gostop
                     float randZ = UnityEngine.Random.Range(-0.5f, 0.5f);
                     int stackCount = slot.Value.Count;
 
-                    Vector3 destination1 = hitPosition.position;
+                    Vector3 destination1 = hitPosition[user].position;
                     Vector3 destination2 = cardPosition[slot.Key - 1].position +
                         new Vector3(randX, stackCount * card.Height, randZ);
 
                     card.SetShadow(true);
-                    card.Owner = (Player)user;
-                    card.SetPhysicDiable(false); // 물리 다시 적용.
-
-                    if ((Player)user == Player.USER)
+               
+                    if (card.Month == 13) // 조커 카드.
                     {
-                        if (card.Month == 13) // 조커 카드.
-                        {
-                            EatScore(card, complete: () => {
-                                StealCard();
-                            });
+                        EatCard(card, complete: () => {
+                            StealCard();
+                        });
 
-                            var deckCard = deck.Pop();
-                            deckCard.MoveTo(card.transform.position, time: 0.1f);
-                            deckCard.ShowMe();
-                            hands[user].Add(deckCard);
-                        }
-                        else if (card.Month == 100) // 폭탄 공짜 카드.
-                        {
-                            GameObject.Destroy(card.gameObject);
-                            stateMachine.Change(State.CARD_POP);
-                        }
-                        else // 일반 카드.
-                        {
-  
-                            card.MoveTo( // 카드를 위로 뽑아서.
-                                destination1,
-                                time: 0.2f,
-                                ease: DG.Tweening.Ease.InExpo,
-                                complete: () =>
-                                {
-                                    card.MoveTo(
-                                        destination2,
-                                        time: 0.2f,
-                                        ease: DG.Tweening.Ease.OutElastic,
-                                        delay: delay,
-                                        complete: () =>
-                                        {
-
-                                        });
-                                });
-
-                            slot.Value.Add(card);
-                        }
+                        var deckCard = deck.Pop();
+                        deckCard.MoveTo(card.transform.position, time: 0.1f);
+                        deckCard.ShowMe();
+                        deckCard.SetShadow(false);
+                        deckCard.Owner = (Player)user;
+                        hands[user].Add(deckCard);
                     }
-                    else
+                    else if (card.Month == 100) // 폭탄 공짜 카드.
                     {
-                        if (card.Month == 13)
-                        {
-                            EatScore(card, complete: () => {
-                                StealCard();
+                        GameObject.Destroy(card.gameObject);
+                        stateMachine.Change(State.CARD_POP);
+                    }
+                    else // 일반 카드.
+                    {
+                        card.MoveTo( // 카드를 위로 뽑아서.
+                            destination1,
+                            time: 0.2f,
+                            ease: DG.Tweening.Ease.InExpo,
+                            complete: () => {
+
+                                card.MoveTo(
+                                    destination2,
+                                    time: 0.2f,
+                                    ease: DG.Tweening.Ease.InExpo,
+                                    delay: delay,
+                                    complete: () =>
+                                    {
+                                        card.SetEnablePhysics(true);
+
+                                        Collider[] colliders = Physics.OverlapSphere(card.transform.position, 5f);
+                                        for (int i = 0; i < colliders.Length; i++)
+                                        {
+                                            var coll = colliders[i];
+                                            if (coll == null)
+                                                continue;
+                                            var surroundCard = coll.GetComponent<Card>();
+                                            if (surroundCard == null)
+                                                continue;
+
+                                            surroundCard.SetEnablePhysics(true);
+                                            surroundCard.rigidBody.AddExplosionForce(10, card.transform.position, 10f);
+                                        }
+                                        Debug.Log(colliders.ToString());
+                                        //card.rigidBody.AddExplosionForce(10000, card.transform.position, 10, 5f);
+                                    });
                             });
 
-                            var deckCard = deck.Pop();
-                            deckCard.MoveTo(card.transform.position);
-                            deckCard.CardOpen();
-                            hands[user].Add(deckCard);
-
-                            info.evt = StateEvent.INIT;
-                        }
-                        else
-                        {
-                            card.MoveTo(
-                                destination1,
-                                time: 0.2f,
-                                ease: DG.Tweening.Ease.InExpo,
-                                complete: () =>
-                                {
-                                    card.MoveTo(
-                                        destination2,
-                                        time: 0.2f,
-                                        ease: DG.Tweening.Ease.InExpo,
-                                        delay: delay,
-                                        complete: () =>
-                                        {
-
-                                        });
-
-                                });
-
-                            slot.Value.Add(card);
-                        }
+                        slot.Value.Add(card);
                     }
                 }
             }
@@ -1407,64 +1362,128 @@ namespace Gostop
         /// 
         /// </summary>
         /// <param name="card"></param>
-        private void EatScore(Card card, int count = 0, Action complete = null)
+        private void EatCard(Card card, int count = 0, Action complete = null)
         {
-            int index = (int)turnUser;
-            int stack = 0;
-            Vector3 targetPosition = Vector3.zero;
+            int user = (int)turnUser;
+            List<Card> list = null;
+            Vector3 start = Vector3.zero;
+            Vector3 end = Vector3.zero;
+
+
 
             switch (card.KindOfCard)
             {
+                // 카드 두개 칸.
                 case Card.KindOf.GWANG:
                 case Card.KindOf.GWANG_B:
-                    targetPosition = boardPositions[index].Gwang.position;
-                    stack = scores[index].
+                    list = scores[user].
                         Where(e => e.KindOfCard == Card.KindOf.GWANG ||
                                    e.KindOfCard == Card.KindOf.GWANG_B).
-                                    ToList().
-                                    Count();
+                                    ToList();
 
+                    start = boardPositions[user].Gwang.position;
+                    end = new Vector3(start.x + card.Width * 2f, start.y, start.z);
                     break;
+
+                // 카드 두개 반ㅂ 칸.
                 case Card.KindOf.MUNG:
                 case Card.KindOf.MUNG_GODORI:
                 case Card.KindOf.MUNG_KOO:
-                    targetPosition = boardPositions[index].Mung.position;
-                    stack = scores[index].
+                    list = scores[user].
                         Where(e => e.KindOfCard == Card.KindOf.MUNG ||
                                    e.KindOfCard == Card.KindOf.MUNG_GODORI ||
                                    e.KindOfCard == Card.KindOf.MUNG_KOO).
-                                   ToList().
-                                   Count();
+                                   ToList();
+
+                    start = boardPositions[user].Mung.position;
+                    end = new Vector3(start.x + card.Width * 2.5f, start.y, start.z);
                     break;
+
                 case Card.KindOf.CHO:
                 case Card.KindOf.CHUNG:
                 case Card.KindOf.HONG:
                 case Card.KindOf.CHO_B:
-                    targetPosition = boardPositions[index].Thee.position;
-                    stack = scores[index].
+                    list = scores[user].
                         Where(e => e.KindOfCard == Card.KindOf.CHO ||
                                    e.KindOfCard == Card.KindOf.CHUNG ||
                                    e.KindOfCard == Card.KindOf.HONG ||
                                    e.KindOfCard == Card.KindOf.CHO_B).
-                                   ToList().
-                                   Count();
+                                   ToList();
+
+                    start = boardPositions[user].Thee.position;
+                    end = new Vector3(start.x + card.Width * 2.5f, start.y, start.z);
                     break;
+
                 case Card.KindOf.P:
                 case Card.KindOf.PP:
                 case Card.KindOf.PPP:
-                    targetPosition = boardPositions[index].Pee.position;
-                    stack = scores[index].
+                    list = scores[user].
                         Where(e => e.KindOfCard == Card.KindOf.P ||
                                    e.KindOfCard == Card.KindOf.PP ||
                                    e.KindOfCard == Card.KindOf.PPP).
-                                   ToList().
-                                   Count();
+                                   ToList();
+
+                    start = boardPositions[user].Pee.position;
+                    end = new Vector3(start.x + card.Width * 2.5f, start.y, start.z);
                     break;
             }
 
-            float interval = 0.5f;
-            var position = targetPosition + new Vector3(stack * 0.6f, stack * card.Height, 0);
-            card.MoveTo(position, time: count * 0.05f, delay: interval, complete: complete);
+            float interval = 0.05f;
+
+            // 기존 카드들 재배치.
+            for (int i = 0; i < list.Count; i++)
+            {
+                var c = list[i];
+                if (c == null) 
+                    continue;
+                /*
+                switch (list.Count)
+                {
+                    case 1:
+                        targetPosition = Vector3.Lerp(start, end, 0f);
+                        break;
+                    case 2:
+                    case 3:
+                        targetPosition = Vector3.Lerp(start, end, i / 3);
+                        break;
+
+                    default:
+                        targetPosition = Vector3.Lerp(start, end, i / 5);
+                        break;
+                }
+                */
+
+                c.SetSortOrder(i + 1);
+                c.SetEnablePhysics(true);
+                c.Owner = (Player)user;
+                
+                Vector3 newPosition = start + new Vector3((card.Width * i) * 0.5f, 0, 0);
+                c.MoveTo(
+                    newPosition,
+                    time: 0.1f,
+                    delay: count * interval);
+            }
+
+            // 카드 가져오기.
+            var position1 = new Vector3(card.transform.position.x, 1, card.transform.position.z);
+            Vector3 targetPosition = start + new Vector3((card.Width * list.Count) * 0.5f, 0, 0);
+            // 위로 살짝뛰웠다가.
+            card.Owner = (Player)user;
+            card.MoveTo(
+                position1,
+                time: 0.1f,
+                delay: count * interval,
+                complete: () => {
+                        // 목적 위치로.
+                        card.MoveTo(
+                            targetPosition,
+                            time: 0.1f,
+                            delay: count * interval,
+                            complete: () => {
+
+                                complete();
+                            });
+                });
 
             scores[(int)turnUser].Add(card);
         }
@@ -1492,21 +1511,19 @@ namespace Gostop
         private void Eat()
         {
             Debug.Log($"먹는 판정 패 : {listEat.Count}");
-
             int total = listEat.Count;
             if (total == 0)
             {
                 return;
             }
 
-
             for (int i = listEat.Count - 1; i >= 0; --i)
             {
                 var card = listEat[i];
-                EatScore(card, total - i); // 카드 획득.
+                EatCard(card, total - i); // 카드 획득.
 
                 var slot = GetSlot(card);
-                slot.Value.Remove(card); // 보드 슬롯에서 제거.           
+                slot.Value.Remove(card); // 보드 슬롯에서 제거.
             }
 
             listEat.Clear();
@@ -1703,23 +1720,28 @@ namespace Gostop
                 float randZ = UnityEngine.Random.Range(-0.5f, 0.5f);
                 int stackCount = slot.Value.Count;
 
-                Vector3 destination1 = hitPosition.position;
+                int turnIndex = user;
+                if (user == (int)Player.NONE)
+                    turnIndex = 0;
+
+                Vector3 destination1 = hitPosition[turnIndex].position;
                 Vector3 destination2 = cardPosition[slot.Key - 1].position +
                             new Vector3(randX, stackCount * card.Height, randZ);
 
+                
                 card.CardOpen(time: 0.2f);
                 card.Owner = (Player)user;
                 card.MoveTo(
                     destination1,
                     time: 0.2f,
-                    ease: DG.Tweening.Ease.InExpo,
+                    ease: DG.Tweening.Ease.OutCubic,
                     complete: () => {
                       card.MoveTo(
                         destination2,
                         time: 0.2f,
-                        ease: DG.Tweening.Ease.InExpo,
+                        ease: DG.Tweening.Ease.InQuad,
                         complete: () => {
-
+                            card.SetEnablePhysics(true);
                         });
                     });
 
@@ -1771,7 +1793,7 @@ namespace Gostop
             int count = 0;
             foreach (var slot in bottoms)
             {
-                count += slot.Value.Where(card => card.CompleteMove == false).ToList().Count;
+                count += GetMoveCount(slot.Value);
             }
 
             return count;

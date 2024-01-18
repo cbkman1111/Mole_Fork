@@ -60,8 +60,7 @@ namespace Scenes
                         var turnInfo = stateMachine.GetCurrturnInfo();
                         var stateInfo = turnInfo.GetCurrentStateInfo();
 
-                        if (stateInfo.state == State.CARD_HIT &&
-                            board.MyTurn() == true)
+                        if (stateInfo.state == State.CARD_HIT && board.MyTurn() == true)
                         {
                             var list = board.GetSameMonthCard((int)Board.Player.USER, card);
                             if (list.Count == 3)
