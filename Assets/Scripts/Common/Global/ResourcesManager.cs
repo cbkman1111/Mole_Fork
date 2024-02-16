@@ -60,7 +60,7 @@ namespace Common.Global
                 return obj.GetComponent<T>();
             }
 
-            return default(T);
+            return default;
         }
 
         public T[] LoadBudleAll<T>() where T : Object

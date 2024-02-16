@@ -173,7 +173,7 @@ namespace Common.Global
                 switch (StringToEnum<SceneBase.Scenes>(sceneName))
                 {
                     case SceneBase.Scenes.SceneIntro:
-                        scene = obj.AddComponent<SceneIntro>(); //new SceneIntro();
+                        scene = obj.AddComponent<SceneIntro>();
                         break;
                     case SceneBase.Scenes.SceneMenu:
                         scene = obj.AddComponent<SceneMenu>();

@@ -102,7 +102,6 @@ namespace Scenes
 
                 yield return MEC.Timing.WaitForOneFrame;
             }
-  
         }
 
         /// <summary>

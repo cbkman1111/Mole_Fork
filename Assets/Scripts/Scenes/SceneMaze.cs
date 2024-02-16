@@ -1,12 +1,9 @@
 using System.Collections.Generic;
 using Common.Global;
 using Common.Scene;
-using Common.Utils.Pool;
-using DG.Tweening;
 using UI.Menu;
 using UnityEngine;
 using System;
-using System.Collections.Generic;
 using Scenes.EllersAlgorithm;
 using UI.Popup;
 using Unity.Jobs;
@@ -330,35 +327,6 @@ namespace Scenes
             }
 
             /// <summary>
-            /// Prints a row
-            /// </summary>
-            private void PrintRow()
-            {
-                Console.Write("|");
-                foreach (Cell cell in row)
-                {
-                    if (cell.HasRightWall && cell.HasBottomWall)
-                    {
-                        Console.Write($"__|");
-                    }
-                    else if (cell.HasRightWall && !cell.HasBottomWall)
-                    {
-                        Console.Write($"  |");
-                    }
-                    else if (cell.HasBottomWall && !cell.HasRightWall)
-                    {
-                        Console.Write($"___");
-                    }
-                    else
-                    {
-                        Console.Write($"   ");
-                    }
-                }
-                Console.Write("\n");
-            }
-
-
-            /// <summary>
             /// Prints the whole maze
             /// </summary>
             public void PrintMaze()
@@ -584,31 +552,13 @@ namespace Scenes
                 menu.InitMenu();
             }
 
-            /*
-            MyJob jobData = new MyJob();
-            jobData.b = 10;
-            jobData.result = result;
-
-            Debug.Log($"111111111111111111111111111111- start");
-            // Schedule the job
-            JobHandle handle = jobData.Schedule();
-            
-            //handle.IsCompleted() == true
-            // Wait for the job to complete
-            handle.Complete();
-            Debug.Log($"111111111111111111111111111111 - end {result[0]}");
-
-            // Free the memory allocated by the result array
-            result.Dispose();
-            */
-
             mazeGenerator = new Maze();
             mazeGenerator.GenerateMaze(rows, cols);
             mazeGenerator.PrintMaze();
 
             var maze = mazeGenerator.TranslateMaze();
-            int n1 = EscapeMaze(maze);
-            int n2 = EscapeMaze2(mazeGenerator.maze);
+            //int n1 = EscapeMaze(maze);
+            //int n2 = EscapeMaze2(mazeGenerator.maze);
             //mazeGenerator.SolveMaze();
 
             var prefabPlayer = ResourcesManager.Instance.LoadInBuild<MazeMouse>("Prefab/MazeMouse");
@@ -626,71 +576,12 @@ namespace Scenes
 
             return true;
         }
-        public static int EscapeMaze2(Cell[,] maps)
-        {
-            int rows = maps.GetLength(0);
-            int cols = maps.GetLength(1);
-            int[,] directions = { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } }; 
 
-            Queue<Tuple<int, int, int>> queue = new Queue<Tuple<int, int, int>>();
-            HashSet<Tuple<int, int>> visited = new HashSet<Tuple<int, int>>();
-
-            queue.Enqueue(new Tuple<int, int, int>(0, 0, 1));
-            visited.Add(new Tuple<int, int>(0, 0));
-
-            List<Vector2Int> path = new List<Vector2Int>();
-
-            while (queue.Count > 0)
-            {
-                Tuple<int, int, int> current = queue.Dequeue();
-                int row = current.Item1;
-                int col = current.Item2;
-                int distance = current.Item3;
-
-                if (row == rows - 1 && col == cols - 1) // 출구에 도달한 경우
-                {
-                    return distance;
-                }
-
-                for (int i = 0; i < 4; i++)
-                {
-                    int newRow = row + directions[i, 0];
-                    int newCol = col + directions[i, 1];
-
-                    if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < cols)
-                    {
-                        bool allreadyVisited = visited.Contains(new Tuple<int, int>(newRow, newCol));
-
-                        // 사이에 벽이 있는지 검사.
-                        bool wallExist = false;
-                        switch (i)
-                        {
-                            case 0: // 오른쪽
-                                wallExist = maps[row, col].HasRightWall;
-                                break;
-                            case 1: // 왼쪽
-                                wallExist = maps[newRow, newCol].HasRightWall;
-                                break;
-                            case 2: // 아래
-                                wallExist = maps[row, col].HasBottomWall;
-                                break;
-                            case 3: // 위
-                                wallExist = maps[newRow, newCol].HasBottomWall; 
-                                break;
-                        }
-
-                        if (wallExist == false && allreadyVisited == false)
-                        {
-                            visited.Add(new Tuple<int, int>(newRow, newCol));
-                            queue.Enqueue(new Tuple<int, int, int>(newRow, newCol, distance + 1));
-                        }
-                    }
-                }
-            }
-
-            return -1; // 출구에 도달할 수 없는 경우
-        }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="maps"></param>
+        /// <returns></returns>
         public static int EscapeMaze(int[,] maps)
         {
             int rows = maps.GetLength(0);

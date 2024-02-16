@@ -12,6 +12,7 @@ public class AppDelegate : MonoBehaviour
         Application.targetFrameRate = 100;
 
         //SoundManager.Instance.Load();
+        _= DataManager.Instance;
 
         AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneIntro, false);
     }

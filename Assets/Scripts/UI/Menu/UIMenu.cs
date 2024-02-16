@@ -70,6 +70,10 @@ namespace UI.Menu
             {
                 AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneTetris);
             }
+            else if (name == "Button - TextRpg")
+            {
+                AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneTextRpg);
+            }
         }
     }
 }

@@ -22,7 +22,7 @@ namespace Common.Scene
             SceneBehaviorTree, // Behavior Design 테스트용.
             ScenePuzzle, // 퍼즐.
             SceneTetris, // 테트리스.
-
+            SceneTextRpg, // 텍스트 RPG
             Demo
         }
 
