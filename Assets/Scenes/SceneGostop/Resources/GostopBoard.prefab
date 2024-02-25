@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 884269384}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 22, z: -0.55}
+  m_LocalPosition: {x: 0, y: 22, z: -1.53}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -95,6 +95,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6536961966182150105}
   - component: {fileID: 6536961966182150104}
+  - component: {fileID: 850192160}
   m_Layer: 0
   m_Name: GostopBoard
   m_TagString: Untagged
@@ -228,6 +229,46 @@ MonoBehaviour:
     RecvieCard: {fileID: 2784226073021815113}
     Hand: {fileID: 7100931228097348642}
   menu: {fileID: 0}
+--- !u!114 &850192160
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6536961966182150106}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d7b55c7ecdb49a4a89fa5e6f9022861, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startWhenEnabled: 1
+  asynchronousLoad: 0
+  pauseWhenDisabled: 0
+  restartWhenComplete: 0
+  logTaskChanges: 0
+  group: 0
+  resetValuesOnRestart: 0
+  externalBehavior: {fileID: 11400000, guid: 4b8c75bb483826644a3ff030592c16cb, type: 2}
+  mBehaviorSource:
+    behaviorName: BehaviorGostop
+    behaviorDescription: 
+    mTaskData:
+      types: []
+      parentIndex: 
+      startIndex: 
+      variableStartIndex: 
+      JSONSerialization: '{"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedTransform","Name":"Mouse","IsShared":true}]}'
+      fieldSerializationData:
+        typeName: []
+        fieldNameHash: 
+        startIndex: 
+        dataPosition: 
+        unityObjects: []
+        byteData: 
+        byteDataArray: 
+      Version: 1.7.2
+  gizmoViewMode: 2
+  showBehaviorDesignerGizmo: 1
 --- !u!1001 &2055270
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1069,6 +1110,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6536961966182150105}
     m_Modifications:
+    - target: {fileID: 2205159889346106323, guid: 1e657ab7f643a554b9866d5866f8e555,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 2985073118822244093, guid: 1e657ab7f643a554b9866d5866f8e555,
         type: 3}
       propertyPath: m_Enabled
@@ -1103,6 +1149,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: GostopBoardPartAI
+      objectReference: {fileID: 0}
+    - target: {fileID: 5439174911767203788, guid: 1e657ab7f643a554b9866d5866f8e555,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7555065322608323125, guid: 1e657ab7f643a554b9866d5866f8e555,
         type: 3}
@@ -1562,12 +1613,12 @@ PrefabInstance:
     - target: {fileID: 3542677223952660245, guid: 6b654c955e1f8684b82077f0c6ea29d3,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 3542677223952660245, guid: 6b654c955e1f8684b82077f0c6ea29d3,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3542677223952660245, guid: 6b654c955e1f8684b82077f0c6ea29d3,
         type: 3}
@@ -1627,7 +1678,7 @@ PrefabInstance:
     - target: {fileID: 5210216926051713783, guid: 6b654c955e1f8684b82077f0c6ea29d3,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5210216926051713783, guid: 6b654c955e1f8684b82077f0c6ea29d3,
         type: 3}
@@ -1672,12 +1723,12 @@ PrefabInstance:
     - target: {fileID: 5502931906961711346, guid: 6b654c955e1f8684b82077f0c6ea29d3,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5502931906961711346, guid: 6b654c955e1f8684b82077f0c6ea29d3,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5502931906961711346, guid: 6b654c955e1f8684b82077f0c6ea29d3,
         type: 3}
@@ -1827,7 +1878,7 @@ PrefabInstance:
     - target: {fileID: 8302477013540155438, guid: 6b654c955e1f8684b82077f0c6ea29d3,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8302477013540155438, guid: 6b654c955e1f8684b82077f0c6ea29d3,
         type: 3}

@@ -160,6 +160,7 @@ namespace Gostop
             var trun = GetCurrturnInfo();
             return trun.GetCurrentStateInfo();
         }
+
         /// <summary>
         /// 시작, 트리거 리턴 ture, 완료 순으로 호출되며 상태를 처리합니다.
         /// </summary>
