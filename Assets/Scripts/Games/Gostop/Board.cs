@@ -57,7 +57,7 @@ namespace Gostop
     /// </summary>
     public class Board : MonoBehaviour
     {
-        private StateMachineGostop stateMachine = null;
+        //private StateMachineGostop stateMachine = null;
         private State lastState = State.NONE;
 
         [SerializeField]
@@ -179,10 +179,12 @@ namespace Gostop
             return true;
         }
 
+        /*
         public StateMachineGostop GetStateMachine()
         {
             return stateMachine;
         }
+        */
 
         /// <summary>
         /// 
@@ -246,6 +248,7 @@ namespace Gostop
         /// 
         /// </summary>
         /// <returns></returns>
+        /*
         private void Update()
         {
             if (stateMachine == null)
@@ -404,7 +407,7 @@ namespace Gostop
                 case State.OPEN_1_MORE:
                     stateMachine.Process(
                         start: () => {
-                            Pop1Cards(/*(int)Player.NONE*/);
+                            //Pop1Cards((int)Player.NONE);
                         },
                         check: () => {
                             int count = 0;
@@ -512,7 +515,7 @@ namespace Gostop
                 case State.CARD_POP:
                     stateMachine.Process(
                         start: () => {
-                            turnInfo.pop = Pop1Cards(/*(int)turnUser*/);
+                            //turnInfo.pop = Pop1Cards((int)turnUser);
                         },
                         check: () => {
 
@@ -690,6 +693,7 @@ namespace Gostop
                     break;
             }
         }
+        */
 
         /// <summary>
         /// 상대의 패를 훔칩니다.
@@ -776,6 +780,7 @@ namespace Gostop
         /// <summary>
         /// 기존 카드를 제거합니다.
         /// </summary>
+        /*
         private void DestroyAllCards()
         {
             // 객체 지우기.
@@ -826,8 +831,8 @@ namespace Gostop
             {
                 scores[i].Clear();
             }
-
         }
+        */
 
         /// <summary>
         /// 
@@ -1324,8 +1329,9 @@ namespace Gostop
         /// <param name="card"></param>
         public void HitCard(int user, Card card, float delay = 0)
         {
-            var turnInfo = stateMachine.GetCurrturnInfo();
-            var info = turnInfo.GetCurrentStateInfo();
+            //var turnInfo = stateMachine.GetCurrturnInfo();
+            //var info = turnInfo.GetCurrentStateInfo();
+            /*
             KeyValuePair<int, List<Card>> slot = GetSlot(card);
             bool success = hands[user].Remove(card);
             if (success == true)
@@ -1403,6 +1409,7 @@ namespace Gostop
                     }
                 }
             }
+            */
         }
 
         /// <summary>

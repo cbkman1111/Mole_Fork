@@ -3,27 +3,28 @@ using BehaviorDesigner.Runtime.Tasks;
 using Common.Global;
 using Gostop;
 using Scenes;
+using Spine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.WSA;
 
 namespace Gostop
 {
-    public class GostopActionCreateDeck : GostopAction
+    public class GostopActionComputerHit : GostopAction
     {
         public override void OnStart()
         {
             var scene = AppManager.Instance.CurrScene as SceneGostop;
             var board = GetComponent<Board>();
-            board.CreateDeck();
+
+            board.SortHand();
         }
 
         public override TaskStatus OnUpdate()
         {
 #if UNITY_EDITOR
-            if(UnityEngine.Application.isPlaying == false)
+            if (UnityEngine.Application.isPlaying == false)
             {
                 return TaskStatus.Failure;
             }
@@ -31,7 +32,11 @@ namespace Gostop
 
             var scene = AppManager.Instance.CurrScene as SceneGostop;
             var board = GetComponent<Board>();
-            int count = board.deck.Where(card => card.ListTween.Count != 0).ToList().Count;
+
+            int count = 0;
+            count += board.hands[0].Where(card => card.ListTween.Count == 0).ToList().Count;
+            count += board.hands[1].Where(card => card.ListTween.Count == 0).ToList().Count;
+
             if (count == 0)
             {
                 return TaskStatus.Success;

@@ -3,6 +3,7 @@ using Common.Scene;
 using UI.Menu;
 using UnityEngine;
 using Gostop;
+using UnityEditor;
 
 namespace Scenes
 {
@@ -55,10 +56,31 @@ namespace Scenes
                     Card card = hit.collider.GetComponent<Card>();
                     if (card != null)
                     {
-                        var stateMachine = board.GetStateMachine();
-                        var turnInfo = stateMachine.GetCurrturnInfo();
-                        var stateInfo = turnInfo.GetCurrentStateInfo();
 
+                        //var stateMachine = board.GetStateMachine();
+                        //var turnInfo = stateMachine.GetCurrturnInfo();
+                        //var stateInfo = turnInfo.GetCurrentStateInfo();
+                        if (board.MyTurn() == true)
+                        {
+                            var list = board.GetSameMonthCard((int)Board.Player.USER, card);
+                            if (list.Count == 3)
+                            {
+                                board.HitBomb((int)Board.Player.USER, list, card);
+                                //stateInfo.evt = StateEvent.PROGRESS;
+                            }
+                            else if (list.Count == 4) // 총통
+                            {
+                                board.HitChongtong((int)Board.Player.USER, list, card);
+                                //stateInfo.evt = StateEvent.PROGRESS;
+                            }
+                            else
+                            {
+                                board.HitCard((int)Board.Player.USER, card);
+                                //stateInfo.evt = StateEvent.PROGRESS;
+                            }
+                        }
+
+                        /*
                         if (stateInfo.state == State.CARD_HIT && board.MyTurn() == true)
                         {
                             var list = board.GetSameMonthCard((int)Board.Player.USER, card);
@@ -78,6 +100,7 @@ namespace Scenes
                                 stateInfo.evt = StateEvent.PROGRESS; 
                             }
                         }
+                        */
                     }
                 }
             }

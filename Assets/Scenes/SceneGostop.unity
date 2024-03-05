@@ -598,6 +598,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 850192160, guid: 7d2c1290d36904a43a99060fc99999c9, type: 3}
+      propertyPath: mBehaviorSource.mTaskData.JSONSerialization
+      value: '{}'
+      objectReference: {fileID: 0}
     - target: {fileID: 850192164, guid: 7d2c1290d36904a43a99060fc99999c9, type: 3}
       propertyPath: m_Color.a
       value: 0.2627451

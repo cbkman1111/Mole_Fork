@@ -3,43 +3,44 @@ using BehaviorDesigner.Runtime.Tasks;
 using Common.Global;
 using Gostop;
 using Scenes;
+using SweetSugar.Scripts.TargetScripts.TargetEditor;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.WSA;
 
 namespace Gostop
 {
-    public class GostopActionCreateDeck : GostopAction
+    public class GostopConditionTurnComputer : Conditional
     {
+        int jokerCount = 0;
+
         public override void OnStart()
         {
+            /*
             var scene = AppManager.Instance.CurrScene as SceneGostop;
             var board = GetComponent<Board>();
-            board.CreateDeck();
+
+            jokerCount = board.CheckJoker();
+            */
         }
 
         public override TaskStatus OnUpdate()
         {
 #if UNITY_EDITOR
-            if(UnityEngine.Application.isPlaying == false)
+            if (UnityEngine.Application.isPlaying == false)
             {
                 return TaskStatus.Failure;
             }
 #endif
 
-            var scene = AppManager.Instance.CurrScene as SceneGostop;
+            //var scene = AppManager.Instance.CurrScene as SceneGostop;
             var board = GetComponent<Board>();
-            int count = board.deck.Where(card => card.ListTween.Count != 0).ToList().Count;
-            if (count == 0)
-            {
+
+            if (board.MyTurn() == false)
                 return TaskStatus.Success;
-            }
             else
-            {
-                return TaskStatus.Running;
-            }
+                return TaskStatus.Failure;
         }
     }
 }

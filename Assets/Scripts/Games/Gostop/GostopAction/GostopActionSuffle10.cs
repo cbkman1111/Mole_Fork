@@ -23,6 +23,13 @@ namespace Gostop
 
         public override TaskStatus OnUpdate()
         {
+#if UNITY_EDITOR
+            if (UnityEngine.Application.isPlaying == false)
+            {
+                return TaskStatus.Failure;
+            }
+#endif
+
             var scene = AppManager.Instance.CurrScene as SceneGostop;
             var board = GetComponent<Board>();
 
