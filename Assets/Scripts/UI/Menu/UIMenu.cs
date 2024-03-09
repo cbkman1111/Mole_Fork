@@ -74,6 +74,10 @@ namespace UI.Menu
             {
                 AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneTextRpg);
             }
+            else if(name == "Button - Dotween")
+            {
+                AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneDotween);
+            }
         }
     }
 }

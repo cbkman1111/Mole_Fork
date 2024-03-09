@@ -214,6 +214,9 @@ namespace Common.Global
                     case SceneBase.Scenes.SceneTetris:
                         scene = obj.AddComponent<SceneTetris>();
                         break;
+                    case SceneBase.Scenes.SceneDotween:
+                        scene = obj.AddComponent<SceneDotween>();
+                        break;
                     default:
                         break;
                 }

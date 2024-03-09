@@ -23,6 +23,8 @@ namespace Common.Scene
             ScenePuzzle, // 퍼즐.
             SceneTetris, // 테트리스.
             SceneTextRpg, // 텍스트 RPG
+            SceneDotween, // 닷트윈 테스트.
+
             Demo
         }
 
