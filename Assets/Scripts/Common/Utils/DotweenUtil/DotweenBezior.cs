@@ -1,40 +1,28 @@
-using BehaviorDesigner.Runtime.Tasks;
-using Common.Global;
-using Common.Scene;
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
-using System.Net;
 using UnityEditor;
 using UnityEngine;
 
-public class SceneDotween : SceneBase
+//  
+public class DotweenBezior : MonoBehaviour
 {
-    [Header("출발점")]
+    //[DisplayAsString]
+    [Header("출발")]
     public Transform StartPoint = null;
     public Transform handl_a;
 
-    [Header("중간점")]
+    [Header("중간")]
     public Transform handl_b;
     public Transform wp_a = null;
     public Transform handl_c;
 
-    [Header("도착점")]
+    [Header("도착")]
     public Transform handl_d;
     public Transform wp_b = null;
 
-    public Transform projectile = null;
-    
     public float _gizmoDetail = 30;
     List<Vector3> _gizmoPoints = new List<Vector3>();
-    public override bool Init(JSONObject param)
-    {
-        var menu = UIManager.Instance.OpenMenu<UIMenuDotween>("UIMenuDotween");
-        menu.InitMenu(OnShoot);
-
-        return true;
-    }
-
     public Vector3[] GetPath()
     {
         Vector3[] path = new Vector3[6];
@@ -50,17 +38,19 @@ public class SceneDotween : SceneBase
         path.SetValue(handl_d.transform.position, 5); // a
         return path;
     }
-    public void OnShoot()
-    {
-        Vector3[] path = GetPath();
 
+    private void SampleFun()
+    {
+        /*
+        Vector3[] path = GetPath();
         Gizmos.color = Color.blue;
+
         var obj = Instantiate<Transform>(projectile, StartPoint.position, Quaternion.identity);
         obj.transform.DOPath(path, 3, PathType.CubicBezier, PathMode.Full3D, 10, Color.yellow).
-            OnComplete(() => { 
-            Destroy(obj.gameObject);
-        });
-
+            OnComplete(() => {
+                Destroy(obj.gameObject);
+            });
+        */
     }
     private void OnDrawGizmos()
     {
@@ -86,7 +76,7 @@ public class SceneDotween : SceneBase
         Gizmos.DrawLine(wp_a.position, handl_b.position);
         Gizmos.DrawLine(wp_a.position, handl_c.position);
         Gizmos.DrawLine(wp_b.position, handl_d.position);
-        
+
         Handles.DrawBezier(StartPoint.position, wp_a.position, handl_a.position, handl_b.position, Color.red, null, 2);
         Handles.DrawBezier(wp_a.position, wp_b.position, handl_c.position, handl_d.position, Color.red, null, 2);
     }
