@@ -24,7 +24,6 @@ public class UIMenuDotween : MenuBase
     private Pool<Transform> poolText = null;
     private int _score = 0;
 
-
     public bool InitMenu(Action shoot)
     {
         OnShoot = shoot;
@@ -55,16 +54,20 @@ public class UIMenuDotween : MenuBase
 
             var sequnce = DOTween.Sequence();
             float intervalMove = 0.6f;
-            float intervalWait = 0.1f;
+            
             sequnce.AppendInterval(0.05f);
-            sequnce.Append(textMesh.transform.DOMoveY(obj.position.y +200, intervalMove).SetEase(Ease.Linear));
+            sequnce.Join(textMesh.transform.DOMoveY(obj.position.y +200, intervalMove).SetEase(Ease.Linear));
             sequnce.Join(textMesh.transform.DOShakeScale(0.5f, 1, 10, 90, true).SetEase(Ease.OutBounce));
-            //sequnce.AppendInterval(intervalWait);
-            sequnce.Join(textMesh.DOFade(0, intervalMove * 1.0f).SetEase(Ease.Linear));
+            sequnce.AppendInterval(0.05f);
+            sequnce.Join(textMesh.DOFade(0, 0.3f).SetEase(Ease.Linear));
             sequnce.OnComplete(() =>
             {
                 poolText.ReturnObject(obj);
             });
+        }
+        else if (name == "Button - Back")
+        {
+            AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneMenu);
         }
     }
 }
