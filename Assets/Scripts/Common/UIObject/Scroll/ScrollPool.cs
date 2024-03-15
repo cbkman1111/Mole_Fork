@@ -175,6 +175,7 @@ namespace Common.UIObject.Scroll
 				Transform trans = obj as Transform;
 				if (trans != null)
 				{
+					trans.SetParent(parent);
 					trans.gameObject.SetActive(false);
 				}
 

@@ -39,6 +39,11 @@ public class DotweenBezior : MonoBehaviour
         return path;
     }
 
+    public Vector3 GetStartPoint()
+    {
+        return StartPoint.position;
+    }   
+
     private void SampleFun()
     {
         /*
