@@ -45,13 +45,17 @@ public class SceneDotween : SceneBase
         obj.transform.rotation = Quaternion.identity;
         obj.transform.DOPath(path, 1, PathType.CubicBezier, PathMode.Full3D, 10, Color.yellow).
             SetEase(Ease.Linear).
-            OnComplete(() => {
-
-                _pool.ReturnObject(obj);
-                obj = null;
-                
-                //Destroy(obj.gameObject, 2f);
+            OnComplete(() =>
+            {
+                MEC.Timing.RunCoroutine(ReturnObject(obj));
             });
     }
 
+    private IEnumerator<float> ReturnObject(Transform obj)
+    {
+        yield return MEC.Timing.WaitForSeconds(2);
+
+        _pool.ReturnObject(obj);
+        obj = null;
+    }
 }
