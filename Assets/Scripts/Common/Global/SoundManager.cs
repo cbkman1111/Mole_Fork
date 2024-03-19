@@ -19,9 +19,10 @@ namespace Common.Global
             //gameObject.name = string.Format("singleton - {0}", Tag);
             mixer = ResourcesManager.Instance.LoadInBuild<AudioMixer>("AudioMixer");
 
-            AudioSource prefab = ResourcesManager.Instance.LoadInBuild<AudioSource>("Audio Source");
-            musics = Pool<AudioSource>.Create(prefab, transform, 1);
-            effect = Pool<AudioSource>.Create(prefab, transform, 10);
+            AudioSource prefabBGM = ResourcesManager.Instance.LoadInBuild<AudioSource>("Audio Source - BGM");
+            AudioSource prefabEffect = ResourcesManager.Instance.LoadInBuild<AudioSource>("Audio Source - Effect");
+            musics = Pool<AudioSource>.Create(prefabBGM, transform, 1);
+            effect = Pool<AudioSource>.Create(prefabEffect, transform, 10);
   
             return true;
         }

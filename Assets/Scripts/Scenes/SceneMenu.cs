@@ -18,12 +18,14 @@ namespace Scenes
 
             SoundManager.Instance.Load();
             DataManager.Instance.LoadTables();
+
+            SoundManager.Instance.PlayMusic("17856_1462216818");
             return true;
         }
 
         public override void OnTouchBean(Vector3 position)
         {
-
+            SoundManager.Instance.PlayEffect("EFF_shoot");
         }
 
         public override void OnTouchEnd(Vector3 position)
