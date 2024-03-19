@@ -17,7 +17,6 @@ namespace Common.Global
         protected override bool Init()
         {
             //gameObject.name = string.Format("singleton - {0}", Tag);
-
             mixer = ResourcesManager.Instance.LoadInBuild<AudioMixer>("AudioMixer");
 
             AudioSource prefab = ResourcesManager.Instance.LoadInBuild<AudioSource>("Audio Source");
@@ -29,7 +28,7 @@ namespace Common.Global
 
         public bool Load()
         {
-            AudioClip[] clips = ResourcesManager.Instance.LoadBudleAll<AudioClip>();
+            AudioClip[] clips = ResourcesManager.Instance.LoadnBuildAllI<AudioClip>("Sounds");
             foreach (var clip in clips)
             {
                 soundTable.Add(clip.name, clip);

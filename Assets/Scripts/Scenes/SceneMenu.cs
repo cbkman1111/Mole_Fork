@@ -7,8 +7,6 @@ namespace Scenes
 {
     public class SceneMenu : SceneBase
     {
-
-
         public override bool Init(JSONObject param)
         {
             UIMenu menu = UIManager.Instance.OpenMenu<UIMenu>("UIMenu");
@@ -17,6 +15,9 @@ namespace Scenes
                 menu.InitMenu();
             }
 
+
+            SoundManager.Instance.Load();
+            DataManager.Instance.LoadTables();
             return true;
         }
 

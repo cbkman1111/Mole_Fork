@@ -8,10 +8,23 @@ public class AppDelegate : MonoBehaviour
     static void main()
     {
         Debug.Log("App Started. by AppDelegate.cs");
-        
         Application.targetFrameRate = 60;
-        //SoundManager.Instance.Load();
-        //_= DataManager.Instance;
+
+        Debug.Log("Device Model: " + SystemInfo.deviceModel);
+        Debug.Log("Device Name: " + SystemInfo.deviceName);
+        Debug.Log("Device Type: " + SystemInfo.deviceType);
+        Debug.Log("Operating System: " + SystemInfo.operatingSystem);
+        Debug.Log("Processor Count: " + SystemInfo.processorCount);
+        Debug.Log("Processor Frequency: " + SystemInfo.processorFrequency);
+        Debug.Log("Processor Type: " + SystemInfo.processorType);
+        Debug.Log("Supported Render Texture Count: " + SystemInfo.supportedRenderTargetCount);
+        Debug.Log("System Memory Size: " + SystemInfo.systemMemorySize);
+        Debug.Log("Graphics Device Name: " + SystemInfo.graphicsDeviceName);
+        Debug.Log("Graphics Device Vendor: " + SystemInfo.graphicsDeviceVendor);
+        Debug.Log("Graphics Memory Size: " + SystemInfo.graphicsMemorySize);
+        Debug.Log("Graphics Shader Level: " + SystemInfo.graphicsShaderLevel);
+        Debug.Log("Supports Shadows: " + SystemInfo.supportsShadows);
+
 
         AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneIntro, false);
     }

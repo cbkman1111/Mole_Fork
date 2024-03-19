@@ -17,13 +17,14 @@ namespace Common.Global
         protected override bool Init()
         {
             tables.Clear();
-            
-            LoadTables();
+
             return true;
         }
 
-    
-        private void LoadTables()
+        /// <summary>
+        /// 
+        /// </summary>
+        public void LoadTables()
         {   
             string path = "TableData/";
             string[] tableNames = { 
@@ -45,20 +46,6 @@ namespace Common.Global
                 object table = JsonConvert.DeserializeObject(asset.ToString(), tableType);
                 tables.Add(tableName, table as DataTable);
             }
-
-
-
-            //JsonMapper.ToObject<List<HeroData>>(data);
-
-            TextAsset asset2 = ResourcesManager.Instance.LoadInBuild<TextAsset>($"{path}TableTemp4");
-            Type tableType2 = Type.GetType($"Common.Table.TableTemp4");
-            // JSON 문자열을 해당 클래스의 인스턴스로 역직렬화합니다.
-            
-            JsonMapper.ToObject<List<TableTemp4>>(asset2.ToString());
-
-            object table2 = JsonConvert.DeserializeObject(asset2.ToString(), tableType2);
-            Debug.Log(table2);
-
         }
 
         

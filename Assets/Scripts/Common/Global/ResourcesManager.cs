@@ -41,7 +41,7 @@ namespace Common.Global
             return Resources.Load<T>(path);
         }
     
-        public T[] LoadAllInBuild<T>(string path) where T : Object
+        public T[] LoadnBuildAllI<T>(string path) where T : Object
         {
             return Resources.LoadAll<T>(path);
         }
