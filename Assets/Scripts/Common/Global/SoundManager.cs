@@ -16,9 +16,7 @@ namespace Common.Global
 
         protected override bool Init()
         {
-            //gameObject.name = string.Format("singleton - {0}", Tag);
             mixer = ResourcesManager.Instance.LoadInBuild<AudioMixer>("AudioMixer");
-
             AudioSource prefabBGM = ResourcesManager.Instance.LoadInBuild<AudioSource>("Audio Source - BGM");
             AudioSource prefabEffect = ResourcesManager.Instance.LoadInBuild<AudioSource>("Audio Source - Effect");
             musics = Pool<AudioSource>.Create(prefabBGM, transform, 1);
@@ -72,7 +70,7 @@ namespace Common.Global
         {
             if(soundTable.ContainsKey(name) == false )
                 return;
-
+            
             AudioSource audio = musics.GetObject();
             if(audio != null)
             {

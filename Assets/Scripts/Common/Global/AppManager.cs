@@ -5,6 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Common.Global.Singleton;
 using Common.Scene;
+using Common.Utils.Pool;
+using Network;
 using Scenes;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -28,7 +30,15 @@ namespace Common.Global
         /// <returns></returns>
         protected override bool Init()
         {
+            SoundManager.Instance.Load();
+            DataManager.Instance.Load();
+            NetworkManager.Instance.Connect();
             return true;
+        }
+
+        public void StartApplication()
+        {
+            AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneIntro, false);
         }
 
         /// <summary>
@@ -242,24 +252,30 @@ namespace Common.Global
             StartCoroutine(LoadScene(sceneName, loading));
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="paused"></param>
-        public void OnAppPause(bool paused)
+
+        void OnApplicationPause(bool paused)
         {
-            Debug.Log($"{Tag} OnAppPause. {paused}");
+            
         }
 
-        public void OnAppFocus(bool focus)
+        void OnApplicationFocus(bool focus)
         {
-            Debug.Log($"{Tag} OnAppFocus. {focus}");
+
         }
 
-        public void OnAppQuit()
+        private void OnApplicationQuit()
         {
-            Debug.Log($"{Tag} OnAppQuit.");
+            SoundManager.Instance.Destroy();
+            DataManager.Instance.Destroy();
+            NetworkManager.Instance.Destroy();
+            ResourcesManager.Instance.Destroy();
+            UIManager.Instance.Destroy();
+            PoolManager.Instance.Destroy();
+
+            AppManager.Instance.Destroy();
+            Debug.Log("App Quit");
         }
+
 
         private Vector3 lastMousePosition = Vector3.zero;
 

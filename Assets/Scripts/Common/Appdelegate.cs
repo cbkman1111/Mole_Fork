@@ -1,5 +1,7 @@
 using Common.Global;
 using Common.Scene;
+using Common.Utils.Pool;
+using Network;
 using UnityEngine;
 
 public class AppDelegate : MonoBehaviour
@@ -25,22 +27,6 @@ public class AppDelegate : MonoBehaviour
         Debug.Log("Graphics Shader Level: " + SystemInfo.graphicsShaderLevel);
         Debug.Log("Supports Shadows: " + SystemInfo.supportsShadows);
 
-
-        AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneIntro, false);
-    }
-
-    void OnApplicationPause(bool paused)
-    {
-        AppManager.Instance.OnAppPause(paused);
-    }
-
-    void OnApplicationFocus(bool focus)
-    {
-        AppManager.Instance.OnAppFocus(focus);
-    }
-
-    private void OnApplicationQuit()
-    {
-        AppManager.Instance.OnAppQuit();
+        AppManager.Instance.StartApplication();
     }
 }

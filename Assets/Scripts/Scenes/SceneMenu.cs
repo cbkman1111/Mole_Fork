@@ -1,5 +1,6 @@
 using Common.Global;
 using Common.Scene;
+using Network;
 using UI.Menu;
 using UnityEngine;
 
@@ -15,10 +16,6 @@ namespace Scenes
                 menu.InitMenu();
             }
 
-
-            SoundManager.Instance.Load();
-            DataManager.Instance.LoadTables();
-
             SoundManager.Instance.PlayMusic("17856_1462216818");
             return true;
         }
@@ -26,6 +23,8 @@ namespace Scenes
         public override void OnTouchBean(Vector3 position)
         {
             SoundManager.Instance.PlayEffect("EFF_shoot");
+
+            NetworkManager.Instance.Send("Hello from client");
         }
 
         public override void OnTouchEnd(Vector3 position)

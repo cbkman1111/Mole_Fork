@@ -24,7 +24,7 @@ namespace Common.Global
         /// <summary>
         /// 
         /// </summary>
-        public void LoadTables()
+        public void Load()
         {   
             string path = "TableData/";
             string[] tableNames = { 

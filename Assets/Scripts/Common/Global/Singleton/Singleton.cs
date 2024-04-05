@@ -56,6 +56,12 @@ namespace Common.Global.Singleton
         }
 
         protected abstract bool Init();
+        public virtual void Destroy()
+        {
+            Destroy(_instance.gameObject);
+            _instance = null;
+        }
+
         protected string Tag => name;
     }
 }

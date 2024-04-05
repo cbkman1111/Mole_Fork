@@ -15,7 +15,7 @@ namespace UI.Menu
 
         public bool InitMenu()
         {
-            Button btn = GetObject<Button>("Button - A");
+            
             return true;
         }
 

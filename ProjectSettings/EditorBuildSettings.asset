@@ -53,6 +53,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SceneDotween.unity
     guid: fbb13a7e6b01dc546a84a231928a2b20
+  - enabled: 1
+    path: Assets/Scenes/ScenePuzzle.unity
+    guid: 754099599cae54049b51a780f8fac464
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: f11489fc9e0119a41a7424443fc3e23c,
       type: 2}

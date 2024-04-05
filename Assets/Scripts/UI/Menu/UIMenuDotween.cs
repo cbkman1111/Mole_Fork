@@ -12,6 +12,7 @@ using UnityEngine.UI;
 public class UIMenuDotween : MenuBase
 {
     private Action OnShoot = null;
+    private Action<float> OnSlide = null;
 
     [SerializeField]
     private GameObject TextPrefab = null;
@@ -24,14 +25,23 @@ public class UIMenuDotween : MenuBase
     private Pool<Transform> poolText = null;
     private int _score = 0;
 
-    public bool InitMenu(Action shoot)
+
+    public bool InitMenu(Action shoot, Action<float> slide)
     {
         OnShoot = shoot;
+        OnSlide = slide;
+
         _score = 0;
         textCombo.text = _score.ToFormattedString();
         poolText = Pool<Transform>.Create(TextPrefab.transform, transform, 10);
         return true;
     }
+
+    public override void OnValueChanged(Slider slider, float f) 
+    {
+        OnSlide(f);
+    }
+
     protected override void OnClick(Button btn)
     {
         string name = btn.name;

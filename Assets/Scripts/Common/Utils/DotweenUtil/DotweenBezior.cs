@@ -20,9 +20,12 @@ public class DotweenBezior : MonoBehaviour
     [Header("µµÂø")]
     public Transform handl_d;
     public Transform wp_b = null;
-
     public float _gizmoDetail = 30;
     List<Vector3> _gizmoPoints = new List<Vector3>();
+
+    //[Header("¾Þ±Û")]
+
+
     public Vector3[] GetPath()
     {
         Vector3[] path = new Vector3[6];

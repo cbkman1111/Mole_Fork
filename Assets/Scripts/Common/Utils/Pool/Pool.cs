@@ -7,7 +7,7 @@ namespace Common.Utils.Pool
     /// 
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class Pool<T> where T : Object
+    public class Pool<T> where T : Component
     {
         private T _prefab = null;
         private Queue<T> _queue;
