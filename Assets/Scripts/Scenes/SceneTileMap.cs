@@ -2,12 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using Ant;
 using Common.Global;
 using Common.Scene;
 using Common.Utils.Pool;
 using DG.Tweening;
 using Games.TileMap;
 using Games.TileMap.Datas;
+using Spine.Unity;
 using TileMap;
 using UI.Menu;
 using UnityEngine;
@@ -24,14 +26,19 @@ namespace Scenes
         
         private UIMenuTileMap _menu = null;
         private Map _map = null;
-        private Pige _pigeon = null;
+        private Pige _player = null;
 
         private float _ditanceCamera = 0;
 
         private MEC.CoroutineHandle handler;
         
         RaycastHit[] _hits = new RaycastHit[10];
-        
+
+        public SkeletonAnimation skelDragon = null;
+
+        [SerializeField] 
+        private SkinMixAndMatch _skelWoody;
+
         /// <summary>
         /// 
         /// </summary>
@@ -52,8 +59,8 @@ namespace Scenes
                     },
                     save:() =>
                     {
-                        _mapData.X = _pigeon.x;
-                        _mapData.Z = _pigeon.z;
+                        _mapData.X = _player.x;
+                        _mapData.Z = _player.z;
                         
                         _mapData.Save();
                     },
@@ -61,6 +68,15 @@ namespace Scenes
                     {
                         float amount = 6 * percent;
                         _ditanceCamera = 5 + amount;
+                    },
+                    nextHead:() => {
+                        _skelWoody.NextHeadSkin();
+                    },
+                    nextWeapone:() => {
+                        _skelWoody.NextWeaponeSkin();
+                    },
+                    seat:() => { 
+
                     });
             }
 
@@ -98,8 +114,17 @@ namespace Scenes
             
             // 캐릭터 생성.
             var prefab = ResourcesManager.Instance.LoadInBuild<Pige>("Player");
-            _pigeon = GameObject.Instantiate<Pige>(prefab);
-            _pigeon.Init(startX, 1, startZ);
+            _player = GameObject.Instantiate<Pige>(prefab);
+            _player.name = "luke";
+            _player.Init(startX, 1, startZ, new Vector3(0.15f, 0.15f, 0.15f));
+
+
+            var seat = skelDragon.skeleton.FindSlot("seat");
+            if(seat != null)
+            {
+                var man = new GameObject();
+                //man.transform.SetParent(seat.Skeleton.tra)
+            }
 
             // 카메라 위치 초기화.
             MainCamera.transform.position = Vector3.zero;
@@ -130,7 +155,7 @@ namespace Scenes
             PoolManager.Instance.RemoveAll();
             
             MainCamera.transform.DOKill();
-            _pigeon.transform.DOKill();
+            _player.transform.DOKill();
         }
 
         /// <summary>
@@ -338,7 +363,7 @@ namespace Scenes
             // 탑뷰 시점으로 변환.
             angle.z = angle.y;
             
-            _pigeon.Move(angle);
+            _player.Move(angle);
         }
 
         /// <summary>
@@ -388,17 +413,17 @@ namespace Scenes
         /// </summary>
         public override void OnUpdate()
         {
-            if (_pigeon == true)
+            if (_player == true)
             {
-                var cameraPosition = _pigeon.transform.position + /*new Vector3(0, 1, 0) +*/
-                                     _pigeon.transform.GetChild(0).forward * -_ditanceCamera;
+                var cameraPosition = _player.transform.position + /*new Vector3(0, 1, 0) +*/
+                                     _player.transform.GetChild(0).forward * -_ditanceCamera;
 
                 if (Vector3.Distance(MainCamera.transform.position, cameraPosition) > 0.1f)
                 {
                     if (MainCamera.transform.position == Vector3.zero)
                     {
-                        MainCamera.transform.position = _pigeon.transform.position + /*new Vector3(0, 1, 0) + */
-                                                        _pigeon.transform.GetChild(0).forward * -_ditanceCamera;
+                        MainCamera.transform.position = _player.transform.position + /*new Vector3(0, 1, 0) + */
+                                                        _player.transform.GetChild(0).forward * -_ditanceCamera;
                     }
                     else
                     {
@@ -407,15 +432,15 @@ namespace Scenes
                     }
                 }
                 
-                if((int)_pigeon.transform.position.x != _pigeon.x ||
-                   (int)_pigeon.transform.position.z != _pigeon.z)
+                if((int)_player.transform.position.x != _player.x ||
+                   (int)_player.transform.position.z != _player.z)
                 {
-                    _pigeon.x = (int)_pigeon.transform.position.x;
-                    _pigeon.z = (int)_pigeon.transform.position.z;
+                    _player.x = (int)_player.transform.position.x;
+                    _player.z = (int)_player.transform.position.z;
 
                     // 새 좌표에 해당하는 타일로 업데이트.
                     handler.IsRunning = false;
-                    handler = MEC.Timing.RunCoroutine(_map.UpdateTiles(_pigeon.x, _pigeon.z));
+                    handler = MEC.Timing.RunCoroutine(_map.UpdateTiles(_player.x, _player.z));
                    
                 }
             }

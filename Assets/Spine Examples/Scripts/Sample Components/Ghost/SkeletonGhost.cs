@@ -1,16 +1,16 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated January 1, 2020. Replaces all prior versions.
+ * Last updated July 28, 2023. Replaces all prior versions.
  *
- * Copyright (c) 2013-2020, Esoteric Software LLC
+ * Copyright (c) 2013-2023, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
  * conditions of Section 2 of the Spine Editor License Agreement:
  * http://esotericsoftware.com/spine-editor-license
  *
- * Otherwise, it is permitted to integrate the Spine Runtimes into software
- * or otherwise create derivative works of the Spine Runtimes (collectively,
+ * Otherwise, it is permitted to integrate the Spine Runtimes into software or
+ * otherwise create derivative works of the Spine Runtimes (collectively,
  * "Products"), provided that each user of the Products must obtain their own
  * Spine Editor license and redistribution of the Products in any form must
  * include this license and copyright notice.
@@ -23,14 +23,14 @@
  * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
  * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
- * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE
+ * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
 // Contributed by: Mitch Thompson
 
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Spine.Unity.Examples {
 
@@ -44,7 +44,7 @@ namespace Spine.Unity.Examples {
 		public bool ghostingEnabled = true;
 		[Tooltip("The time between invididual ghost pieces being spawned.")]
 		[UnityEngine.Serialization.FormerlySerializedAs("spawnRate")]
-		public float spawnInterval = 1f/30f;
+		public float spawnInterval = 1f / 30f;
 		[Tooltip("Maximum number of ghosts that can exist at a time. If the fade speed is not fast enough, the oldest ghost will immediately disappear to enforce the maximum number.")]
 		public int maximumGhosts = 10;
 		public float fadeSpeed = 10;
@@ -92,7 +92,7 @@ namespace Spine.Unity.Examples {
 					go.hideFlags = GhostHideFlags;
 				}
 
-				var skeletonAnimation = skeletonRenderer as Spine.Unity.IAnimationStateComponent;
+				IAnimationStateComponent skeletonAnimation = skeletonRenderer as Spine.Unity.IAnimationStateComponent;
 				if (skeletonAnimation != null)
 					skeletonAnimation.AnimationState.Event += OnEvent;
 			}
@@ -130,7 +130,7 @@ namespace Spine.Unity.Examples {
 
 				Material[] materials = meshRenderer.sharedMaterials;
 				for (int i = 0; i < materials.Length; i++) {
-					var originalMat = materials[i];
+					Material originalMat = materials[i];
 					Material ghostMat;
 					if (!materialTable.ContainsKey(originalMat)) {
 						ghostMat = new Material(originalMat) {
@@ -149,7 +149,7 @@ namespace Spine.Unity.Examples {
 					materials[i] = ghostMat;
 				}
 
-				var goTransform = go.transform;
+				Transform goTransform = go.transform;
 				goTransform.parent = transform;
 
 				pool[poolIndex].Initialize(meshFilter.sharedMesh, materials, color, additive, fadeSpeed, meshRenderer.sortingLayerID, (sortWithDistanceOnly) ? meshRenderer.sortingOrder : meshRenderer.sortingOrder - 1);
@@ -175,7 +175,7 @@ namespace Spine.Unity.Examples {
 					if (pool[i] != null) pool[i].Cleanup();
 			}
 
-			foreach (var mat in materialTable.Values)
+			foreach (Material mat in materialTable.Values)
 				Destroy(mat);
 		}
 

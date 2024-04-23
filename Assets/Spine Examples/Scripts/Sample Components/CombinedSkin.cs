@@ -1,16 +1,16 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated January 1, 2020. Replaces all prior versions.
+ * Last updated July 28, 2023. Replaces all prior versions.
  *
- * Copyright (c) 2013-2020, Esoteric Software LLC
+ * Copyright (c) 2013-2023, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
  * conditions of Section 2 of the Spine Editor License Agreement:
  * http://esotericsoftware.com/spine-editor-license
  *
- * Otherwise, it is permitted to integrate the Spine Runtimes into software
- * or otherwise create derivative works of the Spine Runtimes (collectively,
+ * Otherwise, it is permitted to integrate the Spine Runtimes into software or
+ * otherwise create derivative works of the Spine Runtimes (collectively,
  * "Products"), provided that each user of the Products must obtain their own
  * Spine Editor license and redistribution of the Products in any form must
  * include this license and copyright notice.
@@ -23,14 +23,14 @@
  * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
  * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
- * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE
+ * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
+using Spine.Unity.AttachmentTools;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Spine.Unity.AttachmentTools;
 
 namespace Spine.Unity.Examples {
 	public class CombinedSkin : MonoBehaviour {
@@ -40,21 +40,21 @@ namespace Spine.Unity.Examples {
 		Skin combinedSkin;
 
 		void Start () {
-			var skeletonComponent = GetComponent<ISkeletonComponent>();
+			ISkeletonComponent skeletonComponent = GetComponent<ISkeletonComponent>();
 			if (skeletonComponent == null) return;
-			var skeleton = skeletonComponent.Skeleton;
+			Skeleton skeleton = skeletonComponent.Skeleton;
 			if (skeleton == null) return;
 
 			combinedSkin = combinedSkin ?? new Skin("combined");
 			combinedSkin.Clear();
-			foreach (var skinName in skinsToCombine) {
-				var skin = skeleton.Data.FindSkin(skinName);
-				if (skin != null) combinedSkin.AddAttachments(skin);
+			foreach (string skinName in skinsToCombine) {
+				Skin skin = skeleton.Data.FindSkin(skinName);
+				if (skin != null) combinedSkin.AddSkin(skin);
 			}
 
 			skeleton.SetSkin(combinedSkin);
 			skeleton.SetToSetupPose();
-			var animationStateComponent = skeletonComponent as IAnimationStateComponent;
+			IAnimationStateComponent animationStateComponent = skeletonComponent as IAnimationStateComponent;
 			if (animationStateComponent != null) animationStateComponent.AnimationState.Apply(skeleton);
 		}
 	}

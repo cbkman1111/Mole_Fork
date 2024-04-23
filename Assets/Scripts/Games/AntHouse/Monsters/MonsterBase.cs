@@ -5,22 +5,23 @@ using UnityEngine;
 using UnityEngine.AI;
 using Spine;
 using Spine.Unity;
+using TileMap;
+using DG.Tweening;
 
 namespace Ant
 {
     public class MonsterBase : MonoBehaviour
     {
+        protected StateMachine<ObjectState> _stateMachine = new StateMachine<ObjectState>();
+
         protected Rigidbody2D rigidBody = null;
         protected SpriteRenderer hand = null;
         protected NavMeshAgent agent = null;
-        
         protected MonsterData objData = null;
 
-        protected SkeletonAnimation skel = null;
+        [SerializeField] 
+        protected SkeletonAnimation _skel = null;
         protected bool loop = false;
-
-        protected enum SkellAnimationState { die, idle, run, run_shoot };
-        protected SkellAnimationState state = SkellAnimationState.idle;
 
         /// <summary>
         /// 
@@ -119,21 +120,72 @@ namespace Ant
             objData.position = transform.position;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="direction"></param>
-        public void Move(Vector3 direction)
+
+        public virtual void Move(Vector3 angle)
         {
-            if (rigidBody != null)
+            switch (_stateMachine.State)
             {
-                hand.transform.position = transform.position + (direction * 0.6f);
+                case ObjectState.None:
+                case ObjectState.Idle:
 
-                var position = transform.position + (direction * objData.speed);
-                rigidBody.MovePosition(position);
+                    if (Mathf.Abs(angle.z) > Mathf.Abs(angle.x))
+                    {
+                        if (angle.z > 0f)
+                            _stateMachine.PushState(ObjectState.MoveUp);
+                        else if (angle.z < 0f)
+                            _stateMachine.PushState(ObjectState.MoveDown);
+                    }
+                    else
+                    {
+                        if (angle.x > 0f)
+                            _stateMachine.PushState(ObjectState.MoveLeft);
+                        else
+                            _stateMachine.PushState(ObjectState.MoveRight);
+                    }
+
+                    break;
+                case ObjectState.MoveLeft:
+                case ObjectState.MoveRight:
+                case ObjectState.MoveUp:
+                case ObjectState.MoveDown:
+
+                    if (Mathf.Abs(angle.z) > Mathf.Abs(angle.x))
+                    {
+                        if (angle.z > 0f)
+                            _stateMachine.PushState(ObjectState.MoveUp);
+                        else if (angle.z < 0f)
+                            _stateMachine.PushState(ObjectState.MoveDown);
+                    }
+                    else
+                    {
+                        if (angle.x > 0f)
+                            _stateMachine.PushState(ObjectState.MoveLeft);
+                        else
+                            _stateMachine.PushState(ObjectState.MoveRight);
+                    }
+
+                    var speed = 0.10f;
+                    var target = transform.position + (angle * speed);
+                    target.y = 0.5f;
+
+                    transform.DOKill();
+                    transform.DOMove(target, 0.1f).
+                        OnUpdate(() =>
+                        {
+                        }).
+                        SetEase(Ease.Linear).
+                        OnComplete(() =>
+                        {
+                            _stateMachine.PushState(ObjectState.Stop);
+                        });
+                    break;
+
+                case ObjectState.Stop:
+
+                    break;
+                case ObjectState.Click:
+                    break;
             }
-
-            SetState(SkellAnimationState.run);
         }
 
         /// <summary>
@@ -141,7 +193,7 @@ namespace Ant
         /// </summary>
         public void Stop()
         {
-            SetState(SkellAnimationState.idle);
+            SetState(ObjectState.Idle);
         }
 
         /// <summary>
@@ -149,8 +201,9 @@ namespace Ant
         /// </summary>
         public void Hit()
         {
-            SetState(SkellAnimationState.run_shoot);
+            SetState(ObjectState.Attack);
         }
+
         protected void HandleEvent(TrackEntry trackEntry, Spine.Event e)
         {
             // Play some sound if the event named "footstep" fired.
@@ -164,27 +217,47 @@ namespace Ant
         /// 
         /// </summary>
         /// <param name="s"></param>
-        protected void SetState(SkellAnimationState s)
+        protected void SetState(ObjectState s)
         {
-            if (s == state)
-                return;
+            _stateMachine.PushState(s);
+        }
 
-            state = s;
-            string name = SkellAnimationState.idle.ToString();
-            switch (state)
+
+        protected virtual void OnEnterState(ObjectState before, ObjectState after)
+        {
+            switch (after)
             {
-                case SkellAnimationState.idle:
-                case SkellAnimationState.run:
-                case SkellAnimationState.die:
-                    loop = true;
+                case ObjectState.Idle:
+                    _skel.state.SetAnimation(0, "movement/idle-front", true);
                     break;
-                case SkellAnimationState.run_shoot:
-                    loop = false;
+                case ObjectState.MoveLeft:
+                    _skel.state.SetAnimation(0, "movement/trot-left", true);
+                    break;
+                case ObjectState.MoveRight:
+                    _skel.state.SetAnimation(0, "movement/trot-right", true);
+                    break;
+                case ObjectState.MoveUp:
+                    _skel.state.SetAnimation(0, "movement/trot-back", true);
+                    break;
+                case ObjectState.MoveDown:
+                    _skel.state.SetAnimation(0, "movement/trot-front", true);
+                    break;
+
+                case ObjectState.Stop:
+                    //_skel.state.SetAnimation(0, "idle", true);
+                    _skel.state.SetAnimation(0, "emotes/sulk", false);
+                    _stateMachine.PushState(ObjectState.Idle);
+                    break;
+                case ObjectState.Click:
+                    if (after == ObjectState.Click)
+                    {
+                        transform.DOPunchScale(transform.forward, 0.1f).OnComplete(() => {
+                            SetState(ObjectState.Idle);
+                        });
+                    }
+
                     break;
             }
-
-            name = state.ToString();
-            skel.state.SetAnimation(0, name, loop);
         }
     }
 }

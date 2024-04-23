@@ -5,6 +5,7 @@ using Common.Global;
 using Common.Scene;
 using Games.AntHouse.Datas;
 using Games.AntHouse.Objects;
+using TileMap;
 using UI.Menu;
 using UnityEngine;
 using UnityEngine.AI;
@@ -109,7 +110,10 @@ namespace Scenes
         /// </summary>
         /// <param name="angle"></param>
         public void OnMove(Vector3 angle)
-        {
+        {            
+            // 탑뷰 시점으로 변환.
+            angle.z = angle.y;
+
             player.Move(angle);
         }
 
@@ -163,6 +167,7 @@ namespace Scenes
             player = Player.Create<Player>(mapData.player, enableAgent: false);
             if (player != null)
             {
+                
                 player.name = "monster_player";
             }
         }

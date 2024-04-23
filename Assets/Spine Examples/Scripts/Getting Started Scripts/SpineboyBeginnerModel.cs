@@ -1,16 +1,16 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated January 1, 2020. Replaces all prior versions.
+ * Last updated July 28, 2023. Replaces all prior versions.
  *
- * Copyright (c) 2013-2020, Esoteric Software LLC
+ * Copyright (c) 2013-2023, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
  * conditions of Section 2 of the Spine Editor License Agreement:
  * http://esotericsoftware.com/spine-editor-license
  *
- * Otherwise, it is permitted to integrate the Spine Runtimes into software
- * or otherwise create derivative works of the Spine Runtimes (collectively,
+ * Otherwise, it is permitted to integrate the Spine Runtimes into software or
+ * otherwise create derivative works of the Spine Runtimes (collectively,
  * "Products"), provided that each user of the Products must obtain their own
  * Spine Editor license and redistribution of the Products in any form must
  * include this license and copyright notice.
@@ -23,12 +23,12 @@
  * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
  * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
- * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE
+ * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
-using UnityEngine;
 using System.Collections;
+using UnityEngine;
 
 namespace Spine.Unity.Examples {
 	[SelectionBase]
@@ -46,7 +46,7 @@ namespace Spine.Unity.Examples {
 		#endregion
 
 		float lastShootTime;
-		public event System.Action ShootEvent;	// Lets other scripts know when Spineboy is shooting. Check C# Documentation to learn more about events and delegates.
+		public event System.Action ShootEvent;  // Lets other scripts know when Spineboy is shooting. Check C# Documentation to learn more about events and delegates.
 		public event System.Action StartAimEvent;   // Lets other scripts know when Spineboy is aiming.
 		public event System.Action StopAimEvent;   // Lets other scripts know when Spineboy is no longer aiming.
 
@@ -60,7 +60,7 @@ namespace Spine.Unity.Examples {
 
 			if (currentTime - lastShootTime > shootInterval) {
 				lastShootTime = currentTime;
-				if (ShootEvent != null) ShootEvent();	// Fire the "ShootEvent" event.
+				if (ShootEvent != null) ShootEvent();   // Fire the "ShootEvent" event.
 			}
 		}
 
@@ -88,13 +88,13 @@ namespace Spine.Unity.Examples {
 		#endregion
 
 		IEnumerator JumpRoutine () {
-			if (state == SpineBeginnerBodyState.Jumping) yield break;	// Don't jump when already jumping.
+			if (state == SpineBeginnerBodyState.Jumping) yield break;   // Don't jump when already jumping.
 
 			state = SpineBeginnerBodyState.Jumping;
 
 			// Fake jumping.
 			{
-				var pos = transform.localPosition;
+				Vector3 pos = transform.localPosition;
 				const float jumpTime = 1.2f;
 				const float half = jumpTime * 0.5f;
 				const float jumpPower = 20f;

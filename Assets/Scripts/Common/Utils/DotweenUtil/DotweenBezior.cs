@@ -85,7 +85,9 @@ public class DotweenBezior : MonoBehaviour
         Gizmos.DrawLine(wp_a.position, handl_c.position);
         Gizmos.DrawLine(wp_b.position, handl_d.position);
 
+#if UNITY_EDITOR
         Handles.DrawBezier(StartPoint.position, wp_a.position, handl_a.position, handl_b.position, Color.red, null, 2);
         Handles.DrawBezier(wp_a.position, wp_b.position, handl_c.position, handl_d.position, Color.red, null, 2);
+#endif
     }
 }

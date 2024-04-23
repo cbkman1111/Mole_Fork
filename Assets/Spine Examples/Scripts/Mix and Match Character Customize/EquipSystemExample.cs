@@ -1,16 +1,16 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated January 1, 2020. Replaces all prior versions.
+ * Last updated July 28, 2023. Replaces all prior versions.
  *
- * Copyright (c) 2013-2020, Esoteric Software LLC
+ * Copyright (c) 2013-2023, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
  * conditions of Section 2 of the Spine Editor License Agreement:
  * http://esotericsoftware.com/spine-editor-license
  *
- * Otherwise, it is permitted to integrate the Spine Runtimes into software
- * or otherwise create derivative works of the Spine Runtimes (collectively,
+ * Otherwise, it is permitted to integrate the Spine Runtimes into software or
+ * otherwise create derivative works of the Spine Runtimes (collectively,
  * "Products"), provided that each user of the Products must obtain their own
  * Spine Editor license and redistribution of the Products in any form must
  * include this license and copyright notice.
@@ -23,15 +23,14 @@
  * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
  * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
- * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE
+ * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
+using Spine.Unity.AttachmentTools;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-using Spine.Unity.AttachmentTools;
 
 namespace Spine.Unity.Examples {
 	public class EquipSystemExample : MonoBehaviour, IHasSkeletonDataAsset {
@@ -54,7 +53,7 @@ namespace Spine.Unity.Examples {
 			public string slot;
 			[SpineSkin]
 			public string templateSkin;
-			[SpineAttachment(skinField:"templateSkin")]
+			[SpineAttachment(skinField: "templateSkin")]
 			public string templateAttachment;
 		}
 
@@ -64,12 +63,12 @@ namespace Spine.Unity.Examples {
 		}
 
 		public void Equip (EquipAssetExample asset) {
-			var equipType = asset.equipType;
+			EquipType equipType = asset.equipType;
 			EquipHook howToEquip = equippables.Find(x => x.type == equipType);
 
-			var skeletonData = skeletonDataAsset.GetSkeletonData(true);
-			int slotIndex = skeletonData.FindSlotIndex(howToEquip.slot);
-			var attachment = GenerateAttachmentFromEquipAsset(asset, slotIndex, howToEquip.templateSkin, howToEquip.templateAttachment);
+			SkeletonData skeletonData = skeletonDataAsset.GetSkeletonData(true);
+			int slotIndex = skeletonData.FindSlot(howToEquip.slot).Index;
+			Attachment attachment = GenerateAttachmentFromEquipAsset(asset, slotIndex, howToEquip.templateSkin, howToEquip.templateAttachment);
 			target.Equip(slotIndex, howToEquip.templateAttachment, attachment);
 		}
 
@@ -78,8 +77,8 @@ namespace Spine.Unity.Examples {
 			cachedAttachments.TryGetValue(asset, out attachment);
 
 			if (attachment == null) {
-				var skeletonData = skeletonDataAsset.GetSkeletonData(true);
-				var templateSkin = skeletonData.FindSkin(templateSkinName);
+				SkeletonData skeletonData = skeletonDataAsset.GetSkeletonData(true);
+				Skin templateSkin = skeletonData.FindSkin(templateSkinName);
 				Attachment templateAttachment = templateSkin.GetAttachment(slotIndex, templateAttachmentName);
 				attachment = templateAttachment.GetRemappedClone(asset.sprite, sourceMaterial, premultiplyAlpha: this.applyPMA);
 				// Note: Each call to `GetRemappedClone()` with parameter `premultiplyAlpha` set to `true` creates

@@ -1,16 +1,16 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated January 1, 2020. Replaces all prior versions.
+ * Last updated July 28, 2023. Replaces all prior versions.
  *
- * Copyright (c) 2013-2020, Esoteric Software LLC
+ * Copyright (c) 2013-2023, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
  * conditions of Section 2 of the Spine Editor License Agreement:
  * http://esotericsoftware.com/spine-editor-license
  *
- * Otherwise, it is permitted to integrate the Spine Runtimes into software
- * or otherwise create derivative works of the Spine Runtimes (collectively,
+ * Otherwise, it is permitted to integrate the Spine Runtimes into software or
+ * otherwise create derivative works of the Spine Runtimes (collectively,
  * "Products"), provided that each user of the Products must obtain their own
  * Spine Editor license and redistribution of the Products in any form must
  * include this license and copyright notice.
@@ -23,12 +23,12 @@
  * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
  * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
- * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE
+ * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Spine.Unity.Examples {
 
@@ -60,7 +60,7 @@ namespace Spine.Unity.Examples {
 			Destroy(shadowRoot.GetComponent<SkeletonUtilityKinematicShadow>());
 
 			// Prepare shadow gameObject's properties.
-			var shadowRootTransform = shadowRoot.transform;
+			Transform shadowRootTransform = shadowRoot.transform;
 			shadowRootTransform.position = transform.position;
 			shadowRootTransform.rotation = transform.rotation;
 
@@ -79,19 +79,19 @@ namespace Spine.Unity.Examples {
 			if (hideShadow)
 				shadowRoot.hideFlags = HideFlags.HideInHierarchy;
 
-			var shadowJoints = shadowRoot.GetComponentsInChildren<Joint>();
+			Joint[] shadowJoints = shadowRoot.GetComponentsInChildren<Joint>();
 			foreach (Joint j in shadowJoints)
 				j.connectedAnchor *= scale;
 
 			// Build list of bone pairs (matches shadow transforms with bone transforms)
-			var bones = GetComponentsInChildren<SkeletonUtilityBone>();
-			var shadowBones = shadowRoot.GetComponentsInChildren<SkeletonUtilityBone>();
-			foreach (var b in bones) {
+			SkeletonUtilityBone[] bones = GetComponentsInChildren<SkeletonUtilityBone>();
+			SkeletonUtilityBone[] shadowBones = shadowRoot.GetComponentsInChildren<SkeletonUtilityBone>();
+			foreach (SkeletonUtilityBone b in bones) {
 				if (b.gameObject == this.gameObject)
 					continue;
 
 				System.Type checkType = (physicsSystem == PhysicsSystem.Physics2D) ? typeof(Rigidbody2D) : typeof(Rigidbody);
-				foreach (var sb in shadowBones) {
+				foreach (SkeletonUtilityBone sb in shadowBones) {
 					if (sb.GetComponent(checkType) != null && sb.boneName == b.boneName) {
 						shadowTable.Add(new TransformPair {
 							dest = b.transform,
@@ -118,17 +118,17 @@ namespace Spine.Unity.Examples {
 
 		void FixedUpdate () {
 			if (physicsSystem == PhysicsSystem.Physics2D) {
-				var shadowRootRigidbody = shadowRoot.GetComponent<Rigidbody2D>();
+				Rigidbody2D shadowRootRigidbody = shadowRoot.GetComponent<Rigidbody2D>();
 				shadowRootRigidbody.MovePosition(transform.position);
 				shadowRootRigidbody.MoveRotation(transform.rotation.eulerAngles.z);
 			} else {
-				var shadowRootRigidbody = shadowRoot.GetComponent<Rigidbody>();
+				Rigidbody shadowRootRigidbody = shadowRoot.GetComponent<Rigidbody>();
 				shadowRootRigidbody.MovePosition(transform.position);
 				shadowRootRigidbody.MoveRotation(transform.rotation);
 			}
 
 			for (int i = 0, n = shadowTable.Count; i < n; i++) {
-				var pair = shadowTable[i];
+				TransformPair pair = shadowTable[i];
 				pair.dest.localPosition = pair.src.localPosition;
 				pair.dest.localRotation = pair.src.localRotation;
 			}
