@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8fbcadf52cc72c6469d18de5e6d3bb45, type: 2}
+  - {fileID: 2100000, guid: 54091ef934c41eb4192f72bfd8e3bcc9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -96,8 +96,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skeletonDataAsset: {fileID: 11400000, guid: c557db443ca2522429ee528fe544f6e4, type: 2}
-  initialSkinName: 
+  skeletonDataAsset: {fileID: 11400000, guid: 2e4e11d4dd87d844a876d18c4d76a612, type: 2}
+  initialSkinName: goblin
   fixPrefabOverrideViaMeshFilter: 2
   initialFlipX: 0
   initialFlipY: 0
@@ -119,8 +119,11 @@ MonoBehaviour:
     materialsInsideMask: []
     materialsOutsideMask: []
   disableRenderingOnOverride: 1
+  physicsPositionInheritanceFactor: {x: 1, y: 1}
+  physicsRotationInheritanceFactor: 1
+  physicsMovementRelativeTo: {fileID: 0}
   updateTiming: 1
   unscaledTime: 0
-  _animationName: idle
+  _animationName: walk
   loop: 1
   timeScale: 1

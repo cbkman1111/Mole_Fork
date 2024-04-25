@@ -50,10 +50,6 @@ namespace UI.Menu
             {
                 AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneBundle);
             }
-            else if (name == "Button - Spine")
-            {
-                AppManager.Instance.ChangeScene(SceneBase.Scenes.Demo);
-            }
             else if (name == "Button - Maze")
             {
                 AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneMaze);
