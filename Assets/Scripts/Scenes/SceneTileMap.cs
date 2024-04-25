@@ -1,8 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using Ant;
 using Common.Global;
 using Common.Scene;
 using Common.Utils.Pool;
@@ -23,21 +20,15 @@ namespace Scenes
 
         public MapData MapData => _mapData;
         private MapData _mapData = null;
-        
         private UIMenuTileMap _menu = null;
         private Map _map = null;
-        private Pige _player = null;
-
-        private float _ditanceCamera = 0;
-
-        private MEC.CoroutineHandle handler;
-        
+        private Pige _luke = null;
+        private WorldObject _player = null;
+        private float _ditanceCamera = 0;        
         RaycastHit[] _hits = new RaycastHit[10];
 
         public SkeletonAnimation skelDragon = null;
-
-        [SerializeField] 
-        private SkinMixAndMatch _skelWoody;
+        public Buffalo _beefalo = null;
 
         /// <summary>
         /// 
@@ -47,6 +38,11 @@ namespace Scenes
         {
             _ditanceCamera = 5;
             
+            //MainCamera.transparencySortMode = UnityEngine.TransparencySortMode.Orthographic;
+            //MainCamera.transparencySortAxis = new Vector3(0, 0, 1);
+
+            _beefalo.Init(100, 101, Vector3.one);
+
             _menu = UIManager.Instance.OpenMenu<UIMenuTileMap>("UIMenuTileMap");
             if (_menu != null)
             {
@@ -70,61 +66,71 @@ namespace Scenes
                         _ditanceCamera = 5 + amount;
                     },
                     nextHead:() => {
-                        _skelWoody.NextHeadSkin();
+                        //_skelWoody.NextHeadSkin();
+                        var skin = _beefalo.GetComponent<SkinMixAndMatch>();
+                        if(skin != null)
+                            skin.NextHeadSkin();
                     },
                     nextWeapone:() => {
-                        _skelWoody.NextWeaponeSkin();
-                    },
-                    seat:() => { 
+                        //_skelWoody.NextWeaponeSkin();
+                        var skin = _beefalo.GetComponent<SkinMixAndMatch>();
+                        if(skin != null)
+                            skin.NextWeaponeSkin();
 
+                    },
+                    seat:() => {
+                        var player = _player;
+                        _player = _beefalo;
+
+                        _beefalo.Seat(player);
+                    },
+                    unSeat: () => {
+                        _player = _beefalo.Unseat();
                     });
             }
 
+            string pathPrefab = "Prefab";
+            string pathCretures = $"{pathPrefab}/Creature";
             PoolManager.Instance.InitList(
-                ResourcesManager.Instance.LoadInBuild<Transform>("TileGround"),
-                ResourcesManager.Instance.LoadInBuild<Transform>("TileWater"),
+                ResourcesManager.Instance.LoadInBuild<Transform>($"{pathPrefab}/TileGround"),
+                ResourcesManager.Instance.LoadInBuild<Transform>($"{pathPrefab}/TileWater"),
                 
-                ResourcesManager.Instance.LoadInBuild<Transform>("Bush"),
-                ResourcesManager.Instance.LoadInBuild<Transform>("PineTree"),
-                ResourcesManager.Instance.LoadInBuild<Transform>("Sapling"),
-                ResourcesManager.Instance.LoadInBuild<Transform>("SeaWeed"),
-                
-                ResourcesManager.Instance.LoadInBuild<Transform>("Mushroom_empty"),
-                ResourcesManager.Instance.LoadInBuild<Transform>("Mushroom_green"),
-                ResourcesManager.Instance.LoadInBuild<Transform>("Mushroom_red"),
-                ResourcesManager.Instance.LoadInBuild<Transform>("Mushroom_seed"),
-                ResourcesManager.Instance.LoadInBuild<Transform>("Mushroom_sky"),
-
-                ResourcesManager.Instance.LoadInBuild<Transform>("Bee"),
-                ResourcesManager.Instance.LoadInBuild<Transform>("Spider"),
-                ResourcesManager.Instance.LoadInBuild<Transform>("FishMan"),
-                ResourcesManager.Instance.LoadInBuild<Transform>("FishA"));
+                ResourcesManager.Instance.LoadInBuild<Transform>($"{pathCretures}/Bush"),
+                ResourcesManager.Instance.LoadInBuild<Transform>($"{pathCretures}/PineTree"),
+                ResourcesManager.Instance.LoadInBuild<Transform>($"{pathCretures}/Sapling"),
+                ResourcesManager.Instance.LoadInBuild<Transform>($"{pathCretures}/SeaWeed"),
+                ResourcesManager.Instance.LoadInBuild<Transform>($"{pathCretures}/Mushroom_empty"),
+                ResourcesManager.Instance.LoadInBuild<Transform>($"{pathCretures}/Mushroom_green"),
+                ResourcesManager.Instance.LoadInBuild<Transform>($"{pathCretures}/Mushroom_red"),
+                ResourcesManager.Instance.LoadInBuild<Transform>($"{pathCretures}/Mushroom_seed"),
+                ResourcesManager.Instance.LoadInBuild<Transform>($"{pathCretures}/Mushroom_sky"),
+                ResourcesManager.Instance.LoadInBuild<Transform>($"{pathCretures}/Bee"),
+                ResourcesManager.Instance.LoadInBuild<Transform>($"{pathCretures}/Spider"),
+                ResourcesManager.Instance.LoadInBuild<Transform>($"{pathCretures}/FishMan"),
+                ResourcesManager.Instance.LoadInBuild<Transform>($"{pathCretures}/FishA"));
             
             var startX = _mapData.X;
             var startZ = _mapData.Z;
-
+            var width = _mapData.Width;
+            var height = _mapData.Height;
+            
             // 맵 생성.
-            const int displayW = 13;
-            const int displayUpSide = 12;
-            const int displayDownSide = 5;
-            var prefabMap = ResourcesManager.Instance.LoadInBuild<Map>("Map");
+            const int displayW = 10;
+            const int displayUpSide = 10;
+            const int displayDownSide = 10;
+
+            var prefabMap = ResourcesManager.Instance.LoadInBuild<Map>($"{pathPrefab}/Map");
             _map = GameObject.Instantiate<Map>(prefabMap);
             _map.transform.position = Vector3.zero;
             _map.Init(_mapData, startX, startZ, displayW, displayUpSide, displayDownSide);
             
             // 캐릭터 생성.
-            var prefab = ResourcesManager.Instance.LoadInBuild<Pige>("Player");
-            _player = GameObject.Instantiate<Pige>(prefab);
-            _player.name = "luke";
-            _player.Init(startX, 1, startZ, new Vector3(0.15f, 0.15f, 0.15f));
+            var prefab = ResourcesManager.Instance.LoadInBuild<Pige>($"{pathPrefab}/Player");
+            _luke = GameObject.Instantiate<Pige>(prefab);
+            _luke.name = "luke";
+            _luke.Init(startX, startZ, new Vector3(0.15f, 0.15f, 0.15f));
 
-
-            var seat = skelDragon.skeleton.FindSlot("seat");
-            if(seat != null)
-            {
-                var man = new GameObject();
-                //man.transform.SetParent(seat.Skeleton.tra)
-            }
+            _player = _luke;
 
             // 카메라 위치 초기화.
             MainCamera.transform.position = Vector3.zero;
@@ -167,9 +173,9 @@ namespace Scenes
 
             var w = _mapData.Width;
             var h = _mapData.Height;
-            var loopCount = w * h;
+            //var loopCount = w * h;
             var smoothCount = 5;
-            var total = loopCount * 2 * smoothCount;
+            //var total = loopCount * 2 * smoothCount;
             var index = 0;
 
             var centerX = (int)(w * 0.5f);
@@ -236,6 +242,7 @@ namespace Scenes
                 }
             }
 
+            
             // 나무 심기.
             for (var x = 0; x < w; x++)
             {
@@ -279,6 +286,7 @@ namespace Scenes
                     //Amount = (float)index / (float)total;
                 }
             }
+            
 
             // 벌 소환.
             for (var x = 0; x < w; x++)
@@ -320,7 +328,7 @@ namespace Scenes
                     }
                 }
             }
-
+     
 
             update(1f);
             //Amount = 1f;
@@ -373,56 +381,22 @@ namespace Scenes
         {
   
         }
-
-        private IEnumerator<float> UpdateTileObjects(int x, int y)
-        {
-            yield return MEC.Timing.WaitForOneFrame;
-        }
-        
-        /*
-        IEnumerator LoadGameObjectAndMaterial()
-        {
-            //Load a GameObject
-            AsyncOperationHandle<GameObject> goHandle = Addressables.LoadAssetAsync<GameObject>("gameObjectKey");
-            yield return goHandle;
-            if(goHandle.Status == AsyncOperationStatus.Succeeded)
-            {
-                GameObject obj = goHandle.Result;
-                //etc...
-            }
-        
-            //Load a Material
-            AsyncOperationHandle<IList<IResourceLocation>> locationHandle = Addressables.LoadResourceLocationsAsync("materialKey");
-            yield return locationHandle;
-            AsyncOperationHandle<Material> matHandle = Addressables.LoadAssetAsync<Material>(locationHandle.Result[0]);
-            yield return matHandle;
-            if (matHandle.Status == AsyncOperationStatus.Succeeded)
-            {
-                Material mat = matHandle.Result;
-                //etc...
-            }
-        
-            //Use this only when the objects are no longer needed
-            Addressables.Release(goHandle);
-            Addressables.Release(matHandle);
-        }
-        */
         
         /// <summary>
         /// 
         /// </summary>
         public override void OnUpdate()
         {
-            if (_player == true)
+            if (_player != null)
             {
-                var cameraPosition = _player.transform.position + /*new Vector3(0, 1, 0) +*/
+                var cameraPosition = _player.transform.position + 
                                      _player.transform.GetChild(0).forward * -_ditanceCamera;
 
                 if (Vector3.Distance(MainCamera.transform.position, cameraPosition) > 0.1f)
                 {
                     if (MainCamera.transform.position == Vector3.zero)
                     {
-                        MainCamera.transform.position = _player.transform.position + /*new Vector3(0, 1, 0) + */
+                        MainCamera.transform.position = _player.transform.position + 
                                                         _player.transform.GetChild(0).forward * -_ditanceCamera;
                     }
                     else
@@ -436,14 +410,15 @@ namespace Scenes
                    (int)_player.transform.position.z != _player.z)
                 {
                     _player.x = (int)_player.transform.position.x;
-                    _player.z = (int)_player.transform.position.z;
+                    _player.z = (int)_player.transform.position.z * 100;
 
                     // 새 좌표에 해당하는 타일로 업데이트.
-                    handler.IsRunning = false;
-                    handler = MEC.Timing.RunCoroutine(_map.UpdateTiles(_player.x, _player.z));
-                   
+                    //handler.IsRunning = false;
+                    //handler = MEC.Timing.RunCoroutine(_map.UpdateTiles(_player.x, _player.z));
                 }
             }
+
+
             if (Input.GetKey(KeyCode.A))
             {
                 OnMove(Vector3.left);

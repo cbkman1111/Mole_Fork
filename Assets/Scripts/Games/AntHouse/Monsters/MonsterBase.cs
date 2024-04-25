@@ -7,6 +7,7 @@ using Spine;
 using Spine.Unity;
 using TileMap;
 using DG.Tweening;
+using UnityEditorInternal;
 
 namespace Ant
 {
@@ -80,7 +81,9 @@ namespace Ant
             agent.enabled = enableAgent;
             agent.speed = objData.speed;
             transform.position = data.position;
-
+            _stateMachine.OnEnterState = OnEnterState;
+            _stateMachine.OnPopState = OnPopState;
+            _stateMachine.PushState(ObjectState.Idle);
             hand = transform.Find("Hand").GetComponent<SpriteRenderer>();
             return true;
         }
@@ -123,11 +126,17 @@ namespace Ant
 
         public virtual void Move(Vector3 angle)
         {
+            if (rigidBody != null)
+            {
+                hand.transform.position = transform.position + (angle * 0.6f);
+                var position = transform.position + (angle * objData.speed);
+                rigidBody.MovePosition(position);
+            }
+
             switch (_stateMachine.State)
             {
-                case ObjectState.None:
+                //case ObjectState.None:
                 case ObjectState.Idle:
-
                     if (Mathf.Abs(angle.z) > Mathf.Abs(angle.x))
                     {
                         if (angle.z > 0f)
@@ -164,10 +173,10 @@ namespace Ant
                             _stateMachine.PushState(ObjectState.MoveRight);
                     }
 
+                    /*
                     var speed = 0.10f;
                     var target = transform.position + (angle * speed);
                     target.y = 0.5f;
-
                     transform.DOKill();
                     transform.DOMove(target, 0.1f).
                         OnUpdate(() =>
@@ -178,6 +187,7 @@ namespace Ant
                         {
                             _stateMachine.PushState(ObjectState.Stop);
                         });
+                    */
                     break;
 
                 case ObjectState.Stop:
@@ -222,6 +232,9 @@ namespace Ant
             _stateMachine.PushState(s);
         }
 
+        protected virtual void OnPopState(ObjectState state)
+        {
+        }
 
         protected virtual void OnEnterState(ObjectState before, ObjectState after)
         {

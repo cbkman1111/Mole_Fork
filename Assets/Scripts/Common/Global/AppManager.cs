@@ -1,13 +1,12 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Common.Global.Singleton;
 using Common.Scene;
 using Common.Utils.Pool;
 using Network;
 using Scenes;
+using System;
+using System.Collections;
+using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -208,9 +207,6 @@ namespace Common.Global
                         break;
                     case SceneBase.Scenes.SceneBundle:
                         scene = obj.AddComponent<SceneBundle>();
-                        break;
-                    case SceneBase.Scenes.Demo:
-                        scene = obj.AddComponent<SceneDemo>();
                         break;
                     case SceneBase.Scenes.SceneMaze:
                         scene = obj.AddComponent<SceneMaze>();

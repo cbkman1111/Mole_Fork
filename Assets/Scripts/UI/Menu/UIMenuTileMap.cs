@@ -18,14 +18,15 @@ namespace UI.Menu
         private Action<float> zoomCamera = null;
         private Action nextHead = null;
         private Action nextWeapone = null;
-        private Action seatPet = null;
+        private Action seat = null;
+        private Action unSeat = null;
 
         public override void OnInit()
         {
 
         }
 
-        public bool InitMenu(Action<Vector3> move, Action stop, Action save, Action<float> zoom, Action nextHead, Action nextWeapone, Action seat)
+        public bool InitMenu(Action<Vector3> move, Action stop, Action save, Action<float> zoom, Action nextHead, Action nextWeapone, Action seat, Action unSeat)
         {
             joystick.Init((Vector3 direct, float angle) => {
                     SetText("Text - Debug", $"Angle : {angle}");
@@ -41,7 +42,8 @@ namespace UI.Menu
             this.zoomCamera = zoom;
             this.nextHead = nextHead;
             this.nextWeapone = nextWeapone;
-            this.seatPet = seat;
+            this.seat = seat;
+            this.unSeat = unSeat;
 
             SetObjectInfo(string.Empty);
             return true;
@@ -96,7 +98,11 @@ namespace UI.Menu
             }
             else if (btnName == "Button - Seat")
             {
-                seatPet?.Invoke();
+                seat?.Invoke();
+            }
+            else if (btnName == "Button - UnSeat")
+            {
+                unSeat?.Invoke();
             }
         }
     }

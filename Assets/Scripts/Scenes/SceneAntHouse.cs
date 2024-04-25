@@ -112,8 +112,7 @@ namespace Scenes
         public void OnMove(Vector3 angle)
         {            
             // 탑뷰 시점으로 변환.
-            angle.z = angle.y;
-
+            //angle.z = angle.y;
             player.Move(angle);
         }
 
@@ -167,7 +166,7 @@ namespace Scenes
             player = Player.Create<Player>(mapData.player, enableAgent: false);
             if (player != null)
             {
-                
+                player.SetScale(new Vector3(0.3f, 0.3f, 0.3f));
                 player.name = "monster_player";
             }
         }

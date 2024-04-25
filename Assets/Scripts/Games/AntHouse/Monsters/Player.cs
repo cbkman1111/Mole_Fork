@@ -7,6 +7,10 @@ namespace Ant
 {
     public class Player : MonsterBase
     {
+        public void SetScale(Vector3 scale)
+        {
+            _skel.transform.localScale = scale;
+        }
         /// <summary>
         /// 
         /// </summary>

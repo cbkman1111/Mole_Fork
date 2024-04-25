@@ -62,3 +62,15 @@ TagManager:
   - name: UI
     uniqueID: 58496801
     locked: 0
+  - name: Skel_WorldObject
+    uniqueID: 2897686109
+    locked: 0
+  - name: Skel_Body
+    uniqueID: 2339521307
+    locked: 0
+  - name: Skel_Hero
+    uniqueID: 1714399959
+    locked: 0
+  - name: Skel_Head
+    uniqueID: 1435022787
+    locked: 0

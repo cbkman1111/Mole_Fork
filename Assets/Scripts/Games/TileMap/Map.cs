@@ -57,7 +57,7 @@ namespace Games.TileMap
                         if (obj == true)
                         {
                             objList[0].obj = obj;
-                            obj.Init(x, 1,z, Vector3.one);
+                            obj.Init(x, z, Vector3.one);
                             objects.Add(obj);
                         }
                     }
@@ -248,7 +248,7 @@ namespace Games.TileMap
                                     WorldObject obj = GetWorldObject(objData);
                                     if (obj == true)
                                     {
-                                        obj.Init(x, 1, z, Vector3.one);
+                                        obj.Init(x, z, Vector3.one);
                                         objData.obj = obj;
                                         objects.Add(obj);
                                     }

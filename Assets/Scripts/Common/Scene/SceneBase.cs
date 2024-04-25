@@ -25,7 +25,6 @@ namespace Common.Scene
             SceneTextRpg, // 텍스트 RPG
             SceneDotween, // 닷트윈 테스트.
 
-            Demo
         }
 
         //public float Amount { get; set; } = 0;
