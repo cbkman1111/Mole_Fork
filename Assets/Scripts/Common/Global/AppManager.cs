@@ -1,5 +1,6 @@
 using Common.Global.Singleton;
 using Common.Scene;
+using Common.Utils;
 using Common.Utils.Pool;
 using Network;
 using Scenes;
@@ -31,7 +32,9 @@ namespace Common.Global
         {
             SoundManager.Instance.Load();
             DataManager.Instance.Load();
-            NetworkManager.Instance.Connect();
+            ResourcesManager.Instance.Load();
+
+            //NetworkManager.Instance.Connect();
             return true;
         }
 
@@ -104,6 +107,7 @@ namespace Common.Global
         /// <returns></returns>
         private IEnumerator LoadScene(string sceneName, bool loading)
         {
+            GiantDebug.Log("AppManager - LoadScene 1");
             _loadingPercent = 0f;
             if (_currScene != null)
             {
@@ -115,6 +119,8 @@ namespace Common.Global
             AsyncOperation asyncNextOperator = null;
             if (loading == true)
             {
+                GiantDebug.Log("AppManager - LoadScene 2");
+
                 // 로딩 메뉴를 띄우고 수치를 갱신.
                 var loadingMenu = UIManager.Instance.OpenMenu<UILoadingMenu>("UILoadingMenu") as UILoadingMenu;
                 var handle = StartCoroutine(UpdateLoadPercent(loadingMenu));
@@ -123,6 +129,9 @@ namespace Common.Global
                 asyncNextOperator = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
                 asyncNextOperator.allowSceneActivation = true;
                 asyncNextOperator.completed += (AsyncOperation operation) => {
+                    
+                    GiantDebug.Log("AppManager - LoadScene 2 - 1");
+
                     _currScene = CreateSceneObject(sceneName);
                     _currScene.MainCamera = Camera.main;
                     
@@ -134,6 +143,8 @@ namespace Common.Global
                     }).
                     // 테스크 완료후 동기로 받음.
                     ContinueWith(preTask => {
+
+                        GiantDebug.Log("AppManager - LoadScene 2 - 3");
                         StopCoroutine(handle);
                         StartCoroutine(InitScene(loadingMenu));
                     }, TaskScheduler.FromCurrentSynchronizationContext());
@@ -141,21 +152,34 @@ namespace Common.Global
             }
             else
             {
+                GiantDebug.Log("AppManager - LoadScene 3");
+
                 asyncNextOperator = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
                 asyncNextOperator.allowSceneActivation = true;
                 asyncNextOperator.completed += (AsyncOperation operation) => {
+                    Debug.Log("AppManager - LoadScene 3 - 1");
+
                     SceneBase changeScnene = CreateSceneObject(sceneName);
+                    if (changeScnene == null)
+                        Debug.LogError("AppManager - 3 - 2 changeScnene  is null.");
+
                     _currScene = changeScnene;
                     _currScene.MainCamera = Camera.main;
-
                     Task.Run(() => {
+                        Debug.Log("AppManager - LoadScene 3 - 2");
                         _currScene.Load((percent) => {
                             _loadingPercent = percent;
+
+                            Debug.Log("AppManager - LoadScene 3 - 3");
                         });
                     }).
                     ContinueWith(preTask => {
-                        _currScene.Init(_param);
+                        Debug.Log("AppManager - LoadScene 3 - 4");
+
+                       
                     }, TaskScheduler.FromCurrentSynchronizationContext());
+
+                     _currScene.Init(_param);
                 };
 
                 yield return null;
@@ -169,6 +193,8 @@ namespace Common.Global
         /// <returns>참조된 씬 객체</returns>
         private SceneBase CreateSceneObject(string sceneName)
         {
+            Debug.Log("AppManager - CreateSceneObject 1");
+
             SceneBase scene = null; //GetSceneComponent(name);
             var activeScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
             var root = activeScene.GetRootGameObjects()[0];
@@ -176,6 +202,8 @@ namespace Common.Global
             GameObject sceneObject = GameObject.Find(sceneName);
             if (sceneObject == null)
             {
+                Debug.Log("AppManager - CreateSceneObject 1 - 1");
+
                 var obj = new GameObject(sceneName);
                 obj.transform.SetParent(root.transform.parent);
 
@@ -229,6 +257,7 @@ namespace Common.Global
             }
             else 
             {
+                Debug.Log("AppManager - CreateSceneObject 1 - 2");
                 scene = sceneObject.GetComponent<SceneBase>();
             }
             
@@ -287,15 +316,29 @@ namespace Common.Global
                 var touch = touches[0]; 
                 phase = touch.phase;
 
-                var position = touch.position;
+                Vector3 position = touch.position;
                 if (phase == TouchPhase.Began)
+                {
                     OnTouchBean(position);
-                else if (phase == TouchPhase.Moved)
-                    OnTouchMove(position, touch.deltaPosition);
+                    lastMousePosition = position;
+                }
+                else if (phase == TouchPhase.Moved ||
+                        phase == TouchPhase.Stationary)
+                {
+                    OnTouchMove(position, lastMousePosition - position);
+                    lastMousePosition = position;
+                }
+                /*
                 else if (phase == TouchPhase.Stationary)
+                {
                     OnTouchStationary(position);
+                }
+                */
                 else if (phase == TouchPhase.Ended)
+                {
                     OnTouchEnd(position);
+                    lastMousePosition = Vector3.zero;
+                }
                 else if (phase == TouchPhase.Canceled)
                     OnTouchCancle(position);
             }

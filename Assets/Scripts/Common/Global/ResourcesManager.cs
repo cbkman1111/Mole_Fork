@@ -8,18 +8,11 @@ namespace Common.Global
 {
     public class ResourcesManager : MonoSingleton<ResourcesManager>
     {
-        string path = "Assets/AssetBundles/bundle";
+        string path = "Assets/AssetBundles/AssetBundles";
         private AssetBundle bundle = null;
-        List<Object> list = null;
 
         protected override bool Init()
         {
-            list = new List<Object>();
-
-            //Load();
-            
-            //Addressables.InitializeAsync();
-            
             return true;
         }
         
@@ -32,7 +25,6 @@ namespace Common.Global
             //WWW.LoadFromCacheOrDownload (on Unity 5.6 or older)
             //AssetBundleManifest manifest = (AssetBundleManifest)ab.LoadAsset("AssetBundleManifest");
             bundle = AssetBundle.LoadFromFile(path);
-
             return bundle != null;
         }
 
@@ -48,6 +40,9 @@ namespace Common.Global
 
         public T LoadBundle<T>(string path) where T : Object
         {
+            if(bundle == null)
+                return default;
+
             T res = bundle.LoadAsset<T>(path);
             if(res != null)
             {

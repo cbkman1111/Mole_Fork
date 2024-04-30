@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using BehaviorDesigner.Runtime.Tasks;
 using Common.Global.Singleton;
 using Common.UIObject;
+using Common.Utils;
 using UnityEngine;
-using Object = UnityEngine.Object;
+
 
 namespace Common.Global
 {
@@ -22,19 +21,23 @@ namespace Common.Global
         // ReSharper disable Unity.PerformanceAnalysic
         protected override bool Init()
         {
+            GiantDebug.Log($"{tag} - Init");
+
             const string uiRoot = "UI/UIRoot";
             var prefab = ResourcesManager.Instance.LoadInBuild<GameObject>(uiRoot);
             var obj = Instantiate(prefab, transform);
             if(obj == false)
             {
-                Debug.LogError($"root is null.");
+                GiantDebug.LogError($"root is null.");
                 return false;
             }
 
             obj.name = "UIRoot";
             obj.transform.position = new Vector3(100,0,0);
             rootObject = obj.GetComponent<UIRoot>();
-return true;
+
+            GiantDebug.Log($"{tag} - Init return true.");
+            return true;
         }
 
         public T OpenMenu<T>(string menuName) where T : MenuBase
@@ -142,10 +145,25 @@ return true;
         {
             _cover.SetParent(rootObject.transform);
 
-            _controllerMenu?.Clear();
-            _controllerHud?.Clear();
-            _controllerPopup?.Clear();
-            _controllerEtc?.Clear();
+            if (_controllerMenu != null)
+            {
+                _controllerMenu.Clear();
+            }
+
+            if (_controllerHud != null)
+            {
+                _controllerHud.Clear();
+            }
+
+            if (_controllerPopup != null)
+            {
+                _controllerPopup.Clear();
+            }
+
+            if (_controllerEtc != null)
+            {
+                _controllerEtc.Clear();
+            }
         }
 
         public void BackKey()

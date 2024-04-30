@@ -1,5 +1,6 @@
 using Common.Global;
 using Common.Scene;
+using Common.Utils;
 using UI.Menu;
 using UnityEngine;
 
@@ -9,13 +10,18 @@ namespace Scenes
     {
         public override bool Init(JSONObject param)
         {
-            UIMenuIntro menu = UIManager.Instance.OpenMenu<UIMenuIntro>("UIMenuIntro");
-            if(menu != null)
-            {
-                menu.InitMenu();
-            }
+            GiantDebug.Log($"SceneIntro init. start.");
 
-    
+            UIMenuIntro menu = UIManager.Instance.OpenMenu<UIMenuIntro>("UIMenuIntro");
+            GiantDebug.Log($"SceneIntro init. {menu}");
+
+            if(menu == null)
+            {
+                GiantDebug.LogError($"{tag} menu is null.");
+                return false;
+            }
+            
+            menu.InitMenu();
             return true;
         }
 

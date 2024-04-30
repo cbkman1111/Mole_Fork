@@ -41,6 +41,7 @@ namespace Games.TileMap
                     // 타일 리스트.
                     if (tileData != null)
                     {
+                        /*
                         var tile = GetTile(tileData);
                         if (tile == true)
                         {
@@ -48,6 +49,7 @@ namespace Games.TileMap
                             tile.Init(tileData, x, z);
                             tiles.Add(tile);
                         }
+                        */
                     }
 
                     // 오브젝트 리스트.
@@ -67,6 +69,7 @@ namespace Games.TileMap
             return true;
         }
 
+        /*
         private Tile GetTile(TileData data)
         {                            
             Transform trans = null;
@@ -81,7 +84,7 @@ namespace Games.TileMap
             var tile = trans.GetComponent<Tile>();
             return tile;
         }
-
+        */
         private WorldObject GetWorldObject(ObjectData data)
         {
             string[] names =
@@ -222,6 +225,7 @@ namespace Games.TileMap
                     {
                         if (tileData.obj == false)
                         {
+                            /*
                             var tile = GetTile(tileData);
                             if (tile == false)
                                 continue;
@@ -237,6 +241,7 @@ namespace Games.TileMap
 
                             tileData.obj = tile;
                             tiles.Add(tile);
+                            */
                         }
 
                         if (objDataList != null)

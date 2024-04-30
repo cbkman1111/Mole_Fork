@@ -1,15 +1,18 @@
 using Common.Global;
-using Common.Scene;
-using Common.Utils.Pool;
-using Network;
 using UnityEngine;
 
 public class AppDelegate : MonoBehaviour
 {
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-    static void main()
+    public static void ExcuteApplication()
     {
-        Debug.Log("App Started. by AppDelegate.cs");
+        Debug.Log("=============================================================");
+        Debug.Log("                                     test project - by bkchoi");
+        Debug.Log("                                                    2024-4-29");
+        Debug.Log("=============================================================");
+
+        Debug.Log("ExcuteApplication() - by AppDelegate.cs");
+
         Application.targetFrameRate = 60;
 
         Debug.Log("Device Model: " + SystemInfo.deviceModel);

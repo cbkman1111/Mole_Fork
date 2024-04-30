@@ -1,6 +1,7 @@
 using Common.Global;
 using Common.Scene;
 using Common.UIObject;
+using Common.Utils;
 using UnityEngine.UI;
 
 namespace UI.Menu
@@ -14,6 +15,7 @@ namespace UI.Menu
 
         public bool InitMenu()
         {
+            GiantDebug.Log($"UIMenuIntro - InitMenu.");
             return true;
         }
 

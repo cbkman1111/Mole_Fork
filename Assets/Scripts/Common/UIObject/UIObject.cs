@@ -182,7 +182,12 @@ namespace Common.UIObject
         public virtual void OnClose() { }
         public virtual void OnValueChanged(Slider slider, float f) { }
         public virtual void OnValueChanged(InputField input, string str) { }
+        
+        /// <summary>
+        /// PopupBase is a base class for all popup UIs.
+        /// </summary>
         public abstract void OnInit();
+        
         protected abstract void OnClick(Button btn);
         public abstract void Close();
 

@@ -38,9 +38,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SceneBundle.unity
     guid: c9edd177243ba0a4788430c1c8cbc47c
-  - enabled: 0
-    path: Assets/Spine2D Knight Character Animation Pack/Scene/Demo.unity
-    guid: ef837bb3c9fc0134db681b3abd6945f8
   - enabled: 1
     path: Assets/Scenes/SceneMaze.unity
     guid: 546549a7da67ac54ca5a6fcef833d213

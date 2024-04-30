@@ -29,15 +29,18 @@ namespace Common.Global
             if (trans == false)
             {
                 string path = $"UI/{name}";
+/*
 #if UNITY_EDITOR
                 var prefab = ResourcesManager.Instance.LoadInBuild<T>(path);
 #else
+#endif
+*/
                 T prefab = ResourcesManager.Instance.LoadBundle<T>(path);
                 if (prefab == null)
                 {
                     prefab = ResourcesManager.Instance.LoadInBuild<T>(path);
                 }
-#endif
+
                 if (prefab == false)
                 {
                     return default(T);

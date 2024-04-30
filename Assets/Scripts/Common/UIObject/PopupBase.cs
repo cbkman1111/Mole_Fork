@@ -7,7 +7,9 @@ namespace Common.UIObject
 {
     public class PopupBase : UIObject
     {
-        public override void OnInit() {
+
+        public override void OnInit() 
+        {
             /*
             transform.position = new Vector3(Screen.width * 0.5f, Screen.height * 2.0f);
             transform.DOMove(
