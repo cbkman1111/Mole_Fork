@@ -8,7 +8,7 @@ namespace Common.Utils.Pool
     {
         public Transform prefab;
     }
-    
+
     public class PoolManager : MonoSingleton<PoolManager>
     {
         public Dictionary<string, Pool<Transform>> dic = null;
@@ -66,4 +66,5 @@ namespace Common.Utils.Pool
             return 0;
         }
     }
+
 }

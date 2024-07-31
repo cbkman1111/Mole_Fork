@@ -2,6 +2,7 @@ using Common.Global.Singleton;
 using Common.Scene;
 using Common.Utils;
 using Common.Utils.Pool;
+using Match3;
 using Network;
 using Scenes;
 using System;
@@ -250,6 +251,9 @@ namespace Common.Global
                         break;
                     case SceneBase.Scenes.SceneDotween:
                         scene = obj.AddComponent<SceneDotween>();
+                        break;
+                    case SceneBase.Scenes.Scene3Match:
+                        scene = obj.AddComponent<Scene3Match>();
                         break;
                     default:
                         break;
