@@ -1,277 +1,144 @@
-﻿using System.Collections;
+﻿using Match3;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI.Table;
 
-public enum PuzzleSquareTypes
+namespace Match3
 {
-    NONE = 0,
-    EmptySquare,
-    SugarSquare,
-    WireBlock,
-    SolidBlock,
-    ThrivingBlock,
-    JellyBlock,
-    SpiralBlock,
-    UndestrBlock,
-    BigBlock,
-    Marshmello,
-    ChocoSpread/*,
-        Cake*/
-}
-
-public class LevelEditor : EditorWindow
-{
-    private const string MenuNameRoot = "매치3/스테이지 에디터";
-    private const string MenuNameOpen = MenuNameRoot + "/열기";
-    private const string MenuNameLoad = MenuNameRoot + "/불러오기 &#l";
-    private const string MenuNameSave = MenuNameRoot + "/저장하기 &#s";
-
-    private string helloWorld;
-    bool groupEnabled;
-    bool myBool = true;
-    float myFloat = 1.23f;
-    public string[] options = new string[] { "Cube", "Sphere", "Plane" };
-    public int index = 0;
-    public int tabIndex = 0;
-    private string[] taps = { "Blocks", "Items", "Directions", "Teleports", "Spawners" };
-
-    // 매뉴에 경로를 지정 한다.
-    [MenuItem(MenuNameOpen)]
-    private static void Open()
+    public enum PuzzleSquareTypes
     {
-        var window = GetWindow(typeof(LevelEditor));
-        window.titleContent = new GUIContent("스테이지 에디터");
-    }
-
-    [MenuItem(MenuNameLoad)]
-    public static void DoLoadStage()
-    {
-        if (!HasOpenInstances<LevelEditor>()) return;
-        var window = (LevelEditor)GetWindow(typeof(LevelEditor));
-        //window.PuzzleEdit.LoadStage();
-    }
-
-    [MenuItem(MenuNameSave)]
-    public static void DoSaveStage()
-    {
-        if (!HasOpenInstances<LevelEditor>()) return;
-        var window = (LevelEditor)GetWindow(typeof(LevelEditor));
-        //window.PuzzleEdit.SaveStage();
-    }
-
-    void OnGUI()
-    {
-        GUILayout.Label("멥툴", EditorStyles.boldLabel);
-        //helloWorld = EditorGUILayout.TextField("Text Field", helloWorld);
-
-        GUILevelSize();
-        GUICreateLoadBtns();
-        GUILayerTabs();
-        
+        NONE = 0,
+        EmptySquare,
+        SugarSquare,
         /*
-        // 텍스트 필드.
-        GUILayout.Label("Base Settings", EditorStyles.boldLabel);
-        helloWorld = EditorGUILayout.TextField("Text Field", helloWorld);
-
-        // 그룹
-        groupEnabled = EditorGUILayout.BeginToggleGroup("Optional Settings", groupEnabled);
-        myBool = EditorGUILayout.Toggle("Toggle", myBool);
-        myFloat = EditorGUILayout.Slider("Slider", myFloat, -3, 3);
-        EditorGUILayout.EndToggleGroup();
-
-        // 버튼.
-        Rect r = (Rect)EditorGUILayout.BeginVertical("Button");
-        if (GUI.Button(r, GUIContent.none))
-        {
-            Debug.Log("Go here");
-        }
-
-        GUILayout.Label("I'm inside the button");
-        GUILayout.Label("So am I");
-        EditorGUILayout.EndVertical();
-
-        // 
-        index = EditorGUILayout.Popup(selectedIndex: index, displayedOptions: options);
-        if (GUILayout.Button("Create"))
-        {
-            // Do Somthing.
-        }
-
-        tabIndex = GUILayout.Toolbar(tabIndex, taps);
-        GUILayout.Label($"layer_{tabIndex}");
-
-        GUILevelSize();
-        GUILayout.Space(10);
-
-        GUILayoutOption[] spriteOptions = new[] {
-            GUILayout.Width (80),
-            GUILayout.Height (80)
-        };
-
-        EditorGUILayout.ObjectField(null, typeof(Texture2D), false, spriteOptions);
-        EditorGUILayout.Space();
-        EditorGUILayout.ObjectField(null, typeof(Sprite), false, spriteOptions);
+        WireBlock,
+        SolidBlock,
+        ThrivingBlock,
+        JellyBlock,
+        SpiralBlock,
+        UndestrBlock,
+        BigBlock,
+        Marshmello,
+        ChocoSpread
         */
     }
-    private void GUIBlocks()
+
+    /// <summary>
+    /// 맵 에디터.
+    /// </summary>
+    public partial class LevelEditor : EditorWindow
     {
-        GUILayout.BeginHorizontal();
-        {
-            //GUILayout.Space(30);
-            GUILayout.BeginVertical();
-            {
-                GUILayout.Label("Tools:", EditorStyles.boldLabel);
-                GUILayout.BeginHorizontal();
-                {
-                    /*
-                    UnityEngine.GUI.color = new Color(1, 1, 1, 1f);
-                    foreach (SquareTypes squareTypeItem in _squareTypeItems)
-                    {
-                        if (squareTypeItem == SquareTypes.NONE) 
-                            continue;
+        private const string MenuNameRoot = "매치3/스테이지 에디터";
+        private const string MenuNameOpen = MenuNameRoot + "/열기";
 
-                        var squareTexture = Square.GetSquareTexture(squareTypeItem);
-                        if (squareType == squareTypeItem)
-                            UnityEngine.GUI.backgroundColor = Color.gray;
-
-                        if (squareTexture.Texture2D != null && GUILayout.Button(
-                                new GUIContent(squareTexture.Texture2D, squareTypeItem.ToString()),
-                                GUILayout.Width(50), GUILayout.Height(50)))
-                        {
-                            squareType = squareTypeItem;
-                            deleteBlock = false;
-                            separateBarBrush = false;
-                        }
-
-                        UnityEngine.GUI.backgroundColor = Color.white;
-                    }
-                    */
-
-                    UnityEngine.GUI.color = new Color(1, 1, 1, 1f);
-                }
-
-                GUILayout.EndHorizontal();
-                GUILayout.BeginHorizontal();
-                {
-                    /*
-                    if (separateBarBrush)
-                        UnityEngine.GUI.backgroundColor = Color.gray;
-                    if (GUILayout.Button(
-                        new GUIContent(separateBar, "Separate bar prevent items from falling or moving through"),
-                        GUILayout.Width(50),
-                        GUILayout.Height(50)))
-                    {
-                        squareType = SquareTypes.NONE;
-                        separateBarBrush = !separateBarBrush;
-                    }
-
-                    UnityEngine.GUI.backgroundColor = Color.white;
-
-                    if (GUILayout.Button(new GUIContent("Clear", "clear all field"), GUILayout.Width(50),
-                        GUILayout.Height(50)))
-                    {
-                        ClearLevel();
-                        // SaveLevel();
-                    }
-
-                    if (GUILayout.Button(new GUIContent("X", "Clear block"), GUILayout.Width(50),
-                        GUILayout.Height(50)))
-                    {
-                        squareType = SquareTypes.NONE;
-                        separateBarBrush = false;
-                    }
-
-                    if (GUILayout.Button(
-                        new GUIContent("Fill+", "Fill with selected block, second click change or clear filling"),
-                        GUILayout.Width(50),
-                        GUILayout.Height(50)))
-                    {
-                        FillLevel();
-                    }
-
-                    if (deleteBlock)
-                        UnityEngine.GUI.backgroundColor = Color.gray;
-                    if (GUILayout.Button(new GUIContent("-1", "to Delete a block from layer"), GUILayout.Width(50),
-                        GUILayout.Height(50)))
-                    {
-                        deleteBlock = !deleteBlock;
-                        separateBarBrush = false;
-                    }
-                    */
-                    UnityEngine.GUI.backgroundColor = Color.white;
-                }
-                GUILayout.EndHorizontal();
-            }
-            GUILayout.EndVertical();
-        }
-        GUILayout.EndHorizontal();
-    }
-
-    private void GUICreateLoadBtns()
-    {
-        GUILayoutOption[] spriteOptions = new[] {
-            GUILayout.Width (200),
-            GUILayout.Height (40)
-        };
-        GUILayout.BeginHorizontal();
-        if (GUILayout.Button("Load Map", spriteOptions))
-        {
-            // Do Somthing.
-        }
-        GUILayout.Space(10);
-        if (GUILayout.Button("Create NewMap", spriteOptions))
-        {
-            // Do Somthing.
-        }
-        GUILayout.EndHorizontal();
-    }
-
-    private void GUILayerTabs()
-    {
-        GUILayout.Label("Layers", EditorStyles.boldLabel);
-        tabIndex = GUILayout.Toolbar(tabIndex, taps);
-        //GUILayout.Label($"layer_{tabIndex}");
-
-        GUILayout.Space(10);
-    }
-
-    private void GUILevelSize()
-    {
+        Level level = null;// new Level();
         const int maxRows = 10;
         const int maxCols = 10;
-        /*
-        int oldValue = levelData.GetField(subLevelNumber - 1).maxRows +
-                       levelData.GetField(subLevelNumber - 1).maxCols;
-        */
+        int layer = 0;
+        int layers = 2;
+        
+        public string[] options = new string[] { "Cube", "Sphere", "Plane" };
+        public int index = 0;
+        public int tabIndex = 0;
+        private string[] taps = { "Blocks", "Items", "Directions", "Teleports", "Spawners" };
 
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("Level", GUILayout.Width(50));
-        GUILayout.Space(10);
+        /// <summary>
+        /// 매치3 -> 스테이지 에디터 -> 열기
+        /// </summary>
+        [MenuItem(MenuNameOpen)]
+        private static void Open()
+        {
+            var window = GetWindow(typeof(LevelEditor));
+            window.titleContent = new GUIContent("스테이지 에디터");
+        }
 
-        EditorGUILayout.IntField("", 6, GUILayout.Width(50));
-        GUILayout.EndHorizontal();
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="Stage"></param>
+        public void SaveLevel(int Stage)
+        {
+            var levelScriptable = Resources.Load("Level/Level_" + Stage) as LevelContainer;
+            if (levelScriptable != null)
+            {
+                levelScriptable.SetData(level.DeepCopy(level));
+                EditorUtility.SetDirty(levelScriptable);
+            }
 
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("Columns", GUILayout.Width(80));
-        GUILayout.Space(10);
+            AssetDatabase.SaveAssets();
+        }
 
-        EditorGUILayout.IntField("", 12, GUILayout.Width(50));
-        GUILayout.EndHorizontal();
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="levelNum"></param>
+        public void LoadLevel(int levelNum)
+        {
+            var levelScriptable = Resources.Load("Level/Level_" + levelNum) as LevelContainer;
+            if (levelScriptable)
+            {
+                level.DeepCopy(levelScriptable.level);
+            }
+        }
 
-        /*
-levelData.GetField(subLevelNumber - 1).maxCols = EditorGUILayout.IntField("",
-    levelData.GetField(subLevelNumber - 1).maxCols, GUILayout.Width(50));
-*/
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="levelNum"></param>
+        protected void CreateMap(int levelNum)
+        {
 
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("Rows", GUILayout.Width(80));
-        GUILayout.Space(10);
+        }
 
-        EditorGUILayout.IntField("", maxRows, GUILayout.Width(50));
-        GUILayout.EndHorizontal();
+        public void GenerateTile(int width, int height)
+        {
+            /*
+            for (int i = TileRoot.transform.childCount - 1; i >= 0; i--)
+            {
+                var obj = TileRoot.transform.GetChild(i);
+                DestroyObjectInEditor(obj.gameObject);
+            }
 
-        //
-        GUILayout.Space(10);
+            int count = 0;
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    var adress = y * height + x;
+                    var index = count % 2;
+                    var bg = Instantiate<GameObject>(TileBG[index], TileRoot.transform);
+                    bg.transform.localPosition = new Vector3(x, y, 0);
+
+                    count++;
+                }
+            }
+            */
+        }
+
+
+
+        void DestroyObjectInEditor(GameObject obj)
+        {
+            if (obj != null)
+            {
+#if UNITY_EDITOR
+                if (!Application.isPlaying)
+                {
+                    // 에디터 모드에서 객체 삭제
+                    DestroyImmediate(obj);
+                }
+                else
+                {
+                    // 플레이 모드에서 객체 삭제
+                    Destroy(obj);
+                }
+#else
+            // 플레이 모드에서 객체 삭제
+            Destroy(obj);
+#endif
+            }
+        }
     }
-    }
+}

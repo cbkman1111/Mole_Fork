@@ -70,9 +70,13 @@ namespace UI.Menu
             {
                 AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneTextRpg);
             }
-            else if(name == "Button - Dotween")
+            else if (name == "Button - Dotween")
             {
                 AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneDotween);
+            }
+            else if (name == "Button - 3Match")
+            {
+                AppManager.Instance.ChangeScene(SceneBase.Scenes.Scene3Match);
             }
         }
     }
