@@ -753,6 +753,7 @@ namespace Gostop
             Vector3 start = Vector3.zero;
             Vector3 end = Vector3.zero;
 
+            card.gameObject.SetActive(false);
             switch (card.KindOfCard)
             {
                 // 카드 두개 칸.
@@ -866,14 +867,15 @@ namespace Gostop
                 return;
             }
 
-            for (int i = listEat.Count - 1; i >= 0; --i)
+            int count = 0;
+            foreach (var card in listEat)
             {
-                var card = listEat[i];
-                EatCard(card, total - i); // 카드 획득.
-
+                EatCard(card, total - count); // 카드 획득.
                 var slot = GetSlot(card);
                 slot.Value.Remove(card); // 보드 슬롯에서 제거.
+                count++;
             }
+
 
             listEat.Clear();
         }
@@ -947,28 +949,27 @@ namespace Gostop
                                 list[1].Owner == Player.NONE &&
                                 list[2].Owner == turnUser)
                         {
+                            
                             foreach (var card in list)
                             {
                                 if (card.Owner == Player.NONE)
                                 {
                                     select.Add(card);
                                 }
-
-                                if (select.Count == 2)
+                                else if (card.Owner == turnUser)
                                 {
-                                    listEat.Add(select[1]);
-                                    if (select[0].KindOfCard == select[1].KindOfCard)
-                                    {
-                                        select.Clear();
-                                    }
-                                }
-                                else 
-                                { 
+                                    listEat.Add(card);
                                 }
                             }
 
+                            if (select.Count == 2)
+                            {
+                                DebugLog($"{list[0].Month} - 골르기. {select.Count}");
+                            }
+
+
                             possibleEat = true;
-                            DebugLog($"{list[0].Month} - 골르기. {select.Count}");
+                            
                         }
                         else
                         {
