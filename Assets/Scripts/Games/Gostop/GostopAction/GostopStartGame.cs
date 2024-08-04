@@ -3,6 +3,7 @@ using BehaviorDesigner.Runtime.Tasks;
 using Common.Global;
 using Gostop;
 using Scenes;
+using SweetSugar.Scripts.TargetScripts.TargetEditor;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,14 +11,17 @@ using UnityEngine;
 
 namespace Gostop
 {
-    public class GostopActionOpen1More : GostopAction
+    public class GostopStartGame : GostopAction
     {
+        int jokerCount = 0;
+
         public override void OnStart()
         {
+            /*
             var scene = AppManager.Instance.CurrScene as SceneGostop;
             var board = GetComponent<Board>();
-            
-            board.Pop1Cards();
+            jokerCount = board.CheckJoker();
+            */
         }
 
         public override TaskStatus OnUpdate()
@@ -28,27 +32,14 @@ namespace Gostop
                 return TaskStatus.Failure;
             }
 #endif
-
-            var scene = AppManager.Instance.CurrScene as SceneGostop;
             var board = GetComponent<Board>();
-            int count = 0;
-            foreach (var slot in board.bottoms)
+            if (board.MyTurn() == true)
             {
-                count += slot.Value.Where(card => card.ListTween.Count != 0).ToList().Count;
-                if (count > 0)
-                {
-                    break;
-                }
+                
             }
 
-            if (count == 0)
-            {
-                return TaskStatus.Success;
-            }
-            else
-            {
-                return TaskStatus.Running;
-            }
+            board.StartGame();
+            return TaskStatus.Failure;
         }
     }
 }

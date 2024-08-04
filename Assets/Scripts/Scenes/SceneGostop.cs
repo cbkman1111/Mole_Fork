@@ -25,7 +25,6 @@ namespace Scenes
             }
 
             board.Init(menu);
-            board.StartGame();
             return true;
         }
 
@@ -56,27 +55,26 @@ namespace Scenes
                     Card card = hit.collider.GetComponent<Card>();
                     if (card != null)
                     {
-
-                        //var stateMachine = board.GetStateMachine();
-                        //var turnInfo = stateMachine.GetCurrturnInfo();
-                        //var stateInfo = turnInfo.GetCurrentStateInfo();
-                        if (board.MyTurn() == true)
+                        if (board.StateInfo.state == State.CARD_HIT)
                         {
-                            var list = board.GetSameMonthCard((int)Board.Player.USER, card);
-                            if (list.Count == 3)
+                            if (board.MyTurn() == true)
                             {
-                                board.HitBomb((int)Board.Player.USER, list, card);
-                                //stateInfo.evt = StateEvent.PROGRESS;
-                            }
-                            else if (list.Count == 4) // 총통
-                            {
-                                board.HitChongtong((int)Board.Player.USER, list, card);
-                                //stateInfo.evt = StateEvent.PROGRESS;
-                            }
-                            else
-                            {
-                                board.HitCard((int)Board.Player.USER, card);
-                                //stateInfo.evt = StateEvent.PROGRESS;
+                                var list = board.GetSameMonthCard((int)Board.Player.USER, card);
+                                if (list.Count == 3)
+                                {
+                                    board.HitBomb((int)Board.Player.USER, list, card);
+                                    //stateInfo.evt = StateEvent.PROGRESS;
+                                }
+                                else if (list.Count == 4) // 총통
+                                {
+                                    board.HitChongtong((int)Board.Player.USER, list, card);
+                                    //stateInfo.evt = StateEvent.PROGRESS;
+                                }
+                                else
+                                {
+                                    board.HitCard((int)Board.Player.USER, card);
+                                    //stateInfo.evt = StateEvent.PROGRESS;
+                                }
                             }
                         }
 

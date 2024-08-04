@@ -1,8 +1,4 @@
-using SweetSugar.Scripts.Level;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 namespace Match3
@@ -10,16 +6,17 @@ namespace Match3
     [Serializable]
     public class Level
     {
-        public int Row = 0;
-        public int Col = 0;
-        public int Stage = 0;
+        public int Row = 5;
+        public int Col = 5;
+        public int Stage = 1;
+        public int Layers = 1;
 
         public Level DeepCopy(Level level)
         {
             Row = level.Row;
             Col = level.Col;
             Stage = level.Stage;
-
+            Layers = level.Layers;
             return this;
         }
     }
@@ -27,11 +24,12 @@ namespace Match3
     [CreateAssetMenu(fileName = "LevelContainer", menuName = "LevelContainer", order = 1)]
     public class LevelContainer : ScriptableObject
     {
-        public Level level;
+        public Level level = null;
 
         public void SetData(Level level)
         {
-            this.level = level;
+            this.level = new();
+            this.level.DeepCopy(level);
         }
     }
 }

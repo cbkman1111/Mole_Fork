@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace Gostop
 {
-    public class GostopConditionTurnComputer : Conditional
+    public class GostopConditionTurn : Conditional
     {
         int jokerCount = 0;
 
@@ -20,7 +20,6 @@ namespace Gostop
             /*
             var scene = AppManager.Instance.CurrScene as SceneGostop;
             var board = GetComponent<Board>();
-
             jokerCount = board.CheckJoker();
             */
         }
@@ -33,14 +32,13 @@ namespace Gostop
                 return TaskStatus.Failure;
             }
 #endif
-
-            //var scene = AppManager.Instance.CurrScene as SceneGostop;
             var board = GetComponent<Board>();
+            if (board.MyTurn() == true)
+            {
+                
+            }
 
-            if (board.MyTurn() == false)
-                return TaskStatus.Success;
-            else
-                return TaskStatus.Failure;
+            return TaskStatus.Success;
         }
     }
 }

@@ -1,3 +1,4 @@
+using Skell;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,27 +12,22 @@ namespace Gostop
     public enum State
     {
         NONE = -1,
-
-        WAIT = 0,
-
-        START_GAME,
-
-        CREATE_DECK,
-
-        SHUFFLE_8,
-        SHUFFLE_10,
-
-        OPEN_8,
-        OPEN_1_MORE,
-
-        CHECK_JORKER,
-
-        HANDS_UP,
-        HANDS_OPEN,
+        //WAIT = 0,
+        //START_GAME,
+        //CREATE_DECK,
+        //SHUFFLE_8,
+        //SHUFFLE_10,
+        //OPEN_8,
+        //OPEN_1_MORE,
+        //CHECK_JORKER,
+        //HANDS_UP,
+        //HANDS_OPEN,
+        
         HANDS_SORT,
 
         CARD_HIT, // 카드 치기.
         CARD_POP, // 카드 뒤집기.
+        CARD_POP_AND_HIT,
 
         EAT_CHECK, // 먹는 판정.
         EAT, // 먹기.
@@ -52,35 +48,25 @@ namespace Gostop
         DONE,
     }
 
-    public class TurnState
+
+    public class PlayInfo
     {
         public int index; // 턴 횟수.
         public Board.Player user; // 턴 유저.
-        public Card pop; // 덱에서 꺼낸 정보.
+        public Card popCard; // 덱에서 꺼낸 정보.
         public Card hit; // 최초 친 카드.
         public bool hited = false; // 쳤는가.
-        private Stack<StateInfo> stack = null;
 
-        public TurnState(int num = 0)
+        public PlayInfo(int num = 0)
         {
             index = num;
-            pop = null;
+            popCard = null;
             hit = null;
             hited = false; // 쳤는가.
-            stack = new Stack<StateInfo>();
             user = Board.Player.NONE;
         }
-
-        public void AddState(StateInfo info)
-        {
-            stack.Push(info);
-        }
-
-        public StateInfo GetCurrentStateInfo()
-        {
-            return stack.Peek();
-        }
     }
+
 
     /// <summary>
     /// 
@@ -89,76 +75,13 @@ namespace Gostop
     {
         public State state;
         public StateEvent evt;
+        public PlayInfo info;
 
         public StateInfo()
         {
-            state = State.WAIT;
+            state = State.NONE;
             evt = StateEvent.INIT;
-        }
-    }
-
-    public class StateMachineGostop
-    {
-        public Stack<TurnState> Stack { get; set; }
-
-        public static StateMachineGostop Create()
-        {
-            StateMachineGostop ret = new StateMachineGostop();
-            if (ret != null && ret.Init())
-            {
-                return ret;
-            }
-
-            return null;
-        }
-
-        public bool Init()
-        {
-            Stack = new Stack<TurnState>();
-            Stack.Push(new TurnState());
-
-            return true;
-        }
-
-        public void Clear()
-        {
-            Stack.Clear();
-        }
-
-        public void AddTurn(Board.Player userIndex)
-        {
-            TurnState turn = new TurnState(Stack.Count);
-            turn.user = userIndex;
-            Stack.Push(turn);
-        }
-
-        public void Change(State state)
-        {
-            StateInfo info = new StateInfo();
-            info.state = state;
-            info.evt = StateEvent.INIT;
-
-            var turnInfo = GetCurrturnInfo();
-            turnInfo.AddState(info);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public TurnState GetCurrturnInfo()
-        {
-            return Stack.Peek();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public StateInfo GetCurrStateInfo()
-        {
-            var trun = GetCurrturnInfo();
-            return trun.GetCurrentStateInfo();
+            info = new PlayInfo();
         }
 
         /// <summary>
@@ -169,34 +92,94 @@ namespace Gostop
         /// <param name="complete"></param>
         public void Process(Action start, Func<bool> check, Action complete)
         {
-            var turn = GetCurrturnInfo();
-            var info = turn.GetCurrentStateInfo();
-            if (info != null)
+            switch (evt)
             {
-                switch (info.evt)
-                {
-                    case StateEvent.INIT:
-                        info.evt = StateEvent.START;
-                        break;
+                case StateEvent.INIT:
+                    evt = StateEvent.START;
+                    break;
 
-                    case StateEvent.START:
-                        info.evt = StateEvent.PROGRESS;
-                        start();
-                        break;
+                case StateEvent.START:
+                    evt = StateEvent.PROGRESS;
+                    start();
+                    break;
 
-                    case StateEvent.PROGRESS:
-                        if (check() == true)
-                        {
-                            info.evt = StateEvent.DONE;
-                        }
-                        break;
+                case StateEvent.PROGRESS:
+                    if (check() == true)
+                        evt = StateEvent.DONE;
+                    break;
 
-                    case StateEvent.DONE:
-                        complete();
-                        break;
-                }
+                case StateEvent.DONE:
+                    complete();
+                    break;
             }
         }
+        
+    }
+
+    public class StateMachineGostop
+    {
+        public Stack<StateInfo> Stack { get; set; }
+
+        public static StateMachineGostop Create()
+        {
+            StateMachineGostop ret = new StateMachineGostop();
+            if (ret != null && ret.Init() == true)
+            {
+                return ret;
+            }
+
+            return null;
+        }
+
+        public bool Init()
+        {
+            Stack = new ();
+            return true;
+        }
+
+        public void Clear()
+        {
+            Stack.Clear();
+        }
+
+        /// <summary>
+        /// 상태 변경.
+        /// </summary>
+        /// <param name="state"></param>
+        public void Change(State state, Board.Player player)
+        {
+            StateInfo info = new StateInfo() {
+                state = state,
+                evt = StateEvent.INIT,
+                info = new PlayInfo()
+                {
+                    index = 0,
+                    user = player,
+                    popCard = null,
+                    hit = null,
+                    hited = false,
+                },
+            };
+
+            Stack.Push(info);
+        }
+
+        /// <summary>
+        /// 상태 꺼내기.
+        /// </summary>
+        /// <returns></returns>
+        public StateInfo PopState()
+        {
+            if (Stack.Count > 0)
+            {
+                var info = Stack.Pop();
+                return info;
+            }
+            
+            return null;
+        }
+
+
     }
 
 }
