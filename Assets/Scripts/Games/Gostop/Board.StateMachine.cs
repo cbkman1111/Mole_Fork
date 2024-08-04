@@ -377,21 +377,19 @@ namespace Gostop
                             {
                                 if (turnUser == Player.COMPUTER)
                                 {
-                                    select[0].Owner = turnUser;
+                                    select[0].Owner = Player.COMPUTER;
                                     listEat.Add(select[0]);
                                     select.Clear();
                                 }
                                 else
                                 {
-                                    if (UIManager.Instance.FindPopup("UI/PopupCardSelect") == false)
-                                    {
-                                        PopupCardSelect popup = UIManager.Instance.OpenPopup<PopupCardSelect>("PopupCardSelect");
-                                        popup.Init(select[0], select[1], (Card selectCard) => {
-                                            selectCard.Owner = turnUser;
-                                            listEat.Add(selectCard);
-                                            select.Clear();
-                                        });
-                                    }
+                                    var popup = UIManager.Instance.OpenPopup<PopupCardSelect>("PopupCardSelect");
+                                    popup.Init(select[0], select[1], (Card selectCard) => {
+                                        selectCard.Owner = turnUser;
+                                        listEat.Add(selectCard);
+                                        select.Clear();
+                                    });
+                         
                                 }
 
                                 return false;
