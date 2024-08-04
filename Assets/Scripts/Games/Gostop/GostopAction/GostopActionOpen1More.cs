@@ -16,7 +16,7 @@ namespace Gostop
         {
             var scene = AppManager.Instance.CurrScene as SceneGostop;
             var board = GetComponent<Board>();
-
+            
             board.Pop1Cards();
         }
 

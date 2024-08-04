@@ -1,3 +1,4 @@
+using Skell;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -26,6 +27,7 @@ namespace Gostop
 
         CARD_HIT, // 카드 치기.
         CARD_POP, // 카드 뒤집기.
+        CARD_POP_AND_HIT,
 
         EAT_CHECK, // 먹는 판정.
         EAT, // 먹기.
@@ -103,9 +105,7 @@ namespace Gostop
 
                 case StateEvent.PROGRESS:
                     if (check() == true)
-                    {
                         evt = StateEvent.DONE;
-                    }
                     break;
 
                 case StateEvent.DONE:
@@ -142,19 +142,30 @@ namespace Gostop
             Stack.Clear();
         }
 
-        public void Change(State state)
+        /// <summary>
+        /// 상태 변경.
+        /// </summary>
+        /// <param name="state"></param>
+        public void Change(State state, Board.Player player)
         {
             StateInfo info = new StateInfo() {
                 state = state,
                 evt = StateEvent.INIT,
                 info = new PlayInfo()
+                {
+                    index = 0,
+                    user = player,
+                    popCard = null,
+                    hit = null,
+                    hited = false,
+                },
             };
 
             Stack.Push(info);
         }
 
         /// <summary>
-        /// 
+        /// 상태 꺼내기.
         /// </summary>
         /// <returns></returns>
         public StateInfo PopState()
