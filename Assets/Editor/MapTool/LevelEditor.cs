@@ -4,41 +4,7 @@ using UnityEngine;
 
 namespace Match3
 {
-    /// <summary>
-    /// 캔디.
-    /// </summary>
-    public enum CandyTypes
-    {
-        None = 0,
-
-        Red,
-        Yellow,
-        Green,
-        Pupple,
-        Blue,
-        Orange,
-
-        SpecialRed,
-        SpecialYellow,
-        SpecialGreen,
-        SpecialPupple,
-        SpecialBlue,
-        SpecialOrange,
-
-        Max,
-    }
-
-    /// <summary>
-    /// 블럭.
-    /// </summary>
-    public enum BlockTypes
-    {
-        None = 0,
-        Empty,
-        Sugar,
-
-        Max,
-    }
+   
 
     /// <summary>
     /// 탭.
@@ -69,6 +35,9 @@ namespace Match3
         private int SelectCandy = (int)CandyTypes.None;
         private int SelectBlock = (int)BlockTypes.None;
         private int Layer = 0;
+        private int Row = 9;
+        private int Col = 9;
+        private int Stage = 1;
 
         private Texture[] candyIcons = null;
         private Texture[] blockIcons = null;

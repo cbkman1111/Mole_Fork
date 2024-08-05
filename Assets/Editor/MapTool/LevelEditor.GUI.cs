@@ -209,7 +209,7 @@ namespace Match3
             GUILayout.Space(10);
             GUILayout.Space(20); // 공백 라인 추가
 
-            List<RectTexture> rects = new List<RectTexture>();
+            //List<RectTexture> rects = new List<RectTexture>();
             GUILayout.BeginVertical();
             
             for (int row = 0; row < level.Row; row++)
@@ -244,9 +244,11 @@ namespace Match3
             switch (TabIndex)
             {
                 case (int)TabTypes.Block:
+                    level.field.Squares[row * level.Col + col].block = (BlockTypes)SelectBlock;
                     break;
 
                 case (int)TabTypes.Candy:
+                    //level.field.Squares[row * level.Col + col].block = (CandyTypes)SelectCandy;
                     break;
 
                 case (int)TabTypes.Direction:
@@ -266,22 +268,30 @@ namespace Match3
             GUILayout.Label("Stage", GUILayout.Width(80));
             GUILayout.Space(10);
 
-            level.Stage = EditorGUILayout.IntField("", level.Stage, GUILayout.Width(50));
+            Stage = EditorGUILayout.IntField("", Stage, GUILayout.Width(50));
             GUILayout.EndHorizontal();
 
             GUILayout.BeginHorizontal();
             GUILayout.Label("Columns", GUILayout.Width(80));
             GUILayout.Space(10);
 
-            level.Col = EditorGUILayout.IntField("", level.Col, GUILayout.Width(50));
+            Col = EditorGUILayout.IntField("", Col, GUILayout.Width(50));
             GUILayout.EndHorizontal();
 
             GUILayout.BeginHorizontal();
             GUILayout.Label("Rows", GUILayout.Width(80));
             GUILayout.Space(10);
 
-            level.Row = EditorGUILayout.IntField("", level.Row, GUILayout.Width(50));
+            Row = EditorGUILayout.IntField("", Row, GUILayout.Width(50));
             GUILayout.EndHorizontal();
+
+            // 크기가 바뀌면 데이터 변경.
+            if(level.Col != Col || level.Row != Row)
+            {
+                level.Col = Col;
+                level.Row = Row;
+                level.field.Squares = new SquareBlock[level.Row * level.Col];
+            }
 
             GUILayout.Space(10);
         }

@@ -13,6 +13,252 @@ MonoBehaviour:
   m_Name: Level_2
   m_EditorClassIdentifier: Assembly-CSharp:Match3:LevelContainer
   level:
-    Row: 2
-    Col: 2
     Stage: 2
+    field:
+      Row: 2
+      Col: 1
+      Layers: 1
+      Squares:
+      - block: 1
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
+      - block: 0
+        direction: {x: 0, y: 0}
+        position: {x: 0, y: 0}
