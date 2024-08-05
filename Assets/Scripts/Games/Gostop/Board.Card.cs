@@ -83,7 +83,7 @@ namespace Gostop
             scores[target].Remove(card);
             listAll.Remove(card);
 
-            EatCard(card, complete:() => {
+            TackCard(card, complete:() => {
                 var start = boardPositions[target].Pee.position;
                 var end = new Vector3(start.x + card.Width * 2f, start.y, start.z);
 
@@ -494,7 +494,7 @@ namespace Gostop
                 for (int i = list.Count - 1; i >= 0; --i)
                 {
                     var card = list[i];
-                    EatCard(card, list.Count - i);
+                    TackCard(card, list.Count - i);
                     slot.Value.Remove(card);
                     
                     count++;
@@ -679,9 +679,9 @@ namespace Gostop
                     if (card.Month == 13) // 조커 카드.
                     {
                         stealCount += 1;
-                        EatCard(card);
-                        stateMachine.Change(State.STEAL, turnUser);
-                        stateMachine.Change(State.CARD_POP_AND_HIT, turnUser);
+                        TackCard(card);
+                        stateMachine.Change(State.StealCard, turnUser);
+                        stateMachine.Change(State.PopCardDeckAndHit, turnUser);
                         StateInfo = null;
                         /*
                         var deckCard = deck.Pop();
@@ -695,7 +695,7 @@ namespace Gostop
                     else if (card.Month == 100) // 폭탄 공짜 카드.
                     {
                         GameObject.Destroy(card.gameObject);
-                        //stateMachine.Change(State.CARD_POP_AND_HIT, turnUser);
+                        stateMachine.Change(State.PopCardDeck, turnUser);
                         StateInfo = null;
                     }
                     else // 일반 카드.
@@ -746,14 +746,14 @@ namespace Gostop
         /// 
         /// </summary>
         /// <param name="card"></param>
-        private void EatCard(Card card, int count = 0, Action complete = null)
+        private void TackCard(Card card, int count = 0, Action complete = null)
         {
             int user = (int)turnUser;
             List<Card> list = null;
             Vector3 start = Vector3.zero;
             Vector3 end = Vector3.zero;
 
-            card.gameObject.SetActive(false);
+            //card.gameObject.SetActive(false);
             switch (card.KindOfCard)
             {
                 // 카드 두개 칸.
@@ -812,7 +812,15 @@ namespace Gostop
             }
 
             float interval = 0.05f;
+            card.Owner = (Player)user;
+            card.MoveTo(start, time: 0.1f,
+                     delay: count * interval,
+                     complete: () => {
 
+                         complete();
+                     });
+
+            /*
             // 기존 카드들 재배치.
             for (int i = 0; i < list.Count; i++)
             {
@@ -830,12 +838,17 @@ namespace Gostop
                     time: 0.1f,
                     delay: count * interval);
             }
+            */
 
             // 카드 가져오기.
-            var position1 = new Vector3(card.transform.position.x, 1, card.transform.position.z);
-            Vector3 targetPosition = start + new Vector3((card.Width * list.Count) * 0.5f, 0, 0);
+            //var position1 = new Vector3(card.transform.position.x, 1, card.transform.position.z);
+            //Vector3 targetPosition = start + new Vector3((card.Width * list.Count) * 0.5f, 0, 0);
+            //Vector3 targetPosition = end;
+
             // 위로 살짝뛰웠다가.
-            card.Owner = (Player)user;
+
+
+            /*
             card.MoveTo(
                 position1,
                 time: 0.1f,
@@ -851,14 +864,14 @@ namespace Gostop
                                 complete();
                             });
                 });
-
+            */
             scores[(int)turnUser].Add(card);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        private void Eat()
+        private void TackeCard()
         {
             Debug.Log($"먹는 판정 패 : {listEat.Count}");
             int total = listEat.Count;
@@ -870,7 +883,7 @@ namespace Gostop
             int count = 0;
             foreach (var card in listEat)
             {
-                EatCard(card, total - count); // 카드 획득.
+                TackCard(card, total - count); // 카드 획득.
                 var slot = GetSlot(card);
                 slot.Value.Remove(card); // 보드 슬롯에서 제거.
                 count++;
@@ -884,7 +897,7 @@ namespace Gostop
         /// 획득 카드 체크.
         /// </summary>
         /// <returns></returns>
-        private bool EatCheck()
+        private bool TakeCardCondition()
         {
             bool possibleEat = false;
             foreach (KeyValuePair<int, List<Card>> kindSlot in bottoms)
@@ -915,6 +928,9 @@ namespace Gostop
                             possibleEat = true;
                             stealCount++;
                             DebugLog($"{list[0].Month} - 귀신.");
+
+                            var popup = UIManager.Instance.OpenPopup<UIPopupMessage>("UIPopupMessage");
+                            popup.Init("귀신");
                         }
                         else if (list[0].Owner == Player.NONE &&
                                  list[1].Owner == turnUser)
@@ -937,13 +953,15 @@ namespace Gostop
                             list[1].Owner == turnUser &&
                             list[2].Owner == Player.NONE)
                         {
-                            DebugLog($"{list[0].Month} - 쌋다. 1");
+                            var popup = UIManager.Instance.OpenPopup<UIPopupMessage>("UIPopupMessage");
+                            popup.Init("뻑1.");
                         }
                         else if (list[0].Owner == Player.NONE &&
                                   list[1].Owner == turnUser &&
                                   list[2].Owner == turnUser)
                         {
-                            DebugLog($"{list[0].Month} - 쌋다. 2");
+                            var popup = UIManager.Instance.OpenPopup<UIPopupMessage>("UIPopupMessage");
+                            popup.Init("뻑2");
                         }
                         else if (list[0].Owner == Player.NONE &&
                                 list[1].Owner == Player.NONE &&
@@ -967,7 +985,6 @@ namespace Gostop
                                 DebugLog($"{list[0].Month} - 골르기. {select.Count}");
                             }
 
-
                             possibleEat = true;
                             
                         }
@@ -990,7 +1007,8 @@ namespace Gostop
 
                             possibleEat = true;
                             stealCount++;
-                            DebugLog($"{list[0].Month} - 아싸.");
+                            var popup = UIManager.Instance.OpenPopup<UIPopupMessage>("UIPopupMessage");
+                            popup.Init("귀신");
                         }
                         else if (list[0].Owner == Player.NONE &&
                                 list[1].Owner == Player.NONE &&
@@ -1005,7 +1023,8 @@ namespace Gostop
                             possibleEat = true;
                             stealCount++;
                             select.Clear();
-                            DebugLog($"{list[0].Month} - 따닥. 1");
+                            var popup = UIManager.Instance.OpenPopup<UIPopupMessage>("UIPopupMessage");
+                            popup.Init("따닥1");
                         }
                         else if (list[0].Owner == Player.NONE &&
                                 list[1].Owner == turnUser &&
@@ -1020,7 +1039,8 @@ namespace Gostop
                             possibleEat = true;
                             stealCount++;
                             select.Clear();
-                            DebugLog($"{list[0].Month} - 따닥. 2");
+                            var popup = UIManager.Instance.OpenPopup<UIPopupMessage>("UIPopupMessage");
+                            popup.Init("따닥2");
                         }
                         else
                         {
@@ -1068,7 +1088,7 @@ namespace Gostop
         /// 
         /// </summary>
         /// <returns></returns>
-        public Card Pop1Cards(Player owner = Player.NONE)
+        public Card PopDeckCard(Player owner = Player.NONE)
         {
             Card card = deck.Pop();
             KeyValuePair<int, List<Card>> slot = GetSlot(card);

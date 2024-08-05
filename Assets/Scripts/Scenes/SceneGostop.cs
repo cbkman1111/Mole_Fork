@@ -28,22 +28,6 @@ namespace Scenes
             return true;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.A))
-            {
-            
-            }
-        }
-
-        public override void OnTouchBean(Vector3 position)
-        {
-
-        }
-
         public override void OnTouchEnd(Vector3 position)
         {
             Ray ray = MainCamera.ScreenPointToRay(position);
@@ -55,7 +39,7 @@ namespace Scenes
                     Card card = hit.collider.GetComponent<Card>();
                     if (card != null)
                     {
-                        if (board.StateInfo.state == State.CARD_HIT)
+                        if (board.StateInfo.state == State.HitCard)
                         {
                             if (board.MyTurn() == true)
                             {
@@ -63,50 +47,22 @@ namespace Scenes
                                 if (list.Count == 3)
                                 {
                                     board.HitBomb((int)Board.Player.USER, list, card);
-                                    //stateInfo.evt = StateEvent.PROGRESS;
                                 }
                                 else if (list.Count == 4) // 총통
                                 {
                                     board.HitChongtong((int)Board.Player.USER, list, card);
-                                    //stateInfo.evt = StateEvent.PROGRESS;
                                 }
                                 else
                                 {
                                     board.HitCard((int)Board.Player.USER, card);
-                                    //stateInfo.evt = StateEvent.PROGRESS;
                                 }
                             }
                         }
-
-                        /*
-                        if (stateInfo.state == State.CARD_HIT && board.MyTurn() == true)
-                        {
-                            var list = board.GetSameMonthCard((int)Board.Player.USER, card);
-                            if (list.Count == 3)
-                            {
-                                board.HitBomb((int)Board.Player.USER, list, card);
-                                stateInfo.evt = StateEvent.PROGRESS; 
-                            }
-                            else if (list.Count == 4) // 총통
-                            {
-                                board.HitChongtong((int)Board.Player.USER, list, card);
-                                stateInfo.evt = StateEvent.PROGRESS;
-                            }
-                            else 
-                            {
-                                board.HitCard((int)Board.Player.USER, card);
-                                stateInfo.evt = StateEvent.PROGRESS; 
-                            }
-                        }
-                        */
                     }
                 }
             }
         }
 
-        public override void OnTouchMove(Vector3 position, Vector2 deltaPosition)
-        {
-
-        }
+        public override void OnTouchMove(Vector3 position, Vector2 deltaPosition){}
     }
 }

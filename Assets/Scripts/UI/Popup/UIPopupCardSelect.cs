@@ -5,7 +5,7 @@ using Gostop;
 
 namespace UI.Popup
 {
-    public class PopupCardSelect : PopupBase
+    public class UIPopupCardSelect : PopupBase
     {
         Action<Card> OnSelect = null;
         Card cardA = null;

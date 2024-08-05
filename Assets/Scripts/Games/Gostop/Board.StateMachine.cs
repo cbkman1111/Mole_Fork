@@ -32,7 +32,7 @@ namespace Gostop
         /// </summary>
         public void StartGame()
         {
-            stateMachine.Change(State.CARD_HIT, turnUser);
+            stateMachine.Change(State.HitCard, turnUser);
         }
 
         private int GetMoveCount(List<Card> list)
@@ -269,19 +269,33 @@ namespace Gostop
                     break;
                 */
 #endif
-                case State.HANDS_SORT: // 손패를 정렬합니다.
+                case State.MakeGame:
+                    StateInfo.Process(
+                        start: () => {
+                            behaviorTree.gameObject.SetActive(false);
+                            behaviorTree.gameObject.SetActive(true);
+                        },
+                        check: () => {
+                            return true;
+                        },
+                        complete: () => {
+                            StateInfo = null;
+                        });
+
+                    break;
+                case State.SortHands: // 손패를 정렬합니다.
                     StateInfo.Process(
                         start: () => SortHand(),
                         check: () => {
                             return GetMoveCount(hands[0]) == 0;
                         },
                         complete: () => {
-                            stateMachine.Change(State.CARD_HIT, turnUser);
+                            stateMachine.Change(State.HitCard, turnUser);
                             StateInfo = null;
                         });
                     break;
                 
-                case State.CARD_HIT:
+                case State.HitCard:
                     StateInfo.Process(
                         start: () => {
                             menu.ShowScoreMenu(true);
@@ -319,12 +333,12 @@ namespace Gostop
                             return count == 0;
                         },
                         complete: () => {
-                            stateMachine.Change(State.CARD_POP, turnUser);
+                            stateMachine.Change(State.PopCardDeck, turnUser);
                             StateInfo = null;
                         });
                     break;
 
-                case State.CARD_POP_AND_HIT:
+                case State.PopCardDeckAndHit:
                     StateInfo.Process(
                         start: () => {
                             StateInfo.info.popCard = PopDeckCard();
@@ -339,15 +353,15 @@ namespace Gostop
                             return 0 == GetMoveAllCount();
                         },
                         complete: () => {
-                            stateMachine.Change(State.CARD_HIT, turnUser);
+                            stateMachine.Change(State.HitCard, turnUser);
                             StateInfo = null;
                         });
                     break;
 
-                case State.CARD_POP:
+                case State.PopCardDeck:
                     StateInfo.Process(
                         start: () => {
-                            StateInfo.info.popCard = Pop1Cards(turnUser);
+                            StateInfo.info.popCard = PopDeckCard(turnUser);
                         },
                         check: () => {
                             int count = GetMoveAllCount();
@@ -363,15 +377,15 @@ namespace Gostop
                             return count == 0;
                         },
                         complete: () => {
-                            stateMachine.Change(State.EAT_CHECK, turnUser);
+                            stateMachine.Change(State.TakeCardCondition, turnUser);
                             StateInfo = null;
                         });
 
                     break;
 
-                case State.EAT_CHECK: // 카드 획득 처리.
+                case State.TakeCardCondition: // 카드 획득 처리.
                     StateInfo.Process(
-                        start: () => EatCheck(),
+                        start: () => TakeCardCondition(),
                         check: () => {
                             if (select.Count == 2)
                             {
@@ -383,35 +397,49 @@ namespace Gostop
                                 }
                                 else
                                 {
-                                    var popup = UIManager.Instance.OpenPopup<PopupCardSelect>("PopupCardSelect");
-                                    popup.Init(select[0], select[1], (Card selectCard) => {
-                                        selectCard.Owner = turnUser;
-                                        listEat.Add(selectCard);
+                                    if (select[0].KindOfCard != select[1].KindOfCard)
+                                    {
+                                        var popup = UIManager.Instance.OpenPopup<UIPopupCardSelect>("UIPopupCardSelect");
+                                        popup.Init(select[0], select[1], (Card selectCard) => {
+                                            selectCard.Owner = turnUser;
+                                            listEat.Add(selectCard);
+                                            select.Clear();
+                                        });
+                                    }
+                                    else
+                                    {
+                                        select[0].Owner = turnUser;
+                                        listEat.Add(select[0]);
                                         select.Clear();
-                                    });
-                         
+                                    }
                                 }
 
                                 return false;
                             }
                             else
                             {
+                                if(UIManager.Instance.FindPopup("UIPopupMessage"))
+                                {
+                                    return false;
+                                }
+
                                 return true;
                             }
                         },
                         complete: () => {
-
                             select.Clear();
-                            stateMachine.Change(State.EAT, turnUser);
+                            stateMachine.Change(State.TakeCard, turnUser);
                             StateInfo = null;
                         });
                     break;
 
-                case State.EAT: // 카드 획득.
+                case State.TakeCard: // 카드 획득.
                     StateInfo.Process(
-                        start: () => Eat(),
+                        start: () => TackeCard(),
                         check: () => {
-                            return true;
+
+                            StateInfo.info.delta += Time.deltaTime;
+                            return StateInfo.info.delta > 0.4f;
                         },
                         complete: () => {
                             // 주인 없는 카드로 설정.
@@ -425,17 +453,18 @@ namespace Gostop
 
                             if (stealCount == 0)
                             {
-                                stateMachine.Change(State.SCORE_UPDATE, turnUser);
+                                stateMachine.Change(State.UpdateScore, turnUser);
                                 StateInfo = null;
                             }
                             else
                             {
-                                stateMachine.Change(State.STEAL, turnUser);
+                                stateMachine.Change(State.StealCard, turnUser);
                                 StateInfo = null;
                             }
                         });
                     break;
-                case State.STEAL: // 카드 뺃기.
+
+                case State.StealCard: // 카드 뺃기.
                     StateInfo.Process(
                         start: () => StealCard(),
                         check: () => {
@@ -445,30 +474,30 @@ namespace Gostop
                         complete: () => {
                             if (stealCount == 0)
                             {
-                                stateMachine.Change(State.SCORE_UPDATE, turnUser);
+                                stateMachine.Change(State.UpdateScore, turnUser);
                                 StateInfo = null;
                             }
                             else
                             {
-                                stateMachine.Change(State.STEAL, turnUser);
+                                stateMachine.Change(State.StealCard, turnUser);
                                 StateInfo = null;
                             }
                         });
                     break;
 
-                case State.SCORE_UPDATE: // 점수 체크.
+                case State.UpdateScore: // 점수 체크.
                     StateInfo.Process(
                         start: () => ScoreUpdate(),
                         check: () => {
                             return true;
                         },
                         complete: () => {
-                            stateMachine.Change(State.TURN_CHECK, turnUser);
+                            stateMachine.Change(State.ChangeTurn, turnUser);
                             StateInfo = null;
                         });
 
                     break;
-                case State.TURN_CHECK: // 턴 바꾸기.
+                case State.ChangeTurn: // 턴 바꾸기.
                     StateInfo.Process(
                         start: () => SortHand(),
                         check: () => {
@@ -476,12 +505,14 @@ namespace Gostop
                             return count == 0;
                         },
                         complete: () => {
-                            State nextState = State.HANDS_SORT;
+                            State nextState = State.SortHands;
 
                             // 현재 턴유저의 카드가 0개라면.
                             if (hands[(int)Player.COMPUTER].Count == 0 && hands[(int)Player.USER].Count == 0)
                             {
-                                nextState = State.GAME_OVER_TIE;
+                                nextState = State.GameOver_Tie;
+                                nextState = State.GameOver_Win;
+                                nextState = State.GameOver_Lose;
                             }
                             else 
                             {
@@ -502,7 +533,7 @@ namespace Gostop
                         });
                     break;
 
-                case State.GAME_OVER_TIE: // 무승부 상태 처리.
+                case State.GameOver_Win: // 승리 상태 처리.
                     StateInfo.Process(
                         start: () => { },
                         check: () => {
@@ -510,13 +541,37 @@ namespace Gostop
                         },
                         complete: () => {
                             DestroyAllCards();
-                            //stateMachine.Init();
-                            //stateMachine.Change(State.START_GAME);
+                            stateMachine.Change(State.MakeGame, turnUser);
+                            StateInfo = null;
+                        });
+                    break;
+
+                case State.GameOver_Lose: // 패배 상태 처리.
+                    StateInfo.Process(
+                        start: () => { },
+                        check: () => {
+                            return GetMoveAllCount() == 0;
+                        },
+                        complete: () => {
+                            DestroyAllCards();
+                            stateMachine.Change(State.MakeGame, turnUser);
+                            StateInfo = null;
+                        });
+                    break;
+
+                case State.GameOver_Tie: // 무승부 상태 처리.
+                    StateInfo.Process(
+                        start: () => { },
+                        check: () => {
+                            return GetMoveAllCount() == 0;
+                        },
+                        complete: () => {
+                            DestroyAllCards();
+                            stateMachine.Change(State.MakeGame, turnUser);
                             StateInfo = null;
                         });
                     break;
             }
         }
     }
-
 }

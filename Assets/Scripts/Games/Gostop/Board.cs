@@ -9,6 +9,7 @@ using UI.Popup;
 using UnityEngine;
 using static UnityEditor.Rendering.InspectorCurveEditor;
 using UnityEditor;
+using BehaviorDesigner.Runtime;
 
 
 namespace Gostop
@@ -18,12 +19,6 @@ namespace Gostop
     /// </summary>
     public partial class Board : MonoBehaviour
     {
-        public struct DebugInfo
-        {
-            public int num;
-            public string msg;
-        }
-
         public enum Player
         {
             NONE = -1,
@@ -43,7 +38,8 @@ namespace Gostop
         }
 
         private StateMachineGostop stateMachine = null;
-        
+        private BehaviorTree behaviorTree = null;
+
         [SerializeField]
         public Card prefabCard = null;
         public Sprite[] sprites = null;
@@ -55,9 +51,6 @@ namespace Gostop
 
         private Board.Player turnUser = 0;
         private int stealCount = 0; // 빼앗아올 패.
-
-        private Queue<DebugInfo> listDebug = new Queue<DebugInfo>();
-        private int debugNumber = 0;
 
         /// <summary>
         /// 
@@ -84,7 +77,6 @@ namespace Gostop
             this.menu = menu;
             this.stateMachine = StateMachineGostop.Create();
 
-            //stateMachine.Change(State.WAIT);
             turnUser = Player.USER;
 
             deck = new Stack<Card>();
@@ -118,9 +110,8 @@ namespace Gostop
             gameScore[0] = new Scores();
             gameScore[1] = new Scores();
 
-            menu.SetPosition(this);
-
-            var behavior = GetComponent<BehaviorDesigner.Runtime.BehaviorTree>();
+            //menu.SetPosition(this);
+            behaviorTree = GetComponent<BehaviorTree>();
             return true;
         }
         
@@ -130,42 +121,6 @@ namespace Gostop
         /// <param name="msg"></param>
         public void DebugLog(string msg)
         {
-            if (turnUser == Player.COMPUTER)
-            {
-                return;
-            }
-
-            debugNumber++;
-            DebugInfo info;
-            info.num = debugNumber;
-            info.msg = msg;
-
-            listDebug.Enqueue(info);
-
-            string messages = string.Empty;
-            foreach (var debug in listDebug)
-            {
-                messages += $"{debug.num}. {debug.msg}\n";
-            }
-
-            menu.SetDebug(messages);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="info"></param>
-        protected void EatLog(KeyValuePair<int, List<Card>> info)
-        {
-            if (info.Value.Where(c => c.Owner != Player.NONE).ToList().Count() == 0)
-            {
-                return;
-            }
-
-            foreach (var card in info.Value)
-            {
-                DebugLog($"   > {card.Month}월 {card.KindOfCard} / {card.Owner}");
-            }
         }
     }
 }

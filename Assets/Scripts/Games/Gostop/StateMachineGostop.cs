@@ -11,32 +11,25 @@ namespace Gostop
     /// </summary>
     public enum State
     {
-        NONE = -1,
-        //WAIT = 0,
-        //START_GAME,
-        //CREATE_DECK,
-        //SHUFFLE_8,
-        //SHUFFLE_10,
-        //OPEN_8,
-        //OPEN_1_MORE,
-        //CHECK_JORKER,
-        //HANDS_UP,
-        //HANDS_OPEN,
-        
-        HANDS_SORT,
+        None = -1,
 
-        CARD_HIT, // 카드 치기.
-        CARD_POP, // 카드 뒤집기.
-        CARD_POP_AND_HIT,
+        MakeGame, // 게임 생성.
 
-        EAT_CHECK, // 먹는 판정.
-        EAT, // 먹기.
-        STEAL, // 카드 뺏기.
+        HitCard, // 카드 치기.
+        PopCardDeck, // 카드 뒤집기.
+        PopCardDeckAndHit, // 카드 뒤집고 치기 대기.
+        SortHands,
 
-        SCORE_UPDATE, // 점수 갱신.
-        TURN_CHECK, // 턴 바꾸기.
+        TakeCardCondition, // 먹을 수 있는지 확인.
+        TakeCard, // 카드 가져오기.
+        StealCard, // 카드 뺏기.
 
-        GAME_OVER_TIE, // 무승부.
+        UpdateScore, // 점수 갱신.
+        ChangeTurn, // 턴 바꾸기.
+
+        GameOver_Tie, // 무승부.
+        GameOver_Win, // 승.
+        GameOver_Lose, // 패.
     }
 
     // 상태 처리 단계
@@ -56,7 +49,7 @@ namespace Gostop
         public Card popCard; // 덱에서 꺼낸 정보.
         public Card hit; // 최초 친 카드.
         public bool hited = false; // 쳤는가.
-
+        public float delta = 0.0f; // 시간.
         public PlayInfo(int num = 0)
         {
             index = num;
@@ -64,6 +57,7 @@ namespace Gostop
             hit = null;
             hited = false; // 쳤는가.
             user = Board.Player.NONE;
+            delta = 0.0f;
         }
     }
 
@@ -79,7 +73,7 @@ namespace Gostop
 
         public StateInfo()
         {
-            state = State.NONE;
+            state = State.None;
             evt = StateEvent.INIT;
             info = new PlayInfo();
         }
@@ -178,8 +172,6 @@ namespace Gostop
             
             return null;
         }
-
-
     }
 
 }

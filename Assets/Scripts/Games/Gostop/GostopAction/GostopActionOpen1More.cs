@@ -17,7 +17,7 @@ namespace Gostop
             var scene = AppManager.Instance.CurrScene as SceneGostop;
             var board = GetComponent<Board>();
             
-            board.Pop1Cards();
+            board.PopDeckCard();
         }
 
         public override TaskStatus OnUpdate()
