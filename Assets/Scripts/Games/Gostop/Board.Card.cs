@@ -765,7 +765,7 @@ namespace Gostop
                                     ToList();
 
                     start = boardPositions[user].Gwang.position;
-                    end = new Vector3(start.x + card.Width * 2f, start.y, start.z);
+                    //end = new Vector3(start.x + card.Width * 2f, start.y, start.z);
                     break;
 
                 // 카드 두개 반ㅂ 칸.
@@ -779,7 +779,7 @@ namespace Gostop
                                    ToList();
 
                     start = boardPositions[user].Mung.position;
-                    end = new Vector3(start.x + card.Width * 2.5f, start.y, start.z);
+                    //end = new Vector3(start.x + card.Width * 2.5f, start.y, start.z);
                     break;
 
                 case Card.KindOf.CHO:
@@ -794,7 +794,7 @@ namespace Gostop
                                    ToList();
 
                     start = boardPositions[user].Thee.position;
-                    end = new Vector3(start.x + card.Width * 2.5f, start.y, start.z);
+                    //end = new Vector3(start.x + card.Width * 2.5f, start.y, start.z);
                     break;
 
                 case Card.KindOf.P:
@@ -807,7 +807,7 @@ namespace Gostop
                                    ToList();
 
                     start = boardPositions[user].Pee.position;
-                    end = new Vector3(start.x + card.Width * 2.5f, start.y, start.z);
+                    //end = new Vector3(start.x + card.Width * 2.5f, start.y, start.z);
                     break;
             }
 
@@ -815,63 +815,16 @@ namespace Gostop
             card.Owner = (Player)user;
             card.MoveTo(start, time: 0.1f,
                      delay: count * interval,
-                     complete: () => {
+                     complete: complete);
 
-                         complete();
-                     });
-
-            /*
-            // 기존 카드들 재배치.
-            for (int i = 0; i < list.Count; i++)
-            {
-                var c = list[i];
-                if (c == null) 
-                    continue;
-
-                c.SetSortOrder(i + 1);
-                c.SetEnablePhysics(true);
-                c.Owner = (Player)user;
-                
-                Vector3 newPosition = start + new Vector3((card.Width * i) * 0.5f, 0, 0);
-                c.MoveTo(
-                    newPosition,
-                    time: 0.1f,
-                    delay: count * interval);
-            }
-            */
-
-            // 카드 가져오기.
-            //var position1 = new Vector3(card.transform.position.x, 1, card.transform.position.z);
-            //Vector3 targetPosition = start + new Vector3((card.Width * list.Count) * 0.5f, 0, 0);
-            //Vector3 targetPosition = end;
-
-            // 위로 살짝뛰웠다가.
-
-
-            /*
-            card.MoveTo(
-                position1,
-                time: 0.1f,
-                delay: count * interval,
-                complete: () => {
-                        // 목적 위치로.
-                        card.MoveTo(
-                            targetPosition,
-                            time: 0.1f,
-                            delay: count * interval,
-                            complete: () => {
-
-                                complete();
-                            });
-                });
-            */
+           
             scores[(int)turnUser].Add(card);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        private void TackeCard()
+        private void TackeCardToScore()
         {
             Debug.Log($"먹는 판정 패 : {listEat.Count}");
             int total = listEat.Count;
@@ -883,14 +836,14 @@ namespace Gostop
             int count = 0;
             foreach (var card in listEat)
             {
-                TackCard(card, total - count); // 카드 획득.
+                //TackCard(card, total - count); // 카드 획득.
                 var slot = GetSlot(card);
                 slot.Value.Remove(card); // 보드 슬롯에서 제거.
                 count++;
             }
 
 
-            listEat.Clear();
+            //listEat.Clear();
         }
 
         /// <summary>
@@ -1008,7 +961,7 @@ namespace Gostop
                             possibleEat = true;
                             stealCount++;
                             var popup = UIManager.Instance.OpenPopup<UIPopupMessage>("UIPopupMessage");
-                            popup.Init("귀신");
+                            popup.Init("아싸~");
                         }
                         else if (list[0].Owner == Player.NONE &&
                                 list[1].Owner == Player.NONE &&
@@ -1040,7 +993,7 @@ namespace Gostop
                             stealCount++;
                             select.Clear();
                             var popup = UIManager.Instance.OpenPopup<UIPopupMessage>("UIPopupMessage");
-                            popup.Init("따닥2");
+                            popup.Init("폭탄!!");
                         }
                         else
                         {

@@ -22,6 +22,7 @@ namespace Gostop
 
         TakeCardCondition, // 먹을 수 있는지 확인.
         TakeCard, // 카드 가져오기.
+        TakeToMe, // 내게 가져오기.
         StealCard, // 카드 뺏기.
 
         UpdateScore, // 점수 갱신.

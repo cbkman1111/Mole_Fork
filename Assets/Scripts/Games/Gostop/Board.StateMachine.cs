@@ -435,11 +435,10 @@ namespace Gostop
 
                 case State.TakeCard: // 카드 획득.
                     StateInfo.Process(
-                        start: () => TackeCard(),
+                        start: () => TackeCardToScore(),
                         check: () => {
-
                             StateInfo.info.delta += Time.deltaTime;
-                            return StateInfo.info.delta > 0.4f;
+                            return StateInfo.info.delta > 0.2f;
                         },
                         complete: () => {
                             // 주인 없는 카드로 설정.
@@ -451,6 +450,29 @@ namespace Gostop
                                 }
                             }
 
+                            stateMachine.Change(State.TakeToMe, turnUser);
+                            StateInfo = null;
+
+                        });
+                    break;
+
+                case State.TakeToMe:
+                    StateInfo.Process(
+                        start: () => {
+                            int count = 0;
+                            int total = listEat.Count;
+                            foreach (var card in listEat)
+                            {
+                                TackCard(card, total - count); // 카드 획득.
+                                count++;
+                            }
+
+                            listEat.Clear();
+                        },
+                        check: () => {
+                            return GetMoveAllCount() == 0;
+                        },
+                        complete: () => {
                             if (stealCount == 0)
                             {
                                 stateMachine.Change(State.UpdateScore, turnUser);
@@ -462,6 +484,8 @@ namespace Gostop
                                 StateInfo = null;
                             }
                         });
+
+
                     break;
 
                 case State.StealCard: // 카드 뺃기.
