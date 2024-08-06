@@ -18,7 +18,7 @@ namespace Gostop
             var scene = AppManager.Instance.CurrScene as SceneGostop;
             var board = GetComponent<Board>();
 
-            board.SortHand();
+            board.HandSort();
         }
 
         public override TaskStatus OnUpdate()

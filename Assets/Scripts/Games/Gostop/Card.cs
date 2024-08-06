@@ -127,6 +127,7 @@ namespace Gostop
                 case 49:
                     KindOfCard = KindOf.PPP;
                     break;
+                case 12:
                 case 50:
                 case 51:
                 case 52:

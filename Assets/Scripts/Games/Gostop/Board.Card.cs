@@ -9,6 +9,7 @@ using UI.Popup;
 using UnityEngine;
 using static UnityEditor.Rendering.InspectorCurveEditor;
 using UnityEditor;
+using SweetSugar.Scripts.TargetScripts.TargetEditor;
 
 
 namespace Gostop
@@ -115,13 +116,16 @@ namespace Gostop
             // 객체 지우기.
             for (int i = 0; i < deck.Count(); i++)
             {
-                GameObject.Destroy(deck.Pop().gameObject);
+                var card = deck.Pop();
+                DOTween.KillAll(card.gameObject);
+                GameObject.Destroy(card.gameObject);
             }
 
             foreach (var kindSlot in bottoms)
             {
                 foreach (var card in kindSlot.Value)
                 {
+                    DOTween.KillAll(card.gameObject);
                     GameObject.Destroy(card.gameObject);
                 }
             }
@@ -130,6 +134,7 @@ namespace Gostop
             {
                 foreach (var card in hands[i])
                 {
+                    DOTween.KillAll(card.gameObject);
                     GameObject.Destroy(card.gameObject);
                 }
             }
@@ -138,6 +143,7 @@ namespace Gostop
             {
                 foreach (var card in scores[i])
                 {
+                    DOTween.KillAll(card.gameObject);
                     GameObject.Destroy(card.gameObject);
                 }
             }
@@ -190,24 +196,32 @@ namespace Gostop
         /// 
         /// </summary>
         /// <returns></returns>
-        public bool SortHand()
+        public bool HandSort()
         {
-            for (int i = 0; i < (int)Player.MAX; i++)
+            try 
             {
-                hands[i] = hands[i].OrderBy(card => card.Num).ToList();
-
-                for (int index = 0; index < hands[i].Count; index++)
+                for (int i = 0; i < (int)Player.MAX; i++)
                 {
-                    var card = hands[i][index];
-                    var handPosition = boardPositions[i].Hand.GetChild(index).transform.position;
-                    //var handRotation = boardPositions[i].Hand.transform.rotation;
+                    hands[i] = hands[i].OrderBy(card => card.Num).ToList();
 
-                    card.MoveTo(
-                        handPosition,
-                        time: 0.2f);
+                    for (int index = 0; index < hands[i].Count; index++)
+                    {
+                        var card = hands[i][index];
+                        var handPosition = boardPositions[i].Hand.GetChild(index).transform.position;
+                        //var handRotation = boardPositions[i].Hand.transform.rotation;
+
+                        card.MoveTo(
+                            handPosition,
+                            time: 0.2f);
+                    }
+
                 }
-              
+            } 
+            catch (Exception e)
+            {
+                Debug.LogError(e.Message);
             }
+
             return true;
         }
 
@@ -397,7 +411,7 @@ namespace Gostop
         public bool CreateDeck()
         {
             List<int> nums = new List<int>();
-            int cardCount = 48;
+            int cardCount = 50;
             for (int i = 0; i < cardCount; i++)
             {
                 nums.Add(i + 1);
@@ -679,10 +693,16 @@ namespace Gostop
                     if (card.Month == 13) // 조커 카드.
                     {
                         stealCount += 1;
-                        TackCard(card);
-                        stateMachine.Change(State.StealCard, turnUser);
+                        //TackCard(card);
+                        //
+
+                        StealCard();
+                        TackCard(card, 1); // 카드 획득.
+
+                        //stateMachine.Change(State.StealCard, turnUser);
                         stateMachine.Change(State.PopCardDeckAndHit, turnUser);
                         StateInfo = null;
+
                         /*
                         var deckCard = deck.Pop();
                         deckCard.MoveTo(card.transform.position, time: 0.1f);
@@ -1032,8 +1052,8 @@ namespace Gostop
             deckCard.SetShadow(false);
             deckCard.Owner = (Player)turnUser;
             hands[(int)turnUser].Add(deckCard);
-            
-            SortHand();
+
+            HandSort();
             return card;
         }
 
@@ -1043,6 +1063,9 @@ namespace Gostop
         /// <returns></returns>
         public Card PopDeckCard(Player owner = Player.NONE)
         {
+            if (deck.Count == 0)
+                return null;
+
             Card card = deck.Pop();
             KeyValuePair<int, List<Card>> slot = GetSlot(card);
             if (slot.Key != -1)

@@ -25,6 +25,7 @@ namespace Scenes
             }
 
             board.Init(menu);
+            board.StartGame();
             return true;
         }
 

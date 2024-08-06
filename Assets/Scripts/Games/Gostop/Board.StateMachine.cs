@@ -32,7 +32,7 @@ namespace Gostop
         /// </summary>
         public void StartGame()
         {
-            stateMachine.Change(State.HitCard, turnUser);
+            stateMachine.Change(State.StartGame, turnUser);
         }
 
         private int GetMoveCount(List<Card> list)
@@ -60,78 +60,56 @@ namespace Gostop
             State state = StateInfo.state;
             switch (state)
             {
-#if false
-                /*
-                case State.WAIT:
-                    stateMachine.Process(
-                        start: () => {
-                        },
-                        check: () => {
-                            return true;
-                        },
-                        complete: () => { });
-                    break;
-                */
-
                 // 게임 시작.
-                /*
-                case State.START_GAME:
-                    stateMachine.Process(
+                case State.StartGame:
+                    StateInfo.Process(
                          start: () => {
-                             listDebug.Clear();
+                             DestroyAllCards();
                          },
                          check: () => {
                              return true;
                          },
                          complete: () => {
-                             stateMachine.Change(State.CREATE_DECK);
+                             stateMachine.Change(State.CreateDeck, Player.NONE);
+                             StateInfo = null;
                          });
                     break;
-                */
+          
                 // 카드덱 생성.
-                /*
-                case State.CREATE_DECK:
-                    stateMachine.Process(
+                case State.CreateDeck:
+                    StateInfo.Process(
                         start: () => {
-                            ScoreUpdate();
+                            //ScoreUpdate();
                             CreateDeck();
                         },
                         check: () => {
-                            int count = GetMoveCount(deck); //deck.Where(card => card.ListTween.Count == 0).ToList().Count;
+                            int count = deck.Where(card => card.ListTween.Count != 0).ToList().Count;
                             return count == 0;
                         },
                         complete: () => {
-                            stateMachine.Change(State.SHUFFLE_8);
+                            stateMachine.Change(State.Shuffle_8, Player.NONE);
+                            StateInfo = null;
                         });
-
                     break;
-                */
 
                 // 바닥 8장 깔기.
-                /*
-                case State.SHUFFLE_8:
-                    stateMachine.Process(
+                case State.Shuffle_8:
+                    StateInfo.Process(
                         start: () => {
                             Shuffle8Card();
                         },
                         check: () => {
-                            int count = 0;
-                            foreach (var slot in bottoms){
-                                count += GetMoveCount(slot.Value);// slot.Value.Where(card => card.ListTween.Count == 0).ToList().Count;
-                            }
-
-                            return count == 0;
+                            return GetMoveAllCount() == 0;
                         },
                         complete: () => {
-                            stateMachine.Change(State.SHUFFLE_10);
+                            stateMachine.Change(State.Shuffle_10, Player.NONE);
+                            StateInfo = null;
                         });
-
                     break;
-                */
+          
                 // 열장씩 나누기.
-                /*
-                case State.SHUFFLE_10:
-                    stateMachine.Process(
+                case State.Shuffle_10:
+                    StateInfo.Process(
                         start: () => {
                             //Pop10Cards();
                             Shuffle10Card();
@@ -143,15 +121,15 @@ namespace Gostop
                             return count == 0;
                         },
                         complete: () => {
-                            stateMachine.Change(State.OPEN_8);
+                            stateMachine.Change(State.Open8, Player.NONE);
+                            StateInfo = null;
                         });
                     break;
-                */
+
 
                 // 8장 뒤집기
-                /*
-                case State.OPEN_8:
-                    stateMachine.Process(
+                case State.Open8:
+                    StateInfo.Process(
                         start: () => {
                             FlipCard8();
                         },
@@ -164,15 +142,15 @@ namespace Gostop
                             return count == 0;
                         },
                         complete: () => {
-                            stateMachine.Change(State.CHECK_JORKER);
+                            stateMachine.Change(State.CheckJocker, Player.NONE);
+                            StateInfo = null;
                         });
                     break;
-                */
+          
 
                 // 바닥 조커 확인.
-                /*
-                case State.CHECK_JORKER:
-                    stateMachine.Process(
+                case State.CheckJocker:
+                    StateInfo.Process(
                         start: () => {
                             CheckJoker();
                         },
@@ -201,21 +179,21 @@ namespace Gostop
 
                             if (jockerCount > 0 || Count < 8)
                             {
-                                stateMachine.Change(State.OPEN_1_MORE);
+                                stateMachine.Change(State.Open1More, Player.NONE);
+                                StateInfo = null;
                             }
                             else
                             {
-                                stateMachine.Change(State.HANDS_UP);
+                                stateMachine.Change(State.HandUp, Player.NONE);
+                                StateInfo = null;
                             }
                         });
                     break;
-                */
-
-                /*
-                case State.OPEN_1_MORE:
-                    stateMachine.Process(
+       
+                case State.Open1More:
+                    StateInfo.Process(
                         start: () => {
-                            //Pop1Cards((int)Player.NONE);
+                            PopDeckCard(Player.NONE);
                         },
                         check: () => {
                             int count = 0;
@@ -228,14 +206,14 @@ namespace Gostop
                             return count == 0;
                         },
                         complete: () => {
-                            stateMachine.Change(State.CHECK_JORKER);
+                            stateMachine.Change(State.CheckJocker, Player.NONE);
+                            StateInfo = null;
                         });
                     break;
-                */
 
-                /*
-                case State.HANDS_UP:
-                    stateMachine.Process(
+
+                case State.HandUp:
+                    StateInfo.Process(
                         start: () => {
                             HandsUp();
                         },
@@ -247,14 +225,14 @@ namespace Gostop
                             return count == 0;
                         },
                         complete: () => {
-                            stateMachine.Change(State.HANDS_OPEN);
+                            stateMachine.Change(State.HandOpen, Player.NONE);
+                            StateInfo = null;
                         });
                     break;
-                */
-
-                /*
-                case State.HANDS_OPEN: // 손패를 뒤집습니다.
-                    stateMachine.Process(
+            
+ 
+                case State.HandOpen: // 손패를 뒤집습니다.
+                    StateInfo.Process(
                         start: () => {
                             HandOpen();
                         },
@@ -263,29 +241,14 @@ namespace Gostop
                             return count == 0;
                         },
                         complete: () => {
-                            stateMachine.Change(State.HANDS_SORT);
-                        });
-
-                    break;
-                */
-#endif
-                case State.MakeGame:
-                    StateInfo.Process(
-                        start: () => {
-                            behaviorTree.gameObject.SetActive(false);
-                            behaviorTree.gameObject.SetActive(true);
-                        },
-                        check: () => {
-                            return true;
-                        },
-                        complete: () => {
+                            stateMachine.Change(State.HandSort, Player.NONE);
                             StateInfo = null;
                         });
-
                     break;
-                case State.SortHands: // 손패를 정렬합니다.
+
+                case State.HandSort: // 손패를 정렬합니다.
                     StateInfo.Process(
-                        start: () => SortHand(),
+                        start: () => HandSort(),
                         check: () => {
                             return GetMoveCount(hands[0]) == 0;
                         },
@@ -301,7 +264,7 @@ namespace Gostop
                             menu.ShowScoreMenu(true);
                             if (turnUser == Player.COMPUTER)
                             {
-                                var list = GetSameMonthCard((int)Board.Player.USER, hands[(int)Player.COMPUTER][0]);
+                                var list = GetSameMonthCard((int)Board.Player.COMPUTER, hands[(int)Player.COMPUTER][0]);
                                 if (list.Count == 3) // 폭탄
                                 {
                                     HitBomb((int)Player.COMPUTER, list, list[0]);
@@ -362,12 +325,15 @@ namespace Gostop
                     StateInfo.Process(
                         start: () => {
                             StateInfo.info.popCard = PopDeckCard(turnUser);
+                            if(StateInfo.info.popCard == null)
+                                Debug.LogError("PopDeckCard is null");
                         },
                         check: () => {
                             int count = GetMoveAllCount();
                             if (count == 0)
                             {
-                                if (StateInfo.info.popCard.Month == 13) // 뒤집어서 조커가 나오면 다시 뽑습니다.
+                                if (StateInfo.info.popCard != null &&
+                                    StateInfo.info.popCard.Month == 13) // 뒤집어서 조커가 나오면 다시 뽑습니다.
                                 {
                                     StateInfo.evt = StateEvent.INIT;
                                     return false;
@@ -523,13 +489,13 @@ namespace Gostop
                     break;
                 case State.ChangeTurn: // 턴 바꾸기.
                     StateInfo.Process(
-                        start: () => SortHand(),
+                        start: () => HandSort(),
                         check: () => {
                             int count = GetMoveAllCount();
                             return count == 0;
                         },
                         complete: () => {
-                            State nextState = State.SortHands;
+                            State nextState = State.HandSort;
 
                             // 현재 턴유저의 카드가 0개라면.
                             if (hands[(int)Player.COMPUTER].Count == 0 && hands[(int)Player.USER].Count == 0)
@@ -565,7 +531,7 @@ namespace Gostop
                         },
                         complete: () => {
                             DestroyAllCards();
-                            stateMachine.Change(State.MakeGame, turnUser);
+                            stateMachine.Change(State.StartGame, turnUser);
                             StateInfo = null;
                         });
                     break;
@@ -578,7 +544,7 @@ namespace Gostop
                         },
                         complete: () => {
                             DestroyAllCards();
-                            stateMachine.Change(State.MakeGame, turnUser);
+                            stateMachine.Change(State.StartGame, turnUser);
                             StateInfo = null;
                         });
                     break;
@@ -591,7 +557,7 @@ namespace Gostop
                         },
                         complete: () => {
                             DestroyAllCards();
-                            stateMachine.Change(State.MakeGame, turnUser);
+                            stateMachine.Change(State.StartGame, turnUser);
                             StateInfo = null;
                         });
                     break;

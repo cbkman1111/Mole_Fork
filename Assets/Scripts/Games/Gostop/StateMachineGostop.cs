@@ -13,12 +13,22 @@ namespace Gostop
     {
         None = -1,
 
-        MakeGame, // 게임 생성.
+        StartGame, // 게임 생성.
+
+        CreateDeck, // 덱 생성.
+        Shuffle_8,
+        Shuffle_10,
+        Open8,
+        CheckJocker,
+        Open1More,
+        HandUp,
+        HandOpen,
+        HandSort,
 
         HitCard, // 카드 치기.
         PopCardDeck, // 카드 뒤집기.
         PopCardDeckAndHit, // 카드 뒤집고 치기 대기.
-        SortHands,
+  
 
         TakeCardCondition, // 먹을 수 있는지 확인.
         TakeCard, // 카드 가져오기.
