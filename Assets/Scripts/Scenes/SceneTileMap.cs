@@ -43,7 +43,7 @@ namespace Scenes
 
             _beefalo.Init(100, 101, Vector3.one);
 
-            _menu = UIManager.Instance.OpenMenu<UIMenuTileMap>("UIMenuTileMap");
+            _menu = UIManager.Instance.OpenMenu<UIMenuTileMap>();
             if (_menu != null)
             {
                 _menu.InitMenu(

@@ -546,7 +546,7 @@ namespace Scenes
         /// <returns></returns>
         public override bool Init(JSONObject param)
         {
-            menu = UIManager.Instance.OpenMenu<UIMenuMaze>("UIMenuMaze");
+            menu = UIManager.Instance.OpenMenu<UIMenuMaze>();
             if (menu != null)
             {
                 menu.InitMenu();
@@ -640,7 +640,7 @@ namespace Scenes
        
         public void OnGameOver()
         {
-            var popup = UIManager.Instance.OpenPopup<PopupNormal>("PopupNormal");
+            var popup = UIManager.Instance.OpenPopup<PopupNormal>();
             popup.SetUI();
             popup.SetOnClose(() => {
                 AppManager.Instance.ChangeScene(Scenes.SceneMenu);

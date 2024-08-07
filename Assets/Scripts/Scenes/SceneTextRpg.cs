@@ -10,7 +10,7 @@ namespace Scenes
     {
         public override bool Init(JSONObject param)
         {
-            UIMenuTextRpg menu = UIManager.Instance.OpenMenu<UIMenuTextRpg>("UIMenuTextRpg");
+            UIMenuTextRpg menu = UIManager.Instance.OpenMenu<UIMenuTextRpg>();
             if(menu != null)
             {
                 menu.InitMenu();

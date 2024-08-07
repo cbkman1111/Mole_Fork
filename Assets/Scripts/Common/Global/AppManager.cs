@@ -123,7 +123,7 @@ namespace Common.Global
                 GiantDebug.Log("AppManager - LoadScene 2");
 
                 // 로딩 메뉴를 띄우고 수치를 갱신.
-                var loadingMenu = UIManager.Instance.OpenMenu<UILoadingMenu>("UILoadingMenu") as UILoadingMenu;
+                var loadingMenu = UIManager.Instance.OpenMenu<UILoadingMenu>();
                 var handle = StartCoroutine(UpdateLoadPercent(loadingMenu));
 
                 // 다음 씬을 로드 시작.

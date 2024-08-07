@@ -37,8 +37,8 @@ namespace Gostop
             HAND,
         }
 
-        private StateMachineGostop stateMachine = null;
-        private BehaviorTree behaviorTree = null;
+        private CommandProcedure commandProcedure = null;
+        //private BehaviorTree behaviorTree = null;
 
         [SerializeField]
         public Card prefabCard = null;
@@ -56,11 +56,11 @@ namespace Gostop
         /// 
         /// </summary>
         /// <returns></returns>
-        public static Board Create(UIMenuGostop menu)
+        public static Board Create(Action<Player, Score> updateScore)
         {
             Board prefab = ResourcesManager.Instance.LoadInBuild<Board>("Board");
             Board board = Instantiate<Board>(prefab);
-            if (board != null && board.Init(menu))
+            if (board != null && board.Init(updateScore))
             {
                 return board;
             }
@@ -72,10 +72,10 @@ namespace Gostop
         /// 
         /// </summary>
         /// <returns></returns>
-        public bool Init(UIMenuGostop menu)
+        public bool Init(Action<Player, Score> updateScore)
         {
-            this.menu = menu;
-            this.stateMachine = StateMachineGostop.Create();
+            this.updateScore = updateScore;
+            this.commandProcedure = CommandProcedure.Create();
 
             turnUser = Player.USER;
 
@@ -106,12 +106,10 @@ namespace Gostop
             bottoms.Add(12, new List<Card>());
             bottoms.Add(13, new List<Card>());
 
-            gameScore = new Scores[2];
-            gameScore[0] = new Scores();
-            gameScore[1] = new Scores();
-
-            //menu.SetPosition(this);
-            behaviorTree = GetComponent<BehaviorTree>();
+            gameScore = new Score[2];
+            gameScore[0] = new Score();
+            gameScore[1] = new Score();
+            //behaviorTree = GetComponent<BehaviorTree>();
             return true;
         }
         

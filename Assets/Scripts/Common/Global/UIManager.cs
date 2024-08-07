@@ -40,9 +40,10 @@ namespace Common.Global
             return true;
         }
 
-        public T OpenMenu<T>(string menuName) where T : MenuBase
+        public T OpenMenu<T>() where T : MenuBase
         {
-            var ret = _controllerMenu.Open<T>(menuName);
+            string name = typeof(T).Name;
+            var ret = _controllerMenu.Open<T>(name);
             if (ret != null)
             {
                 ret.OnInit();
@@ -51,9 +52,10 @@ namespace Common.Global
             return ret;
         }
 
-        public T OpenHud<T>(string hudName) where T : HudBase
+        public T OpenHud<T>() where T : HudBase
         {
-            var ret = _controllerPopup.Open<T>(hudName);
+            string name = typeof(T).Name;
+            var ret = _controllerPopup.Open<T>(name);
             if (ret == true)
             {
                 ret.OnInit();
@@ -62,21 +64,10 @@ namespace Common.Global
             return ret;
         }
 
-        public T OpenPopup<T>(string popupName) where T : PopupBase
+        public T OpenPopup<T>() where T : PopupBase
         {
-            var ret = _controllerPopup.Open<T>(popupName);
-            if (ret == true)
-            {
-                ret.OnInit();
-            }
-
-            CoverCheck();
-            return ret;
-        }
-
-        public T OpenEtc<T>(string etcName) where T : UIObject.UIObject
-        {
-            var ret = _controllerPopup.Open<T>(etcName);
+            string name = typeof(T).Name;
+            var ret = _controllerPopup.Open<T>(name);
             if (ret == true)
             {
                 ret.OnInit();
@@ -86,30 +77,63 @@ namespace Common.Global
             return ret;
         }
 
-        public bool FindPopup(string popupName)
+        public T OpenEtc<T>() where T : UIObject.UIObject
         {
-            return _controllerPopup.Get(popupName) == true;
+            string name = typeof(T).Name;
+            var ret = _controllerPopup.Open<T>(name);
+            if (ret == true)
+            {
+                ret.OnInit();
+            }
+
+            CoverCheck();
+            return ret;
         }
 
-        public void CloseMenu(string menuName)
+        public bool FindPopup<T>()
         {
-            _controllerMenu.Close(menuName);
+            string name = typeof(T).Name;
+            return _controllerPopup.Get(name) == true;
         }
 
-        public void CloseHud(string hudName)
+        public void CloseMenu<T>()
         {
-            _controllerHud.Close(hudName);
+            string name = typeof(T).Name;
+            _controllerMenu.Close(name);
         }
 
-        public void ClosePopup(string popupName)
+        public void CloseMenu(string name)
         {
-            _controllerPopup.Close(popupName);
+            _controllerMenu.Close(name);
+        }
+
+        public void CloseHud<T>()
+        {
+            string name = typeof(T).Name;
+            _controllerHud.Close(name);
+        }
+
+        public void CloseHud(string name)
+        {
+            _controllerHud.Close(name);
+        }
+
+        public void ClosePopup<T>()
+        {
+            _controllerPopup.Close(name);
             CoverCheck();
         }
 
-        public void CloseEtc(string etcName)
+        public void ClosePopup(string name)
         {
-            _controllerEtc.Close(etcName);
+            _controllerPopup.Close(name);
+            CoverCheck();
+        }
+
+        public void CloseEtc<T>()
+        {
+            string name = typeof(T).Name;
+            _controllerEtc.Close(name);
             CoverCheck();
         }
 

@@ -35,7 +35,7 @@ public class SceneDotween : SceneBase
 
     public override bool Init(JSONObject param)
     {
-        var menu = UIManager.Instance.OpenMenu<UIMenuDotween>("UIMenuDotween");
+        var menu = UIManager.Instance.OpenMenu<UIMenuDotween>();
         menu.InitMenu(OnShoot, OnSlide);
 
         _pool = Pool<Transform>.Create(_projectilePrefab.transform, transform, 10);

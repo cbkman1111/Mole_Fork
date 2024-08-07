@@ -9,7 +9,7 @@ namespace Gostop
     /// <summary>
     /// 각 턴의 정보.
     /// </summary>
-    public enum State
+    public enum Command
     {
         None = -1,
 
@@ -44,14 +44,13 @@ namespace Gostop
     }
 
     // 상태 처리 단계
-    public enum StateEvent
+    public enum CommandStep
     {
-        INIT = 0,
-        START,
-        PROGRESS,
-        DONE,
+        None = -1,
+        Start,
+        Progress,
+        Done,
     }
-
 
     public class PlayInfo
     {
@@ -76,16 +75,16 @@ namespace Gostop
     /// <summary>
     /// 
     /// </summary>
-    public class StateInfo
+    public class CommandInfo
     {
-        public State state;
-        public StateEvent evt;
+        public Command type;
+        public CommandStep step;
         public PlayInfo info;
 
-        public StateInfo()
+        public CommandInfo()
         {
-            state = State.None;
-            evt = StateEvent.INIT;
+            type = Command.None;
+            step = CommandStep.None;
             info = new PlayInfo();
         }
 
@@ -97,37 +96,36 @@ namespace Gostop
         /// <param name="complete"></param>
         public void Process(Action start, Func<bool> check, Action complete)
         {
-            switch (evt)
+            switch (step)
             {
-                case StateEvent.INIT:
-                    evt = StateEvent.START;
+                case CommandStep.None:
+                    step = CommandStep.Start;
                     break;
 
-                case StateEvent.START:
-                    evt = StateEvent.PROGRESS;
+                case CommandStep.Start:
+                    step = CommandStep.Progress;
                     start();
                     break;
 
-                case StateEvent.PROGRESS:
+                case CommandStep.Progress:
                     if (check() == true)
-                        evt = StateEvent.DONE;
+                        step = CommandStep.Done;
                     break;
 
-                case StateEvent.DONE:
+                case CommandStep.Done:
                     complete();
                     break;
             }
         }
-        
     }
 
-    public class StateMachineGostop
+    public class CommandProcedure
     {
-        public Stack<StateInfo> Stack { get; set; }
+        public Queue<CommandInfo> QueueCommand { get; set; }
 
-        public static StateMachineGostop Create()
+        public static CommandProcedure Create()
         {
-            StateMachineGostop ret = new StateMachineGostop();
+            CommandProcedure ret = new CommandProcedure();
             if (ret != null && ret.Init() == true)
             {
                 return ret;
@@ -138,24 +136,24 @@ namespace Gostop
 
         public bool Init()
         {
-            Stack = new ();
+            QueueCommand = new ();
             return true;
         }
 
         public void Clear()
         {
-            Stack.Clear();
+            QueueCommand.Clear();
         }
 
         /// <summary>
         /// 상태 변경.
         /// </summary>
         /// <param name="state"></param>
-        public void Change(State state, Board.Player player)
+        public void Enqueue(Command command, Board.Player player = Board.Player.NONE)
         {
-            StateInfo info = new StateInfo() {
-                state = state,
-                evt = StateEvent.INIT,
+            CommandInfo info = new CommandInfo() {
+                type = command,
+                step = CommandStep.None,
                 info = new PlayInfo()
                 {
                     index = 0,
@@ -166,19 +164,19 @@ namespace Gostop
                 },
             };
 
-            Stack.Push(info);
+            QueueCommand.Enqueue(info);
         }
 
         /// <summary>
         /// 상태 꺼내기.
         /// </summary>
         /// <returns></returns>
-        public StateInfo PopState()
+        public CommandInfo Dequeue()
         {
-            if (Stack.Count > 0)
+            if (QueueCommand.Count > 0)
             {
-                var info = Stack.Pop();
-                return info;
+                var command = QueueCommand.Dequeue();
+                return command;
             }
             
             return null;

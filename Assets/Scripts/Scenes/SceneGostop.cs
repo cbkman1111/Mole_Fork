@@ -4,31 +4,53 @@ using UI.Menu;
 using UnityEngine;
 using Gostop;
 using UnityEditor;
+using System;
+using TMPro;
 
 namespace Scenes
 {
+    /// <summary>
+    /// 고스톱 Scene 객체.
+    /// </summary>
     public class SceneGostop : SceneBase
     {
         [SerializeField]
         public Board board = null;
+        [SerializeField]
+        private TextMeshPro[] Score = new TextMeshPro[(int)Board.Player.MAX];
 
         /// <summary>
-        /// 
+        /// 씬 초기화.
         /// </summary>
         /// <returns></returns>
         public override bool Init(JSONObject param)
         {
-            UIMenuGostop menu = UIManager.Instance.OpenMenu<UIMenuGostop>("UIMenuGostop");
+            UIMenuGostop menu = UIManager.Instance.OpenMenu<UIMenuGostop>();
             if (menu != null)
             {
                 menu.InitMenu();
             }
 
-            board.Init(menu);
+            board.Init(UpdateScore);
             board.StartGame();
             return true;
         }
 
+        /// <summary>
+        /// 점수 처리.
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="score"></param>
+        private void UpdateScore(Board.Player player, Score score)
+        {
+            int index = (int)player;
+            Score[index].SetText($"{score.total} 점");
+        }
+
+        /// <summary>
+        /// 화면 터치 때기.
+        /// </summary>
+        /// <param name="position"></param>
         public override void OnTouchEnd(Vector3 position)
         {
             Ray ray = MainCamera.ScreenPointToRay(position);
@@ -40,7 +62,7 @@ namespace Scenes
                     Card card = hit.collider.GetComponent<Card>();
                     if (card != null)
                     {
-                        if (board.StateInfo.state == State.HitCard)
+                        if (board.CommandInfo.type == Command.HitCard)
                         {
                             if (board.MyTurn() == true)
                             {

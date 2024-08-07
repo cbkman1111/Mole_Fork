@@ -33,7 +33,7 @@ namespace Gostop
         public Transform Hand = null;
     }
 
-    public class Scores
+    public class Score
     {
         public int shake; // 흔듬 숫자.
         public int go; // 고 숫자.
@@ -53,6 +53,25 @@ namespace Gostop
         public int thee;
 
         public int total;
+
+        public void Init()
+        {
+            shake = 0; 
+            go = 0; 
+            peebak = false; 
+            gwangbak = false; 
+            mungbak = false; 
+            goback = false;
+            chungdan = false;
+            hongdan = false;
+            chodan = false;
+            godori = false;
+            gawng = 0;
+            mung = 0;
+            pee = 0;
+            thee = 0;
+            total = 0;
+        }
     }
 
     /// <summary>
@@ -60,7 +79,7 @@ namespace Gostop
     /// </summary>
     public partial class Board : MonoBehaviour
     {
-        public Scores[] gameScore = null;
-        public UIMenuGostop menu = null;
+        public Score[] gameScore = null;
+        public Action<Player, Score> updateScore = null;
     }
 }

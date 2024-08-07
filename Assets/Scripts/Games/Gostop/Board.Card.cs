@@ -150,7 +150,7 @@ namespace Gostop
 
             // 배열 지우기.
             deck.Clear();
-            stateMachine.Clear();
+            commandProcedure.Clear();
 
             foreach (var kindSlot in bottoms)
             {
@@ -399,8 +399,7 @@ namespace Gostop
 
                 float muti = Mathf.Pow(2, multiCount);
                 gameScore[player].total *= (int)muti;
-
-                menu.ScoreUpdate((Player)user, gameScore[user]);
+                updateScore((Player)user, gameScore[user]);
             }
         }
 
@@ -672,7 +671,7 @@ namespace Gostop
         /// <param name="card"></param>
         public void HitCard(int user, Card card, float delay = 0)
         {
-            var playInfo = StateInfo.info;
+            var playInfo = CommandInfo.info;
      
             KeyValuePair<int, List<Card>> slot = GetSlot(card);
             bool success = hands[user].Remove(card);
@@ -693,30 +692,16 @@ namespace Gostop
                     if (card.Month == 13) // 조커 카드.
                     {
                         stealCount += 1;
-                        //TackCard(card);
-                        //
-
                         StealCard();
                         TackCard(card, 1); // 카드 획득.
-
-                        //stateMachine.Change(State.StealCard, turnUser);
-                        stateMachine.Change(State.PopCardDeckAndHit, turnUser);
-                        StateInfo = null;
-
-                        /*
-                        var deckCard = deck.Pop();
-                        deckCard.MoveTo(card.transform.position, time: 0.1f);
-                        deckCard.ShowMe();
-                        deckCard.SetShadow(false);
-                        deckCard.Owner = (Player)user;
-                        hands[user].Add(deckCard);
-                        */
+                        commandProcedure.Enqueue(Command.PopCardDeckAndHit, turnUser);
+                        CommandInfo = null;
                     }
                     else if (card.Month == 100) // 폭탄 공짜 카드.
                     {
                         GameObject.Destroy(card.gameObject);
-                        stateMachine.Change(State.PopCardDeck, turnUser);
-                        StateInfo = null;
+                        commandProcedure.Enqueue(Command.PopCardDeck, turnUser);
+                        CommandInfo = null;
                     }
                     else // 일반 카드.
                     {
@@ -902,7 +887,7 @@ namespace Gostop
                             stealCount++;
                             DebugLog($"{list[0].Month} - 귀신.");
 
-                            var popup = UIManager.Instance.OpenPopup<UIPopupMessage>("UIPopupMessage");
+                            var popup = UIManager.Instance.OpenPopup<UIPopupMessage>();
                             popup.Init("귀신");
                         }
                         else if (list[0].Owner == Player.NONE &&
@@ -926,14 +911,14 @@ namespace Gostop
                             list[1].Owner == turnUser &&
                             list[2].Owner == Player.NONE)
                         {
-                            var popup = UIManager.Instance.OpenPopup<UIPopupMessage>("UIPopupMessage");
+                            var popup = UIManager.Instance.OpenPopup<UIPopupMessage>();
                             popup.Init("뻑1.");
                         }
                         else if (list[0].Owner == Player.NONE &&
                                   list[1].Owner == turnUser &&
                                   list[2].Owner == turnUser)
                         {
-                            var popup = UIManager.Instance.OpenPopup<UIPopupMessage>("UIPopupMessage");
+                            var popup = UIManager.Instance.OpenPopup<UIPopupMessage>();
                             popup.Init("뻑2");
                         }
                         else if (list[0].Owner == Player.NONE &&
@@ -980,7 +965,7 @@ namespace Gostop
 
                             possibleEat = true;
                             stealCount++;
-                            var popup = UIManager.Instance.OpenPopup<UIPopupMessage>("UIPopupMessage");
+                            var popup = UIManager.Instance.OpenPopup<UIPopupMessage>();
                             popup.Init("아싸~");
                         }
                         else if (list[0].Owner == Player.NONE &&
@@ -996,7 +981,7 @@ namespace Gostop
                             possibleEat = true;
                             stealCount++;
                             select.Clear();
-                            var popup = UIManager.Instance.OpenPopup<UIPopupMessage>("UIPopupMessage");
+                            var popup = UIManager.Instance.OpenPopup<UIPopupMessage>();
                             popup.Init("따닥1");
                         }
                         else if (list[0].Owner == Player.NONE &&
@@ -1012,7 +997,7 @@ namespace Gostop
                             possibleEat = true;
                             stealCount++;
                             select.Clear();
-                            var popup = UIManager.Instance.OpenPopup<UIPopupMessage>("UIPopupMessage");
+                            var popup = UIManager.Instance.OpenPopup<UIPopupMessage>();
                             popup.Init("폭탄!!");
                         }
                         else

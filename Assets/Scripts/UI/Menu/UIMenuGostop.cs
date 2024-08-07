@@ -60,7 +60,7 @@ namespace UI.Menu
             */
         }
 
-        public void ScoreUpdate(Board.Player user, Scores score)
+        public void ScoreUpdate(Board.Player user, Score score)
         {
             int userIndex = 1;
             if (user == Board.Player.COMPUTER)
