@@ -4,7 +4,7 @@ using Common.UIObject;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CellTest : UIObject
+public class UICellTest : UIObject
 {
     public Image color = null;
     public Text msg = null;

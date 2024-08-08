@@ -3,9 +3,6 @@ using SweetSugar.Scripts.Level;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using static System.Collections.Specialized.BitVector32;
-using static UnityEditor.Experimental.GraphView.GraphView;
-
 
 namespace Match3
 {
@@ -60,8 +57,6 @@ namespace Match3
                 inputCol = $"{valueHeight}";
             }
         }
-       
-      
 
         private void Tool()
         {

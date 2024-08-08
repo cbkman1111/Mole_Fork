@@ -7,7 +7,8 @@ using UnityEngine.UI;
 
 namespace UI.Popup
 {
-    public class PopupNormal : PopupBase
+    [Path("UI/PopupTemp")]
+    public class UIPopupNormal : PopupBase
     {
         public Action _close { get; set; } = null;
 

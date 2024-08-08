@@ -640,7 +640,7 @@ namespace Scenes
        
         public void OnGameOver()
         {
-            var popup = UIManager.Instance.OpenPopup<PopupNormal>();
+            var popup = UIManager.Instance.OpenPopup<UIPopupNormal>();
             popup.SetUI();
             popup.SetOnClose(() => {
                 AppManager.Instance.ChangeScene(Scenes.SceneMenu);

@@ -16,6 +16,9 @@ namespace Scenes
                 menu.InitMenu();
             }
 
+            SoundManager.Instance.StopMusics();
+            SoundManager.Instance.StopEffect();
+
             SoundManager.Instance.PlayMusic("17856_1462216818");
             return true;
         }
@@ -23,8 +26,7 @@ namespace Scenes
         public override void OnTouchBean(Vector3 position)
         {
             SoundManager.Instance.PlayEffect("EFF_shoot");
-
-            NetworkManager.Instance.Send("Hello from client");
+            //NetworkManager.Instance.Send("Hello from client");
         }
 
         public override void OnTouchEnd(Vector3 position)
@@ -36,7 +38,6 @@ namespace Scenes
             //if (hit.collider != null)
             //{
             //}
-
             //Debug.DrawRay(world, transform.forward * 100, Color.red, 1.3f);
         }
 

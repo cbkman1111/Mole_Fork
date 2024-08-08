@@ -10,35 +10,42 @@ namespace Common.Global
     {
         private Canvas _canvas;
         private readonly List<UIObject.UIObject> _list = new List<UIObject.UIObject>();
+
+        /// <summary>
+        /// 
+        /// </summary>
         private void Awake()
         {
             _canvas = GetComponent<Canvas>();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public Transform GetTransform()
         {
             return _canvas.transform;
         }
 
-        // ReSharper disable Unity.PerformanceAnalysis
-        public T Open<T>(string name) where T : UIObject.UIObject
+        /// <summary>
+        /// ¿­±â.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public T Open<T>(string path, string name) where T : UIObject.UIObject
         {
             var trans = _canvas.transform.Find(name);
             T ret;
 
             if (trans == false)
             {
-                string path = $"UI/{name}";
-/*
-#if UNITY_EDITOR
-                var prefab = ResourcesManager.Instance.LoadInBuild<T>(path);
-#else
-#endif
-*/
-                T prefab = ResourcesManager.Instance.LoadBundle<T>(path);
+                string resourcePath = $"{path}/{name}";
+                T prefab = ResourcesManager.Instance.LoadBundle<T>(resourcePath);
                 if (prefab == null)
                 {
-                    prefab = ResourcesManager.Instance.LoadInBuild<T>(path);
+                    prefab = ResourcesManager.Instance.LoadInBuild<T>(resourcePath);
                 }
 
                 if (prefab == false)
@@ -62,7 +69,7 @@ namespace Common.Global
                 ret = trans.GetComponent<T>();
             }
 
-            if (_list.Contains(ret) == false)
+            if (ret != null && _list.Contains(ret) == false)
             {
                 _list.Add(ret);
             }

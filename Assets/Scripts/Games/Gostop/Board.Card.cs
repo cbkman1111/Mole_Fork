@@ -19,10 +19,17 @@ namespace Gostop
     /// </summary>
     public partial class Board : MonoBehaviour
     {
+        /// <summary>
+        /// 게임 보드에 존재하는 카드.
+        /// </summary>
         public Dictionary<int, List<Card>> bottoms = null;
         public List<Card>[] hands = null;
         public List<Card>[] scores = null;
         public Stack<Card> deck = null;
+
+        /// <summary>
+        /// 골라야 하거나, 먹은 카드 처리용.
+        /// </summary>
         private List<Card> select = null; // 선택해야 하는 카드.
         private List<Card> listEat = null; // 먹는패.
 

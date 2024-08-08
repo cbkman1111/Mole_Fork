@@ -1,8 +1,5 @@
-using System.Collections.Generic;
-using System.Linq;
 using Common.UIObject.Scroll;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 /// <summary>
@@ -66,18 +63,14 @@ public class ScrollTest : ScrollBase<ScrollData>
 		return preLoaded[(int)cell.Data.PrefabType()];
 	}
 
-    protected override void OnDragScroll()
-    {
-        //throw new System.NotImplementedException();
-    }
+    protected override void OnDragScroll(){}
 
     protected override void UpdateCell(ScrollData data, RectTransform trans, int index = 0)
     {
-		//throw new System.NotImplementedException();
 		if (trans == null)
 			return;
 
-		CellTest cell = trans.GetComponent<CellTest>();
+		var cell = trans.GetComponent<UICellTest>();
 		if (cell != null)
 		{
 			cell.SetUI(data);
@@ -86,8 +79,6 @@ public class ScrollTest : ScrollBase<ScrollData>
 		LayoutRebuilder.ForceRebuildLayoutImmediate(trans);
 	}
 }
-
-
 
 public class ScrollData
 {

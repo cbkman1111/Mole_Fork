@@ -5,6 +5,17 @@ using UnityEngine.UI;
 
 namespace Common.UIObject
 {
+    public class PathAttribute : Attribute
+    {
+        public string ResourcePath { get; }
+
+        public PathAttribute(string path)
+        {
+            ResourcePath = path;
+        }
+    }
+
+    [Path("UI")]
     public abstract class UIObject : MonoBehaviour
     {
         protected Dictionary<string, Component> List = null;

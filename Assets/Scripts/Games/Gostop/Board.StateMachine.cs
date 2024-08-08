@@ -545,7 +545,7 @@ namespace Gostop
             }
 
             // 처리 다된 커맨드이면 다음 커맨드 꺼냄.
-            if (CommandInfo.step == CommandStep.Done)
+            if (CommandInfo != null && CommandInfo.step == CommandStep.Done)
             {
                 if (commandProcedure.QueueCommand.Count > 0)
                 {

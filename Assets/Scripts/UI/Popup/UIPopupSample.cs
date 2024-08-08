@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace UI.Popup
 {
-    public class PopupSample : PopupBase
+    public class UIPopupSample : PopupBase
     {
         public override void Close()
         {
@@ -27,7 +27,7 @@ namespace UI.Popup
             }
             else if (name == "Button - Other")
             {
-                PopupNormal popup = UIManager.Instance.OpenPopup<PopupNormal>();
+                var popup = UIManager.Instance.OpenPopup<UIPopupNormal>();
             }
         }
     }

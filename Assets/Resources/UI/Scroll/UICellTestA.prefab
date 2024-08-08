@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 7601140284183639248}
   - component: {fileID: 2012719103657861687}
   - component: {fileID: 6634608431327689390}
-  - component: {fileID: -4107902499258701610}
+  - component: {fileID: 2653921414689678851}
   m_Layer: 5
-  m_Name: CellTestA
+  m_Name: UICellTestA
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -81,7 +81,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &-4107902499258701610
+--- !u!114 &2653921414689678851
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

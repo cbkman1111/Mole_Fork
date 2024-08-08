@@ -6,7 +6,8 @@ using UnityEngine.UI;
 
 namespace UI.Popup
 {
-    public class PopupScrollViewTest : PopupBase
+    [Path("UI/Scroll")]
+    public class UIPopupScrollViewTest : PopupBase
     {
         private ScrollTest _scrollView = null;
 

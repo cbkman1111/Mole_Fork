@@ -2,6 +2,7 @@
 using Common.Global.Singleton;
 using Common.UIObject;
 using Common.Utils;
+using System;
 using UnityEngine;
 
 
@@ -18,7 +19,10 @@ namespace Common.Global
         private CanvasController _controllerEtc { get => rootObject._controllerEtc; }
         private Transform _cover { get => rootObject._cover; }
 
-        // ReSharper disable Unity.PerformanceAnalysic
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         protected override bool Init()
         {
             GiantDebug.Log($"{tag} - Init");
@@ -40,10 +44,23 @@ namespace Common.Global
             return true;
         }
 
+        /// <summary>
+        /// Path 어트리뷰트에서 경로를 가져옵니다.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        private string GetPath<T>()
+        {
+            var attribute = (PathAttribute)Attribute.GetCustomAttribute(typeof(T), typeof(PathAttribute));
+            return attribute.ResourcePath;
+        }
+
+
         public T OpenMenu<T>() where T : MenuBase
         {
-            string name = typeof(T).Name;
-            var ret = _controllerMenu.Open<T>(name);
+            var path = GetPath<T>();
+            var name = typeof(T).Name;
+            var ret = _controllerMenu.Open<T>(path, name);
             if (ret != null)
             {
                 ret.OnInit();
@@ -54,8 +71,9 @@ namespace Common.Global
 
         public T OpenHud<T>() where T : HudBase
         {
-            string name = typeof(T).Name;
-            var ret = _controllerPopup.Open<T>(name);
+            var path = GetPath<T>();
+            var name = typeof(T).Name;
+            var ret = _controllerPopup.Open<T>(path, name);
             if (ret == true)
             {
                 ret.OnInit();
@@ -64,10 +82,12 @@ namespace Common.Global
             return ret;
         }
 
+
         public T OpenPopup<T>() where T : PopupBase
         {
-            string name = typeof(T).Name;
-            var ret = _controllerPopup.Open<T>(name);
+            var path = GetPath<T>();
+            var name = typeof(T).Name;
+            var ret = _controllerPopup.Open<T>(path, name);
             if (ret == true)
             {
                 ret.OnInit();
@@ -79,8 +99,9 @@ namespace Common.Global
 
         public T OpenEtc<T>() where T : UIObject.UIObject
         {
-            string name = typeof(T).Name;
-            var ret = _controllerPopup.Open<T>(name);
+            var path = GetPath<T>();
+            var name = typeof(T).Name;
+            var ret = _controllerPopup.Open<T>(path, name);
             if (ret == true)
             {
                 ret.OnInit();
