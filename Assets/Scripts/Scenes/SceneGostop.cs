@@ -18,6 +18,14 @@ namespace Scenes
         public float HitCardTime = 0.1f;
         public float TakeCardTime = 0.1f;
         public float SuffleCardTime = 0.1f;
+        public float SuffleCardInterval = 0.1f;
+        public float FlipTime = 0.2f;
+        public float HandUpTime = 0.1f;
+        public float HandUpDelay= 0.1f;
+        public float HandOpenTime = 0.1f;
+
+        public float HitUpTime = 0.2f;
+        public float HitDownTime = 0.1f;
     }
 
     public class BoardTimeContainer : ScriptableObject

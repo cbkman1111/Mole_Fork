@@ -95,6 +95,7 @@ namespace Gostop
                 var start = boardPositions[target].Pee.position;
                 var end = new Vector3(start.x + card.Width * 2f, start.y, start.z);
 
+                /*
                 // 기존 카드들 재배치.
                 for (int i = 0; i < listAll.Count; i++)
                 {
@@ -112,6 +113,8 @@ namespace Gostop
                         time: 0.1f,
                         delay: i * 0.1f);
                 }
+
+                */
             });
         }
 
@@ -467,8 +470,8 @@ namespace Gostop
   
                 card.MoveTo(
                     position,
-                    time: 0.08f,
-                    delay: i * 0.025f, 
+                    time: setting.SuffleCardTime,
+                    delay: i * setting.SuffleCardInterval, 
                     complete: () => {
                         card.SetEnablePhysics(true);
                     });
@@ -492,14 +495,13 @@ namespace Gostop
 
                     float randX = UnityEngine.Random.Range(-1.00f, 1.0f);
                     float randZ = UnityEngine.Random.Range(1.00f, 1.0f);
-
                     var recivePosition = boardPositions[user].RecvieCard.position;
                     Vector3 position = recivePosition + new Vector3(randX, i * card.Height, randZ);
                     
                     card.MoveTo(
                         position,
-                        time: 0.1f,
-                        delay: user * 0.2f + i * 0.1f);
+                        time: setting.SuffleCardTime,
+                        delay: user * 0.2f + i * setting.SuffleCardInterval);
 
                     card.Owner = (Player)user;
                     hands[user].Add(card);
@@ -515,6 +517,9 @@ namespace Gostop
             foreach (var slot in bottoms)
             {
                 var list = slot.Value.Where(e => e.Month == 13).ToList();
+                if (list == null || list.Count == 0)
+                    continue;
+
                 for (int i = list.Count - 1; i >= 0; --i)
                 {
                     var card = list[i];
@@ -544,7 +549,7 @@ namespace Gostop
             {
                 foreach (var card in slot.Value)
                 {
-                    card.CardOpen(0.2f);
+                    card.CardOpen(setting.FlipTime);
                     card.SetEnablePhysics(true);
                 }
             }
@@ -568,12 +573,12 @@ namespace Gostop
                     var card = list[i];
                     var slot = boardPositions[user].Hand.transform.GetChild(i);
                     var rotate = boardPositions[user].Hand.rotation;
-                    //card.SetPhysicDiable(true);
-                    card.CardOpen(0.1f);
+                    
+                    card.CardOpen(setting.FlipTime);
                     card.MoveTo(
                         slot.position,
-                        time: 0.1f,
-                        delay: i * 0.05f);
+                        time: setting.HandUpTime,
+                        delay: i * setting.HandUpDelay);
                 }
             }
 
@@ -586,16 +591,16 @@ namespace Gostop
         /// <returns></returns>
         private bool HandOpen()
         {
-            for (int index = 0; index < hands[0].Count; index++)
+            for (int index = 0; index < hands[(int)Player.Player].Count; index++)
             {
-                Card card = hands[0][index];
-                card.ShowMe(delay: index * 0.05f);
+                Card card = hands[(int)Player.Player][index];
+                card.ShowMe(delay: index * setting.HandOpenTime);
                 card.SetShadow(false);
             }
 
-            for (int index = 0; index < hands[1].Count; index++)
+            for (int index = 0; index < hands[(int)Player.Enemy].Count; index++)
             {
-                Card card = hands[1][index];
+                Card card = hands[(int)Player.Enemy][index];
                 card.SetOpen(true);
                 card.SetShadow(false);
             }
@@ -720,13 +725,13 @@ namespace Gostop
                         slot.Value.Add(card);
                         card.MoveTo( // 카드를 위로 뽑아서.
                             destination1,
-                            time: 0.2f,
+                            time: setting.HitUpTime,
                             ease: DG.Tweening.Ease.InExpo,
                             complete: () => {
 
                                 card.MoveTo(
                                     destination2,
-                                    time: 0.2f,
+                                    time: setting.HitDownTime,
                                     ease: DG.Tweening.Ease.InExpo,
                                     delay: delay,
                                     complete: () =>
