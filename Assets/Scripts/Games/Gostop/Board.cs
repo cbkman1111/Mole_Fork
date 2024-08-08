@@ -10,6 +10,7 @@ using UnityEngine;
 using static UnityEditor.Rendering.InspectorCurveEditor;
 using UnityEditor;
 using BehaviorDesigner.Runtime;
+using Scenes;
 
 
 namespace Gostop
@@ -21,10 +22,10 @@ namespace Gostop
     {
         public enum Player
         {
-            NONE = -1,
-            USER = 0,
-            COMPUTER,
-            MAX,
+            None = -1,
+            Player = 0,
+            Enemy,
+            Max,
         };
 
         public enum BoardPositions
@@ -40,12 +41,16 @@ namespace Gostop
         private CommandProcedure commandProcedure = null;
         //private BehaviorTree behaviorTree = null;
 
+        public BoardSetting setting;
+
         [SerializeField]
         public Card prefabCard = null;
         public Sprite[] sprites = null;
         public Sprite spriteBomb = null;
         public Transform[] hitPosition = null;
         public Transform deckPosition = null;
+        public Vector3 Deck => deckPosition.position;
+
         public List<Transform> cardPosition = null;
         public BoardPosition[] boardPositions = null;
 
@@ -72,25 +77,26 @@ namespace Gostop
         /// 
         /// </summary>
         /// <returns></returns>
-        public bool Init(Action<Player, Score> updateScore)
+        public bool Init(Action<Player, Score> score)
         {
-            this.updateScore = updateScore;
-            this.commandProcedure = CommandProcedure.Create();
+            BoardTimeContainer container = ResourcesManager.Instance.LoadInBuild<BoardTimeContainer>("BoardSetting");
+            setting = container.setting;
 
-            turnUser = Player.USER;
-
+            updateScore = score;
+            commandProcedure = CommandProcedure.Create();
+            turnUser = Player.Player;
             deck = new Stack<Card>();
-            hands = new List<Card>[(int)Player.MAX];
+            
+            hands = new List<Card>[(int)Player.Max];
             hands[0] = new List<Card>();
             hands[1] = new List<Card>();
 
-            scores = new List<Card>[(int)Player.MAX];
+            scores = new List<Card>[(int)Player.Max];
             scores[0] = new List<Card>();
             scores[1] = new List<Card>();
 
             select = new List<Card>();
             listEat = new List<Card>();
-
             bottoms = new Dictionary<int, List<Card>>();
             bottoms.Add(1, new List<Card>());
             bottoms.Add(2, new List<Card>());
@@ -111,14 +117,6 @@ namespace Gostop
             gameScore[1] = new Score();
             //behaviorTree = GetComponent<BehaviorTree>();
             return true;
-        }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="msg"></param>
-        public void DebugLog(string msg)
-        {
         }
     }
 }

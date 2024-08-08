@@ -6,9 +6,29 @@ using Gostop;
 using UnityEditor;
 using System;
 using TMPro;
+using System.Collections.Generic;
+using Cinemachine.Editor;
 
 namespace Scenes
 {
+    [Serializable]
+    public class BoardSetting
+    {
+        public float DeckCardTime = 0.1f;
+        public float HitCardTime = 0.1f;
+        public float TakeCardTime = 0.1f;
+        public float SuffleCardTime = 0.1f;
+    }
+
+    public class BoardTimeContainer : ScriptableObject
+    {
+        public BoardSetting setting;
+        public void SetData(BoardSetting data)
+        {
+            this.setting = data;
+        }
+    }
+
     /// <summary>
     /// 고스톱 Scene 객체.
     /// </summary>
@@ -17,7 +37,7 @@ namespace Scenes
         [SerializeField]
         public Board board = null;
         [SerializeField]
-        private TextMeshPro[] Score = new TextMeshPro[(int)Board.Player.MAX];
+        private TextMeshPro[] Score = new TextMeshPro[(int)Board.Player.Max];
 
         /// <summary>
         /// 씬 초기화.
@@ -66,18 +86,18 @@ namespace Scenes
                         {
                             if (board.MyTurn() == true)
                             {
-                                var list = board.GetSameMonthCard((int)Board.Player.USER, card);
+                                var list = board.GetSameMonthCard((int)Board.Player.Player, card);
                                 if (list.Count == 3)
                                 {
-                                    board.HitBomb((int)Board.Player.USER, list, card);
+                                    board.HitBomb((int)Board.Player.Player, list, card);
                                 }
                                 else if (list.Count == 4) // 총통
                                 {
-                                    board.HitChongtong((int)Board.Player.USER, list, card);
+                                    board.HitChongtong((int)Board.Player.Player, list, card);
                                 }
                                 else
                                 {
-                                    board.HitCard((int)Board.Player.USER, card);
+                                    board.HitCard((int)Board.Player.Player, card);
                                 }
                             }
                         }

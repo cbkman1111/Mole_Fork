@@ -4,8 +4,6 @@ using UnityEngine;
 
 namespace Match3
 {
-   
-
     /// <summary>
     /// 탭.
     /// </summary>

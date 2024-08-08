@@ -19,7 +19,7 @@ namespace Gostop
         /// <returns></returns>
         public bool MyTurn()
         {
-            return turnUser == Player.USER;
+            return turnUser == Player.Player;
         }
 
         /// <summary>
@@ -39,6 +39,17 @@ namespace Gostop
         private int GetMoveCount(List<Card> list)
         {
             int count = list.Where(card => card.ListTween.Count != 0).ToList().Count;
+            return count;
+        }
+
+        /// <summary>
+        /// 움직이는 카드 존재 확인.
+        /// </summary>
+        /// <param name="deck"></param>
+        /// <returns></returns>
+        private int GetMoveCount(Stack<Card> stack)
+        {
+            int count = stack.Where(card => card.ListTween.Count != 0).ToList().Count;
             return count;
         }
 
@@ -72,7 +83,7 @@ namespace Gostop
                          },
                          complete: () => {
                              commandProcedure.Enqueue(Command.CreateDeck);
-                             
+
                          });
                     break;
           
@@ -83,7 +94,7 @@ namespace Gostop
                             CreateDeck();
                         },
                         check: () => {
-                            int count = deck.Where(card => card.ListTween.Count != 0).ToList().Count;
+                            int count = GetMoveCount(deck);
                             return count == 0;
                         },
                         complete: () => {
@@ -111,13 +122,12 @@ namespace Gostop
                 case Command.Shuffle_10:
                     CommandInfo.Process(
                         start: () => {
-                            //Pop10Cards();
                             Shuffle10Card();
                         },
                         check: () => {
                             int count = 0;
-                            count += GetMoveCount(hands[0]);// hands[0].Where(e => e.ListTween.Count == 0).ToList().Count;
-                            count += GetMoveCount(hands[1]);// hands[1].Where(e => e.ListTween.Count == 0).ToList().Count;
+                            count += GetMoveCount(hands[0]);
+                            count += GetMoveCount(hands[1]);
                             return count == 0;
                         },
                         complete: () => {
@@ -136,7 +146,7 @@ namespace Gostop
                         check: () => {
                             int count = 0;
                             foreach (var slot in bottoms) {
-                                count += GetMoveCount(slot.Value);// slot.Value.Where(e => e.ListTween.Count == 0).ToList().Count;
+                                count += GetMoveCount(slot.Value);
                             }
 
                             return count == 0;
@@ -193,7 +203,7 @@ namespace Gostop
                 case Command.Open1More:
                     CommandInfo.Process(
                         start: () => {
-                            PopDeckCard(Player.NONE);
+                            PopDeckCard(Player.None);
                         },
                         check: () => {
                             int count = 0;
@@ -259,20 +269,21 @@ namespace Gostop
                 case Command.HitCard:
                     CommandInfo.Process(
                         start: () => {
-                            if (turnUser == Player.COMPUTER)
+                            if (turnUser == Player.Enemy)
                             {
-                                var list = GetSameMonthCard((int)Board.Player.COMPUTER, hands[(int)Player.COMPUTER][0]);
+                                int turnIndex = (int)turnUser;
+                                var list = GetSameMonthCard(turnIndex, hands[turnIndex][0]);
                                 if (list.Count == 3) // 폭탄
                                 {
-                                    HitBomb((int)Player.COMPUTER, list, list[0]);
+                                    HitBomb(turnIndex, list, list[0]);
                                 }
                                 else if (list.Count == 4) // 총통
                                 {
-                                    HitChongtong((int)Player.COMPUTER, list, list[0]);
+                                    HitChongtong(turnIndex, list, list[0]);
                                 }
                                 else
                                 {
-                                    HitCard((int)Player.COMPUTER, hands[(int)Player.COMPUTER][0]);
+                                    HitCard(turnIndex, hands[turnIndex][0]);
                                 }
                             }
                         },
@@ -354,9 +365,9 @@ namespace Gostop
                         check: () => {
                             if (select.Count == 2)
                             {
-                                if (turnUser == Player.COMPUTER)
+                                if (turnUser == Player.Enemy)
                                 {
-                                    select[0].Owner = Player.COMPUTER;
+                                    select[0].Owner = Player.Enemy;
                                     listEat.Add(select[0]);
                                     select.Clear();
                                 }
@@ -410,7 +421,7 @@ namespace Gostop
                             {
                                 var list = kindSlot.Value;
                                 foreach (var card in list) {
-                                    card.Owner = Player.NONE;
+                                    card.Owner = Player.None;
                                 }
                             }
 
@@ -488,7 +499,7 @@ namespace Gostop
                             Command nextCommand = Command.HandSort;
 
                             // 현재 턴유저의 카드가 0개라면.
-                            if (hands[(int)Player.COMPUTER].Count == 0 && hands[(int)Player.USER].Count == 0)
+                            if (hands[(int)Player.Enemy].Count == 0 && hands[(int)Player.Player].Count == 0)
                             {
                                 nextCommand = Command.GameOver_Tie;
                                 nextCommand = Command.GameOver_Win;
@@ -496,13 +507,13 @@ namespace Gostop
                             }
                             else 
                             {
-                                if (turnUser == Player.USER)
+                                if (turnUser == Player.Player)
                                 {
-                                    turnUser = Player.COMPUTER;
+                                    turnUser = Player.Enemy;
                                 }
                                 else
                                 {
-                                    turnUser = Player.USER;
+                                    turnUser = Player.Player;
                                 }
                             }
 

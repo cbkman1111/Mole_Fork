@@ -66,7 +66,7 @@ namespace Gostop
             popCard = null;
             hit = null;
             hited = false; // 쳤는가.
-            user = Board.Player.NONE;
+            user = Board.Player.None;
             delta = 0.0f;
         }
     }
@@ -149,7 +149,7 @@ namespace Gostop
         /// 상태 변경.
         /// </summary>
         /// <param name="state"></param>
-        public void Enqueue(Command command, Board.Player player = Board.Player.NONE)
+        public void Enqueue(Command command, Board.Player player = Board.Player.None)
         {
             CommandInfo info = new CommandInfo() {
                 type = command,

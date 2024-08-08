@@ -24,7 +24,7 @@ namespace Gostop
         public float Width { get; set; }
         private Action OnComplete = null;
 
-        private Board.Player owner = Board.Player.NONE;
+        private Board.Player owner = Board.Player.None;
 
         public List<Tween> ListTween { get; set; } = new List<Tween>();
 
@@ -37,9 +37,9 @@ namespace Gostop
             set
             {
                 owner = value;
-                if (owner == Board.Player.USER)
+                if (owner == Board.Player.Player)
                     spriteRendererDebug.color = Color.blue;
-                else if (owner == Board.Player.COMPUTER)
+                else if (owner == Board.Player.Enemy)
                     spriteRendererDebug.color = Color.red;
                 else
                     spriteRendererDebug.color = Color.white;
@@ -70,7 +70,7 @@ namespace Gostop
             Num = num;
             Month = GetMonth(num);
             
-            Owner = Board.Player.NONE;
+            Owner = Board.Player.None;
 
             spriteRenderer.sprite = sprite;
             spriteRenderer.sortingOrder = 1;

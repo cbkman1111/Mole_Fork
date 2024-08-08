@@ -38,15 +38,15 @@ namespace Gostop
         /// </summary>
         private void StealCard()
         {
-            int target = (int)Player.NONE;
+            int target = (int)Player.None;
             
-            if (turnUser == Player.COMPUTER)
+            if (turnUser == Player.Enemy)
             {
-                target = (int)Player.USER;
+                target = (int)Player.Player;
             }
-            else if (turnUser == Player.USER)
+            else if (turnUser == Player.Player)
             {
-                target = (int)Player.COMPUTER;
+                target = (int)Player.Enemy;
             }
 
             var listAll = scores[target].Where(e =>
@@ -137,7 +137,7 @@ namespace Gostop
                 }
             }
 
-            for (int i = 0; i < (int)Player.MAX; i++)
+            for (int i = 0; i < (int)Player.Max; i++)
             {
                 foreach (var card in hands[i])
                 {
@@ -146,7 +146,7 @@ namespace Gostop
                 }
             }
 
-            for (int i = 0; i < (int)Player.MAX; i++)
+            for (int i = 0; i < (int)Player.Max; i++)
             {
                 foreach (var card in scores[i])
                 {
@@ -169,7 +169,7 @@ namespace Gostop
                 hands[i].Clear();
             }
 
-            for (int i = 0; i < (int)Player.MAX; i++)
+            for (int i = 0; i < (int)Player.Max; i++)
             {
                 scores[i].Clear();
             }
@@ -207,16 +207,13 @@ namespace Gostop
         {
             try 
             {
-                for (int i = 0; i < (int)Player.MAX; i++)
+                for (int i = 0; i < (int)Player.Max; i++)
                 {
                     hands[i] = hands[i].OrderBy(card => card.Num).ToList();
-
                     for (int index = 0; index < hands[i].Count; index++)
                     {
                         var card = hands[i][index];
                         var handPosition = boardPositions[i].Hand.GetChild(index).transform.position;
-                        //var handRotation = boardPositions[i].Hand.transform.rotation;
-
                         card.MoveTo(
                             handPosition,
                             time: 0.2f);
@@ -237,7 +234,7 @@ namespace Gostop
         /// </summary>
         private void ScoreUpdate()
         {
-            for (int user = 0; user < (int)Player.MAX; user++)
+            for (int user = 0; user < (int)Player.Max; user++)
             {
                 int gwang = scores[user].Where(card => card.KindOfCard == Card.KindOf.GWANG || card.KindOfCard == Card.KindOf.GWANG_B).ToList().Count();
                 int mung = scores[user].Where(card => card.KindOfCard == Card.KindOf.MUNG || card.KindOfCard == Card.KindOf.MUNG_GODORI || card.KindOfCard == Card.KindOf.MUNG_KOO).ToList().Count();
@@ -294,7 +291,11 @@ namespace Gostop
                 }
 
                 // 피점수
-                var list = scores[user].Where(card => card.KindOfCard == Card.KindOf.P || card.KindOfCard == Card.KindOf.PP || card.KindOfCard == Card.KindOf.PPP).ToList();
+                var list = scores[user].Where(
+                    card => card.KindOfCard == Card.KindOf.P || 
+                    card.KindOfCard == Card.KindOf.PP || 
+                    card.KindOfCard == Card.KindOf.PPP).ToList();
+
                 int pee = 0;
                 foreach (var card in list)
                 {
@@ -319,17 +320,17 @@ namespace Gostop
             }
 
             // 박 계산
-            for (int user = 0; user < (int)Player.MAX; user++)
+            for (int user = 0; user < (int)Player.Max; user++)
             {
                 int player = (int)user;
-                int enemy = (int)Player.COMPUTER;
-                if (player == (int)Player.USER)
+                int enemy = (int)Player.Enemy;
+                if (player == (int)Player.Player)
                 {
-                    enemy = (int)Player.COMPUTER;
+                    enemy = (int)Player.Enemy;
                 }
                 else
                 {
-                    enemy = (int)Player.USER;
+                    enemy = (int)Player.Player;
                 }
 
                 if (gameScore[player].gawng > 0)
@@ -424,6 +425,7 @@ namespace Gostop
             }
 
             nums = ShuffleList(nums);
+
             for (int i = 0; i < nums.Count; i++)
             {
                 int n = nums[i];
@@ -435,8 +437,10 @@ namespace Gostop
                     deck.Push(card);
 
                     float height = card.Height;
-                    card.transform.position = deckPosition.position;
-                    card.MoveTo(new Vector3(deckPosition.position.x, height * i, deckPosition.position.z), delay: i * 0.01f);
+                    var dest = new Vector3(Deck.x, Deck.y + height * i, Deck.z);
+
+                    card.transform.position = Deck;
+                    card.MoveTo(dest, time: setting.DeckCardTime, delay: i * 0.01f);
                 }
             }
 
@@ -702,13 +706,11 @@ namespace Gostop
                         StealCard();
                         TackCard(card, 1); // 카드 획득.
                         commandProcedure.Enqueue(Command.PopCardDeckAndHit, turnUser);
-                        CommandInfo = null;
                     }
                     else if (card.Month == 100) // 폭탄 공짜 카드.
                     {
                         GameObject.Destroy(card.gameObject);
                         commandProcedure.Enqueue(Command.PopCardDeck, turnUser);
-                        CommandInfo = null;
                     }
                     else // 일반 카드.
                     {
@@ -892,12 +894,11 @@ namespace Gostop
 
                             possibleEat = true;
                             stealCount++;
-                            DebugLog($"{list[0].Month} - 귀신.");
 
                             var popup = UIManager.Instance.OpenPopup<UIPopupMessage>();
                             popup.Init("귀신");
                         }
-                        else if (list[0].Owner == Player.NONE &&
+                        else if (list[0].Owner == Player.None &&
                                  list[1].Owner == turnUser)
                         {
                             foreach (var card in list)
@@ -906,36 +907,34 @@ namespace Gostop
                             }
 
                             possibleEat = true;
-                            DebugLog($"{list[0].Month} - 두장.");
                         }
                         else
                         {
-                            DebugLog($"{list[0].Month} - 두장. ??");
                         }
                         break;
                     case 3:
-                        if (list[0].Owner == Player.NONE &&
+                        if (list[0].Owner == Player.None &&
                             list[1].Owner == turnUser &&
-                            list[2].Owner == Player.NONE)
+                            list[2].Owner == Player.None)
                         {
                             var popup = UIManager.Instance.OpenPopup<UIPopupMessage>();
                             popup.Init("뻑1.");
                         }
-                        else if (list[0].Owner == Player.NONE &&
+                        else if (list[0].Owner == Player.None &&
                                   list[1].Owner == turnUser &&
                                   list[2].Owner == turnUser)
                         {
                             var popup = UIManager.Instance.OpenPopup<UIPopupMessage>();
                             popup.Init("뻑2");
                         }
-                        else if (list[0].Owner == Player.NONE &&
-                                list[1].Owner == Player.NONE &&
+                        else if (list[0].Owner == Player.None &&
+                                list[1].Owner == Player.None &&
                                 list[2].Owner == turnUser)
                         {
                             
                             foreach (var card in list)
                             {
-                                if (card.Owner == Player.NONE)
+                                if (card.Owner == Player.None)
                                 {
                                     select.Add(card);
                                 }
@@ -947,22 +946,19 @@ namespace Gostop
 
                             if (select.Count == 2)
                             {
-                                DebugLog($"{list[0].Month} - 골르기. {select.Count}");
                             }
 
                             possibleEat = true;
-                            
                         }
                         else
                         {
-                            DebugLog($"{list[0].Month} - 3장. ??");
                         }
 
                         break;
                     case 4:
-                        if (list[0].Owner == Player.NONE &&
-                            list[1].Owner == Player.NONE &&
-                            list[2].Owner == Player.NONE &&
+                        if (list[0].Owner == Player.None &&
+                            list[1].Owner == Player.None &&
+                            list[2].Owner == Player.None &&
                             list[3].Owner == turnUser)
                         {
                             foreach (var card in list)
@@ -975,8 +971,8 @@ namespace Gostop
                             var popup = UIManager.Instance.OpenPopup<UIPopupMessage>();
                             popup.Init("아싸~");
                         }
-                        else if (list[0].Owner == Player.NONE &&
-                                list[1].Owner == Player.NONE &&
+                        else if (list[0].Owner == Player.None &&
+                                list[1].Owner == Player.None &&
                                 list[2].Owner == turnUser &&
                                 list[3].Owner == turnUser)
                         {
@@ -991,7 +987,7 @@ namespace Gostop
                             var popup = UIManager.Instance.OpenPopup<UIPopupMessage>();
                             popup.Init("따닥1");
                         }
-                        else if (list[0].Owner == Player.NONE &&
+                        else if (list[0].Owner == Player.None &&
                                 list[1].Owner == turnUser &&
                                 list[2].Owner == turnUser &&
                                 list[3].Owner == turnUser)
@@ -1009,12 +1005,10 @@ namespace Gostop
                         }
                         else
                         {
-                            DebugLog($"{list[0].Month} - 4장. ??");
                         }
                         break;
                     default:
                         {
-                            //DebugLog($"{list[0].Month} - 5장. ??");
                         }
                         break;
                 }
@@ -1053,39 +1047,66 @@ namespace Gostop
         /// 
         /// </summary>
         /// <returns></returns>
-        public Card PopDeckCard(Player owner = Player.NONE)
+        public Card PopDeckCard(Player owner = Player.None)
         {
             if (deck.Count == 0)
                 return null;
 
+            int slotIndex = -1;
+            int slotStack = 0;
             Card card = deck.Pop();
-            KeyValuePair<int, List<Card>> slot = GetSlot(card);
-            if (slot.Key != -1)
+
+            List<Card> list = null;
+
+            // 조커 카드.
+            if (card.Month == 13 && owner != Player.None) 
+            {
+                foreach (var slot in bottoms)
+                {
+                    var count = slot.Value.Where(c => c.Owner == owner).ToList().Count();
+                    if (count > 0)
+                    { 
+                        slotIndex = slot.Key - 1;
+                        slotStack = slot.Value.Count;
+                        list = slot.Value;
+                        break;
+                    }
+                }
+            }
+            else 
+            {
+                KeyValuePair<int, List<Card>> slot = GetSlot(card);
+                slotIndex = slot.Key-1;
+                slotStack = slot.Value.Count;
+                list = slot.Value;
+            }
+
+            if (slotIndex != -1)
             {
                 float randX = UnityEngine.Random.Range(-0.5f, 0.5f);
                 float randZ = UnityEngine.Random.Range(-0.5f, 0.5f);
-                int stackCount = slot.Value.Count;
+                int stackCount = slotStack;
                 Vector3 destination1 = hitPosition[(int)turnUser].position;
-                Vector3 destination2 = cardPosition[slot.Key - 1].position +
-                            new Vector3(randX, stackCount * card.Height, randZ);
+                Vector3 destination2 = cardPosition[slotIndex].position +
+                            new Vector3(randX + (stackCount * card.Width * 0.2f), stackCount * card.Height, randZ);
 
-                card.CardOpen(time: 0.2f);
                 card.Owner = owner;
+                card.CardOpen(time: 0.1f);
                 card.MoveTo(
                     destination1,
-                    time: 0.2f,
+                    time: 0.1f,
                     ease: DG.Tweening.Ease.OutCubic,
                     complete: () => {
                       card.MoveTo(
                         destination2,
-                        time: 0.2f,
+                        time: 0.1f,
                         ease: DG.Tweening.Ease.InQuad,
                         complete: () => {
                             card.SetEnablePhysics(true);
                         });
                     });
 
-                slot.Value.Add(card);
+                list.Add(card);
             }
 
             return card;
