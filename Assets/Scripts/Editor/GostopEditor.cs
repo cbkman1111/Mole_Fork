@@ -1,8 +1,5 @@
 ﻿using Match3;
 using Scenes;
-using SweetSugar.Scripts.Blocks;
-using SweetSugar.Scripts.Level;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -14,7 +11,22 @@ namespace Gostop
     [CustomEditor(typeof(SceneGostop))]
     public class GostopEditor : Editor
     {
-        //BoardSetting boardTime = null;
+        // 자주 사용되는 GUILayout
+        // https://howudong.tistory.com/145
+        // 아이콘.
+        // https://github.com/halak/Unity-editor-icons
+
+        private SceneGostop sceneGostop = null;
+
+        private int HandIndex;
+        private int HandCardNum;
+        private int DeckCardNum;
+        private int DeckIndex;
+
+        private void OnEnable()
+        {
+            sceneGostop = (SceneGostop)target;
+        }
 
         /// <summary>
         /// 인스펙터 UI 생성.
@@ -23,34 +35,75 @@ namespace Gostop
         {
             DrawDefaultInspector();
 
-            Tool();
+            GUILayout.Space(10);
+            GUILayout.Label("손패 교체 설정", EditorStyles.boldLabel);
+            ChangeCard();
+
+            GUILayout.Space(10);
+            GUILayout.Label("덱 교체 설정", EditorStyles.boldLabel);
+            ChanngeDeck();
+         
+            //CreateBoardSetting();
         }
 
         /// <summary>
-        /// 
+        /// 손패를 교체합니다. (인덱스, 카드번호)
         /// </summary>
-        private void Tool()
+        private void ChangeCard()
         {
+    
             GUILayout.BeginHorizontal();
-            //for (int i = 0; i < 10; i++)
+            HandIndex = EditorGUILayout.IntField("", HandIndex, GUILayout.Width(50), GUILayout.Height(20)); 
+
+            HandCardNum = EditorGUILayout.IntField("", HandCardNum, GUILayout.Width(50), GUILayout.Height(20));
+            if (GUILayout.Button("교체", GUILayout.Width(200), GUILayout.Height(20)))
             {
-                GUILayout.BeginVertical();
-                Color squareColor = new Color(0.8f, 0.8f, 0.8f);
-                var imageButton = new object();
-                if (GUILayout.Button(imageButton as Texture, GUILayout.Width(40), GUILayout.Height(40)))
+                var board = sceneGostop.board;
+                if (board != null)
                 {
-
-
+                    
                 }
-
-                //GUI.enabled = false; // 텍스트 비활성.
-                //GUILayout.TextField("test");
-                //GUI.enabled = true; // 다른 요소를 위해 다시 활성화
-                GUILayout.EndVertical();
             }
+
             GUILayout.EndHorizontal();
         }
 
+        /// <summary>
+        /// 덱에 있는 패를 교체합니다.
+        /// </summary>
+        private void ChanngeDeck()
+        {
+            GUILayout.BeginHorizontal();
+            DeckIndex = EditorGUILayout.IntField("", DeckIndex, GUILayout.Width(50), GUILayout.Height(20));
+
+            DeckCardNum = EditorGUILayout.IntField("", DeckCardNum, GUILayout.Width(50), GUILayout.Height(20));
+            if (GUILayout.Button("교체", GUILayout.Width(200), GUILayout.Height(20)))
+            {
+                var board = sceneGostop.board;
+                if (board != null)
+                {
+
+                }
+            }
+
+            GUILayout.EndHorizontal();
+        }
+
+        /// <summary>
+        /// 보드 세팅 파일 생성용 함수.
+        /// </summary>
+        private void CreateBoardSetting()
+        {
+            GUILayout.Space(10);
+            GUILayout.BeginVertical();
+            
+            if (GUILayout.Button("보드 세팅", GUILayout.Width(200), GUILayout.Height(40)))
+            {
+                CreateBoardSettingAsset();
+            }
+
+            GUILayout.EndVertical();
+        }
 
         /// <summary>
         /// 고스톱 보드 설정 파일 생성.
