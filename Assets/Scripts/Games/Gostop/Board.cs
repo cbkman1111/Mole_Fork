@@ -79,8 +79,8 @@ namespace Gostop
         /// <returns></returns>
         public bool Init(Action<Player, Score> score)
         {
-            BoardTimeContainer container = ResourcesManager.Instance.LoadInBuild<BoardTimeContainer>("BoardSetting");
-            setting = container.setting;
+            BoardSettingContainer container = ResourcesManager.Instance.LoadInBuild<BoardSettingContainer>("BoardSetting");
+            setting = container.setting.DeepClone();
 
             updateScore = score;
             commandProcedure = CommandProcedure.Create();

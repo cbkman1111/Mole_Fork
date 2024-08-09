@@ -219,7 +219,7 @@ namespace Gostop
                         var handPosition = boardPositions[i].Hand.GetChild(index).transform.position;
                         card.MoveTo(
                             handPosition,
-                            time: 0.2f);
+                            time: 0.1f);
                     }
 
                 }
@@ -707,13 +707,17 @@ namespace Gostop
                
                     if (card.Month == 13) // 조커 카드.
                     {
+                        playInfo.hited = true;
+                        playInfo.hit = card;
                         stealCount += 1;
-                        StealCard();
+
                         TackCard(card, 1); // 카드 획득.
-                        commandProcedure.Enqueue(Command.PopCardDeckAndHit, turnUser);
                     }
                     else if (card.Month == 100) // 폭탄 공짜 카드.
                     {
+                        playInfo.hited = true;
+                        playInfo.hit = card;
+
                         GameObject.Destroy(card.gameObject);
                         commandProcedure.Enqueue(Command.PopCardDeck, turnUser);
                     }
@@ -860,9 +864,6 @@ namespace Gostop
                 slot.Value.Remove(card); // 보드 슬롯에서 제거.
                 count++;
             }
-
-
-            //listEat.Clear();
         }
 
         /// <summary>
@@ -1036,14 +1037,10 @@ namespace Gostop
         public Card PopDeckCard()
         {
             Card card = deck.Pop();
-
-            var deckCard = deck.Pop();
-            deckCard.MoveTo(card.transform.position, time: 0.1f);
-            deckCard.ShowMe();
-            deckCard.SetShadow(false);
-            deckCard.Owner = (Player)turnUser;
-            hands[(int)turnUser].Add(deckCard);
-
+            card.ShowMe();
+            card.SetShadow(false);
+            card.Owner = (Player)turnUser;
+            hands[(int)turnUser].Add(card);
             HandSort();
             return card;
         }

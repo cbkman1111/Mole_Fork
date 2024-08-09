@@ -288,21 +288,32 @@ namespace Gostop
                             }
                         },
                         check: () => {
+                            // 칠때까지 대기.
                             if (CommandInfo.info.hited == false)
-                            {
                                 return false;
-                            }
 
-                            if (CommandInfo.info.hit.Month == 13)
+                            // 조커를 낸 경우면 조금 기다렸다가 패 훔쳐오기 처리.
+                            if(CommandInfo.info.hit.Month == 13)
                             {
-                                return false;
+                                CommandInfo.info.delta += Time.deltaTime;
+                                if(CommandInfo.info.delta < 0.1f)
+                                {
+                                    return false;
+                                }
                             }
-
+                            
                             int count = GetMoveAllCount();
                             return count == 0;
                         },
                         complete: () => {
-                            commandProcedure.Enqueue(Command.PopCardDeck);
+                            if (CommandInfo.info.hit.Month == 13)
+                            {
+                                commandProcedure.Enqueue(Command.StealCardAndPopDeck, turnUser);
+                            }
+                            else
+                            {
+                                commandProcedure.Enqueue(Command.PopCardDeck);
+                            }
                         });
                     break;
 
@@ -441,6 +452,7 @@ namespace Gostop
                             }
 
                             listEat.Clear();
+                            ScoreUpdate();
                         },
                         check: () => {
                             return GetMoveAllCount() == 0;
@@ -448,7 +460,7 @@ namespace Gostop
                         complete: () => {
                             if (stealCount == 0)
                             {
-                                commandProcedure.Enqueue(Command.UpdateScore, turnUser);
+                                commandProcedure.Enqueue(Command.ChangeTurn, turnUser);
                             }
                             else
                             {
@@ -458,9 +470,12 @@ namespace Gostop
 
                     break;
 
-                case Command.StealCard: // 카드 뺃기.
+                case Command.StealCardAndPopDeck: // 카드 뺃고 턴 가져오기.
                     CommandInfo.Process(
-                        start: () => StealCard(),
+                        start: () => {
+                            StealCard();
+                            ScoreUpdate();
+                        },
                         check: () => {
                             int count = GetMoveAllCount();
                             return count == 0;
@@ -468,7 +483,30 @@ namespace Gostop
                         complete: () => {
                             if (stealCount == 0)
                             {
-                                commandProcedure.Enqueue(Command.UpdateScore, turnUser);
+                                commandProcedure.Enqueue(Command.PopCardDeckAndHit, turnUser);
+                            }
+                            else
+                            {
+                                commandProcedure.Enqueue(Command.StealCardAndPopDeck, turnUser);
+                            }
+                        });
+                    break;
+
+                case Command.StealCard: // 카드 뺃기.
+                    CommandInfo.Process(
+                        start: () =>
+                        {
+                            StealCard();
+                            ScoreUpdate();
+                        },
+                        check: () => {
+                            int count = GetMoveAllCount();
+                            return count == 0;
+                        },
+                        complete: () => {
+                            if (stealCount == 0)
+                            {
+                                commandProcedure.Enqueue(Command.ChangeTurn, turnUser);
                             }
                             else
                             {
@@ -477,17 +515,6 @@ namespace Gostop
                         });
                     break;
 
-                case Command.UpdateScore: // 점수 체크.
-                    CommandInfo.Process(
-                        start: () => ScoreUpdate(),
-                        check: () => {
-                            return true;
-                        },
-                        complete: () => {
-                            commandProcedure.Enqueue(Command.ChangeTurn, turnUser);
-                        });
-
-                    break;
                 case Command.ChangeTurn: // 턴 바꾸기.
                     CommandInfo.Process(
                         start: () => HandSort(),
@@ -498,7 +525,6 @@ namespace Gostop
                         complete: () => {
                             Command nextCommand = Command.HandSort;
 
-                            // 현재 턴유저의 카드가 0개라면.
                             if (hands[(int)Player.Enemy].Count == 0 && hands[(int)Player.Player].Count == 0)
                             {
                                 nextCommand = Command.GameOver_Tie;

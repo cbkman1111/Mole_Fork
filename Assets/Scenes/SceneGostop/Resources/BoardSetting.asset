@@ -11,9 +11,16 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 0}
   m_Name: BoardSetting
-  m_EditorClassIdentifier: Assembly-CSharp:Scenes:BoardTimeContainer
+  m_EditorClassIdentifier: Assembly-CSharp:Gostop:BoardSettingContainer
   setting:
     DeckCardTime: 0.1
     HitCardTime: 0.1
     TakeCardTime: 0.1
-    SuffleCardTime: 0.1
+    SuffleCardTime: 0.05
+    SuffleCardInterval: 0.05
+    FlipTime: 0.1
+    HandUpTime: 0.1
+    HandUpDelay: 0.05
+    HandOpenTime: 0.1
+    HitUpTime: 0.2
+    HitDownTime: 0.1

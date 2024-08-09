@@ -13,8 +13,7 @@ namespace Match3
             string assetPathAndName = AssetDatabase.GenerateUniqueAssetPath(path + name + ".asset");
 
             AssetDatabase.CreateAsset(asset, assetPathAndName);
-
-            AssetDatabase.SaveAssets();
+            //AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
             EditorUtility.FocusProjectWindow();
             Selection.activeObject = asset;

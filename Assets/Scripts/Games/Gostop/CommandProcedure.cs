@@ -7,15 +7,15 @@ using UnityEngine;
 namespace Gostop
 { 
     /// <summary>
-    /// °¢ ÅÏÀÇ Á¤º¸.
+    /// ê° í„´ì˜ ì •ë³´.
     /// </summary>
     public enum Command
     {
         None = -1,
 
-        StartGame, // °ÔÀÓ »ı¼º.
+        StartGame, // ê²Œì„ ìƒì„±.
 
-        CreateDeck, // µ¦ »ı¼º.
+        CreateDeck, // ë± ìƒì„±.
         Shuffle_8,
         Shuffle_10,
         Open8,
@@ -25,25 +25,25 @@ namespace Gostop
         HandOpen,
         HandSort,
 
-        HitCard, // Ä«µå Ä¡±â.
-        PopCardDeck, // Ä«µå µÚÁı±â.
-        PopCardDeckAndHit, // Ä«µå µÚÁı°í Ä¡±â ´ë±â.
-  
+        HitCard, // ì¹´ë“œ ì¹˜ê¸°.
+        PopCardDeck, // ì¹´ë“œ ë’¤ì§‘ê¸°.
+        PopCardDeckAndHit, // ì¹´ë“œ ë’¤ì§‘ê³  ì¹˜ê¸° ëŒ€ê¸°.
+    
+        TakeCardCondition, // ë¨¹ì„ ìˆ˜ ìˆëŠ”ì§€ í™•ì¸.
+        TakeCard, // ì¹´ë“œ ê°€ì ¸ì˜¤ê¸°.
+        TakeToMe, // ë‚´ê²Œ ê°€ì ¸ì˜¤ê¸°.
+        StealCard, // ì¹´ë“œ ëºê¸°.
+        StealCardAndPopDeck, // ì¹´ë“œ ëºê³  í„´ ê°€ì ¸ì˜¤ê¸°.
 
-        TakeCardCondition, // ¸ÔÀ» ¼ö ÀÖ´ÂÁö È®ÀÎ.
-        TakeCard, // Ä«µå °¡Á®¿À±â.
-        TakeToMe, // ³»°Ô °¡Á®¿À±â.
-        StealCard, // Ä«µå »¯±â.
+        //UpdateScore, // ì ìˆ˜ ê°±ì‹ .
+        ChangeTurn, // í„´ ë°”ê¾¸ê¸°.
 
-        UpdateScore, // Á¡¼ö °»½Å.
-        ChangeTurn, // ÅÏ ¹Ù²Ù±â.
-
-        GameOver_Tie, // ¹«½ÂºÎ.
-        GameOver_Win, // ½Â.
-        GameOver_Lose, // ÆĞ.
+        GameOver_Tie, // ë¬´ìŠ¹ë¶€.
+        GameOver_Win, // ìŠ¹.
+        GameOver_Lose, // íŒ¨.
     }
 
-    // »óÅÂ Ã³¸® ´Ü°è
+    // ìƒíƒœ ì²˜ë¦¬ ë‹¨ê³„
     public enum CommandStep
     {
         None = -1,
@@ -54,18 +54,18 @@ namespace Gostop
 
     public class PlayInfo
     {
-        public int index; // ÅÏ È½¼ö.
-        public Board.Player user; // ÅÏ À¯Àú.
-        public Card popCard; // µ¦¿¡¼­ ²¨³½ Á¤º¸.
-        public Card hit; // ÃÖÃÊ Ä£ Ä«µå.
-        public bool hited = false; // ÃÆ´Â°¡.
-        public float delta = 0.0f; // ½Ã°£.
+        public int index; // í„´ íšŸìˆ˜.
+        public Board.Player user; // í„´ ìœ ì €.
+        public Card popCard; // ë±ì—ì„œ êº¼ë‚¸ ì •ë³´.
+        public Card hit; // ìµœì´ˆ ì¹œ ì¹´ë“œ.
+        public bool hited = false; // ì³¤ëŠ”ê°€.
+        public float delta = 0.0f; // ì‹œê°„.
         public PlayInfo(int num = 0)
         {
             index = num;
             popCard = null;
             hit = null;
-            hited = false; // ÃÆ´Â°¡.
+            hited = false; // ì³¤ëŠ”ê°€.
             user = Board.Player.None;
             delta = 0.0f;
         }
@@ -89,7 +89,7 @@ namespace Gostop
         }
 
         /// <summary>
-        /// ½ÃÀÛ, Æ®¸®°Å ¸®ÅÏ ture, ¿Ï·á ¼øÀ¸·Î È£ÃâµÇ¸ç »óÅÂ¸¦ Ã³¸®ÇÕ´Ï´Ù.
+        /// ì‹œì‘, íŠ¸ë¦¬ê±° ë¦¬í„´ ture, ì™„ë£Œ ìˆœìœ¼ë¡œ í˜¸ì¶œë˜ë©° ìƒíƒœë¥¼ ì²˜ë¦¬í•©ë‹ˆë‹¤.
         /// </summary>
         /// <param name="start"></param>
         /// <param name="check"></param>
@@ -146,7 +146,7 @@ namespace Gostop
         }
 
         /// <summary>
-        /// »óÅÂ º¯°æ.
+        /// ìƒíƒœ ë³€ê²½.
         /// </summary>
         /// <param name="state"></param>
         public void Enqueue(Command command, Board.Player player = Board.Player.None)
@@ -168,7 +168,7 @@ namespace Gostop
         }
 
         /// <summary>
-        /// »óÅÂ ²¨³»±â.
+        /// ìƒíƒœ êº¼ë‚´ê¸°.
         /// </summary>
         /// <returns></returns>
         public CommandInfo Dequeue()
