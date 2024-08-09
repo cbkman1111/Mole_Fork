@@ -24,11 +24,6 @@ namespace Gostop
         public Transform Thee = null;
         public Transform Pee = null;
 
-        public Transform GwangScore = null;
-        public Transform MungScore = null;
-        public Transform TheeScore = null;
-        public Transform PeeScore = null;
-
         public Transform RecvieCard = null;
         public Transform Hand = null;
     }

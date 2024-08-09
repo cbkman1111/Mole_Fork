@@ -22,8 +22,8 @@ namespace UI.Menu
 
         public void SetPosition(Board board)
         {
+            /*
             var cam = AppManager.Instance.CurrScene.MainCamera;
-
             Vector3 gwang = cam.WorldToScreenPoint(board.boardPositions[0].GwangScore.position);
             Vector3 mung = cam.WorldToScreenPoint(board.boardPositions[0].MungScore.position);
             Vector3 thee = cam.WorldToScreenPoint(board.boardPositions[0].TheeScore.position);
@@ -43,6 +43,7 @@ namespace UI.Menu
             SetPosition("Image - Mung Player 2", mung);
             SetPosition("Image - Thee Player 2", thee);
             SetPosition("Image - Pee Player 2", pee);
+            */
         }
 
         public void ShowScoreMenu(bool active)
@@ -72,7 +73,6 @@ namespace UI.Menu
             SetText($"Text - Mung Player {userIndex}", $"{score.mung}");
             SetText($"Text - Thee Player {userIndex}", $"{score.thee}");
             SetText($"Text - Pee Player {userIndex}", $"{score.pee}");
-
             SetText($"Text - Total Score Player {userIndex}", $"{score.total}");
         }
 
@@ -88,14 +88,8 @@ namespace UI.Menu
             }
         }
 
-        public void SetDebugTrun()
-        { 
-
-        }
-
         public override void OnValueChanged(Slider slider, float f)
         {
-            //base.OnValueChanged(slider, f);
             if (slider.name == "Slider - TimeScale")
             {
                 Time.timeScale = f;
@@ -110,7 +104,5 @@ namespace UI.Menu
                 AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneMenu);
             }
         }
-
-        public override void OnInit() { }
     }
 }
