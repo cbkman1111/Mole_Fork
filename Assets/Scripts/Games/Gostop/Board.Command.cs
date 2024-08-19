@@ -261,7 +261,7 @@ namespace Gostop
                             if (turnUser == Player.Enemy)
                             {
                                 int turnIndex = (int)turnUser;
-                                var list = GetSameMonthCard(turnIndex, hands[turnIndex].Get(0));
+                                var list = GetSameMonthCard(turnIndex, hands[turnIndex][0]);
                                 if (list.Count == 3) // 폭탄
                                 {
                                     HitBomb(turnIndex, list, list[0]);
@@ -272,7 +272,7 @@ namespace Gostop
                                 }
                                 else
                                 {
-                                    HitCard(turnIndex, hands[turnIndex].Get(0));
+                                    HitCard(turnIndex, hands[turnIndex][0]);
                                 }
                             }
                         },
@@ -365,7 +365,7 @@ namespace Gostop
                         check: () => {
                             if (select.Count == 2)
                             {
-                                var list = select.List;
+                                var list = select;
                                 if (turnUser == Player.Enemy)
                                 {
                                     list[0].Owner = Player.Enemy;
@@ -421,7 +421,7 @@ namespace Gostop
                             foreach (var kindSlot in bottoms)
                             {
                                 var list = kindSlot.Value;
-                                foreach (var card in list.List) {
+                                foreach (var card in list) {
                                     card.Owner = Player.None;
                                 }
                             }
@@ -435,7 +435,8 @@ namespace Gostop
                         start: () => {
                             int count = 0;
                             int total = listEat.Count;
-                            foreach (var card in listEat.List)
+
+                            foreach (var card in listEat)
                             {
                                 TackCard(card, total - count); // 카드 획득.
                                 count++;

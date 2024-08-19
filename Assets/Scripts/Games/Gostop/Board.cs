@@ -91,9 +91,9 @@ namespace Gostop
             hands[0] = new CardList();
             hands[1] = new CardList();
 
-            scores = new List<Card>[(int)Player.Max];
-            scores[0] = new List<Card>();
-            scores[1] = new List<Card>();
+            scores = new CardList[(int)Player.Max];
+            scores[0] = new CardList();
+            scores[1] = new CardList();
 
             select = new CardList();
             listEat = new CardList();
