@@ -1,16 +1,10 @@
+using Common.Global;
 using DG.Tweening;
 using System;
-
 using System.Collections.Generic;
 using System.Linq;
-using Common.Global;
-using UI.Menu;
 using UI.Popup;
 using UnityEngine;
-using static UnityEditor.Rendering.InspectorCurveEditor;
-using UnityEditor;
-using SweetSugar.Scripts.TargetScripts.TargetEditor;
-
 
 namespace Gostop
 {
@@ -22,16 +16,16 @@ namespace Gostop
         /// <summary>
         /// 게임 보드에 존재하는 카드.
         /// </summary>
-        public Dictionary<int, List<Card>> bottoms = null;
-        public List<Card>[] hands = null;
+        public Dictionary<int, CardList> bottoms = null;
+        public CardList[] hands = null;
         public List<Card>[] scores = null;
         public Stack<Card> deck = null;
 
         /// <summary>
         /// 골라야 하거나, 먹은 카드 처리용.
         /// </summary>
-        private List<Card> select = null; // 선택해야 하는 카드.
-        private List<Card> listEat = null; // 먹는패.
+        private CardList select = null; // 선택해야 하는 카드.
+        private CardList listEat = null; // 먹는패.
 
         /// <summary>
         /// 상대의 패를 훔칩니다.
@@ -133,20 +127,12 @@ namespace Gostop
 
             foreach (var kindSlot in bottoms)
             {
-                foreach (var card in kindSlot.Value)
-                {
-                    DOTween.KillAll(card.gameObject);
-                    GameObject.Destroy(card.gameObject);
-                }
+                kindSlot.Value.Destroy();
             }
 
             for (int i = 0; i < (int)Player.Max; i++)
             {
-                foreach (var card in hands[i])
-                {
-                    DOTween.KillAll(card.gameObject);
-                    GameObject.Destroy(card.gameObject);
-                }
+                hands[i].Destroy();
             }
 
             for (int i = 0; i < (int)Player.Max; i++)
@@ -161,16 +147,6 @@ namespace Gostop
             // 배열 지우기.
             deck.Clear();
             commandProcedure.Clear();
-
-            foreach (var kindSlot in bottoms)
-            {
-                kindSlot.Value.Clear();
-            }
-
-            for (int i = 0; i < 2; i++)
-            {
-                hands[i].Clear();
-            }
 
             for (int i = 0; i < (int)Player.Max; i++)
             {
@@ -212,10 +188,10 @@ namespace Gostop
             {
                 for (int i = 0; i < (int)Player.Max; i++)
                 {
-                    hands[i] = hands[i].OrderBy(card => card.Num).ToList();
+                    hands[i].OrderByNum();
                     for (int index = 0; index < hands[i].Count; index++)
                     {
-                        var card = hands[i][index];
+                        var card = hands[i].Get(index);
                         var handPosition = boardPositions[i].Hand.GetChild(index).transform.position;
                         card.MoveTo(
                             handPosition,
@@ -460,7 +436,7 @@ namespace Gostop
             {
                 Card card = deck.Pop();
 
-                KeyValuePair<int, List<Card>> slot = GetSlot(card);
+                KeyValuePair<int, CardList> slot = GetSlot(card);
                 float randX = UnityEngine.Random.Range(0.2f, 0.3f);
                 float randZ = UnityEngine.Random.Range(0.1f, 0.15f);
 
@@ -516,7 +492,7 @@ namespace Gostop
             int count = 0;
             foreach (var slot in bottoms)
             {
-                var list = slot.Value.Where(e => e.Month == 13).ToList();
+                var list = slot.Value.GetList(13);
                 if (list == null || list.Count == 0)
                     continue;
 
@@ -547,7 +523,7 @@ namespace Gostop
         {
             foreach (var slot in bottoms)
             {
-                foreach (var card in slot.Value)
+                foreach (var card in slot.Value.List)
                 {
                     card.CardOpen(setting.FlipTime);
                     card.SetEnablePhysics(true);
@@ -570,10 +546,9 @@ namespace Gostop
 
                 for (int i = 0; i < list.Count; i++)
                 {
-                    var card = list[i];
+                    var card = list.Get(i);
                     var slot = boardPositions[user].Hand.transform.GetChild(i);
                     var rotate = boardPositions[user].Hand.rotation;
-                    
                     card.CardOpen(setting.FlipTime);
                     card.MoveTo(
                         slot.position,
@@ -593,14 +568,14 @@ namespace Gostop
         {
             for (int index = 0; index < hands[(int)Player.Player].Count; index++)
             {
-                Card card = hands[(int)Player.Player][index];
+                Card card = hands[(int)Player.Player].Get(index);
                 card.ShowMe(delay: index * setting.HandOpenTime);
                 card.SetShadow(false);
             }
 
             for (int index = 0; index < hands[(int)Player.Enemy].Count; index++)
             {
-                Card card = hands[(int)Player.Enemy][index];
+                Card card = hands[(int)Player.Enemy].Get(index);
                 card.SetOpen(true);
                 card.SetShadow(false);
             }
@@ -616,7 +591,7 @@ namespace Gostop
         /// <returns></returns>
         public List<Card> GetSameMonthCard(int user, Card card)
         {
-            return hands[user].Where(c => c.Month == card.Month && c.Month != 13).ToList();
+            return hands[user].SameList(card);// Where(c => c.Month == card.Month && c.Month != 13).ToList();
         }
 
         /// <summary>
@@ -639,11 +614,11 @@ namespace Gostop
         {
             bool eatPossible = false;
 
-            foreach (KeyValuePair<int, List<Card>> kindSlot in bottoms)
+            foreach (KeyValuePair<int, CardList> kindSlot in bottoms)
             {
                 if (kindSlot.Value.Count > 0)
                 {
-                    if (kindSlot.Value[0].Month == list[0].Month)
+                    if (kindSlot.Value.List[0].Month == list[0].Month)
                     {
                         eatPossible = true;
                         break;
@@ -689,7 +664,7 @@ namespace Gostop
         {
             var playInfo = CommandInfo.info;
      
-            KeyValuePair<int, List<Card>> slot = GetSlot(card);
+            KeyValuePair<int, CardList> slot = GetSlot(card);
             bool success = hands[user].Remove(card);
             if (success == true)
             {
@@ -857,7 +832,7 @@ namespace Gostop
             }
 
             int count = 0;
-            foreach (var card in listEat)
+            foreach (var card in listEat.List)
             {
                 //TackCard(card, total - count); // 카드 획득.
                 var slot = GetSlot(card);
@@ -873,10 +848,10 @@ namespace Gostop
         private bool TakeCardCondition()
         {
             bool possibleEat = false;
-            foreach (KeyValuePair<int, List<Card>> kindSlot in bottoms)
+            foreach (KeyValuePair<int, CardList> kindSlot in bottoms)
             {
-                var list = kindSlot.Value.Where(c => c.Month != 13).ToList();
-                var listJocker = kindSlot.Value.Where(c => c.Month == 13).ToList();
+                var list = kindSlot.Value.GetListNot13();
+                var listJocker = kindSlot.Value.GetList(13);
 
                 if (listJocker.Count > 0)
                 {
@@ -1040,6 +1015,7 @@ namespace Gostop
             card.ShowMe();
             card.SetShadow(false);
             card.Owner = (Player)turnUser;
+
             hands[(int)turnUser].Add(card);
             HandSort();
             return card;
@@ -1065,22 +1041,22 @@ namespace Gostop
             {
                 foreach (var slot in bottoms)
                 {
-                    var count = slot.Value.Where(c => c.Owner == owner).ToList().Count();
+                    var count = slot.Value.List.Where(c => c.Owner == owner).ToList().Count();
                     if (count > 0)
                     { 
                         slotIndex = slot.Key - 1;
                         slotStack = slot.Value.Count;
-                        list = slot.Value;
+                        list = slot.Value.List;
                         break;
                     }
                 }
             }
             else 
             {
-                KeyValuePair<int, List<Card>> slot = GetSlot(card);
+                KeyValuePair<int, CardList> slot = GetSlot(card);
                 slotIndex = slot.Key-1;
                 slotStack = slot.Value.Count;
-                list = slot.Value;
+                list = slot.Value.List;
             }
 
             if (slotIndex != -1)
@@ -1119,12 +1095,12 @@ namespace Gostop
         /// </summary>
         /// <param name="card"></param>
         /// <returns></returns>
-        private KeyValuePair<int, List<Card>> GetSlot(Card card)
+        private KeyValuePair<int, CardList> GetSlot(Card card)
         {
             int key = -1;
             foreach (var kindSlot in bottoms)
             {
-                var exist = kindSlot.Value.Where(e => e.Month == card.Month).FirstOrDefault();
+                var exist = kindSlot.Value.List.Where(e => e.Month == card.Month).FirstOrDefault();
                 if (exist != null)
                 {
                     key = kindSlot.Key;
@@ -1132,7 +1108,7 @@ namespace Gostop
                 }
             }
 
-            KeyValuePair<int, List<Card>> slot;
+            KeyValuePair<int, CardList> slot;
             if (key == -1)
             {
                 var emptyList = bottoms.Where(c => c.Value.Count == 0).ToList();
@@ -1156,7 +1132,7 @@ namespace Gostop
             int count = 0;
             foreach (var slot in bottoms)
             {
-                count += GetMoveCount(slot.Value);
+                count += slot.Value.MoveCount();// GetMoveCount();
             }
 
             return count;

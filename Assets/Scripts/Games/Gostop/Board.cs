@@ -87,30 +87,32 @@ namespace Gostop
             turnUser = Player.Player;
             deck = new Stack<Card>();
             
-            hands = new List<Card>[(int)Player.Max];
-            hands[0] = new List<Card>();
-            hands[1] = new List<Card>();
+            hands = new CardList[(int)Player.Max];
+            hands[0] = new CardList();
+            hands[1] = new CardList();
 
             scores = new List<Card>[(int)Player.Max];
             scores[0] = new List<Card>();
             scores[1] = new List<Card>();
 
-            select = new List<Card>();
-            listEat = new List<Card>();
-            bottoms = new Dictionary<int, List<Card>>();
-            bottoms.Add(1, new List<Card>());
-            bottoms.Add(2, new List<Card>());
-            bottoms.Add(3, new List<Card>());
-            bottoms.Add(4, new List<Card>());
-            bottoms.Add(5, new List<Card>());
-            bottoms.Add(6, new List<Card>());
-            bottoms.Add(7, new List<Card>());
-            bottoms.Add(8, new List<Card>());
-            bottoms.Add(9, new List<Card>());
-            bottoms.Add(10, new List<Card>());
-            bottoms.Add(11, new List<Card>());
-            bottoms.Add(12, new List<Card>());
-            bottoms.Add(13, new List<Card>());
+            select = new CardList();
+            listEat = new CardList();
+            bottoms = new Dictionary<int, CardList>
+            {
+                { 1, new CardList() },
+                { 2, new CardList() },
+                { 3, new CardList() },
+                { 4, new CardList() },
+                { 5, new CardList() },
+                { 6, new CardList() },
+                { 7, new CardList() },
+                { 8, new CardList() },
+                { 9, new CardList() },
+                { 10, new CardList() },
+                { 11, new CardList() },
+                { 12, new CardList() },
+                { 13, new CardList() }
+            };
 
             gameScore = new Score[2];
             gameScore[0] = new Score();

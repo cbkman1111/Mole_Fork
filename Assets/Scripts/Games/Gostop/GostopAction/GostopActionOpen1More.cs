@@ -34,7 +34,7 @@ namespace Gostop
             int count = 0;
             foreach (var slot in board.bottoms)
             {
-                count += slot.Value.Where(card => card.ListTween.Count != 0).ToList().Count;
+                count += slot.Value.MoveCount();
                 if (count > 0)
                 {
                     break;

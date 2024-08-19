@@ -34,17 +34,6 @@ namespace Gostop
         /// <summary>
         /// 움직이는 카드 존재 확인.
         /// </summary>
-        /// <param name="list"></param>
-        /// <returns></returns>
-        private int GetMoveCount(List<Card> list)
-        {
-            int count = list.Where(card => card.ListTween.Count != 0).ToList().Count;
-            return count;
-        }
-
-        /// <summary>
-        /// 움직이는 카드 존재 확인.
-        /// </summary>
         /// <param name="deck"></param>
         /// <returns></returns>
         private int GetMoveCount(Stack<Card> stack)
@@ -126,8 +115,8 @@ namespace Gostop
                         },
                         check: () => {
                             int count = 0;
-                            count += GetMoveCount(hands[0]);
-                            count += GetMoveCount(hands[1]);
+                            count += hands[0].MoveCount();//
+                            count += hands[1].MoveCount();//
                             return count == 0;
                         },
                         complete: () => {
@@ -146,7 +135,7 @@ namespace Gostop
                         check: () => {
                             int count = 0;
                             foreach (var slot in bottoms) {
-                                count += GetMoveCount(slot.Value);
+                                count += slot.Value.MoveCount();
                             }
 
                             return count == 0;
@@ -168,7 +157,7 @@ namespace Gostop
                             int countMove = 0;
                             foreach (var slot in bottoms)
                             {
-                                countMove += GetMoveCount(slot.Value);
+                                countMove += slot.Value.MoveCount(); 
                             }
 
                             return countMove == 0;
@@ -178,7 +167,7 @@ namespace Gostop
                             int jockerCount = 0;
                             foreach (var slot in bottoms)
                             {
-                                int n = slot.Value.Where(e => e.Month == 13).ToList().Count;
+                                int n = slot.Value.GetList(13).Count;
                                 if (n > 0)
                                 {
                                     jockerCount += n;
@@ -210,7 +199,7 @@ namespace Gostop
 
                             foreach (var slot in bottoms)
                             {
-                                count += GetMoveCount(slot.Value);
+                                count += slot.Value.MoveCount();// GetMoveCount();
                             }
 
                             return count == 0;
@@ -228,8 +217,8 @@ namespace Gostop
                         },
                         check: () => {
                             int count = 0;
-                            count += GetMoveCount(hands[0]);
-                            count += GetMoveCount(hands[1]);
+                            count += hands[0].MoveCount();
+                            count += hands[1].MoveCount(); 
                             return count == 0;
                         },
                         complete: () => {
@@ -245,7 +234,7 @@ namespace Gostop
                             HandOpen();
                         },
                         check: () => {
-                            int count = GetMoveCount(hands[0]);
+                            int count = hands[0].MoveCount();// GetMoveCount(hands[0].List);
                             return count == 0;
                         },
                         complete: () => {
@@ -258,7 +247,7 @@ namespace Gostop
                     CommandInfo.Process(
                         start: () => HandSort(),
                         check: () => {
-                            return GetMoveCount(hands[0]) == 0;
+                            return hands[0].MoveCount() == 0;
                         },
                         complete: () => {
                             commandProcedure.Enqueue(Command.HitCard);
@@ -272,7 +261,7 @@ namespace Gostop
                             if (turnUser == Player.Enemy)
                             {
                                 int turnIndex = (int)turnUser;
-                                var list = GetSameMonthCard(turnIndex, hands[turnIndex][0]);
+                                var list = GetSameMonthCard(turnIndex, hands[turnIndex].Get(0));
                                 if (list.Count == 3) // 폭탄
                                 {
                                     HitBomb(turnIndex, list, list[0]);
@@ -283,7 +272,7 @@ namespace Gostop
                                 }
                                 else
                                 {
-                                    HitCard(turnIndex, hands[turnIndex][0]);
+                                    HitCard(turnIndex, hands[turnIndex].Get(0));
                                 }
                             }
                         },
@@ -376,18 +365,19 @@ namespace Gostop
                         check: () => {
                             if (select.Count == 2)
                             {
+                                var list = select.List;
                                 if (turnUser == Player.Enemy)
                                 {
-                                    select[0].Owner = Player.Enemy;
-                                    listEat.Add(select[0]);
+                                    list[0].Owner = Player.Enemy;
+                                    listEat.Add(list[0]);
                                     select.Clear();
                                 }
                                 else
                                 {
-                                    if (select[0].KindOfCard != select[1].KindOfCard)
+                                    if (list[0].KindOfCard != list[1].KindOfCard)
                                     {
                                         var popup = UIManager.Instance.OpenPopup<UIPopupCardSelect>();
-                                        popup.Init(select[0], select[1], (Card selectCard) => {
+                                        popup.Init(list[0], list[1], (Card selectCard) => {
                                             selectCard.Owner = turnUser;
                                             listEat.Add(selectCard);
                                             select.Clear();
@@ -395,8 +385,8 @@ namespace Gostop
                                     }
                                     else
                                     {
-                                        select[0].Owner = turnUser;
-                                        listEat.Add(select[0]);
+                                        list[0].Owner = turnUser;
+                                        listEat.Add(list[0]);
                                         select.Clear();
                                     }
                                 }
@@ -431,7 +421,7 @@ namespace Gostop
                             foreach (var kindSlot in bottoms)
                             {
                                 var list = kindSlot.Value;
-                                foreach (var card in list) {
+                                foreach (var card in list.List) {
                                     card.Owner = Player.None;
                                 }
                             }
@@ -445,7 +435,7 @@ namespace Gostop
                         start: () => {
                             int count = 0;
                             int total = listEat.Count;
-                            foreach (var card in listEat)
+                            foreach (var card in listEat.List)
                             {
                                 TackCard(card, total - count); // 카드 획득.
                                 count++;
