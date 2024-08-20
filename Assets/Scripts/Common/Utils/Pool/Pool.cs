@@ -13,7 +13,7 @@ namespace Common.Utils.Pool
         private Queue<T> _queue;
         private Transform _parent;
         public int Max { get; private set; } = 0;
-        private List<T> ActiveList { get; set; }
+        private List<T> _activeList { get; set; }
 
         /// <summary>
         /// 오브젝트 풀.
@@ -47,7 +47,7 @@ namespace Common.Utils.Pool
             this._prefab = prefab;
             this.Max = max;
             this._queue = new Queue<T>();
-            this.ActiveList = new List<T>();
+            this._activeList = new List<T>();
             this._parent = parent;
 
             for(int i = 0; i < max; i++)
@@ -55,13 +55,8 @@ namespace Common.Utils.Pool
                 var obj = Object.Instantiate(prefab, parent);
                 if (obj != null)
                 {
-                    var trans = obj as Transform;
-                    if (trans != null)
-                    {
-                        trans.name = prefab.name;
-                        trans.gameObject.SetActive(false);
-                    }
-
+                    obj.name = prefab.name;
+                    obj.gameObject.SetActive(false);
                     _queue.Enqueue(obj);
                 }
             }
@@ -79,32 +74,22 @@ namespace Common.Utils.Pool
             if (_queue.Count > 0)
             {
                 obj = _queue.Dequeue();
-                var trans = obj as Transform;
-                if (trans != null)
-                {
-                    trans.gameObject.SetActive(true);
-                }
-            
-                ActiveList.Add(obj);
+                obj.gameObject.SetActive(true);
+                _activeList.Add(obj);
                 return obj;
             }
             else
             {
-                var insertObj = Object.Instantiate(_prefab, _parent);
+                var insertObj = GameObject.Instantiate<T>(_prefab, _parent);
                 if (insertObj == true)
                 {
-                    var trans = insertObj as Transform;
-                    if (trans != null)
-                    {
-                        trans.name = _prefab.name;
-                        trans.gameObject.SetActive(false);
-                    }
-
+                    insertObj.name = _prefab.name;
+                    insertObj.gameObject.SetActive(false);
                     _queue.Enqueue(insertObj);
                     return GetObject();
                 }
             }
-            
+
             return default(T);
         }
 
@@ -114,27 +99,35 @@ namespace Common.Utils.Pool
         /// <param name="obj"></param>
         public bool ReturnObject(T obj) 
         {
-            if (ActiveList.Contains(obj) == true)
+            if (_activeList.Contains(obj) == true)
             {
                 _queue.Enqueue(obj);
-                ActiveList.Remove(obj);
-
-                var trans = obj as Transform;
-                if (trans != null)
-                {
-                    trans.gameObject.SetActive(false);
-                }
-
+                _activeList.Remove(obj);
+                obj.transform.SetParent(_parent);
+                obj.gameObject.SetActive(false);
                 return true;
             }
 
             return false;
         }
 
-        public int ActiveCount()
+        /// <summary>
+        /// 객체를 queue로 반환하고, destory가 true면 모두 제거합니다.
+        /// </summary>
+        /// <param name="destroy"></param>
+        public void ReturnAll()
         {
-            return ActiveList.Count;
+            // 큐로 옮기기.
+            while (_activeList.Count > 0)
+            {
+                var obj = _activeList[0];
+                ReturnObject(obj);
+            }
         }
 
+        public int ActiveCount()
+        {
+            return _activeList.Count;
+        }
     }
 }

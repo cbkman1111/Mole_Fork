@@ -78,6 +78,10 @@ namespace UI.Menu
             {
                 AppManager.Instance.ChangeScene(SceneBase.Scenes.Scene3Match);
             }
+            else if (name == "Button - Test")
+            {
+                AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneTest);
+            }
         }
     }
 }
