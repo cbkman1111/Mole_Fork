@@ -1,6 +1,8 @@
 using SweetSugar.Scripts.Blocks;
 using SweetSugar.Scripts.Level;
 using System;
+using System.Collections.Generic;
+using System.Security.Policy;
 using UnityEngine;
 
 namespace Match3
@@ -15,8 +17,8 @@ namespace Match3
         Red,
         Yellow,
         Green,
-        Pupple,
-        Blue,
+        Purple,
+        Sky,
         Orange,
 
         SpecialRed,
@@ -38,6 +40,15 @@ namespace Match3
         Empty,
         Sugar,
 
+        Max,
+    }
+
+    public enum DirectionTypes
+    {
+        Down,
+        Up,
+        Left,
+        Right,
         Max,
     }
 
@@ -66,10 +77,22 @@ namespace Match3
 
         public FieldData field = new();
 
-        public Level DeepCopy(Level level)
+        public Level()
         {
-            Stage = level.Stage;
-            field = level.field;
+            field = new();
+        }
+
+        public Level DeepCopy(Level dest)
+        {
+            Stage = dest.Stage;
+            field.Col = dest.Col;
+            field.Row = dest.Row;
+            field.Layers = dest.Layers;
+
+            foreach(var square in dest.field.Squares)
+            {
+                field.Squares[square.position.x + square.position.y * Col] = square;
+            }
             return this;
         }
     }
@@ -96,13 +119,14 @@ namespace Match3
     [Serializable]
     public class SquareBlock
     {
-        public BlockTypes block;
+        public List<BlockTypes> block;
+        public CandyTypes candy;
         public Vector2 direction;
         public Vector2Int position;
 
         public SquareBlock()
         {
-            block = BlockTypes.None;
+            block = new List<BlockTypes>();
             direction = new Vector2(0, -1);
             position = Vector2Int.zero;
         }
@@ -115,11 +139,9 @@ namespace Match3
     public class LevelContainer : ScriptableObject
     {
         public Level level = null;
-
-        public void SetData(Level level)
+        public void SetData(Level dest)
         {
-            this.level = new();
-            this.level.DeepCopy(level);
+            level.DeepCopy(dest);
         }
     }
 }

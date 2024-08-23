@@ -93,15 +93,16 @@ namespace UI.Menu
             for (int i = 0; i < (int)particleCount; i++)
             {
                 var sprite = pool.GetObject();
+                sprite.Index = i;
+                sprite.ShowText(false);
                 sprite.transform.localPosition = Vector3.zero;
-                if(sprite.canvasGroup)
-                    sprite.canvasGroup.alpha = 1;
-                //sprite.sortingOrder = i;
-                //sprite.sprite = icon;
-                //sprite.color = new Color(1, 1, 1, 1);
+                sprite.canvasGroup.alpha = 1;
 
                 // 360도 랜덤 각도 생성
                 float angle = UnityEngine.Random.Range(180f, 360);
+                if (i == 0)
+                    angle = 270;
+
                 // 각도를 라디안으로 변환
                 float radians = angle * Mathf.Deg2Rad;
                 // 점프할 거리 설정 (예: 5 유닛)
@@ -113,7 +114,7 @@ namespace UI.Menu
                     0
                 ) + targetCube.transform.position;
 
-                float power = UnityEngine.Random.Range(100f, 200f);// / 100f;
+                float power = UnityEngine.Random.Range(100f, 180f);// / 100f;
                 int numJumps = 1;
                 float duration = Mathf.Lerp(0.4f, 0.6f, (power - 1f) / 4f);
 
@@ -125,12 +126,30 @@ namespace UI.Menu
                      duration).
                      SetEase(Ease.Linear));
                 sequnce.AppendInterval(0.2f);
-                if(sprite.canvasGroup)
-                    sequnce.Append(sprite.canvasGroup.DOFade(0, 0.5f));
-                
+                sequnce.AppendCallback(() => {
+                    if (sprite.Index == 0)
+                    {
+                        var obj = pool.GetObject();
+                        obj.canvasGroup.alpha = 1;
+                        obj.ShowText(true);
+                        obj.transform.SetAsLastSibling();
+                        obj.transform.position = sprite.transform.position;
+                        float destY = sprite.transform.position.y + 100;
+                        var sequnce = DOTween.Sequence();
+                        sequnce.Append(obj.transform.DOMoveY(destY, 0.5f));
+                        sequnce.AppendInterval(0.2f);
+                        sequnce.Append(obj.canvasGroup.DOFade(0, 0.5f));
+                        sequnce.AppendCallback(() =>
+                        {
+                            pool.ReturnObject(obj);
+                        });
+                    }
+                });
+                sequnce.Append(sprite.canvasGroup.DOFade(0, 0.5f));
                 sequnce.AppendCallback(() =>
                 {
                     pool.ReturnObject(sprite);
+  
                 });
 
                 sequnce.Play();

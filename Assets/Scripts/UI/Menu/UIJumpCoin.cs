@@ -5,9 +5,10 @@ using UnityEngine.UI;
 public class UIJumpCoin : MenuBase
 {
     public CanvasGroup canvasGroup = null;
+    public int Index;
 
-    public Image GetIcon()
+    public void ShowText(bool enable)
     {
-        return List["Image - Icon"] as Image;
+        SetActive("Text - Count", enable);
     }
 }

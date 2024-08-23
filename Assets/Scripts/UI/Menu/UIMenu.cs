@@ -76,7 +76,7 @@ namespace UI.Menu
             }
             else if (name == "Button - 3Match")
             {
-                AppManager.Instance.ChangeScene(SceneBase.Scenes.Scene3Match);
+                AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneMatch3);
             }
             else if (name == "Button - Test")
             {

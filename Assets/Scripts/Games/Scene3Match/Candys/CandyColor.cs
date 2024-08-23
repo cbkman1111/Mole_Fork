@@ -5,7 +5,7 @@ using UnityEngine.Tilemaps;
 
 namespace Match3
 {
-    public class CandyRed : CandyBase
+    public class CandyColor : CandyBase
     {
         
     }

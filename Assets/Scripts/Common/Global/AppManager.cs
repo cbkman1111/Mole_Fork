@@ -252,8 +252,8 @@ namespace Common.Global
                     case SceneBase.Scenes.SceneDotween:
                         scene = obj.AddComponent<SceneDotween>();
                         break;
-                    case SceneBase.Scenes.Scene3Match:
-                        scene = obj.AddComponent<Scene3Match>();
+                    case SceneBase.Scenes.SceneMatch3:
+                        scene = obj.AddComponent<SceneMatch3>();
                         break;
                     default:
                         break;

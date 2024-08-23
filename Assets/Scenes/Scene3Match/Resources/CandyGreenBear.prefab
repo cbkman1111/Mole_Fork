@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8162519609326487118}
   - component: {fileID: 2588655537681333884}
   m_Layer: 0
-  m_Name: Candy10
+  m_Name: CandyGreenBear
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -118,7 +118,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: cb205e42864ca4a7493eb517454f965f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 602077c9fcbeb4dbcb982cf680370405, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

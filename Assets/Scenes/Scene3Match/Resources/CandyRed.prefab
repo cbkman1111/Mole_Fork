@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8162519609326487118}
   - component: {fileID: 2588655537681333884}
   m_Layer: 0
-  m_Name: Candy06
+  m_Name: CandyRed
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -118,7 +118,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 00609a7a5bb9f4a9b89633edcfd97d78, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 3dda22942cfed4603a1e236fa67c317c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

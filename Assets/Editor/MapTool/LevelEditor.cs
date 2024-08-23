@@ -9,9 +9,9 @@ namespace Match3
     /// </summary>
     public enum TabTypes
     {
-        Block = 0,
+        Direction = 0,
         Candy,
-        Direction,
+        Block,
         Teleport,
         Generate,
 
@@ -28,10 +28,13 @@ namespace Match3
 
         private Level level { get; set; } = null;
         
-        private string[] tabs = { "블럭", "캔디", "방향", "텔레포트", "생성" };
+        private string[] tabs = { "방향", "캔디", "블럭", "텔레포트", "생성" };
         private int TabIndex = (int)TabTypes.Block;
         private int SelectCandy = (int)CandyTypes.None;
         private int SelectBlock = (int)BlockTypes.None;
+        private bool SelectBlockDelete = false; // 채우기, 제거, 지우기.
+
+        private int SelectDirection = (int)DirectionTypes.Down;
         private int Layer = 0;
         private int Row = 9;
         private int Col = 9;
@@ -39,6 +42,7 @@ namespace Match3
 
         private Texture[] candyIcons = null;
         private Texture[] blockIcons = null;
+        private Texture[] directions = null;
 
         /// <summary>
         /// 매치3 -> 스테이지 에디터 -> 열기
@@ -61,23 +65,30 @@ namespace Match3
             level = new();
             candyIcons = new Texture[(int)CandyTypes.Max];
             blockIcons = new Texture[(int)BlockTypes.Max];
-            
+            directions = new Texture[(int)DirectionTypes.Max];
+
             TabIndex = (int)TabTypes.Block;
             SelectCandy = (int)CandyTypes.None;
             SelectBlock = (int)BlockTypes.None;
             
-            string path = "Assets/SweetSugar/Textures_png/Items";
+            string pathItems = "Assets/SweetSugar/Textures_png/Items";
             candyIcons[0] = null;
-            candyIcons[1] = (Texture)AssetDatabase.LoadAssetAtPath($"{path}/item_01.png", typeof(Texture));
-            candyIcons[2] = (Texture)AssetDatabase.LoadAssetAtPath($"{path}/item_02.png", typeof(Texture));
-            candyIcons[3] = (Texture)AssetDatabase.LoadAssetAtPath($"{path}/item_03.png", typeof(Texture));
-            candyIcons[4] = (Texture)AssetDatabase.LoadAssetAtPath($"{path}/item_04.png", typeof(Texture));
-            candyIcons[5] = (Texture)AssetDatabase.LoadAssetAtPath($"{path}/item_05.png", typeof(Texture));
-            candyIcons[6] = (Texture)AssetDatabase.LoadAssetAtPath($"{path}/item_06.png", typeof(Texture));
+            candyIcons[1] = (Texture)AssetDatabase.LoadAssetAtPath($"{pathItems}/item_01.png", typeof(Texture));
+            candyIcons[2] = (Texture)AssetDatabase.LoadAssetAtPath($"{pathItems}/item_02.png", typeof(Texture));
+            candyIcons[3] = (Texture)AssetDatabase.LoadAssetAtPath($"{pathItems}/item_03.png", typeof(Texture));
+            candyIcons[4] = (Texture)AssetDatabase.LoadAssetAtPath($"{pathItems}/item_04.png", typeof(Texture));
+            candyIcons[5] = (Texture)AssetDatabase.LoadAssetAtPath($"{pathItems}/item_05.png", typeof(Texture));
+            candyIcons[6] = (Texture)AssetDatabase.LoadAssetAtPath($"{pathItems}/item_06.png", typeof(Texture));
 
             blockIcons[0] = null;
-            blockIcons[1] = (Texture)AssetDatabase.LoadAssetAtPath($"{path}/item_spot_01.png", typeof(Texture));
-            blockIcons[2] = (Texture)AssetDatabase.LoadAssetAtPath($"{path}/game_item_a_1.png", typeof(Texture));
+            blockIcons[1] = (Texture)AssetDatabase.LoadAssetAtPath($"{pathItems}/item_spot_01.png", typeof(Texture));
+            blockIcons[2] = (Texture)AssetDatabase.LoadAssetAtPath($"{pathItems}/game_item_a_1.png", typeof(Texture));
+
+            string pathEditor = "Assets/SweetSugar/Textures_png/EditorSprites";
+            directions[(int)DirectionTypes.Down] = (Texture)AssetDatabase.LoadAssetAtPath($"{pathEditor}/arrow.png", typeof(Texture));
+            directions[(int)DirectionTypes.Up] = (Texture)AssetDatabase.LoadAssetAtPath($"{pathEditor}/arrow_up.png", typeof(Texture));
+            directions[(int)DirectionTypes.Left] = (Texture)AssetDatabase.LoadAssetAtPath($"{pathEditor}/arrow_left.png", typeof(Texture));
+            directions[(int)DirectionTypes.Right] = (Texture)AssetDatabase.LoadAssetAtPath($"{pathEditor}/arrow_right.png", typeof(Texture));
         }
 
         /// <summary>
