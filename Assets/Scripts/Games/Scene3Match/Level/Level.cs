@@ -1,12 +1,9 @@
-using SweetSugar.Scripts.Blocks;
-using SweetSugar.Scripts.Level;
 using System;
 using System.Collections.Generic;
-using System.Security.Policy;
 using UnityEngine;
 
 namespace Match3
-{ 
+{
     /// <summary>
     /// Äµµð.
     /// </summary>
@@ -139,6 +136,7 @@ namespace Match3
     public class LevelContainer : ScriptableObject
     {
         public Level level = null;
+
         public void SetData(Level dest)
         {
             level.DeepCopy(dest);

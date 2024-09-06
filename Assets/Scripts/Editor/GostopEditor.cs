@@ -43,7 +43,7 @@ namespace Gostop
             GUILayout.Label("덱 교체 설정", EditorStyles.boldLabel);
             ChanngeDeck();
          
-            //CreateBoardSetting();
+            CreateBoardSetting();
         }
 
         /// <summary>
@@ -112,9 +112,9 @@ namespace Gostop
         {
             var path = "Assets/Scenes/SceneGostop/Resources/";
             string fileName = "BoardSetting";
-            var container = ScriptableObjectUtil.CreateAsset<BoardSettingContainer>(path, fileName);
-            container.SetData(new BoardSetting());
-            EditorUtility.SetDirty(container);
+            var setting = ScriptableObjectUtil.CreateAsset<BoardSetting>(path, fileName);
+            //container.SetData(new BoardSetting());
+            EditorUtility.SetDirty(setting);
             AssetDatabase.SaveAssets();
         }
     }

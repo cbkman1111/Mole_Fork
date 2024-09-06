@@ -30,7 +30,10 @@ namespace Scenes
             }
 
             level = new();
-            var levelScriptable = Resources.Load("Level/Level_" + 1) as LevelContainer;
+
+            var path = $"Level/Level_{1}";
+            var levelScriptable = ResourcesManager.Instance.LoadInBuild<LevelContainer>(path);
+            //var levelScriptable = Resources.Load("Level/Level_" + 1) as LevelContainer;
             if (levelScriptable != null)
             {
                 level.DeepCopy(levelScriptable.level);
@@ -96,7 +99,6 @@ namespace Scenes
                 }
             }
 
-            
             return true;
         }
 

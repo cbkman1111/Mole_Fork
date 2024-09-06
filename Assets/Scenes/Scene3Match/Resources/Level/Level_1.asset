@@ -20,103 +20,103 @@ MonoBehaviour:
       Layers: 1
       Squares:
       - block: 01000000
-        candy: 4
+        candy: 2
         direction: {x: 0, y: -1}
         position: {x: 0, y: 0}
       - block: 01000000
-        candy: 5
+        candy: 0
         direction: {x: 0, y: -1}
         position: {x: 1, y: 0}
-      - block: 0100000002000000
-        candy: 2
+      - block: 01000000
+        candy: 0
         direction: {x: 0, y: -1}
         position: {x: 2, y: 0}
       - block: 01000000
-        candy: 5
+        candy: 0
         direction: {x: 0, y: -1}
         position: {x: 3, y: 0}
       - block: 01000000
-        candy: 1
+        candy: 4
         direction: {x: 0, y: -1}
         position: {x: 4, y: 0}
-      - block: 
-        candy: 1
+      - block: 01000000
+        candy: 0
         direction: {x: 0, y: -1}
         position: {x: 0, y: 1}
-      - block: 
-        candy: 4
+      - block: 01000000
+        candy: 0
         direction: {x: 0, y: -1}
         position: {x: 1, y: 1}
-      - block: 02000000
-        candy: 5
+      - block: 01000000
+        candy: 0
         direction: {x: 0, y: -1}
         position: {x: 2, y: 1}
-      - block: 
-        candy: 2
+      - block: 01000000
+        candy: 0
         direction: {x: 0, y: -1}
         position: {x: 3, y: 1}
-      - block: 
-        candy: 1
+      - block: 01000000
+        candy: 0
         direction: {x: 0, y: -1}
         position: {x: 4, y: 1}
-      - block: 
-        candy: 2
+      - block: 01000000
+        candy: 0
         direction: {x: 0, y: -1}
         position: {x: 0, y: 2}
-      - block: 
-        candy: 6
+      - block: 01000000
+        candy: 0
         direction: {x: 0, y: -1}
         position: {x: 1, y: 2}
-      - block: 02000000
-        candy: 6
+      - block: 01000000
+        candy: 0
         direction: {x: 0, y: -1}
         position: {x: 2, y: 2}
-      - block: 
-        candy: 4
+      - block: 01000000
+        candy: 0
         direction: {x: 0, y: -1}
         position: {x: 3, y: 2}
-      - block: 
-        candy: 2
+      - block: 01000000
+        candy: 0
         direction: {x: 0, y: -1}
         position: {x: 4, y: 2}
-      - block: 
-        candy: 1
+      - block: 01000000
+        candy: 0
         direction: {x: 0, y: -1}
         position: {x: 0, y: 3}
-      - block: 
-        candy: 6
+      - block: 01000000
+        candy: 0
         direction: {x: 0, y: -1}
         position: {x: 1, y: 3}
-      - block: 02000000
-        candy: 5
+      - block: 01000000
+        candy: 0
         direction: {x: 0, y: -1}
         position: {x: 2, y: 3}
-      - block: 
-        candy: 4
+      - block: 01000000
+        candy: 0
         direction: {x: 0, y: -1}
         position: {x: 3, y: 3}
-      - block: 
-        candy: 1
+      - block: 01000000
+        candy: 0
         direction: {x: 0, y: -1}
         position: {x: 4, y: 3}
-      - block: 02000000
+      - block: 01000000
         candy: 1
         direction: {x: 0, y: -1}
         position: {x: 0, y: 4}
-      - block: 02000000
-        candy: 5
+      - block: 01000000
+        candy: 0
         direction: {x: 0, y: -1}
         position: {x: 1, y: 4}
-      - block: 02000000
-        candy: 2
+      - block: 01000000
+        candy: 0
         direction: {x: 0, y: -1}
         position: {x: 2, y: 4}
-      - block: 02000000
-        candy: 5
+      - block: 01000000
+        candy: 0
         direction: {x: 0, y: -1}
         position: {x: 3, y: 4}
-      - block: 02000000
-        candy: 4
+      - block: 01000000
+        candy: 3
         direction: {x: 0, y: -1}
         position: {x: 4, y: 4}
       - block: 

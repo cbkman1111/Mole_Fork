@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Gostop
 {
     [Serializable]
-    public class BoardSetting
+    public class BoardSetting : ScriptableObject
     {
         public float DeckCardTime = 0.1f;
         public float HitCardTime = 0.1f;
@@ -20,6 +20,7 @@ namespace Gostop
         public float HitDownTime = 0.1f;
     }
 
+    /*
     public class BoardSettingContainer : ScriptableObject
     {
         public BoardSetting setting;
@@ -29,4 +30,5 @@ namespace Gostop
             this.setting = data.DeepClone<BoardSetting>();
         }
     }
+    */
 }

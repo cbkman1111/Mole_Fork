@@ -237,9 +237,9 @@ namespace Match3
         {
             GUILayout.BeginHorizontal();
             {
-                GUILayout.Label("Layers " + (Layer + 1) + " / " + level.Layers, EditorStyles.label, GUILayout.Width(100));
+                GUILayout.Label("Layers " + (CurrLayer + 1) + " / " + level.Layers, EditorStyles.label, GUILayout.Width(100));
                 GUILayout.Space(0);
-                Layer = (int)GUILayout.HorizontalSlider(Layer, level.Layers - 1, 0, GUILayout.Width(100));
+                CurrLayer = (int)GUILayout.HorizontalSlider(CurrLayer, level.Layers - 1, 0, GUILayout.Width(100));
                 GUILayout.Space(50);
             }
 
@@ -302,9 +302,9 @@ namespace Match3
 
                         case (int)TabTypes.Block:
                             BlockTypes blockTypes = BlockTypes.None;
-                            if (square.block.Count > Layer)
+                            if (square.block.Count > CurrLayer)
                             {
-                                blockTypes = square.block[Layer];
+                                blockTypes = square.block[CurrLayer];
                             }
 
                             imageButton = blockIcons[(int)blockTypes];
@@ -351,7 +351,11 @@ namespace Match3
             switch (TabIndex)
             {
                 case (int)TabTypes.Block:
-                    if(square.block.Contains((BlockTypes)SelectBlock) == false)
+                    if (SelectBlockDelete == true)
+                    {
+                        square.block.Clear();
+                    }
+                    else if (square.block.Contains((BlockTypes)SelectBlock) == false)
                     {
                         square.block.Add((BlockTypes)SelectBlock);
                     }
@@ -393,30 +397,32 @@ namespace Match3
             GUILayout.Label("Stage", GUILayout.Width(80));
             GUILayout.Space(10);
 
-            Stage = EditorGUILayout.IntField("", Stage, GUILayout.Width(50));
+            level.Stage = EditorGUILayout.IntField("", level.Stage, GUILayout.Width(50));
             GUILayout.EndHorizontal();
 
             GUILayout.BeginHorizontal();
             GUILayout.Label("Columns", GUILayout.Width(80));
             GUILayout.Space(10);
 
-            Col = EditorGUILayout.IntField("", Col, GUILayout.Width(50));
+            level.Col = EditorGUILayout.IntField("", level.Col, GUILayout.Width(50));
             GUILayout.EndHorizontal();
 
             GUILayout.BeginHorizontal();
             GUILayout.Label("Rows", GUILayout.Width(80));
             GUILayout.Space(10);
 
-            Row = EditorGUILayout.IntField("", Row, GUILayout.Width(50));
+            level.Row = EditorGUILayout.IntField("", level.Row, GUILayout.Width(50));
             GUILayout.EndHorizontal();
 
             // 크기가 바뀌면 데이터 변경.
+            /*
             if(level.Col != Col || level.Row != Row)
             {
                 level.Col = Col;
                 level.Row = Row;
                 level.field = new();
             }
+            */
 
             GUILayout.Space(10);
         }

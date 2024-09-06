@@ -1,4 +1,5 @@
-﻿using SweetSugar.Scripts.Level;
+﻿using Common.Global;
+using SweetSugar.Scripts.Level;
 using UnityEditor;
 using UnityEngine;
 
@@ -35,10 +36,10 @@ namespace Match3
         private bool SelectBlockDelete = false; // 채우기, 제거, 지우기.
 
         private int SelectDirection = (int)DirectionTypes.Down;
-        private int Layer = 0;
-        private int Row = 9;
-        private int Col = 9;
-        private int Stage = 1;
+        private int CurrLayer = 0;
+        //private int Row = 9;
+        //private int Col = 9;
+        //private int Stage = 1;
 
         private Texture[] candyIcons = null;
         private Texture[] blockIcons = null;
@@ -97,6 +98,7 @@ namespace Match3
         /// <param name="Stage"></param>
         public void SaveLevel()
         {
+            //var levelScriptable = ResourcesManager.Instance.LoadInBuild<LevelContainer>("Level/Level_" + level.Stage);
             var levelScriptable = Resources.Load("Level/Level_" + level.Stage) as LevelContainer;
             if (levelScriptable != null)
             {
@@ -122,10 +124,15 @@ namespace Match3
         /// <param name="levelNum"></param>
         public void LoadLevel(int levelNum)
         {
-            var levelScriptable = Resources.Load("Level/Level_" + levelNum) as LevelContainer;
+            //var levelScriptable = ResourcesManager.Instance.LoadInBuild<LevelContainer>("Level/Level_" + levelNum);
+            var levelScriptable = Resources.Load<LevelContainer>("Level/Level_" + levelNum);// as LevelContainer;
             if (levelScriptable)
             {
                 level.DeepCopy(levelScriptable.level);
+
+                //Col = level.Col;
+                //Row = level.Row;
+                //Stage = level.Stage;
             }
         }
 
