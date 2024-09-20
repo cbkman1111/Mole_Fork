@@ -71,9 +71,8 @@ namespace Creature
             TweenMove = transform.DOMove(transform.position + target, duration).
                 SetEase(Ease.Linear).
                 OnComplete(() => {
-                    OnMoveEnd();
                     TweenMove = null;
-                    ChangeState(ObjectState.Idle);
+                    //ChangeState(ObjectState.Idle);
                 });
         }
 
@@ -90,7 +89,6 @@ namespace Creature
             TweenMove = transform.DOMove(transform.position + target, duration).
                 SetEase(Ease.Linear).
                 OnComplete(() => {
-                    OnDashEnd();
                     TweenMove = null;
                     ChangeState(ObjectState.Stop);
                 });
@@ -119,9 +117,7 @@ namespace Creature
             }
         }
 
-        protected virtual void OnMoveEnd() { }
         protected virtual void OnDash(Vector3 angle) {}
-        protected virtual void OnDashEnd() { }
         protected virtual void OnDirectChanged(Direct direct) { }
     }
 }

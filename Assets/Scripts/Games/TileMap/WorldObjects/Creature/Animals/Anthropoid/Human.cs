@@ -9,6 +9,7 @@ namespace Creature
         {
             switch (State)
             {
+                case ObjectState.Stop:
                 case ObjectState.Idle:
                     if (direct == Direct.Left)
                     {
@@ -45,10 +46,6 @@ namespace Creature
                     {
                         Play("movement/trot-front", true);
                     }
-                    break;
-
-                case ObjectState.Stop:
-                    Play("emotes/burp");
                     break;
             }
         }

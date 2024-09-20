@@ -83,7 +83,6 @@ namespace Scenes
                     seat:() => {
                         var player = _player;
                         _player = _beefalo;
-
                         _beefalo.Seat(player);
                     },
                     unSeat: () => {
