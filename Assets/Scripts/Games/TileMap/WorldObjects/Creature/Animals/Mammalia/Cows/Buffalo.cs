@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace TileMap
+namespace Creature
 {
     public class Buffalo : Mammalia
     {

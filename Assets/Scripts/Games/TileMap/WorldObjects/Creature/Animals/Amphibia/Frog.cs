@@ -4,9 +4,8 @@ using UnityEngine;
 
 namespace Creature
 {
-    public class Cat : Mammalia
+    public class Frog : Animal
     {
-
     }
-
 }
+

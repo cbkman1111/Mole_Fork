@@ -1,5 +1,5 @@
 
-namespace TileMap
+namespace Creature
 {
     public class Bush : Plants
     {

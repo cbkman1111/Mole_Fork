@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Spider : Insect
+namespace Creature
 {
-  
+    public class Spider : Insect
+    {
+
+    }
 }
- 

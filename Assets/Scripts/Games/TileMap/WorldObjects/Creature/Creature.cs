@@ -1,13 +1,11 @@
 using System;
 using UnityEngine;
 
-namespace TileMap
+namespace Creature
 {
     public class Creature : WorldObject
     {
         
-
-        protected int Hp { get; set; }
     }
 }
 

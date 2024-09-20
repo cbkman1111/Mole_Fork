@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using Common.Global;
 using Common.Scene;
 using Common.Utils.Pool;
+using Creature;
 using DG.Tweening;
 using Games.TileMap;
 using Games.TileMap.Datas;
 using Spine.Unity;
-using TileMap;
 using UI.Menu;
 using UnityEngine;
 
@@ -22,13 +22,15 @@ namespace Scenes
         private MapData _mapData = null;
         private UIMenuTileMap _menu = null;
         private Map _map = null;
-        private Pige _luke = null;
+        private Human _luke = null;
         private WorldObject _player = null;
         private float _ditanceCamera = 0;        
         RaycastHit[] _hits = new RaycastHit[10];
 
         public SkeletonAnimation skelDragon = null;
         public Buffalo _beefalo = null;
+
+        private Vector3 lastMove = Vector3.zero;
 
         /// <summary>
         /// 
@@ -48,15 +50,16 @@ namespace Scenes
             {
                 _menu.InitMenu(
                     move: (Vector3 angle) => {
-                        OnMove(angle);
+                        lastMove = angle;
+                        OnMove(lastMove);
                     },
                     stop: () => {
                         OnStop();
                     },
                     save:() =>
                     {
-                        _mapData.X = _player.x;
-                        _mapData.Z = _player.z;
+                        _mapData.X = _player.X;
+                        _mapData.Z = _player.Z;
                         
                         _mapData.Save();
                     },
@@ -76,7 +79,6 @@ namespace Scenes
                         var skin = _beefalo.GetComponent<SkinMixAndMatch>();
                         if(skin != null)
                             skin.NextWeaponeSkin();
-
                     },
                     seat:() => {
                         var player = _player;
@@ -125,10 +127,10 @@ namespace Scenes
             _map.Init(_mapData, startX, startZ, displayW, displayUpSide, displayDownSide);
             
             // 캐릭터 생성.
-            var prefab = ResourcesManager.Instance.LoadInBuild<Pige>($"{pathPrefab}/Player");
-            _luke = GameObject.Instantiate<Pige>(prefab);
+            var prefab = ResourcesManager.Instance.LoadInBuild<Human>($"{pathPrefab}/Player");
+            _luke = GameObject.Instantiate<Human>(prefab);
             _luke.name = "luke";
-            _luke.Init(startX, startZ, new Vector3(0.15f, 0.15f, 0.15f));
+            _luke.Init(startX, startZ, Vector3.one);
 
             _player = _luke;
 
@@ -362,16 +364,27 @@ namespace Scenes
             return wallCount;
         }
         
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="angle"></param>
         public void OnMove(Vector3 angle)
         {
             // 탑뷰 시점으로 변환.
             angle.z = angle.y;
-            
-            _player.Move(angle);
+
+            IMove moveAble = _player as IMove;
+            if (moveAble != null)
+            {
+                moveAble.Move(angle);
+            }
+        }
+
+        public void OnDash(Vector3 angle)
+        {
+            // 탑뷰 시점으로 변환.
+            angle.z = angle.y;
+            IMove moveAble = _player as IMove;
+            if (moveAble != null)
+            {
+                moveAble.Dash(angle);
+            }
         }
 
         /// <summary>
@@ -379,7 +392,11 @@ namespace Scenes
         /// </summary>
         public void OnStop()
         {
-  
+            IMove moveAble = _player as IMove;
+            if (moveAble != null)
+            {
+                moveAble.Stop();
+            }
         }
         
         /// <summary>
@@ -389,15 +406,13 @@ namespace Scenes
         {
             if (_player != null)
             {
-                var cameraPosition = _player.transform.position + 
-                                     _player.transform.GetChild(0).forward * -_ditanceCamera;
-
+                var cameraPosition = _player.transform.position + _player.transform.GetChild(0).forward * -_ditanceCamera;
+                
                 if (Vector3.Distance(MainCamera.transform.position, cameraPosition) > 0.1f)
                 {
                     if (MainCamera.transform.position == Vector3.zero)
                     {
-                        MainCamera.transform.position = _player.transform.position + 
-                                                        _player.transform.GetChild(0).forward * -_ditanceCamera;
+                        MainCamera.transform.position = cameraPosition;
                     }
                     else
                     {
@@ -406,34 +421,38 @@ namespace Scenes
                     }
                 }
                 
-                if((int)_player.transform.position.x != _player.x ||
-                   (int)_player.transform.position.z != _player.z)
+                if((int)_player.transform.position.x != _player.X ||
+                   (int)_player.transform.position.z != _player.Z)
                 {
-                    _player.x = (int)_player.transform.position.x;
-                    _player.z = (int)_player.transform.position.z * 100;
-
-                    // 새 좌표에 해당하는 타일로 업데이트.
-                    //handler.IsRunning = false;
-                    //handler = MEC.Timing.RunCoroutine(_map.UpdateTiles(_player.x, _player.z));
+                    _player.X = (int)_player.transform.position.x;
+                    _player.Z = (int)_player.transform.position.z * 100;
                 }
             }
 
 
             if (Input.GetKey(KeyCode.A))
             {
-                OnMove(Vector3.left);
+                lastMove = Vector3.left;
+                OnMove(lastMove);
             }
             else if (Input.GetKey(KeyCode.D))
             {
-                OnMove(Vector3.right);
+                lastMove = Vector3.right;
+                OnMove(lastMove);
             }
             else if (Input.GetKey(KeyCode.W))
             {
-                OnMove(Vector3.up);
+                lastMove = Vector3.up;
+                OnMove(lastMove);
             }
             else if (Input.GetKey(KeyCode.S))
             {
-                OnMove(Vector3.down);
+                lastMove = Vector3.down;
+                OnMove(lastMove);
+            }
+            else if (Input.GetKey(KeyCode.Space))
+            {
+                OnDash(lastMove);
             }
             else if (Input.GetKeyUp(KeyCode.A))
             {
@@ -480,7 +499,7 @@ namespace Scenes
                 var worldObject = obj.GetComponent<WorldObject>();
                 if (worldObject != null)
                 {
-                    worldObject.SetState(ObjectState.Click);
+                    worldObject.ChangeState(ObjectState.Click);
                     _menu.SetObjectInfo(obj.name);
                 }
             }
