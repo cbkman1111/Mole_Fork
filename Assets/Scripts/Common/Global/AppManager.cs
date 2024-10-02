@@ -255,6 +255,9 @@ namespace Common.Global
                     case SceneBase.Scenes.SceneMatch3:
                         scene = obj.AddComponent<SceneMatch3>();
                         break;
+                    case SceneBase.Scenes.SceneHash:
+                        scene = obj.AddComponent<SceneHash>();
+                        break;
                     default:
                         break;
                 }

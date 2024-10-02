@@ -82,6 +82,10 @@ namespace UI.Menu
             {
                 AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneTest);
             }
+            else if (name == "Button - Hash")
+            {
+                AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneHash);
+            }
         }
     }
 }

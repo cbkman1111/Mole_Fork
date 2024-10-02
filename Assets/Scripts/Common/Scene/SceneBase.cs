@@ -27,6 +27,8 @@ namespace Common.Scene
 
             SceneMatch3, // 닷트윈 테스트.
 
+            SceneHash,
+
         }
 
         //public float Amount { get; set; } = 0;

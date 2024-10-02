@@ -162,7 +162,7 @@ namespace Scenes
                 };
             }
 
-            player = Player.Create<Player>(mapData.player, enableAgent: false);
+            player = Player.Create<Player>(mapData.player, enableAgent: true);
             if (player != null)
             {
                 player.SetScale(new Vector3(0.3f, 0.3f, 0.3f));

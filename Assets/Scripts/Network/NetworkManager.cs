@@ -2,6 +2,8 @@ using Common.Global.Singleton;
 using System;
 using System.IO;
 using System.Net.Sockets;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading;
 using UnityEngine;
 
@@ -22,7 +24,6 @@ namespace Network
             reader = null;
             writer = null;
             threadRead = null;
-
             return true;
         }
 
@@ -132,8 +133,8 @@ namespace Network
                 Debug.Log($"{Tag} - client is not connected");
                 return;
             }
-
-
         }
+
+      
     }
 }
