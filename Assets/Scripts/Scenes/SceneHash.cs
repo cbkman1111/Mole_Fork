@@ -1,10 +1,11 @@
 using Common.Global;
 using Common.Scene;
 using Common.Utils;
+using System;
+using System.Collections;
 using System.Security.Cryptography;
 using System.Text;
 using UI.Menu;
-using UnityEngine;
 
 public class SceneHash : SceneBase
 {
@@ -16,6 +17,26 @@ public class SceneHash : SceneBase
         if (menu != null)
         {
             menu.InitMenu(ConvertSHA, ConvertMD5, ConvertBase64);
+        }
+
+        Hashtable table = new Hashtable(7);
+        table.Add(1, "One");
+        table.Add(2, "Two");
+        table.Add(3, "Three");
+        table.Add(4, "Four");
+        table.Add(5, "Five");
+        table.Add(6, "Six");
+        table.Add(7, "Seven");
+        table.Add(8, "Eight");
+        table.Add(9, "Nine");
+        table.Add(10, "Ten");
+        table.Add(11, "Eleven");
+        table.Add(12, "Twelve");
+
+        foreach (DictionaryEntry entry in table)
+        {
+            string msg = $"{entry.Key.GetHashCode()} => {entry.Key.GetHashCode() % table.Count} / {entry.Value}";
+            GiantDebug.Log(msg);
         }
 
         return true;
@@ -80,5 +101,28 @@ public class SceneHash : SceneBase
     {
         byte[] bytes = ASCIIEncoding.ASCII.GetBytes(str);
         return System.Convert.ToBase64String(bytes);
+    }
+
+    bool FindPrime(int number)
+    {
+        if (number == 1) 
+            return false;
+
+        if (number == 2) 
+            return true;
+
+        if (number % 2 == 0) 
+            return false;
+
+        // 제곱근의 정수부분까지만 검사
+        var squareRoot = (int)Math.Floor(Math.Sqrt(number));
+
+        for (int i = 3; i <= squareRoot; i += 2)
+        {
+            if (number % i == 0) 
+                return false;
+        }
+
+        return true;
     }
 }
