@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Common.Utils;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -14,34 +15,40 @@ namespace Match3
         /// </summary>
         void OnGUI()
         {
-            GUITitle(); // title draw.
-
-            GUILevelSize(); // level size draw.
-            GUILayerTabs();
-            GUILayer();
-
-            GUIToos(); // 툴 타이틀.
-
-            switch (TabIndex)
+            try
             {
-                case (int)TabTypes.Block:
-                    GUIToolBlock();
-                    GUIToolBlockSub();
-                    break;
-                case (int)TabTypes.Candy:
-                    GUIToolCandy();
-                    break;
-                case (int)TabTypes.Direction:
-                    GUIToolDirection();
-                    break;
-                case (int)TabTypes.Teleport:
-                    break;
-                case (int)TabTypes.Generate:
-                    break;
+                GUITitle(); // title draw.
+                GUILevelSize(); // level size draw.
+                GUILayerTabs();
+                GUILayer();
+                GUIToos(); // 툴 타이틀.
+
+                switch (TabIndex)
+                {
+                    case (int)TabTypes.Block:
+                        GUIToolBlock();
+                        GUIToolBlockSub();
+                        break;
+                    case (int)TabTypes.Candy:
+                        GUIToolCandy();
+                        break;
+                    case (int)TabTypes.Direction:
+                        GUIToolDirection();
+                        break;
+                    case (int)TabTypes.Teleport:
+                        break;
+                    case (int)TabTypes.Generate:
+                        break;
+                }
+
+                GUIBoard();
+                GUICreateLoadBtns();
             }
-            
-            GUIBoard();
-            GUICreateLoadBtns();
+            catch (System.Exception e)
+            {
+                GiantDebug.LogWarning(e.ToString());
+                //Debug.LogError(e);
+            }
         }
 
         /// <summary>
@@ -154,6 +161,9 @@ namespace Match3
         /// </summary>
         private void GUIToolBlock()
         {
+            if (blockIcons == null)
+                return;
+
             GUILayout.BeginHorizontal();
             for (int i = 0; i < (int)BlockTypes.Max; i++)
             {
@@ -168,6 +178,12 @@ namespace Match3
                 }
 
                 UnityEngine.GUI.color = squareColor;
+
+                if(i >= blockIcons.Length || blockIcons[i] == null)
+                {
+                    continue;
+                }
+
                 if (GUILayout.Button(blockIcons[i] as Texture, GUILayout.Width(60), GUILayout.Height(60)))
                 {
                     SelectBlock = i;
@@ -393,6 +409,9 @@ namespace Match3
         /// </summary>
         private void GUILevelSize()
         {
+            if (level == null)
+                return;
+
             GUILayout.BeginHorizontal();
             GUILayout.Label("Stage", GUILayout.Width(80));
             GUILayout.Space(10);

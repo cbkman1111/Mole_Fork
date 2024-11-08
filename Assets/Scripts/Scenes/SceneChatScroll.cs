@@ -1,5 +1,7 @@
 using Common.Global;
 using Common.Scene;
+using Common.Utils;
+using Network;
 using UI.Menu;
 using UnityEngine;
 
@@ -19,7 +21,18 @@ namespace Scenes
                 menu.InitMenu();
             }
  
+            NetworkManager.Instance.Connect();
+            NetworkManager.Instance.OnConnectAction = (result) =>
+            {
+                GiantDebug.Log("OnConnectAction");
+                NetworkManager.Instance.Send("Hello");
+            };
             return true;
+        }
+
+        public override void UnLoad()
+        {
+            NetworkManager.Instance.Destroy();
         }
 
         /// <summary>

@@ -39,23 +39,23 @@ namespace Common.Global.Singleton
         {
             get
             {
-                if (_instance != false) return _instance;
+                if (_instance != false) 
+                    return _instance;
                 
-                // ReSharper disable once Unity.PerformanceCriticalCodeInvocation
                 _instance = GameObject.FindObjectOfType(typeof(T)) as T;
-                if (_instance != false) return _instance;
+                if (_instance != false) 
+                    return _instance;
                 
-                // ReSharper disable once Unity.PerformanceCriticalCodeInvocation
                 _instance = new GameObject(typeof(T).ToString()).AddComponent<T>();
                 DontDestroyOnLoad(_instance);
 
-                // ReSharper disable once Unity.PerformanceCriticalCodeInvocation
                 _instance.Init();
                 return _instance;
             }
         }
 
         protected abstract bool Init();
+
         public virtual void Destroy()
         {
             Destroy(_instance.gameObject);

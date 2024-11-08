@@ -2,7 +2,6 @@ using Common.Global.Singleton;
 using Common.Scene;
 using Common.Utils;
 using Common.Utils.Pool;
-using Match3;
 using Network;
 using Scenes;
 using System;
@@ -34,14 +33,17 @@ namespace Common.Global
             SoundManager.Instance.Load();
             DataManager.Instance.Load();
             ResourcesManager.Instance.Load();
-
             //NetworkManager.Instance.Connect();
             return true;
         }
 
         public void StartApplication()
         {
-            AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneIntro, false);
+            //지금 활성화 된 씬 가져오기.
+            var activeScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
+            var startScene = StringToEnum<SceneBase.Scenes>(activeScene.name);
+            
+            AppManager.Instance.ChangeScene(startScene, false);
         }
 
         /// <summary>
