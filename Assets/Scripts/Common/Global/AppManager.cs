@@ -6,6 +6,7 @@ using Network;
 using Scenes;
 using System;
 using System.Collections;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -17,6 +18,13 @@ namespace Common.Global
     {
         private float _loadingPercent = 0f;
         private SceneBase _currScene = null;
+
+        /// <summary>
+        /// 국가별 로컬라이즈 설정.
+        /// </summary>
+        public CultureInfo CultureInfo { get; set; } = new CultureInfo("ko-KR");
+
+
         public SceneBase CurrScene
         {
             get => _currScene;

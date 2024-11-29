@@ -56,6 +56,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SceneTextRpg.unity
     guid: 6cc2511ab0fe0594d983487f4332b443
+  - enabled: 1
+    path: Assets/Scenes/SceneHash.unity
+    guid: bababe9ca72ca034e822f55cd0262437
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: f11489fc9e0119a41a7424443fc3e23c,
       type: 2}
