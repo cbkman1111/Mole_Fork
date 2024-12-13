@@ -42,8 +42,8 @@ PlayerSettings:
   m_SplashScreenLogos: []
   m_VirtualRealitySplashScreen: {fileID: 0}
   m_HolographicTrackingLossScreen: {fileID: 0}
-  defaultScreenWidth: 1024
-  defaultScreenHeight: 768
+  defaultScreenWidth: 1600
+  defaultScreenHeight: 900
   defaultScreenWidthWeb: 550
   defaultScreenHeightWeb: 800
   m_StereoRenderingPath: 0
@@ -58,9 +58,9 @@ PlayerSettings:
   iosUseCustomAppBackgroundBehavior: 0
   iosAllowHTTPDownload: 1
   allowedAutorotateToPortrait: 1
-  allowedAutorotateToPortraitUpsideDown: 1
-  allowedAutorotateToLandscapeRight: 1
-  allowedAutorotateToLandscapeLeft: 1
+  allowedAutorotateToPortraitUpsideDown: 0
+  allowedAutorotateToLandscapeRight: 0
+  allowedAutorotateToLandscapeLeft: 0
   useOSAutorotation: 1
   use32BitDisplayBuffer: 1
   preserveFramebufferAlpha: 0
@@ -76,7 +76,7 @@ PlayerSettings:
   androidMinimumWindowHeight: 300
   androidFullscreenMode: 1
   androidAutoRotationBehavior: 1
-  defaultIsNativeResolution: 1
+  defaultIsNativeResolution: 0
   macRetinaSupport: 1
   runInBackground: 1
   captureSingleScreen: 0
@@ -807,20 +807,22 @@ PlayerSettings:
   webGLPowerPreference: 2
   scriptingDefineSymbols:
     : IS_UNITYEDITOR_ANIMATIONS_AVAILABLE
-    Android: UNITY_POST_PROCESSING_STACK_V2
-    EmbeddedLinux: UNITY_POST_PROCESSING_STACK_V2
-    GameCoreXboxOne: UNITY_POST_PROCESSING_STACK_V2
-    Lumin: IS_UNITYEDITOR_ANIMATIONS_AVAILABLE;UNITY_POST_PROCESSING_STACK_V2
-    Nintendo Switch: IS_UNITYEDITOR_ANIMATIONS_AVAILABLE;UNITY_POST_PROCESSING_STACK_V2
-    PS4: IS_UNITYEDITOR_ANIMATIONS_AVAILABLE;UNITY_POST_PROCESSING_STACK_V2
-    PS5: UNITY_POST_PROCESSING_STACK_V2
-    Stadia: UNITY_POST_PROCESSING_STACK_V2
-    Standalone: UNITY_POST_PROCESSING_STACK_V2
-    WebGL: IS_UNITYEDITOR_ANIMATIONS_AVAILABLE;UNITY_POST_PROCESSING_STACK_V2
-    Windows Store Apps: UNITY_POST_PROCESSING_STACK_V2
-    XboxOne: IS_UNITYEDITOR_ANIMATIONS_AVAILABLE;UNITY_POST_PROCESSING_STACK_V2
-    iPhone: 
-    tvOS: IS_UNITYEDITOR_ANIMATIONS_AVAILABLE;UNITY_POST_PROCESSING_STACK_V2
+    Android: UNITY_POST_PROCESSING_STACK_V2;DOTWEEN
+    EmbeddedLinux: UNITY_POST_PROCESSING_STACK_V2;DOTWEEN
+    GameCoreScarlett: DOTWEEN
+    GameCoreXboxOne: UNITY_POST_PROCESSING_STACK_V2;DOTWEEN
+    LinuxHeadlessSimulation: DOTWEEN
+    Lumin: IS_UNITYEDITOR_ANIMATIONS_AVAILABLE;UNITY_POST_PROCESSING_STACK_V2;DOTWEEN
+    Nintendo Switch: IS_UNITYEDITOR_ANIMATIONS_AVAILABLE;UNITY_POST_PROCESSING_STACK_V2;DOTWEEN
+    PS4: IS_UNITYEDITOR_ANIMATIONS_AVAILABLE;UNITY_POST_PROCESSING_STACK_V2;DOTWEEN
+    PS5: UNITY_POST_PROCESSING_STACK_V2;DOTWEEN
+    Stadia: UNITY_POST_PROCESSING_STACK_V2;DOTWEEN
+    Standalone: UNITY_POST_PROCESSING_STACK_V2;DOTWEEN
+    WebGL: IS_UNITYEDITOR_ANIMATIONS_AVAILABLE;UNITY_POST_PROCESSING_STACK_V2;DOTWEEN
+    Windows Store Apps: UNITY_POST_PROCESSING_STACK_V2;DOTWEEN
+    XboxOne: IS_UNITYEDITOR_ANIMATIONS_AVAILABLE;UNITY_POST_PROCESSING_STACK_V2;DOTWEEN
+    iPhone: DOTWEEN
+    tvOS: IS_UNITYEDITOR_ANIMATIONS_AVAILABLE;UNITY_POST_PROCESSING_STACK_V2;DOTWEEN
   additionalCompilerArguments: {}
   platformArchitecture:
     iPhone: 1
