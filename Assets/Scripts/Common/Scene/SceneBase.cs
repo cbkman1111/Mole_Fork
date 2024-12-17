@@ -26,7 +26,7 @@ namespace Common.Scene
             SceneDotween, // 닷트윈 테스트.
 
             SceneMatch3, // 닷트윈 테스트.
-
+            SceneAdMob,
             SceneHash,
 
         }

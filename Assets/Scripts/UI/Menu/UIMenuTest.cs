@@ -6,7 +6,6 @@ using DG.Tweening;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
-using static Spine.Unity.Editor.SpineEditorUtilities;
 
 namespace UI.Menu
 {

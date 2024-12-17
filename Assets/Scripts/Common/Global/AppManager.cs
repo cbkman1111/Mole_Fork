@@ -41,16 +41,20 @@ namespace Common.Global
             SoundManager.Instance.Load();
             DataManager.Instance.Load();
             ResourcesManager.Instance.Load();
+            _ = AdMobManager.Instance;
             //NetworkManager.Instance.Connect();
+
             return true;
         }
 
         public void StartApplication()
         {
-            //지금 활성화 된 씬 가져오기.
-            var activeScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
-            var startScene = StringToEnum<SceneBase.Scenes>(activeScene.name);
-            
+            SceneBase.Scenes startScene = SceneBase.Scenes.SceneIntro;
+
+#if UNITY_EDITOR
+            startScene = StringToEnum<SceneBase.Scenes>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+#endif
+
             AppManager.Instance.ChangeScene(startScene, false);
         }
 
@@ -268,6 +272,9 @@ namespace Common.Global
                     case SceneBase.Scenes.SceneHash:
                         scene = obj.AddComponent<SceneHash>();
                         break;
+                    case SceneBase.Scenes.SceneAdMob:
+                        scene = obj.AddComponent<SceneAdMob>();
+                        break;
                     default:
                         break;
                 }
@@ -313,7 +320,7 @@ namespace Common.Global
             ResourcesManager.Instance.Destroy();
             UIManager.Instance.Destroy();
             PoolManager.Instance.Destroy();
-
+            AdMobManager.Instance.Destroy();
             AppManager.Instance.Destroy();
             Debug.Log("App Quit");
         }

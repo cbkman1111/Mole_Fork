@@ -146,6 +146,10 @@ namespace UI.Menu
             {
                 AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneHash);
             }
+            else if (name == "Button - AdMob")
+            {
+                AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneAdMob);
+            }
             else if (name == "Button-Shop")
             {
                 SetContent(eContents.Shop);

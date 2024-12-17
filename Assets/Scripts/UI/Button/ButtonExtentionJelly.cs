@@ -1,4 +1,5 @@
 using DG.Tweening;
+using Spine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -29,11 +30,19 @@ namespace UI.Extention
         {
             base.OnPointerUp(eventData);
 
+            Click(eventData);
+        }
+
+        public override void Click(PointerEventData eventData = null)
+        {
             const float duration = 0.2f;
             transform.DOScale(Vector3.one, duration: duration).
                 SetEase(Ease.InOutBack).
                 OnComplete(() => {
-                    base.OnPointerClick(eventData);
+                    if (eventData != null)
+                    { 
+                        base.OnPointerClick(eventData);
+                    }
                 });
         }
 

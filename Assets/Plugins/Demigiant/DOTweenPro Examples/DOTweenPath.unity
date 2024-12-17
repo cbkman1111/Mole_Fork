@@ -295,7 +295,7 @@ MonoBehaviour:
   path:
     wpLengths:
     - 0
-    - 9.359136
+    - 9.359137
     - 10.405018
     - 7.102792
     - 6.6672983
@@ -317,7 +317,7 @@ MonoBehaviour:
       b: {x: 0, y: 0, z: 0}
     - a: {x: 3.8321667, y: 6.9544535, z: 0}
       b: {x: 0, y: 0, z: 0}
-    length: 52.02238
+    length: 52.022385
     isFinalized: 1
     timesTable:
     - 0.014285714
@@ -417,50 +417,50 @@ MonoBehaviour:
     - 20.220243
     - 20.891918
     - 21.555
-    - 22.208927
-    - 22.852415
-    - 23.483595
-    - 24.100157
-    - 24.699495
-    - 25.278862
-    - 25.83552
-    - 26.366951
-    - 26.8711
-    - 27.376375
-    - 27.912098
-    - 28.475262
-    - 29.060778
-    - 29.66227
-    - 30.272577
-    - 30.884148
-    - 31.48931
-    - 32.080574
-    - 32.650936
-    - 33.194313
-    - 33.709743
-    - 34.240025
-    - 34.79521
-    - 35.371506
-    - 35.965523
-    - 36.574467
-    - 37.19625
-    - 37.829685
-    - 38.474625
-    - 39.132145
-    - 39.804657
-    - 40.496033
-    - 41.23852
-    - 42.10978
-    - 43.088493
-    - 44.145332
-    - 45.25077
-    - 46.375446
-    - 47.49042
-    - 48.567577
-    - 49.58027
-    - 50.50447
-    - 51.32128
-    - 52.02238
+    - 22.20893
+    - 22.852417
+    - 23.483597
+    - 24.100159
+    - 24.699497
+    - 25.278864
+    - 25.835522
+    - 26.366953
+    - 26.871101
+    - 27.376377
+    - 27.9121
+    - 28.475264
+    - 29.06078
+    - 29.662271
+    - 30.27258
+    - 30.88415
+    - 31.489311
+    - 32.080578
+    - 32.65094
+    - 33.194317
+    - 33.709747
+    - 34.24003
+    - 34.795216
+    - 35.37151
+    - 35.965527
+    - 36.57447
+    - 37.196255
+    - 37.82969
+    - 38.47463
+    - 39.13215
+    - 39.80466
+    - 40.496037
+    - 41.238525
+    - 42.109783
+    - 43.088497
+    - 44.145336
+    - 45.250774
+    - 46.37545
+    - 47.490425
+    - 48.56758
+    - 49.580273
+    - 50.504475
+    - 51.321285
+    - 52.022385
   inspectorMode: 0
   pathType: 1
   handlesType: 0
@@ -509,6 +509,7 @@ GameObject:
   - component: {fileID: 848136771}
   - component: {fileID: 848136769}
   - component: {fileID: 848136768}
+  - component: {fileID: 848136773}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -590,6 +591,39 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &848136773
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 848136767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_Version: 2
 --- !u!1 &970591913
 GameObject:
   m_ObjectHideFlags: 0
@@ -1275,6 +1309,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1242857380}
   - component: {fileID: 1242857379}
+  - component: {fileID: 1242857381}
   m_Layer: 0
   m_Name: Directional light
   m_TagString: Untagged
@@ -1359,6 +1394,26 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1242857381
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1242857378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 1
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
 --- !u!1 &1260203940
 GameObject:
   m_ObjectHideFlags: 0

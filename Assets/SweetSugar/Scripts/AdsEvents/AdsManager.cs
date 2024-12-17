@@ -121,13 +121,13 @@ namespace SweetSugar.Scripts.AdsEvents
         //interstitial = new InterstitialAd(admobUIDIOS);
              LoadInterstitialAd(admobUIDIOS);
 #else
-        MobileAds.Initialize(admobUIDAndroid);//2.1.6
+        //MobileAds.Initialize(admobUIDAndroid);//2.1.6
 		//interstitial = new InterstitialAd (admobUIDAndroid);
              LoadInterstitialAd(admobUIDAndroid);
 #endif
 
             // Create an empty ad request.
-            requestAdmob = new AdRequest.Builder().AddExtra ("npa", npaValue.ToString ()).Build();
+            //requestAdmob = new AdRequest.Builder().AddExtra ("npa", npaValue.ToString ()).Build();
             /*// Load the interstitial with the request.
             interstitial.LoadAd(requestAdmob);
             interstitial.OnAdLoaded += HandleInterstitialLoaded;
@@ -140,7 +140,8 @@ namespace SweetSugar.Scripts.AdsEvents
 
         private AdRequest CreateAdRequest()
         {
-            return new AdRequest.Builder().AddExtra ("npa", npaValue.ToString ()).Build();
+            //return new AdRequest.Builder().AddExtra ("npa", npaValue.ToString ()).Build();
+            return null;
         }
         
         public void LoadInterstitialAd(string _adUnitId)

@@ -8,8 +8,9 @@ namespace UI.Extention
 {
     /// <summary>
     /// 유니티 버튼
+    /// true 상속 받은 클래스도 커스텀 처리 되도록 하는 옵션.
     /// </summary>
-    [CustomEditor(typeof(ButtonExtention))]
+    [CustomEditor(typeof(ButtonExtention), true)]
     public class ButtonExtentionEditor : UnityEditor.UI.ButtonEditor
     {
         private ButtonExtention component = null;
@@ -21,20 +22,20 @@ namespace UI.Extention
         {
             component = (ButtonExtention)target;
             
-            base.OnInspectorGUI();
+            //base.OnInspectorGUI();
 
             EditorGUILayout.BeginVertical();
+            
+            GUILayout.Label("커스텀 버튼.", EditorStyles.boldLabel);
 
             GUILine(1);
             GUILayout.Label("버튼 사운드", EditorStyles.boldLabel);
-            component.ClickSound = EditorGUILayout.IntField("Click Sound", component.ClickSound);
+            component.ClickSound = EditorGUILayout.IntField("사운드 ID", component.ClickSound);
 
-            /*
-            if (GUILayout.Button("테스트", GUILayout.Width(200), GUILayout.Height(20)))
+            if (GUILayout.Button("클릭 테스트", GUILayout.Width(200), GUILayout.Height(20)))
             {
-                component.PointerDown();
+                component.Click();
             }
-            */
 
 
             EditorGUILayout.EndVertical();

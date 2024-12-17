@@ -3,11 +3,7 @@ using Common.Scene;
 using UI.Menu;
 using UnityEngine;
 using Gostop;
-using UnityEditor;
-using System;
 using TMPro;
-using System.Collections.Generic;
-using Cinemachine.Editor;
 
 namespace Scenes
 {
