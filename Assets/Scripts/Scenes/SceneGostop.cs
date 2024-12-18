@@ -3,47 +3,52 @@ using Common.Scene;
 using UI.Menu;
 using UnityEngine;
 using Gostop;
-using UnityEditor;
+using TMPro;
 
 namespace Scenes
 {
+    /// <summary>
+    /// 고스톱 Scene 객체.
+    /// </summary>
     public class SceneGostop : SceneBase
     {
         [SerializeField]
         public Board board = null;
+        [SerializeField]
+        private TextMeshPro[] Score = new TextMeshPro[(int)Board.Player.Max];
 
         /// <summary>
-        /// 
+        /// 씬 초기화.
         /// </summary>
         /// <returns></returns>
         public override bool Init(JSONObject param)
         {
-            UIMenuGostop menu = UIManager.Instance.OpenMenu<UIMenuGostop>("UIMenuGostop");
+            UIMenuGostop menu = UIManager.Instance.OpenMenu<UIMenuGostop>();
             if (menu != null)
             {
                 menu.InitMenu();
             }
 
-            board.Init(menu);
+            board.Init(UpdateScore);
+            board.StartGame();
             return true;
         }
 
         /// <summary>
-        /// 
+        /// 점수 처리.
         /// </summary>
-        private void Update()
+        /// <param name="player"></param>
+        /// <param name="score"></param>
+        private void UpdateScore(Board.Player player, Score score)
         {
-            if (Input.GetKeyDown(KeyCode.A))
-            {
-            
-            }
+            int index = (int)player;
+            Score[index].SetText($"{score.total} 점");
         }
 
-        public override void OnTouchBean(Vector3 position)
-        {
-
-        }
-
+        /// <summary>
+        /// 화면 터치 때기.
+        /// </summary>
+        /// <param name="position"></param>
         public override void OnTouchEnd(Vector3 position)
         {
             Ray ray = MainCamera.ScreenPointToRay(position);
@@ -55,58 +60,30 @@ namespace Scenes
                     Card card = hit.collider.GetComponent<Card>();
                     if (card != null)
                     {
-                        if (board.StateInfo.state == State.CARD_HIT)
+                        if (board.CommandInfo.type == Command.HitCard)
                         {
                             if (board.MyTurn() == true)
                             {
-                                var list = board.GetSameMonthCard((int)Board.Player.USER, card);
+                                var list = board.GetSameMonthCard((int)Board.Player.Player, card);
                                 if (list.Count == 3)
                                 {
-                                    board.HitBomb((int)Board.Player.USER, list, card);
-                                    //stateInfo.evt = StateEvent.PROGRESS;
+                                    board.HitBomb((int)Board.Player.Player, list, card);
                                 }
                                 else if (list.Count == 4) // 총통
                                 {
-                                    board.HitChongtong((int)Board.Player.USER, list, card);
-                                    //stateInfo.evt = StateEvent.PROGRESS;
+                                    board.HitChongtong((int)Board.Player.Player, list, card);
                                 }
                                 else
                                 {
-                                    board.HitCard((int)Board.Player.USER, card);
-                                    //stateInfo.evt = StateEvent.PROGRESS;
+                                    board.HitCard((int)Board.Player.Player, card);
                                 }
                             }
                         }
-
-                        /*
-                        if (stateInfo.state == State.CARD_HIT && board.MyTurn() == true)
-                        {
-                            var list = board.GetSameMonthCard((int)Board.Player.USER, card);
-                            if (list.Count == 3)
-                            {
-                                board.HitBomb((int)Board.Player.USER, list, card);
-                                stateInfo.evt = StateEvent.PROGRESS; 
-                            }
-                            else if (list.Count == 4) // 총통
-                            {
-                                board.HitChongtong((int)Board.Player.USER, list, card);
-                                stateInfo.evt = StateEvent.PROGRESS;
-                            }
-                            else 
-                            {
-                                board.HitCard((int)Board.Player.USER, card);
-                                stateInfo.evt = StateEvent.PROGRESS; 
-                            }
-                        }
-                        */
                     }
                 }
             }
         }
 
-        public override void OnTouchMove(Vector3 position, Vector2 deltaPosition)
-        {
-
-        }
+        public override void OnTouchMove(Vector3 position, Vector2 deltaPosition){}
     }
 }

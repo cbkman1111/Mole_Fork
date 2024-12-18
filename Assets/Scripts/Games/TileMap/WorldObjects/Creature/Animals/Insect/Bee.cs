@@ -2,8 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bee : Insect
-{
+namespace Creature
+{ 
+    public class Bee : Insect
+    {
   
+    }
 }
  

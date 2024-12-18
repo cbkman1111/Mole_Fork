@@ -3,14 +3,13 @@ using UnityEngine;
 using UnityEngine.AI;
 using Spine;
 using Spine.Unity;
-using TileMap;
 using DG.Tweening;
 
 namespace Ant
 {
     public class MonsterBase : MonoBehaviour
     {
-        protected StateMachine<ObjectState> _stateMachine = new StateMachine<ObjectState>();
+        //protected StateMachine<ObjectState> _stateMachine = new StateMachine<ObjectState>();
 
         protected Rigidbody2D rigidBody = null;
         protected SpriteRenderer hand = null;
@@ -78,10 +77,13 @@ namespace Ant
             agent.enabled = enableAgent;
             agent.speed = objData.speed;
             transform.position = data.position;
-            _stateMachine.OnEnterState = OnEnterState;
-            _stateMachine.OnPopState = OnPopState;
-            _stateMachine.PushState(ObjectState.Idle);
+            //_stateMachine.OnEnterState = OnEnterState;
+            //_stateMachine.OnPopState = OnPopState;
+            
             hand = transform.Find("Hand").GetComponent<SpriteRenderer>();
+
+            //_stateMachine.ClearState();
+            //_stateMachine.PushState(ObjectState.Idle);
             return true;
         }
 
@@ -130,6 +132,7 @@ namespace Ant
                 rigidBody.MovePosition(position);
             }
 
+            /*
             switch (_stateMachine.State)
             {
                 //case ObjectState.None:
@@ -170,7 +173,7 @@ namespace Ant
                             _stateMachine.PushState(ObjectState.MoveRight);
                     }
 
-                    /*
+
                     var speed = 0.10f;
                     var target = transform.position + (angle * speed);
                     target.y = 0.5f;
@@ -184,7 +187,7 @@ namespace Ant
                         {
                             _stateMachine.PushState(ObjectState.Stop);
                         });
-                    */
+             
                     break;
 
                 case ObjectState.Stop:
@@ -193,6 +196,7 @@ namespace Ant
                 case ObjectState.Click:
                     break;
             }
+            */
         }
 
         /// <summary>
@@ -200,7 +204,7 @@ namespace Ant
         /// </summary>
         public void Stop()
         {
-            SetState(ObjectState.Idle);
+            //SetState(ObjectState.Idle);
         }
 
         /// <summary>
@@ -208,7 +212,7 @@ namespace Ant
         /// </summary>
         public void Hit()
         {
-            SetState(ObjectState.Attack);
+            //SetState(ObjectState.Attack);
         }
 
         protected void HandleEvent(TrackEntry trackEntry, Spine.Event e)
@@ -224,6 +228,7 @@ namespace Ant
         /// 
         /// </summary>
         /// <param name="s"></param>
+        /*
         protected void SetState(ObjectState s)
         {
             _stateMachine.PushState(s);
@@ -269,5 +274,6 @@ namespace Ant
                     break;
             }
         }
+        */
     }
 }

@@ -18,7 +18,7 @@ namespace Gostop
             var scene = AppManager.Instance.CurrScene as SceneGostop;
             var board = GetComponent<Board>();
 
-            board.SortHand();
+            board.HandSort();
         }
 
         public override TaskStatus OnUpdate()
@@ -34,8 +34,8 @@ namespace Gostop
             var board = GetComponent<Board>();
 
             int count = 0;
-            count += board.hands[0].Where(card => card.ListTween.Count == 0).ToList().Count;
-            count += board.hands[1].Where(card => card.ListTween.Count == 0).ToList().Count;
+            count += board.hands[0].MoveCount(); //Where(card => card.ListTween.Count == 0).ToList().Count;
+            count += board.hands[1].MoveCount(); //Where(card => card.ListTween.Count == 0).ToList().Count;
 
             if (count == 0)
             {

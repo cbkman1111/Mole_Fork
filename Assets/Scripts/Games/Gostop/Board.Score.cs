@@ -1,14 +1,5 @@
-using DG.Tweening;
 using System;
-
-using System.Collections.Generic;
-using System.Linq;
-using Common.Global;
-using UI.Menu;
-using UI.Popup;
 using UnityEngine;
-using static UnityEditor.Rendering.InspectorCurveEditor;
-using UnityEditor;
 
 
 namespace Gostop
@@ -24,16 +15,11 @@ namespace Gostop
         public Transform Thee = null;
         public Transform Pee = null;
 
-        public Transform GwangScore = null;
-        public Transform MungScore = null;
-        public Transform TheeScore = null;
-        public Transform PeeScore = null;
-
         public Transform RecvieCard = null;
         public Transform Hand = null;
     }
 
-    public class Scores
+    public class Score
     {
         public int shake; // 흔듬 숫자.
         public int go; // 고 숫자.
@@ -53,6 +39,25 @@ namespace Gostop
         public int thee;
 
         public int total;
+
+        public void Init()
+        {
+            shake = 0; 
+            go = 0; 
+            peebak = false; 
+            gwangbak = false; 
+            mungbak = false; 
+            goback = false;
+            chungdan = false;
+            hongdan = false;
+            chodan = false;
+            godori = false;
+            gawng = 0;
+            mung = 0;
+            pee = 0;
+            thee = 0;
+            total = 0;
+        }
     }
 
     /// <summary>
@@ -60,7 +65,7 @@ namespace Gostop
     /// </summary>
     public partial class Board : MonoBehaviour
     {
-        public Scores[] gameScore = null;
-        public UIMenuGostop menu = null;
+        public Score[] gameScore = null;
+        public Action<Player, Score> updateScore = null;
     }
 }

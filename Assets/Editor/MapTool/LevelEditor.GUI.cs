@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Common.Utils;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -14,32 +15,40 @@ namespace Match3
         /// </summary>
         void OnGUI()
         {
-            GUITitle(); // title draw.
-
-            GUILevelSize(); // level size draw.
-            GUILayerTabs();
-            GUILayer();
-
-            GUIToos(); // 툴 타이틀.
-
-            switch (TabIndex)
+            try
             {
-                case (int)TabTypes.Block:
-                    GUIToolBlock();
-                    break;
-                case (int)TabTypes.Candy:
-                    GUIToolCandy();
-                    break;
-                case (int)TabTypes.Direction:
-                    break;
-                case (int)TabTypes.Teleport:
-                    break;
-                case (int)TabTypes.Generate:
-                    break;
+                GUITitle(); // title draw.
+                GUILevelSize(); // level size draw.
+                GUILayerTabs();
+                GUILayer();
+                GUIToos(); // 툴 타이틀.
+
+                switch (TabIndex)
+                {
+                    case (int)TabTypes.Block:
+                        GUIToolBlock();
+                        GUIToolBlockSub();
+                        break;
+                    case (int)TabTypes.Candy:
+                        GUIToolCandy();
+                        break;
+                    case (int)TabTypes.Direction:
+                        GUIToolDirection();
+                        break;
+                    case (int)TabTypes.Teleport:
+                        break;
+                    case (int)TabTypes.Generate:
+                        break;
+                }
+
+                GUIBoard();
+                GUICreateLoadBtns();
             }
-            
-            GUIBoard();
-            GUICreateLoadBtns();
+            catch (System.Exception e)
+            {
+                GiantDebug.LogWarning(e.ToString());
+                //Debug.LogError(e);
+            }
         }
 
         /// <summary>
@@ -49,7 +58,7 @@ namespace Match3
         {
             GUIStyle labelStyle = new GUIStyle(EditorStyles.boldLabel);
             labelStyle.fontSize = 20; // 원하는 폰트 크기로 설정
-            GUILayout.Label("멥툴", labelStyle);
+            GUILayout.Label("맵툴", labelStyle);
             GUILayout.Space(10);
 
             GUILayoutOption[] spriteOptions = new[] {
@@ -116,7 +125,10 @@ namespace Match3
         /// </summary>
         private void GUILayerTabs()
         {
-            GUILayout.Label("레이어", EditorStyles.boldLabel);
+            GUIStyle labelStyle = new GUIStyle(EditorStyles.boldLabel);
+            labelStyle.fontSize = 20; // 원하는 폰트 크기로 설정
+            GUILayout.Label("레이어", labelStyle);
+
             TabIndex = GUILayout.Toolbar(TabIndex, tabs);
 
             GUILayout.Space(10);
@@ -124,8 +136,24 @@ namespace Match3
 
         private void GUIToos()
         {
-            GUILayout.Label("툴", EditorStyles.boldLabel);
+            GUIStyle labelStyle = new GUIStyle(EditorStyles.boldLabel);
+            labelStyle.fontSize = 20; // 원하는 폰트 크기로 설정
+            GUILayout.Label("툴", labelStyle);
+
             GUILayout.Space(10);
+        }
+
+        private void GUIToolBlockSub()
+        {
+            GUILayout.BeginHorizontal();
+
+            UnityEngine.GUI.color = SelectBlockDelete == true ? Color.white : new Color(0.4f, 0.4f, 0.4f);
+            if (GUILayout.Button("지우기", GUILayout.Width(60), GUILayout.Height(40)))
+            {
+                SelectBlockDelete = !SelectBlockDelete;
+            }
+
+            GUILayout.EndHorizontal();
         }
 
         /// <summary>
@@ -133,6 +161,9 @@ namespace Match3
         /// </summary>
         private void GUIToolBlock()
         {
+            if (blockIcons == null)
+                return;
+
             GUILayout.BeginHorizontal();
             for (int i = 0; i < (int)BlockTypes.Max; i++)
             {
@@ -147,6 +178,12 @@ namespace Match3
                 }
 
                 UnityEngine.GUI.color = squareColor;
+
+                if(i >= blockIcons.Length || blockIcons[i] == null)
+                {
+                    continue;
+                }
+
                 if (GUILayout.Button(blockIcons[i] as Texture, GUILayout.Width(60), GUILayout.Height(60)))
                 {
                     SelectBlock = i;
@@ -155,7 +192,7 @@ namespace Match3
 
             GUILayout.EndHorizontal();
         }
-
+        
         /// <summary>
         /// 툴 버튼.
         /// </summary>
@@ -184,6 +221,31 @@ namespace Match3
             GUILayout.EndHorizontal();
         }
 
+        private void GUIToolDirection()
+        {
+            GUILayout.BeginHorizontal();
+            for (int i = 0; i < (int)DirectionTypes.Max; i++)
+            {
+                Color squareColor = Color.white;
+                if (i == SelectDirection)
+                {
+                    squareColor = Color.white;
+                }
+                else
+                {
+                    squareColor = new Color(0.4f, 0.4f, 0.4f);
+                }
+
+                UnityEngine.GUI.color = squareColor;
+                if (GUILayout.Button(directions[i] as Texture, GUILayout.Width(60), GUILayout.Height(60)))
+                {
+                    SelectDirection = i;
+                }
+            }
+
+            GUILayout.EndHorizontal();
+        }
+
         /// <summary>
         /// 레이어 슬라이드.
         /// </summary>
@@ -191,9 +253,9 @@ namespace Match3
         {
             GUILayout.BeginHorizontal();
             {
-                GUILayout.Label("Layers " + (Layer + 1) + " / " + level.Layers, EditorStyles.label, GUILayout.Width(100));
+                GUILayout.Label("Layers " + (CurrLayer + 1) + " / " + level.Layers, EditorStyles.label, GUILayout.Width(100));
                 GUILayout.Space(0);
-                Layer = (int)GUILayout.HorizontalSlider(Layer, level.Layers - 1, 0, GUILayout.Width(100));
+                CurrLayer = (int)GUILayout.HorizontalSlider(CurrLayer, level.Layers - 1, 0, GUILayout.Width(100));
                 GUILayout.Space(50);
             }
 
@@ -205,11 +267,12 @@ namespace Match3
         /// </summary>
         private void GUIBoard()
         {
-            GUILayout.Label("보드", EditorStyles.boldLabel);
-            GUILayout.Space(10);
-            GUILayout.Space(20); // 공백 라인 추가
+            UnityEngine.GUI.color = Color.white;
 
-            List<RectTexture> rects = new List<RectTexture>();
+            GUILayout.Space(10);
+            GUIStyle labelStyle = new GUIStyle(EditorStyles.boldLabel);
+            labelStyle.fontSize = 20; // 원하는 폰트 크기로 설정
+            GUILayout.Label("보드", labelStyle);
             GUILayout.BeginVertical();
             
             for (int row = 0; row < level.Row; row++)
@@ -218,13 +281,70 @@ namespace Match3
 
                 for (int col = 0; col < level.Col; col++)
                 {
+                    int adress = row * level.Col + col;
+                    var square = level.field.Squares[adress];
                     Color squareColor = new Color(0.8f, 0.8f, 0.8f);
                     var imageButton = new object();
                     UnityEngine.GUI.color = squareColor;
-                    
-                    if (GUILayout.Button(imageButton as Texture, GUILayout.Width(40), GUILayout.Height(40)))
+
+                    switch (TabIndex)
                     {
-                        ClickBoard(row, col);
+                        case (int)TabTypes.Direction:
+                            if(square.direction.x == 0 && square.direction.y == -1)
+                            {
+                                imageButton = directions[0];
+                            }
+                            else if (square.direction.x == 0 && square.direction.y == 1)
+                            {
+                                imageButton = directions[1];
+                            }
+                            else if (square.direction.x == -1 && square.direction.y == 0)
+                            {
+                                imageButton = directions[2];
+                            }
+                            else if (square.direction.x == 1 && square.direction.y == 0)
+                            {
+                                imageButton = directions[3];
+                            }
+
+                            if (imageButton != null)
+                            {
+                                if (GUILayout.Button(imageButton as Texture, GUILayout.Width(40), GUILayout.Height(40)))
+                                {
+                                    ClickBoard(row, col);
+                                }
+                            }
+                            break;
+
+                        case (int)TabTypes.Block:
+                            BlockTypes blockTypes = BlockTypes.None;
+                            if (square.block.Count > CurrLayer)
+                            {
+                                blockTypes = square.block[CurrLayer];
+                            }
+
+                            imageButton = blockIcons[(int)blockTypes];
+                            if (GUILayout.Button(imageButton as Texture, GUILayout.Width(40), GUILayout.Height(40)))
+                            {
+                                ClickBoard(row, col);
+                            }
+
+                            break;
+
+                        case (int)TabTypes.Candy:
+                            UnityEngine.GUI.color = Color.white;
+                            imageButton = candyIcons[(int)square.candy];
+                            if (GUILayout.Button(imageButton as Texture, GUILayout.Width(40), GUILayout.Height(40)))
+                            {
+                                ClickBoard(row, col);
+                            }
+                            break;
+                        default:
+                            if (GUILayout.Button(imageButton as Texture, GUILayout.Width(40), GUILayout.Height(40)))
+                            {
+                                ClickBoard(row, col);
+                            }
+                            break;
                     }
                 }
 
@@ -241,15 +361,42 @@ namespace Match3
         /// <param name="col"></param>
         private void ClickBoard(int row, int col)
         {
+            int adress = row * level.Col + col;
+            var square = level.field.Squares[adress];
+
             switch (TabIndex)
             {
                 case (int)TabTypes.Block:
+                    if (SelectBlockDelete == true)
+                    {
+                        square.block.Clear();
+                    }
+                    else if (square.block.Contains((BlockTypes)SelectBlock) == false)
+                    {
+                        square.block.Add((BlockTypes)SelectBlock);
+                    }
                     break;
 
                 case (int)TabTypes.Candy:
+                    level.field.Squares[row * level.Col + col].candy = (CandyTypes)SelectCandy;
                     break;
 
                 case (int)TabTypes.Direction:
+                    switch (SelectDirection)
+                    {
+                        case (int)DirectionTypes.Down:
+                            level.field.Squares[row * level.Col + col].direction = new Vector2(0, -1);
+                            break;
+                        case (int)DirectionTypes.Up:
+                            level.field.Squares[row * level.Col + col].direction = new Vector2(0, 1);
+                            break;
+                        case (int)DirectionTypes.Left:
+                            level.field.Squares[row * level.Col + col].direction = new Vector2(-1, 0);
+                            break;
+                        case (int)DirectionTypes.Right:
+                            level.field.Squares[row * level.Col + col].direction = new Vector2(1, 0);
+                            break;
+                    }
                     break;
                 case (int)TabTypes.Teleport:
                     break;
@@ -262,6 +409,9 @@ namespace Match3
         /// </summary>
         private void GUILevelSize()
         {
+            if (level == null)
+                return;
+
             GUILayout.BeginHorizontal();
             GUILayout.Label("Stage", GUILayout.Width(80));
             GUILayout.Space(10);
@@ -282,6 +432,16 @@ namespace Match3
 
             level.Row = EditorGUILayout.IntField("", level.Row, GUILayout.Width(50));
             GUILayout.EndHorizontal();
+
+            // 크기가 바뀌면 데이터 변경.
+            /*
+            if(level.Col != Col || level.Row != Row)
+            {
+                level.Col = Col;
+                level.Row = Row;
+                level.field = new();
+            }
+            */
 
             GUILayout.Space(10);
         }

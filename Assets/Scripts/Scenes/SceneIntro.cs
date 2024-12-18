@@ -12,7 +12,7 @@ namespace Scenes
         {
             GiantDebug.Log($"SceneIntro init. start.");
 
-            UIMenuIntro menu = UIManager.Instance.OpenMenu<UIMenuIntro>("UIMenuIntro");
+            UIMenuIntro menu = UIManager.Instance.OpenMenu<UIMenuIntro>();
             GiantDebug.Log($"SceneIntro init. {menu}");
 
             if(menu == null)

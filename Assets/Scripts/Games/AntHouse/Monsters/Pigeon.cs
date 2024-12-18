@@ -26,7 +26,7 @@ namespace Ant
                 Debug.Log("An animation ended!");
                 if (loop == false)
                 {
-                    SetState(TileMap.ObjectState.Idle);
+                    //SetState(TileMap.ObjectState.Idle);
                 }
             };
 

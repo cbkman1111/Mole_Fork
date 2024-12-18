@@ -30,7 +30,7 @@ TagManager:
   - Square
   - Tile
   - WorldObject
-  - 
+  - Score
   - 
   - 
   - PostProcess

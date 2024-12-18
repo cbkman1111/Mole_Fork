@@ -25,7 +25,9 @@ namespace Common.Scene
             SceneTextRpg, // 텍스트 RPG
             SceneDotween, // 닷트윈 테스트.
 
-            Scene3Match, // 닷트윈 테스트.
+            SceneMatch3, // 닷트윈 테스트.
+            SceneAdMob,
+            SceneHash,
 
         }
 

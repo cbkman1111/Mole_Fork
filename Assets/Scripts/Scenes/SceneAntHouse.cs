@@ -5,7 +5,6 @@ using Common.Global;
 using Common.Scene;
 using Games.AntHouse.Datas;
 using Games.AntHouse.Objects;
-using TileMap;
 using UI.Menu;
 using UnityEngine;
 using UnityEngine.AI;
@@ -42,7 +41,7 @@ namespace Scenes
 
             mapUpdateTime = DateTime.MinValue;
 
-            menu = UIManager.Instance.OpenMenu<UIMenuAntHouse>("UIMenuAntHouse");
+            menu = UIManager.Instance.OpenMenu<UIMenuAntHouse>();
             if (menu != null)
             {
                 menu.InitMenu(
@@ -163,7 +162,7 @@ namespace Scenes
                 };
             }
 
-            player = Player.Create<Player>(mapData.player, enableAgent: false);
+            player = Player.Create<Player>(mapData.player, enableAgent: true);
             if (player != null)
             {
                 player.SetScale(new Vector3(0.3f, 0.3f, 0.3f));

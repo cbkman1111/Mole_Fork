@@ -18,7 +18,7 @@ namespace Scenes
         
         public override bool Init(JSONObject param)
         {
-            var menu = UIManager.Instance.OpenMenu<UIMenuTetris>("UIMenuTetris");
+            var menu = UIManager.Instance.OpenMenu<UIMenuTetris>();
             if (menu != null)
             {
                 menu.InitMenu();

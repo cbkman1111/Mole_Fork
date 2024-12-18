@@ -3,7 +3,7 @@ using Spine.Unity;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace TileMap
+namespace Creature
 {
     public class Pige : Bird
     {

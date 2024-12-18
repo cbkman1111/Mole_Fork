@@ -13,7 +13,7 @@ namespace Scenes
         /// <returns></returns>
         public override bool Init(JSONObject param)
         {
-            UIMenuPuzzle menu = UIManager.Instance.OpenMenu<UIMenuPuzzle>("UIMenuPuzzle");
+            UIMenuPuzzle menu = UIManager.Instance.OpenMenu<UIMenuPuzzle>();
             if (menu != null)
             {
                 menu.InitMenu();

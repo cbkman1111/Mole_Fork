@@ -2,6 +2,7 @@
 using Common.Global.Singleton;
 using Common.UIObject;
 using Common.Utils;
+using System;
 using UnityEngine;
 
 
@@ -18,7 +19,10 @@ namespace Common.Global
         private CanvasController _controllerEtc { get => rootObject._controllerEtc; }
         private Transform _cover { get => rootObject._cover; }
 
-        // ReSharper disable Unity.PerformanceAnalysic
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         protected override bool Init()
         {
             GiantDebug.Log($"{tag} - Init");
@@ -40,9 +44,23 @@ namespace Common.Global
             return true;
         }
 
-        public T OpenMenu<T>(string menuName) where T : MenuBase
+        /// <summary>
+        /// Path 어트리뷰트에서 경로를 가져옵니다.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        private string GetPath<T>()
         {
-            var ret = _controllerMenu.Open<T>(menuName);
+            var attribute = (PathAttribute)Attribute.GetCustomAttribute(typeof(T), typeof(PathAttribute));
+            return attribute.ResourcePath;
+        }
+
+
+        public T OpenMenu<T>() where T : MenuBase
+        {
+            var path = GetPath<T>();
+            var name = typeof(T).Name;
+            var ret = _controllerMenu.Open<T>(path, name);
             if (ret != null)
             {
                 ret.OnInit();
@@ -51,9 +69,11 @@ namespace Common.Global
             return ret;
         }
 
-        public T OpenHud<T>(string hudName) where T : HudBase
+        public T OpenHud<T>() where T : HudBase
         {
-            var ret = _controllerPopup.Open<T>(hudName);
+            var path = GetPath<T>();
+            var name = typeof(T).Name;
+            var ret = _controllerPopup.Open<T>(path, name);
             if (ret == true)
             {
                 ret.OnInit();
@@ -62,21 +82,12 @@ namespace Common.Global
             return ret;
         }
 
-        public T OpenPopup<T>(string popupName) where T : PopupBase
-        {
-            var ret = _controllerPopup.Open<T>(popupName);
-            if (ret == true)
-            {
-                ret.OnInit();
-            }
 
-            CoverCheck();
-            return ret;
-        }
-
-        public T OpenEtc<T>(string etcName) where T : UIObject.UIObject
+        public T OpenPopup<T>() where T : PopupBase
         {
-            var ret = _controllerPopup.Open<T>(etcName);
+            var path = GetPath<T>();
+            var name = typeof(T).Name;
+            var ret = _controllerPopup.Open<T>(path, name);
             if (ret == true)
             {
                 ret.OnInit();
@@ -86,30 +97,64 @@ namespace Common.Global
             return ret;
         }
 
-        public bool FindPopup(string popupName)
+        public T OpenEtc<T>() where T : UIObject.UIObject
         {
-            return _controllerPopup.Get(popupName) == true;
+            var path = GetPath<T>();
+            var name = typeof(T).Name;
+            var ret = _controllerPopup.Open<T>(path, name);
+            if (ret == true)
+            {
+                ret.OnInit();
+            }
+
+            CoverCheck();
+            return ret;
         }
 
-        public void CloseMenu(string menuName)
+        public bool FindPopup<T>()
         {
-            _controllerMenu.Close(menuName);
+            string name = typeof(T).Name;
+            return _controllerPopup.Get(name) == true;
         }
 
-        public void CloseHud(string hudName)
+        public void CloseMenu<T>()
         {
-            _controllerHud.Close(hudName);
+            string name = typeof(T).Name;
+            _controllerMenu.Close(name);
         }
 
-        public void ClosePopup(string popupName)
+        public void CloseMenu(string name)
         {
-            _controllerPopup.Close(popupName);
+            _controllerMenu.Close(name);
+        }
+
+        public void CloseHud<T>()
+        {
+            string name = typeof(T).Name;
+            _controllerHud.Close(name);
+        }
+
+        public void CloseHud(string name)
+        {
+            _controllerHud.Close(name);
+        }
+
+        public void ClosePopup<T>()
+        {
+            _controllerPopup.Close(name);
             CoverCheck();
         }
 
-        public void CloseEtc(string etcName)
+        public void ClosePopup(string name)
         {
-            _controllerEtc.Close(etcName);
+            _controllerPopup.Close(name);
+            CoverCheck();
+        }
+
+        public void CloseEtc<T>()
+        {
+            string name = typeof(T).Name;
+            _controllerEtc.Close(name);
             CoverCheck();
         }
 

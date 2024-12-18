@@ -2,11 +2,11 @@ using Common.Global.Singleton;
 using Common.Scene;
 using Common.Utils;
 using Common.Utils.Pool;
-using Match3;
 using Network;
 using Scenes;
 using System;
 using System.Collections;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -18,6 +18,13 @@ namespace Common.Global
     {
         private float _loadingPercent = 0f;
         private SceneBase _currScene = null;
+
+        /// <summary>
+        /// 국가별 로컬라이즈 설정.
+        /// </summary>
+        public CultureInfo CultureInfo { get; set; } = new CultureInfo("ko-KR");
+
+
         public SceneBase CurrScene
         {
             get => _currScene;
@@ -34,14 +41,21 @@ namespace Common.Global
             SoundManager.Instance.Load();
             DataManager.Instance.Load();
             ResourcesManager.Instance.Load();
-
+            _ = AdMobManager.Instance;
             //NetworkManager.Instance.Connect();
+
             return true;
         }
 
         public void StartApplication()
         {
-            AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneIntro, false);
+            SceneBase.Scenes startScene = SceneBase.Scenes.SceneIntro;
+
+#if UNITY_EDITOR
+            startScene = StringToEnum<SceneBase.Scenes>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+#endif
+
+            AppManager.Instance.ChangeScene(startScene, false);
         }
 
         /// <summary>
@@ -123,7 +137,7 @@ namespace Common.Global
                 GiantDebug.Log("AppManager - LoadScene 2");
 
                 // 로딩 메뉴를 띄우고 수치를 갱신.
-                var loadingMenu = UIManager.Instance.OpenMenu<UILoadingMenu>("UILoadingMenu") as UILoadingMenu;
+                var loadingMenu = UIManager.Instance.OpenMenu<UILoadingMenu>();
                 var handle = StartCoroutine(UpdateLoadPercent(loadingMenu));
 
                 // 다음 씬을 로드 시작.
@@ -252,8 +266,14 @@ namespace Common.Global
                     case SceneBase.Scenes.SceneDotween:
                         scene = obj.AddComponent<SceneDotween>();
                         break;
-                    case SceneBase.Scenes.Scene3Match:
-                        scene = obj.AddComponent<Scene3Match>();
+                    case SceneBase.Scenes.SceneMatch3:
+                        scene = obj.AddComponent<SceneMatch3>();
+                        break;
+                    case SceneBase.Scenes.SceneHash:
+                        scene = obj.AddComponent<SceneHash>();
+                        break;
+                    case SceneBase.Scenes.SceneAdMob:
+                        scene = obj.AddComponent<SceneAdMob>();
                         break;
                     default:
                         break;
@@ -300,7 +320,7 @@ namespace Common.Global
             ResourcesManager.Instance.Destroy();
             UIManager.Instance.Destroy();
             PoolManager.Instance.Destroy();
-
+            AdMobManager.Instance.Destroy();
             AppManager.Instance.Destroy();
             Debug.Log("App Quit");
         }

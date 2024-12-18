@@ -35,7 +35,8 @@ namespace SweetSugar.Scripts.AdsEvents.GoogleRewardedAds
 
     private AdRequest CreateAdRequest()
     {
-        return new AdRequest.Builder().AddExtra ("npa", npaValue.ToString ()).Build();
+            //return new AdRequest.Builder().AddExtra ("npa", npaValue.ToString ()).Build();
+            return null;
     }
     
     public void Start()

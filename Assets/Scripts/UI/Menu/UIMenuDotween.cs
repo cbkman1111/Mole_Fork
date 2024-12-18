@@ -25,6 +25,8 @@ public class UIMenuDotween : MenuBase
     private Pool<Transform> poolText = null;
     private int _score = 0;
 
+    [SerializeField]
+    private GameObject PrefabParticle = null;
 
     public bool InitMenu(Action shoot, Action<float> slide)
     {
@@ -64,9 +66,9 @@ public class UIMenuDotween : MenuBase
 
             var sequnce = DOTween.Sequence();
             float intervalMove = 0.6f;
-            
+
             sequnce.AppendInterval(0.05f);
-            sequnce.Join(textMesh.transform.DOMoveY(obj.position.y +200, intervalMove).SetEase(Ease.Linear));
+            sequnce.Join(textMesh.transform.DOMoveY(obj.position.y + 200, intervalMove).SetEase(Ease.Linear));
             sequnce.Join(textMesh.transform.DOShakeScale(0.5f, 1, 10, 90, true).SetEase(Ease.OutBounce));
             sequnce.AppendInterval(0.05f);
             sequnce.Join(textMesh.DOFade(0, 0.3f).SetEase(Ease.Linear));
@@ -78,6 +80,11 @@ public class UIMenuDotween : MenuBase
         else if (name == "Button - Back")
         {
             AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneMenu);
+        }
+        else if (name == "Button - ParticleLifeCycle")
+        {
+            var particle = Instantiate<GameObject>(PrefabParticle, null);
+
         }
     }
 }

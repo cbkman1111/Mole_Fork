@@ -167,6 +167,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ab69d6719877f543ae5aee1227ce930, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  board: {fileID: 563689515}
+--- !u!1 &563689515
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 563689516}
+  m_Layer: 0
+  m_Name: Board
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &563689516
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 563689515}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &699819810
 GameObject:
   m_ObjectHideFlags: 0
@@ -261,121 +293,27 @@ MonoBehaviour:
   m_GameObject: {fileID: 699819810}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 639bbcaee2a8592429bb372ded78e875, type: 3}
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifeShop: {fileID: 0}
-  enableInApps: 0
-  squareWidth: 1.2
-  lastDraggedItem: {fileID: 0}
-  lastSwitchedItem: {fileID: 0}
-  popupScore: {fileID: 0}
-  currentLevel: 1
-  FailedCost: 0
-  ExtraFailedMoves: 5
-  ExtraFailedSecs: 30
-  gemsProducts: []
-  InAppIDs: []
-  thrivingBlockDestroyed: 0
-  dispenserSpawner: {fileID: 0}
-  thrivingBlockMachine: 0
-  BoostColorfullBomb: 0
-  BoostPackage: 0
-  BoostStriped: 0
-  BoostMarmalade: 0
-  androidSharingPath: 
-  iosSharingPath: 
-  emptyBoostIcon: {fileID: 0}
-  DebugSettings: {fileID: 0}
-  AdditionalSettings: {fileID: 0}
-  activatedBoost: {fileID: 0}
-  stars: 0
-  stripesEffect: {fileID: 0}
-  showPopupScores: 0
-  scoresColors: []
-  scoresColorsOutline: []
-  gratzWords: []
-  Level: {fileID: 0}
-  LevelsMap: {fileID: 0}
-  FieldsParent: {fileID: 0}
-  NoMoreMatches: {fileID: 0}
-  CompleteWord: {fileID: 0}
-  FailedWord: {fileID: 0}
-  InGameBoosts: []
-  orientationGameCameraHandle: {fileID: 0}
-  animateItems: []
-  dragBlocked: 0
-  moveID: 0
-  onlyFalling: 0
-  levelLoaded: 0
-  FacebookEnable: 0
-  findMatchesStarted: 0
-  testByPlay: 0
-  fieldBoards: []
-  FieldBoardPrefab: {fileID: 0}
-  levelData:
-    SpawnerExits: 0
-    Name: 
-    levelNum: 0
-    fields: []
-    target:
-      name: 
-      localization:
-        description:
-          text: 
-          index: 0
-        failed:
-          text: 
-          index: 0
-      collectAction: 0
-      setCount: 0
-      CanSwithSublevel: 0
-      defaultSprites:
-        array: []
-      prefabs: []
-    targetIndex: 0
-    limitType: 0
-    ingrCountTarget: 
-    limit: 0
-    colorLimit: 0
-    star1: 0
-    star2: 0
-    star3: 0
-    enableMarmalade: 0
-    selectedTutorial: 0
-    currentSublevelIndex: 0
-    subTargetsContainers: []
-    generateIngredientOnlyFromSpawner: 0
-  animStarted: 0
-  winTrail: {fileID: 0}
-  movesTransform: {fileID: 0}
-  destLoopIterations: 0
-  combo: 0
-  fallingCurve:
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
     serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  waitAfterFall: 0.02
-  lastTouchedItem: {fileID: 0}
-  skipWin: 0
-  checkTarget: 0
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_Version: 2

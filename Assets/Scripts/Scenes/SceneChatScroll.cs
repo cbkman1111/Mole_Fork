@@ -1,5 +1,7 @@
 using Common.Global;
 using Common.Scene;
+using Common.Utils;
+using Network;
 using UI.Menu;
 using UnityEngine;
 
@@ -13,13 +15,24 @@ namespace Scenes
         /// <returns></returns>
         public override bool Init(JSONObject param)
         {
-            var menu = UIManager.Instance.OpenMenu<UIMenuChat>("UIMenuChat");
+            var menu = UIManager.Instance.OpenMenu<UIMenuChat>();
             if (menu != null)
             {
                 menu.InitMenu();
             }
  
+            NetworkManager.Instance.Connect();
+            NetworkManager.Instance.OnConnectAction = (result) =>
+            {
+                GiantDebug.Log("OnConnectAction");
+                NetworkManager.Instance.Send("Hello");
+            };
             return true;
+        }
+
+        public override void UnLoad()
+        {
+            NetworkManager.Instance.Destroy();
         }
 
         /// <summary>

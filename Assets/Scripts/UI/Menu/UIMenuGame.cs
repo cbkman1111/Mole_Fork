@@ -8,11 +8,6 @@ namespace UI.Menu
 {
     public class UIMenuGame : MenuBase
     {
-        public override void OnInit()
-        {
-
-        }
-
         public bool InitMenu()
         {
             
@@ -42,7 +37,7 @@ namespace UI.Menu
             string name = btn.name;
             if (name == "Button - A")
             {
-                UIManager.Instance.OpenPopup<PopupSample>("PopupSample");
+                UIManager.Instance.OpenPopup<UIPopupSample>();
                 SetText("Text - title", "a clicked");
             }
             else if (name == "Button - B")
@@ -56,7 +51,7 @@ namespace UI.Menu
                 SoundManager.Instance.PlayEffect("single_coin_fall_on_wood");
                 SetText("Text - title", "c clicked");
 
-                UIManager.Instance.OpenPopup<PopupScrollViewTest>("PopupScrollViewTest");
+                UIManager.Instance.OpenPopup<UIPopupScrollViewTest>();
             }
             else if (name == "Button - Exit")
             {
