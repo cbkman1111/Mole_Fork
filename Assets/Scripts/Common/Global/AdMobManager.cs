@@ -28,6 +28,8 @@ namespace Common.Global
         // Start is called before the first frame update
         protected override bool Init()
         {
+            Debug.Log($"{Tag} - init.");
+
             MobileAds.SetiOSAppPauseOnBackground(true);
             MobileAds.Initialize(initStatus => {
                 // Partner Mediation SDK 설정이 정상적으로 설정되었는지 체크

@@ -41,7 +41,8 @@ namespace Common.Global
             SoundManager.Instance.Load();
             DataManager.Instance.Load();
             ResourcesManager.Instance.Load();
-            _ = AdMobManager.Instance;
+
+            //_ = AdMobManager.Instance;
             //NetworkManager.Instance.Connect();
 
             return true;
@@ -49,13 +50,16 @@ namespace Common.Global
 
         public void StartApplication()
         {
+            Debug.Log("StartApplication - ChangeScene 0");
             SceneBase.Scenes startScene = SceneBase.Scenes.SceneIntro;
 
 #if UNITY_EDITOR
             startScene = StringToEnum<SceneBase.Scenes>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
 #endif
 
+            Debug.Log("StartApplication - ChangeScene 1");
             AppManager.Instance.ChangeScene(startScene, false);
+            Debug.Log("StartApplication - ChangeScene 2");
         }
 
         /// <summary>
