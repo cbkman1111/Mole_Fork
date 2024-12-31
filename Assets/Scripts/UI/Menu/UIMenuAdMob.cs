@@ -1,6 +1,7 @@
 using Common.Global;
 using Common.Scene;
 using Common.UIObject;
+using Common.Utils;
 using UnityEngine.UI;
 
 namespace UI.Menu
@@ -36,7 +37,16 @@ namespace UI.Menu
             }
             else if(name == "Button - ShowAd")
             {
-                AdMobManager.Instance.ShowRewardVideo();
+                AdMobManager.Instance.ShowRewardVideo(
+                    () => {
+                        GiantDebug.Log("광고 시청 완료.");
+                    },
+                    () => {
+                        GiantDebug.Log("광고 시청 실패.");
+                    },
+                    0,
+                    0,
+                    string.Empty);
             }
             else if(name == "Button - DestroyAd")
             {
