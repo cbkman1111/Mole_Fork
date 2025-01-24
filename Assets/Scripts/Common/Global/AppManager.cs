@@ -279,6 +279,9 @@ namespace Common.Global
                     case SceneBase.Scenes.SceneAdMob:
                         scene = obj.AddComponent<SceneAdMob>();
                         break;
+                    case SceneBase.Scenes.ScenePoker:
+                        scene = obj.AddComponent<ScenePoker>();
+                        break;
                     default:
                         break;
                 }
