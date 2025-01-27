@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,10 +16,10 @@ namespace Common.UIObject
         }
     }
 
-    [Path("UI")]
-    public abstract class UIObject : MonoBehaviour
+    public class UIBase : MonoBehaviour
     {
         protected Dictionary<string, Component> List = null;
+
         private void Awake()
         {
             List = new Dictionary<string, Component>();
@@ -32,7 +33,7 @@ namespace Common.UIObject
                     if (List.ContainsKey(button.name) == false)
                     {
                         button.onClick.AddListener(() => {
-                            Click(button);
+                            OnClick(button);
                         });
 
                         List.Add(button.name, button);
@@ -78,6 +79,13 @@ namespace Common.UIObject
                     continue;
                 }
 
+                var textPro = child.GetComponent<TextMeshProUGUI>();
+                if (textPro != null)
+                {
+                    List.TryAdd(textPro.name, textPro);
+                    continue;
+                }
+
                 var img = child.GetComponent<Image>();
                 if (img != null)
                 {
@@ -105,16 +113,28 @@ namespace Common.UIObject
             {
                 return obj.GetComponent<T>();
             }
-         
+
             return default(T);
         }
-    
+
         protected void SetText(string key, string str)
         {
             if (List.TryGetValue(key, out Component obj) == true)
             {
                 Text text = obj.GetComponent<Text>();
-                if(text != null)
+                if (text != null)
+                {
+                    text.text = str;
+                }
+            }
+        }
+
+        protected void SetTextMeshPro(string key, string str)
+        {
+            if (List.TryGetValue(key, out Component obj) == true)
+            {
+                TextMeshProUGUI text = obj.GetComponent<TextMeshProUGUI>();
+                if (text != null)
                 {
                     text.text = str;
                 }
@@ -145,10 +165,19 @@ namespace Common.UIObject
             }
         }
 
+        protected void SetActive(Component component, bool active)
+        {
+            if (component == null)
+                return;
+
+            if(component.gameObject.activeSelf != active)
+                component.gameObject.SetActive(active);
+        }
+
         protected void SetSprite(string key, Sprite sprite)
         {
             if (List.TryGetValue(key, out var obj) != true) return;
-            
+
             Image img = obj.GetComponent<Image>();
             if (img == true)
             {
@@ -185,22 +214,22 @@ namespace Common.UIObject
             return trans;
         }
 
-        private void Click(Button btn)
-        {
-            OnClick(btn);
-        }
+        protected virtual void OnClick(Button btn) { }
+        protected virtual void OnValueChanged(Slider slider, float f) { }
+        protected virtual void OnValueChanged(InputField input, string str) { }
+    }
+
+    [Path("UI")]
+    public abstract class UIObject : UIBase
+    {
+        protected override void OnClick(Button btn) { }
+        protected override void OnValueChanged(Slider slider, float f) { }
+        protected override void OnValueChanged(InputField input, string str) { }
+
         public virtual void OnOpen() { }
         public virtual void OnClose() { }
-        public virtual void OnValueChanged(Slider slider, float f) { }
-        public virtual void OnValueChanged(InputField input, string str) { }
-        
-        /// <summary>
-        /// PopupBase is a base class for all popup UIs.
-        /// </summary>
         public abstract void OnInit();
-        
-        protected abstract void OnClick(Button btn);
+  
         public abstract void Close();
-
     }
 }

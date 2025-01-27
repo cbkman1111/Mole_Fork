@@ -150,6 +150,10 @@ namespace UI.Menu
             {
                 AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneAdMob);
             }
+            else if (name == "Button - Pocker")
+            {
+                AppManager.Instance.ChangeScene(SceneBase.Scenes.ScenePoker);
+            }
             else if (name == "Button-Shop")
             {
                 SetContent(eContents.Shop);

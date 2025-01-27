@@ -1,27 +1,47 @@
 using Common.Global;
 using Common.Scene;
 using Common.UIObject;
-using Common.Utils.Pool;
-using DG.Tweening;
-using System;
+using Common.Utils;
+using Pocker;
+using Scenes;
 using UnityEngine;
 using UnityEngine.UI;
+using static Scenes.ScenePoker;
 
 namespace UI.Menu
 {
     public class UIMenuPoker: MenuBase
     {
+        [SerializeField]
+        private UIPokerPlayer[] Players;
 
-        public bool createField = false;
-
-        public bool InitMenu()
+        public bool InitMenu(ScenePoker scene)
         {
-            var prefab = ResourcesManager.Instance.LoadInBuild<UIJumpCoin>("UIJumpCoin");
-            //pool = Common.Utils.Pool.Pool<UIJumpCoin>.Create(prefab, targetCube, 30);
+            for(int i = 0; i < Players.Length; i++)
+            {
+                var playerInfo = scene.Players[(PlayUser)i];
+                bool ret = Players[i].InitCards(playerInfo);
+                if(ret == false)
+                {
+                    GiantDebug.Log("ret is false.");
+                }
+             
+                Players[i].OpenCards(7);
+            }
 
             return true;
         }
 
+        public void UpdateRank(ScenePoker scene)
+        {
+            for (int i = 0; i < Players.Length; i++)
+            {
+                var playerInfo = scene.Players[(PlayUser)i];
+                var handRank = playerInfo.EvaluateHand();
+
+                Players[i].SetHandRank(handRank);
+            }
+        }
 
         protected override void OnClick(Button btn)
         {

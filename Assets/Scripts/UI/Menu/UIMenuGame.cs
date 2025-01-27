@@ -19,7 +19,7 @@ namespace UI.Menu
             SetText("Text - title", $"{angle}");
         }
 
-        public override void OnValueChanged(Slider slider, float f) 
+        protected override void OnValueChanged(Slider slider, float f) 
         {
             string name = slider.name;
             if(name.CompareTo("Slider - Camera") == 0)

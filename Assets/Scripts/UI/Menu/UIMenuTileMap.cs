@@ -63,7 +63,7 @@ namespace UI.Menu
             }
         }
 
-        public override void OnValueChanged(Slider slider, float f)
+        protected override void OnValueChanged(Slider slider, float f)
         {
             zoomCamera(f);
         }

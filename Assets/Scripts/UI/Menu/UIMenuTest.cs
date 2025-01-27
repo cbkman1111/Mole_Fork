@@ -67,7 +67,7 @@ namespace UI.Menu
             return angle;
         }
 
-        public override void OnValueChanged(InputField input, string str) 
+        protected override void OnValueChanged(InputField input, string str) 
         {
             /*
             if (input.name.CompareTo("InputField - x") == 0)

@@ -23,7 +23,7 @@ namespace UI.Menu
             return true;
         }
 
-        public override void OnValueChanged(InputField input, string str) 
+        protected override void OnValueChanged(InputField input, string str) 
         {
             string name = input.name;
             if(name == "InputField - Level")
