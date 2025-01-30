@@ -1,10 +1,7 @@
 using Common.UIObject;
 using Poker;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using static Scenes.ScenePoker;
+using static Poker.Player;
 
 namespace Pocker
 {
@@ -41,9 +38,17 @@ namespace Pocker
             }
         }
 
-        public void SetHandRank(HandRank rank)
+        public void SetHandRank(Player player)
         {
-            SetTextMeshPro("Text-HandRank", rank.ToString());
+            var rank = player.Rank;
+            var card = player.RankCard;
+            string str1 = $"{rank.ToString()} {card.Kind} {card.Value}";
+            SetTextMeshPro("Text-HandRank", str1);
+
+            var winner = player.Winner;
+            var order = player.Order;
+            var str2 = winner ? "Winner" : $"Order: {order}";
+            SetTextMeshPro("Text-Rank", str2);
         }
     }
 }

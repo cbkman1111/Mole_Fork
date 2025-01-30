@@ -37,9 +37,7 @@ namespace UI.Menu
             for (int i = 0; i < Players.Length; i++)
             {
                 var playerInfo = scene.Players[(PlayUser)i];
-                var handRank = playerInfo.EvaluateHand();
-
-                Players[i].SetHandRank(handRank);
+                Players[i].SetHandRank(playerInfo);
             }
         }
 
