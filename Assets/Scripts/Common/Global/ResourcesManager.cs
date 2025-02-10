@@ -1,8 +1,5 @@
-using System.Collections.Generic;
 using Common.Global.Singleton;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace Common.Global
 {

@@ -39,7 +39,7 @@ public class UIMenuDotween : MenuBase
         return true;
     }
 
-    public override void OnValueChanged(Slider slider, float f) 
+    public virtual void OnValueChanged(Slider slider, float f) 
     {
         OnSlide(f);
     }

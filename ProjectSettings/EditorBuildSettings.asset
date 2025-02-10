@@ -62,6 +62,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SceneAdMob.unity
     guid: 8f07b817205b90648ab7613be17a139e
+  - enabled: 1
+    path: Assets/Scenes/ScenePoker.unity
+    guid: 42aa3f571c4057f4b9fe43b4463920a5
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: f11489fc9e0119a41a7424443fc3e23c,
       type: 2}

@@ -50,6 +50,7 @@ namespace Common.Global
 
                 if (prefab == false)
                 {
+                    Debug.LogError($"{resourcePath} - prefab is null.");
                     return default(T);
                 }
 

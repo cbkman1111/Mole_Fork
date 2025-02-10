@@ -41,11 +41,6 @@ namespace Gostop
             return this.Where(c => c.Month != 13).ToList();
         }
 
-        public void AddRange(List<Card> cards)
-        {
-            this.AddRange(cards);
-        }
-
         public void OrderByNum()
         {
             this.OrderBy(card => card.Num).ToList();

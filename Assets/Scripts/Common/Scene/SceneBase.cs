@@ -29,6 +29,8 @@ namespace Common.Scene
             SceneAdMob,
             SceneHash,
 
+            ScenePoker, // 포커
+
         }
 
         //public float Amount { get; set; } = 0;

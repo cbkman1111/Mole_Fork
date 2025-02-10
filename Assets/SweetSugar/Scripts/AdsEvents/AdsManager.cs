@@ -110,10 +110,10 @@ namespace SweetSugar.Scripts.AdsEvents
 #if GOOGLE_MOBILE_ADS
             enableGoogleMobileAds = true; //1.6.1
 #if UNITY_ANDROID
-            MobileAds.Initialize(initStatus => { }); //2.1.6
+            //MobileAds.Initialize(initStatus => { }); //2.1.6
             // When true all events raised by GoogleMobileAds will be raised
             // on the Unity main thread. The default value is false.
-            MobileAds.RaiseAdEventsOnUnityMainThread = true;
+            //MobileAds.RaiseAdEventsOnUnityMainThread = true;
             //interstitial = new InterstitialAd(admobUIDAndroid);
             LoadInterstitialAd(admobUIDAndroid);
 #elif UNITY_IOS

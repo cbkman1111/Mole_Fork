@@ -1,24 +1,22 @@
 using Common.Global.Singleton;
-using Common.Global;
 using UnityEngine;
 using GoogleMobileAds.Api;
 using Common.Utils;
 using System;
-using System.Runtime.CompilerServices;
 using System.Collections.Generic;
 
 namespace Common.Global
 {
     public class AdMobManager : MonoSingleton<AdMobManager>
     {
-        // These ad units are configured to always serve test ads.
-#if UNITY_ANDROID
-        private const string _adUnitId = "ca-app-pub-3940256099942544/5354046379";
-#elif UNITY_IPHONE
-        private const string _adUnitId = "ca-app-pub-3940256099942544/6978759866";
-#else
-        private const string _adUnitId = "unused";
-#endif
+        /// 광고단위/지면 ID
+        private const string aosUnit = "ca-app-pub-1994103802600464/6773347431";
+        private const string iosUnit = "ca-app-pub-1994103802600464/8992215030";
+
+        /// 테스트 지면 ID
+        private const string aosUnitTest = "ca-app-pub-3940256099942544/5224354917";
+        private const string iosUnitTest = "ca-app-pub-3940256099942544/1712485313";
+
         private MEC.CoroutineHandle LoadAndShow;
 
         private RewardedInterstitialAd _rewardedInterstitialAd;
@@ -28,7 +26,10 @@ namespace Common.Global
         // Start is called before the first frame update
         protected override bool Init()
         {
+            Debug.Log($"{Tag} - init.");
+#if UNITY_IOS
             MobileAds.SetiOSAppPauseOnBackground(true);
+#endif
             MobileAds.Initialize(initStatus => {
                 // Partner Mediation SDK 설정이 정상적으로 설정되었는지 체크
                 var adapterStatusMap = initStatus.getAdapterStatusMap();
@@ -37,6 +38,10 @@ namespace Common.Global
                 {
                     if (status.Value.InitializationState == AdapterState.Ready)
                     {
+                        RequestConfiguration requestConfiguration = new RequestConfiguration();
+                        requestConfiguration.TestDeviceIds.Add("11a4ba74-d1da-491e-aa01-965a7ea7155a");
+                        MobileAds.SetRequestConfiguration(requestConfiguration);
+
                         LoadRewardedAd();
                     }
                     else if (status.Value.InitializationState == AdapterState.NotReady)
@@ -45,8 +50,12 @@ namespace Common.Global
                     }
                 }
             });
-
             return true;
+        }
+
+        private void Start()
+        {
+
         }
 
         /// <summary>
@@ -67,8 +76,9 @@ namespace Common.Global
             
             SetReady(false);
 
+            var unitID = GetUnitUI();
             // Send the request to load the ad.
-            RewardedInterstitialAd.Load(_adUnitId, adRequest,
+            RewardedInterstitialAd.Load(unitID, adRequest,
                 (RewardedInterstitialAd ad, LoadAdError error) =>
                 {
                     // If the operation failed with a reason.
@@ -98,6 +108,26 @@ namespace Common.Global
                     SetReady(true);
                 });
         }
+        /// <summary>
+        /// 광고 지면 ID 반환.
+        /// </summary>
+        /// <returns></returns>
+        public string GetUnitUI()
+        {
+            string unitId = "unused";
+
+#if UNITY_EDITOR
+            unitId = "unused";
+#elif UNITY_ANDROID
+            unitId = aosUnitTest;
+#elif UNITY_IOS
+            unitId = iosUnitTest;
+#endif
+
+            GiantDebug.Log($"{Tag} - GetUnitUI : {unitId}");
+            return unitId;
+        }
+
 
         private void SetReady(bool ready)
         {
@@ -108,21 +138,21 @@ namespace Common.Global
         /// <summary>
         /// Shows the ad.
         /// </summary>
-        public void ShowRewardVideo()
+        public void ShowRewardVideo(System.Action onComplete, System.Action onFailed, long adRewardGroupID, int adRewardStep, string placementName = "")
         {
             if (_rewardedInterstitialAd != null && _rewardedInterstitialAd.CanShowAd())
             {
                 _rewardedInterstitialAd.Show((Reward reward) =>
                 {
-                    Debug.Log("Rewarded interstitial ad rewarded : " + reward.Amount);
+                    GiantDebug.Log("Rewarded interstitial ad rewarded : " + reward.Amount);
                 });
             }
             else
             {
-                Debug.LogError("Rewarded interstitial ad is not ready yet.");
+                GiantDebug.Log("준비되지 않아 2회차 재생 시도.");  
                 if (LoadAndShow.IsRunning == false)
                 {
-                    LoadAndShow = MEC.Timing.RunCoroutine(LoadAndShowAd());
+                    LoadAndShow = MEC.Timing.RunCoroutine(LoadAndShowAd(onComplete, onFailed));
                 }
             }
 
@@ -130,14 +160,13 @@ namespace Common.Global
             SetReady(false);
         }
 
-        private IEnumerator<float> LoadAndShowAd()
+        private IEnumerator<float> LoadAndShowAd(System.Action onComplete, System.Action onFailed)
         {
             yield return MEC.Timing.WaitForOneFrame;
 
             DestroyAd();
             LoadRewardedAd();
 
-            
             float time = 3.0f;
             while (true)
             {
@@ -155,7 +184,18 @@ namespace Common.Global
                 yield return MEC.Timing.WaitForSeconds(0.5f);
             }
 
-            ShowRewardVideo();
+            if (_rewardedInterstitialAd != null)
+            {
+                _rewardedInterstitialAd.Show((Reward reward) =>
+                {
+                    GiantDebug.Log($"{Tag} - Rewarded ad rewarded the user. Type: {reward.Type}, amount: {reward.Amount}.");
+                    onComplete?.Invoke();
+                });
+            }
+            else
+            {
+                onFailed?.Invoke();
+            }
         }
 
         /// <summary>
