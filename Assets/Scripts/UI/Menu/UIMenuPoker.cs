@@ -1,12 +1,10 @@
 using Common.Global;
 using Common.Scene;
 using Common.UIObject;
-using Common.Utils;
 using Pocker;
-using Scenes;
+using Poker;
 using UnityEngine;
 using UnityEngine.UI;
-using static Scenes.ScenePoker;
 
 namespace UI.Menu
 {
@@ -15,29 +13,22 @@ namespace UI.Menu
         [SerializeField]
         private UIPokerPlayer[] Players;
 
-        public bool InitMenu(ScenePoker scene)
+        public bool InitMenu()
         {
-            for(int i = 0; i < Players.Length; i++)
+            for (int i = 0; i < Players.Length; i++)
             {
-                var playerInfo = scene.Players[(PlayUser)i];
+                var playerInfo = GlobalGameManager.Instance.PockerData.Players[(PlayUser)i];
                 bool ret = Players[i].InitCards(playerInfo);
-                if(ret == false)
-                {
-                    GiantDebug.Log("ret is false.");
-                }
-             
-                Players[i].OpenCards(7);
             }
 
             return true;
         }
 
-        public void UpdateRank(ScenePoker scene)
+        public void UpdateRank()
         {
             for (int i = 0; i < Players.Length; i++)
             {
-                var playerInfo = scene.Players[(PlayUser)i];
-                Players[i].SetHandRank(playerInfo);
+                Players[i].UpdateHandRank();
             }
         }
 
@@ -48,7 +39,14 @@ namespace UI.Menu
             {
                 AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneMenu);
             }
-
+            else if (name == "Button - Process")
+            {
+                // 있는 카드 뒤집기
+                for (int i = 0; i < Players.Length; i++)
+                {
+                    Players[i].OpenCards(2);
+                }
+            }
         }
     }
 }

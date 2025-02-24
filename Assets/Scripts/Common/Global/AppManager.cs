@@ -50,16 +50,12 @@ namespace Common.Global
 
         public void StartApplication()
         {
-            Debug.Log("StartApplication - ChangeScene 0");
             SceneBase.Scenes startScene = SceneBase.Scenes.SceneIntro;
 
 #if UNITY_EDITOR
             startScene = StringToEnum<SceneBase.Scenes>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
 #endif
-
-            Debug.Log("StartApplication - ChangeScene 1");
-            AppManager.Instance.ChangeScene(startScene, false);
-            Debug.Log("StartApplication - ChangeScene 2");
+            ChangeScene(startScene, false);
         }
 
         /// <summary>
@@ -212,17 +208,13 @@ namespace Common.Global
         /// <returns>참조된 씬 객체</returns>
         private SceneBase CreateSceneObject(string sceneName)
         {
-            Debug.Log("AppManager - CreateSceneObject 1");
-
-            SceneBase scene = null; //GetSceneComponent(name);
+            SceneBase scene = null;
             var activeScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
             var root = activeScene.GetRootGameObjects()[0];
 
             GameObject sceneObject = GameObject.Find(sceneName);
             if (sceneObject == null)
             {
-                Debug.Log("AppManager - CreateSceneObject 1 - 1");
-
                 var obj = new GameObject(sceneName);
                 obj.transform.SetParent(root.transform.parent);
 
@@ -288,7 +280,6 @@ namespace Common.Global
             }
             else 
             {
-                Debug.Log("AppManager - CreateSceneObject 1 - 2");
                 scene = sceneObject.GetComponent<SceneBase>();
             }
             

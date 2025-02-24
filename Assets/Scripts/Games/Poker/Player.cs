@@ -1,27 +1,11 @@
-using Common.Utils;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Poker
 {
+    // 포커 플레이어.
     public class Player
     {
-        public enum HandRank
-        {
-            None = 0,
-
-            HighCard,
-            OnePair,
-            TwoPair,
-            ThreeOfAKind,
-            Straight,
-            Flush,
-            FullHouse,
-            FourOfAKind,
-            StraightFlush,
-            RoyalFlush
-        }
-
         public long ID { get; set; }
         public List<Card> Hand { get; set; } = new List<Card>();
         
@@ -44,6 +28,5 @@ namespace Poker
         {
             return Hand.Select(x => x.Value).ToArray();
         }
-
     }
 }

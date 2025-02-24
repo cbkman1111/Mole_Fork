@@ -14,8 +14,14 @@ namespace Pocker
 
         public bool SetCard(Card card)
         {
-            Card = card;
+            if (card == null)
+            {
+                SetActive(ImageFront, false);
+                SetActive(ImageBack, false);
+                return false;
+            }
 
+            Card = card;
             string[] pathKinds = { "Clubs", "Hearts", "Diamond", "Spades" };
             string path = $"Sprites/{Card.Kind.ToString()} {Card.Value}";
 
@@ -26,12 +32,13 @@ namespace Pocker
             {
                 GiantDebug.LogError($"sprite is null. path = {path}");
             }
-            
+
             return true;
         }
         
         public bool OpenCard()
         {
+ 
             SetActive(ImageFront, true);
             SetActive(ImageBack, false);
 

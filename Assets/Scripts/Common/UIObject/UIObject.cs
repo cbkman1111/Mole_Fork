@@ -176,7 +176,8 @@ namespace Common.UIObject
 
         protected void SetSprite(string key, Sprite sprite)
         {
-            if (List.TryGetValue(key, out var obj) != true) return;
+            if (List.TryGetValue(key, out var obj) != true) 
+                return;
 
             Image img = obj.GetComponent<Image>();
             if (img == true)

@@ -1,16 +1,6 @@
 using Common.Global;
 using Common.Scene;
-using Common.Utils;
-using Games.TileMap;
-using Poker;
-using Scenes.EllersAlgorithm;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using UI.Menu;
-using Unity.Mathematics;
-using static Poker.Player;
-using UnityEngine.XR;
 
 namespace Scenes
 {
@@ -55,31 +45,9 @@ namespace Scenes
     /// </summary>
     public class ScenePoker : SceneBase
     {
-        public enum BetType
-        {
-            Fold,
-            Check,
-            Bet,
-            Call,
-            Raise,
-            AllIn,
-        }
 
-        public enum PlayUser
-        {
-            Player1 = 0,
-            Player2,
-            Player3,
-            Player4,
-            Player5,
-
-            Max,
-        }
-
-
-
-        public Deck Deck = null;
-        public Dictionary<PlayUser, Player> Players = null;
+        //private Deck Deck { get; set; } = null;
+        //private Dictionary<PlayUser, Player> Players { get; set; } = null;
 
         private UIMenuPoker menu = null;
 
@@ -90,43 +58,19 @@ namespace Scenes
         /// <returns></returns>
         public override bool Init(JSONObject param)
         {
-            // 1. 플레이어 추가
-            Players = new();
-            Players.Add(PlayUser.Player1, new Player(10000001));
-            Players.Add(PlayUser.Player2, new Player(10000002));
-            Players.Add(PlayUser.Player3, new Player(10000003));
-            Players.Add(PlayUser.Player4, new Player(10000004));
-            Players.Add(PlayUser.Player5, new Player(10000005));
-
-            // 2. 카드 덱 초기화
-            Deck = new();
-            Deck.Shuffle();
-
-            // 3. 카드 배분
-            for (PlayUser player = 0; player < PlayUser.Max; player++)
-            {
-                if(Players.TryGetValue(player, out var playerInfo))
-                {
-                    playerInfo.AddCard(Deck.DeQueue());
-                    playerInfo.AddCard(Deck.DeQueue());
-                    playerInfo.AddCard(Deck.DeQueue());
-                    playerInfo.AddCard(Deck.DeQueue());
-                    playerInfo.AddCard(Deck.DeQueue());
-                    playerInfo.AddCard(Deck.DeQueue());
-                    playerInfo.AddCard(Deck.DeQueue());
-
-                    GiantDebug.Log($"Player {player} : {playerInfo.Hand.ToString()}");
-                }
-            }
+            long[] players = { 10000001 , 10000002, 10000003, 10000004, 10000005, 0, 0, 0, 0, 0}; // PlayUser.Max
+            var gameData = GlobalGameManager.Instance.CreatePokerGame(players);
 
             // 4. UI 초기화
             menu = UIManager.Instance.OpenMenu<UIMenuPoker>();
             if (menu != null)
             {
-                menu.InitMenu(this);
+                menu.InitMenu();
             }
 
+            
             // 5. 결과
+            /*
             for (int i = 0; i < Players.Count; i++)
             {
                 var playerInfo = Players[(PlayUser)i];
@@ -156,183 +100,17 @@ namespace Scenes
                     }
                 }
             }
+            */
 
 
-
-            menu.UpdateRank(this);
+            menu.UpdateRank();
 
             return true;
         }
 
-    
-
         private void OnStartGame()
         { 
 
-        }
-
-        public (HandRank, Card) EvaluateHand(List<Card> Hand)
-        {
-            var royalFlushCard = IsRoyalFlush(Hand);
-            if (royalFlushCard != null)
-                return (HandRank.RoyalFlush, royalFlushCard);
-
-            var straightFlushCard = IsStraightFlush(Hand);
-            if (straightFlushCard != null)
-                return (HandRank.StraightFlush, straightFlushCard);
-
-            var fourOfAKindCard = IsFourOfAKind(Hand);
-            if (fourOfAKindCard != null)
-                return (HandRank.FourOfAKind, fourOfAKindCard);
-
-            var fullHouseCard = IsFullHouse(Hand);
-            if (fullHouseCard != null)
-                return (HandRank.FullHouse, fullHouseCard);
-
-            var flushCard = IsFlush(Hand);
-            if (flushCard != null)
-                return (HandRank.Flush, flushCard);
-
-            var straightCard = IsStraight(Hand);
-            if (straightCard != null)
-                return (HandRank.Straight, straightCard);
-
-            var threeOfAKindCard = IsThreeOfAKind(Hand);
-            if (threeOfAKindCard != null)
-                return (HandRank.ThreeOfAKind, threeOfAKindCard);
-
-            var twoPairCard = IsTwoPair(Hand);
-            if (twoPairCard != null)
-                return (HandRank.TwoPair, twoPairCard);
-
-            var onePairCard = IsOnePair(Hand);
-            if (onePairCard != null)
-                return (HandRank.OnePair, onePairCard);
-
-            var highCard = Hand.OrderByDescending(card => card.Value)
-                               .ThenByDescending(card => card.Kind)
-                               .FirstOrDefault();
-
-            return (HandRank.HighCard, highCard);
-        }
-
-        private Card IsRoyalFlush(List<Card> hand)
-        {
-            var straightFlushCard = IsStraightFlush(hand);
-            if (straightFlushCard != null && hand.Any(card => card.Value == 14))
-            {
-                return hand.OrderByDescending(card => card.Value)
-                           .ThenByDescending(card => card.Kind)
-                           .FirstOrDefault();
-            }
-
-            return null;
-        }
-
-        private Card IsStraightFlush(List<Card> hand)
-        {
-            var flushCard = IsFlush(hand);
-            var straightCard = IsStraight(hand);
-
-            if (flushCard != null && straightCard != null)
-            {
-                return hand.OrderByDescending(card => card.Value)
-                           .ThenByDescending(card => card.Kind)
-                           .FirstOrDefault();
-            }
-
-            return null;
-        }
-
-        private Card IsFourOfAKind(List<Card> hand)
-        {
-            var fourOfAKindGroup = hand.GroupBy(card => card.Value)
-                                       .Where(group => group.Count() == 4)
-                                       .OrderByDescending(group => group.Key)
-                                       .FirstOrDefault();
-
-            return fourOfAKindGroup?.OrderByDescending(card => card.Kind).FirstOrDefault();
-        }
-
-        private Card IsFullHouse(List<Card> hand)
-        {
-            var groups = hand.GroupBy(card => card.Value).ToList();
-            var threeOfAKindGroup = groups.FirstOrDefault(group => group.Count() == 3);
-            var pairGroup = groups.FirstOrDefault(group => group.Count() == 2);
-
-            if (threeOfAKindGroup != null && pairGroup != null)
-            {
-                return threeOfAKindGroup.OrderByDescending(card => card.Value)
-                                        .ThenByDescending(card => card.Kind)
-                                        .FirstOrDefault();
-            }
-
-            return null;
-        }
-
-        private Card IsFlush(List<Card> hand)
-        {
-            var flushGroup = hand.GroupBy(card => card.Kind)
-                                 .Where(group => group.Count() == 5)
-                                 .OrderByDescending(group => group.Max(card => card.Value))
-                                 .FirstOrDefault();
-
-            return flushGroup?.OrderByDescending(card => card.Value)
-                             .ThenByDescending(card => card.Kind)
-                             .FirstOrDefault();
-        }
-
-        private Card IsStraight(List<Card> hand)
-        {
-            var orderedValues = hand.Select(card => card.Value).OrderBy(value => value).ToList();
-            bool isStraight = orderedValues.Zip(orderedValues.Skip(1), (a, b) => (a - b)).All(diff => diff == 1);
-
-            return isStraight ? hand.OrderByDescending(card => card.Value)
-                                      .ThenByDescending(card => card.Kind)
-                                      .FirstOrDefault() : null;
-        }
-
-        private Card IsThreeOfAKind(List<Card> hand)
-        {
-            var threeOfAKindGroup = hand.GroupBy(card => card.Value)
-                                        .Where(group => group.Count() == 3)
-                                        .OrderByDescending(group => group.Key)
-                                        .FirstOrDefault();
-
-            return threeOfAKindGroup?.OrderByDescending(card => card.Value)
-                        .ThenByDescending(card => card.Kind)
-                        .FirstOrDefault();
-        }
-
-        private Card IsTwoPair(List<Card> hand)
-        {
-            var pairGroups = hand.GroupBy(card => card.Value)
-                                 .Where(group => group.Count() == 2)
-                                 .OrderByDescending(group => group.Key)
-                                 .Take(2)
-                                 .ToList();
-
-            if (pairGroups.Count == 2)
-            {
-                return pairGroups.SelectMany(group => group)
-                    .OrderByDescending(card => card.Value)
-                    .ThenByDescending(card => card.Kind)
-                    .FirstOrDefault();
-            }
-
-            return null;
-        }
-
-        private Card IsOnePair(List<Card> hand)
-        {
-            var pairGroup = hand.GroupBy(card => card.Value)
-                                .Where(group => group.Count() == 2)
-                                .OrderByDescending(group => group.Key)
-                                .FirstOrDefault();
-
-            return pairGroup?.OrderByDescending(card => card.Value)
-                            .ThenByDescending(card => card.Kind)
-                            .FirstOrDefault();
         }
     }
 }

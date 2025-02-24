@@ -10,19 +10,28 @@ namespace Pocker
         [SerializeField]
         private UIPokerCard[] Cards;
 
+        private Player Player = null;
+
         public bool InitCards(Player player)
         {
-            if(player.Hand == null || player.Hand.Count != 7)
-            {
+            Player = player;
+            if (Player == null)
                 return false;
+
+            foreach (var card in Cards)
+            {
+                card.SetCard(null);
             }
 
-            for(int i = 0; i < player.Hand.Count; i++)
+            if (Player.Hand != null)
             {
-                bool ret = Cards[i].SetCard(player.Hand[i]);
-                if(ret == false)
+                for (int i = 0; i < Player.Hand.Count; i++)
                 {
-                    return false;
+                    bool ret = Cards[i].SetCard(Player.Hand[i]);
+                    if (ret == false)
+                    {
+                        return false;
+                    }
                 }
             }
 
@@ -33,20 +42,25 @@ namespace Pocker
         {
             for (int i = 0; i < Cards.Length; i++)
             {
-                if(i <= count)
+                if (i <= count)
+                {
                     Cards[i].OpenCard();
+                }
             }
         }
 
-        public void SetHandRank(Player player)
+        public void UpdateHandRank()
         {
-            var rank = player.Rank;
-            var card = player.RankCard;
+            if (Player == null)
+                return;
+
+            var rank = Player.Rank;
+            var card = Player.RankCard;
             string str1 = $"{rank.ToString()} {card.Kind} {card.Value}";
             SetTextMeshPro("Text-HandRank", str1);
 
-            var winner = player.Winner;
-            var order = player.Order;
+            var winner = Player.Winner;
+            var order = Player.Order;
             var str2 = winner ? "Winner" : $"Order: {order}";
             SetTextMeshPro("Text-Rank", str2);
         }
