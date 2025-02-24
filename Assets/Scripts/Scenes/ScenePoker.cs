@@ -65,7 +65,7 @@ namespace Scenes
             menu = UIManager.Instance.OpenMenu<UIMenuPoker>();
             if (menu != null)
             {
-                menu.InitMenu();
+                menu.InitMenu(OnStartGame);
             }
 
             
@@ -109,8 +109,10 @@ namespace Scenes
         }
 
         private void OnStartGame()
-        { 
-
+        {
+            long[] players = { 10000001, 10000002, 10000003, 10000004, 10000005, 0, 0, 0, 0, 0 }; // PlayUser.Max
+            var gameData = GlobalGameManager.Instance.CreatePokerGame(players);
+            menu.InitMenu(OnStartGame);
         }
     }
 }

@@ -1,7 +1,8 @@
+using BehaviorDesigner.Runtime.Tasks.Unity.UnityLight;
 using Common.UIObject;
 using Poker;
 using UnityEngine;
-using static Poker.Player;
+using UnityEngine.UI;
 
 namespace Pocker
 {
@@ -38,11 +39,25 @@ namespace Pocker
             return true;
         }
 
-        public void OpenCards(int count)
+        public void UpdateCard()
+        { 
+            if (Player == null)
+                return;
+
+            for (int i = 0; i < Cards.Length; i++)
+            {
+                if (Player.Hand.Count > i)
+                {
+                    Cards[i].SetCard(Player.Hand[i]);
+                }
+            }
+        }
+
+        public void OpenCards()
         {
             for (int i = 0; i < Cards.Length; i++)
             {
-                if (i <= count)
+                if (Cards[i] != null)
                 {
                     Cards[i].OpenCard();
                 }
@@ -54,15 +69,22 @@ namespace Pocker
             if (Player == null)
                 return;
 
+            bool gameOver = Player.Hand.Count == 7;
             var rank = Player.Rank;
             var card = Player.RankCard;
             string str1 = $"{rank.ToString()} {card.Kind} {card.Value}";
             SetTextMeshPro("Text-HandRank", str1);
 
-            var winner = Player.Winner;
+            var winner = gameOver == true && Player.Winner;
             var order = Player.Order;
             var str2 = winner ? "Winner" : $"Order: {order}";
             SetTextMeshPro("Text-Rank", str2);
+
+            var img = GetObject<Image>("Player");
+            if (img != null)
+            {
+                img.color = winner ? Color.yellow : Color.white;
+            }
         }
     }
 }

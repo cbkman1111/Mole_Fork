@@ -8,11 +8,15 @@ namespace Poker
     /// </summary>
     public class PokerData
     {
+        private int CountDeal = 0;
+        public bool GameOver => CountDeal == 7;
         private Deck Deck { get; set; } = null;
         public Dictionary<PlayUser, Player> Players { get; set; } = null;
 
         public PokerData(long[] players)
         {
+            CountDeal = 0;
+
             Deck = new();
             Deck.Shuffle();
 
@@ -30,7 +34,7 @@ namespace Poker
                 { PlayUser.Observer5, new Player(players[9]) }
             };
 
-            DealCard(2);
+            DealCard(3);
             UpdateHandRank();
             UpdateRank();
         }
@@ -58,11 +62,18 @@ namespace Poker
 
         public void DealCard(int count)
         {
+            if (CountDeal == 7)
+                return;
+
             for (PlayUser index = PlayUser.Player1; index <= PlayUser.Player5; index++)
             {
                 for (int i = 0; i < count; i++)
+                {
                     Players[index].AddCard(Deck.DeQueue());
+                }
             }
+
+            CountDeal += count;
         }
 
         public void UpdateHandRank()
