@@ -7,20 +7,18 @@ namespace Common.Global
 {
     public class GlobalGameManager : MonoSingleton<GlobalGameManager>
     {
-        public Poker.PokerData PockerData = null;
+        public Poker.SevenPokerData PockerGameData { get; set; } = null;
 
         protected override bool Init()
         {
-            PockerData = null;
+            PockerGameData = null;
             return true;
         }
 
-        public Poker.PokerData CreatePokerGame(long[] players)
+        public Poker.SevenPokerData CreatePokerGame(long[] players)
         {
-            PockerData = new Poker.PokerData(players);
-            return PockerData;
+            PockerGameData = new Poker.SevenPokerData(players);
+            return PockerGameData;
         }
-
-
     }
 }

@@ -45,8 +45,8 @@ namespace Pocker
                 return false;
             }
 
-            SetActive(ImageFront, true);
-            SetActive(ImageBack, false);
+            SetActive(ImageFront, Card.Hidden == false);
+            SetActive(ImageBack, Card.Hidden == true);
             return true;
         }
     }

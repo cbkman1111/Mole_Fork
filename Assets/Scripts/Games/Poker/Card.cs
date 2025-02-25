@@ -17,11 +17,13 @@ namespace Poker
 
         public CardKind Kind { get; set; }
         public int Value { get; set; } // 2-14 (11: Jack, 12: Queen, 13: King, 14: Ace)
+        public bool Hidden { get; set; } = true;
 
         public Card(CardKind kind, int value)
         {
             Kind = kind;
             Value = value;
+            Hidden = true;
         }
     }
 }

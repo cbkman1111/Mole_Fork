@@ -1,42 +1,41 @@
+using Creature;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Poker
 {
     /// <summary>
-    /// 포커 게임 글로벌 데이터.
+    /// 7 포커 게임 데이터.
     /// </summary>
-    public class PokerData
+    public class SevenPokerData
     {
-        private int CountDeal = 0;
-        public bool GameOver => CountDeal == 7;
         private Deck Deck { get; set; } = null;
         public Dictionary<PlayUser, Player> Players { get; set; } = null;
 
-        public PokerData(long[] players)
-        {
-            CountDeal = 0;
+        public bool GameOver => State == SevenPokerState.GameOver;
+        public SevenPokerState State = SevenPokerState.None;
 
+        public SevenPokerData(long[] players)
+        {
             Deck = new();
             Deck.Shuffle();
 
             Players = new()
             {
-                { PlayUser.Player1, new Player(players[0]) },
+                { PlayUser.Player1, new Player(players[0]) }, // 플레이어 1
                 { PlayUser.Player2, new Player(players[1]) },
                 { PlayUser.Player3, new Player(players[2]) },
                 { PlayUser.Player4, new Player(players[3]) },
                 { PlayUser.Player5, new Player(players[4]) },
-                { PlayUser.Observer1, new Player(players[5]) },
+
+                { PlayUser.Observer1, new Player(players[5]) }, // 구경꾼 1
                 { PlayUser.Observer2, new Player(players[6]) },
                 { PlayUser.Observer3, new Player(players[7]) },
                 { PlayUser.Observer4, new Player(players[8]) },
                 { PlayUser.Observer5, new Player(players[9]) }
             };
 
-            DealCard(3);
-            UpdateHandRank();
-            UpdateRank();
+            State = SevenPokerState.Start;
         }
 
         /// <summary>
@@ -54,26 +53,64 @@ namespace Poker
             {
                 var index = listOrder[i];
                 Players[index].Order = i;
-                Players[index].Winner = i == 0;
             }
 
             return listOrder;
         }
 
-        public void DealCard(int count)
+        public List<Player> GetPlayerAll(bool die)
         {
-            if (CountDeal == 7)
-                return;
+            var list = Players.Where(info => info.Value.Die == die && info.Key >= PlayUser.Player1 && info.Key <= PlayUser.Player5).Select(e => e.Value).ToList();
+            return list;
+        }
 
+        public List<Player> GetPlayerActive()
+        {
+            return GetPlayerAll(false);
+        }
+
+        public int ActivePlayerCount()
+        {
+            var list = GetPlayerActive();
+            return list.Count;
+        }
+
+        public void OpenFirstCard()
+        {
+            var list = GetPlayerActive();
+            foreach (var player in list)
+            {
+                player.Hand[0].Hidden = true;
+                player.Hand[1].Hidden = true;
+                player.Hand[2].Hidden = false;
+            }
+        }
+
+        public void OpenAllCards()
+        {
+            var list = GetPlayerActive();
+            foreach (var player in list)
+            {
+                player.Hand.ForEach(card => card.Hidden = false);
+            }
+        }
+
+        public void BetEnemy()
+        {
+
+        }
+
+        public void DealCard(int count, bool hidden = false)
+        {
             for (PlayUser index = PlayUser.Player1; index <= PlayUser.Player5; index++)
             {
                 for (int i = 0; i < count; i++)
                 {
-                    Players[index].AddCard(Deck.DeQueue());
+                    var card = Deck.DeQueue();
+                    card.Hidden = hidden;
+                    Players[index].AddCard(card);
                 }
             }
-
-            CountDeal += count;
         }
 
         public void UpdateHandRank()

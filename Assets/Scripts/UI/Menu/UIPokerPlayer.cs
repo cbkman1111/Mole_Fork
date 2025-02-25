@@ -43,13 +43,10 @@ namespace Pocker
         { 
             if (Player == null)
                 return;
-
-            for (int i = 0; i < Cards.Length; i++)
+            
+            for (int i = 0; i < Player.Hand.Count; i++)
             {
-                if (Player.Hand.Count > i)
-                {
-                    Cards[i].SetCard(Player.Hand[i]);
-                }
+                Cards[i].SetCard(Player.Hand[i]);
             }
         }
 
@@ -57,10 +54,7 @@ namespace Pocker
         {
             for (int i = 0; i < Cards.Length; i++)
             {
-                if (Cards[i] != null)
-                {
-                    Cards[i].OpenCard();
-                }
+                Cards[i]?.OpenCard();
             }
         }
 
@@ -69,22 +63,20 @@ namespace Pocker
             if (Player == null)
                 return;
 
-            bool gameOver = Player.Hand.Count == 7;
             var rank = Player.Rank;
             var card = Player.RankCard;
-            string str1 = $"{rank.ToString()} {card.Kind} {card.Value}";
+
+            string str1 = string.Empty;
+            if(rank != HandRank.None && card != null)
+            {
+                str1 = $"{rank.ToString()} {card.Kind} {card.Value}";
+            }
+
             SetTextMeshPro("Text-HandRank", str1);
 
-            var winner = gameOver == true && Player.Winner;
             var order = Player.Order;
-            var str2 = winner ? "Winner" : $"Order: {order}";
+            var str2 = order == 0 ? "first" : $"{order+1}";
             SetTextMeshPro("Text-Rank", str2);
-
-            var img = GetObject<Image>("Player");
-            if (img != null)
-            {
-                img.color = winner ? Color.yellow : Color.white;
-            }
         }
     }
 }
