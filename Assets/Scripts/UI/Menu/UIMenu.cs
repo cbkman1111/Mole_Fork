@@ -9,6 +9,8 @@ using UnityEngine.UI;
 
 namespace UI.Menu
 {
+    
+    
     public class UIMenu : MenuBase
     {
         public enum eContents
@@ -145,6 +147,10 @@ namespace UI.Menu
             else if (name == "Button - Hash")
             {
                 AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneHash);
+            }
+            else if (name == "Button - Loading")
+            {
+                AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneLoading);
             }
             else if (name == "Button - AdMob")
             {

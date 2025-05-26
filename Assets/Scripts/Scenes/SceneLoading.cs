@@ -1,22 +1,23 @@
+using Common.Global;
+using Common.Scene;
+using UI.Menu;
 using UnityEngine;
 
 namespace Scenes
 {
-    public class SceneLoading : MonoBehaviour
+    public class SceneLoading : SceneBase
     {
-        public UILoadingMenu menu = null;
+        private UILoadingMenu menu = null;
 
-        public void SetPercent(float percent)
+        public override bool Init(JSONObject param)
         {
+            menu = UIManager.Instance.OpenMenu<UILoadingMenu>();
             if (menu != null)
             {
-                menu.SetPercent(percent);
+                menu.InitMenu();
             }
-        }
 
-        public bool Complete()
-        {
-            return menu.Complete();
+            return true;
         }
     }
 }

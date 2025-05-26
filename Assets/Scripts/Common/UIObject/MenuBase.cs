@@ -3,6 +3,7 @@ using UnityEngine.UI;
 
 namespace Common.UIObject
 {
+    [Path("UI/Prefabs/Menu")]
     public abstract class MenuBase : UIObject
     {
         public override void OnInit() { }

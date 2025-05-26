@@ -1,4 +1,5 @@
 using Common.Global;
+using Common.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -119,6 +120,12 @@ namespace Common.Global
 
         public Transform Last()
         {
+            if (_canvas == null)
+            {
+                GiantDebug.LogError("CanvasController - Canvas is null.");
+                return null;
+            }
+
             var index = _canvas.transform.childCount - 1;
             Transform trans = null;
             if (index >= 0)
@@ -131,6 +138,12 @@ namespace Common.Global
 
         public void Clear()
         {
+            if (_canvas == null)
+            {
+                GiantDebug.LogError("CanvasController - Canvas is null.");
+                return;
+            }
+
             for (var i = 0; i < _canvas.transform.childCount; i++)
             {
                 var trans = _canvas.transform.GetChild(0);

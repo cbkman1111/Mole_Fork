@@ -1,6 +1,11 @@
 <dependencies>
   <packages>
     <package>androidx.constraintlayout:constraintlayout:2.1.4</package>
+    <package>com.google.ads.mediation:applovin:12.6.1.0</package>
+    <package>com.google.ads.mediation:facebook:6.18.0.0</package>
+    <package>com.google.ads.mediation:fyber:8.3.1.0</package>
+    <package>com.google.ads.mediation:ironsource:8.4.0.0</package>
+    <package>com.google.ads.mediation:vungle:7.4.0.1</package>
     <package>com.google.android.gms:play-services-ads:23.6.0</package>
     <package>com.google.android.ump:user-messaging-platform:3.1.0</package>
   </packages>

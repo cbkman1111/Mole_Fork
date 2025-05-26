@@ -6,6 +6,7 @@ using Network;
 using Scenes;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -74,45 +75,22 @@ namespace Common.Global
         /// </summary>
         /// <param name="loading"></param>
         /// <returns></returns>
-        private IEnumerator UpdateLoadPercent(UILoadingMenu loading)
-        {
+        //private IEnumerator UpdateLoadPercent(UILoadingMenu loading)
+        private IEnumerator<float> UpdateLoadPercent(UIPopupLoading loading)
+		{
+			yield return MEC.Timing.WaitForOneFrame;
             bool done = false;
             while (!done)
             {
                 loading.SetPercent(_loadingPercent);
-
                 if (_loadingPercent >= 1.0f) {
                     done = true;
                 }
 
-                yield return null;
+                yield return MEC.Timing.WaitForOneFrame;
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="loading"></param>
-        /// <returns></returns>
-        private IEnumerator InitScene(UILoadingMenu loading)
-        {
-            yield return new WaitForSeconds(0.2f);
-
-            // 나머지 부족한 게이지를 1.0까지 채움.
-            while (loading.Complete() == false)
-            {
-                _loadingPercent += 0.1f;
-                if (_loadingPercent >= 1.0f)
-                    _loadingPercent = 1.0f;
-
-                loading.SetPercent(_loadingPercent);
-                yield return null;
-            }
-
-            loading.Close();
-            CurrScene.Init(_param);
-            yield return null;
-        }
 
         /// <summary>
         /// 로딩중 팝업을 출력하고 대상 씬을 로드합니다.
@@ -129,72 +107,71 @@ namespace Common.Global
                 _currScene.UnLoad();
                 _currScene = null;
             }
-
-            UIManager.Instance.Clear();
+            
             AsyncOperation asyncNextOperator = null;
             if (loading == true)
             {
-                GiantDebug.Log("AppManager - LoadScene 2");
-
                 // 로딩 메뉴를 띄우고 수치를 갱신.
-                var loadingMenu = UIManager.Instance.OpenMenu<UILoadingMenu>();
-                var handle = StartCoroutine(UpdateLoadPercent(loadingMenu));
+                var loadingMenu = UIManager.Instance.OpenPopup<UIPopupLoading>();
+                var gameObjectLoading = loadingMenu.gameObject;
+                MEC.Timing.RunCoroutine(UpdateLoadPercent(loadingMenu).CancelWith(gameObjectLoading));
 
                 // 다음 씬을 로드 시작.
                 asyncNextOperator = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
-                asyncNextOperator.allowSceneActivation = true;
+                asyncNextOperator.allowSceneActivation = false;
+                while (asyncNextOperator.allowSceneActivation == false)
+                {
+                    if (asyncNextOperator.progress == 0.9f)
+                    {
+                        _loadingPercent = 1.0f;
+                        if (loadingMenu.Complete() == true)
+                        {
+                            asyncNextOperator.allowSceneActivation = true;
+                        }
+                        else
+                            yield return null;
+                    }
+                    else
+                    {
+                        _loadingPercent = asyncNextOperator.progress;
+                        
+                    }
+
+                    yield return null;
+                }
+
                 asyncNextOperator.completed += (AsyncOperation operation) => {
                     
-                    GiantDebug.Log("AppManager - LoadScene 2 - 1");
-
-                    _currScene = CreateSceneObject(sceneName);
-                    _currScene.MainCamera = Camera.main;
-                    
-                    // 비동기로 데이터 로드를 하고, 완료되면 초기화.
                     Task.Run(() => {
-                        CurrScene.Load((percent) => {
-                            _loadingPercent = percent;
-                        });
+                        
                     }).
                     // 테스크 완료후 동기로 받음.
                     ContinueWith(preTask => {
+                        UIManager.Instance.InitWithScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
 
-                        GiantDebug.Log("AppManager - LoadScene 2 - 3");
-                        StopCoroutine(handle);
-                        StartCoroutine(InitScene(loadingMenu));
+                        _currScene = CreateSceneObject(sceneName);
+                        _currScene.MainCamera = Camera.main;
+                        _currScene.Init(_param);
                     }, TaskScheduler.FromCurrentSynchronizationContext());
                 };
             }
             else
             {
-                GiantDebug.Log("AppManager - LoadScene 3");
-
                 asyncNextOperator = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
                 asyncNextOperator.allowSceneActivation = true;
                 asyncNextOperator.completed += (AsyncOperation operation) => {
-                    Debug.Log("AppManager - LoadScene 3 - 1");
-
                     SceneBase changeScnene = CreateSceneObject(sceneName);
-                    if (changeScnene == null)
-                        Debug.LogError("AppManager - 3 - 2 changeScnene  is null.");
 
-                    _currScene = changeScnene;
-                    _currScene.MainCamera = Camera.main;
                     Task.Run(() => {
-                        Debug.Log("AppManager - LoadScene 3 - 2");
-                        _currScene.Load((percent) => {
-                            _loadingPercent = percent;
-
-                            Debug.Log("AppManager - LoadScene 3 - 3");
-                        });
+                        _loadingPercent = operation.progress;
                     }).
                     ContinueWith(preTask => {
-                        Debug.Log("AppManager - LoadScene 3 - 4");
+                        UIManager.Instance.InitWithScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
 
-                       
+                        _currScene = changeScnene;
+                        _currScene.MainCamera = Camera.main;
+                        _currScene.Init(_param);
                     }, TaskScheduler.FromCurrentSynchronizationContext());
-
-                     _currScene.Init(_param);
                 };
 
                 yield return null;

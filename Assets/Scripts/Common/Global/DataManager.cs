@@ -1,15 +1,17 @@
 using UnityEngine;
 using Common.Global.Singleton;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
-using System.Linq;
 using Common.Table;
 using System;
-using LitJson; // Add this import statement
 
 namespace Common.Global
 {
+    public class Excel
+    { 
+
+    }
+
     public class DataManager : MonoSingleton<DataManager>
     {
         private readonly Dictionary<string, DataTable> tables = new();
@@ -60,6 +62,5 @@ namespace Common.Global
 
             return default;
         }
-
     }
 }

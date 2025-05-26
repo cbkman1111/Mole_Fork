@@ -3,6 +3,7 @@ using Common.Global.Singleton;
 using Common.UIObject;
 using Common.Utils;
 using System;
+using System.Linq;
 using UnityEngine;
 
 
@@ -20,27 +21,43 @@ namespace Common.Global
         private Transform _cover { get => rootObject._cover; }
 
         /// <summary>
-        /// 
+        /// 싱글턴 생성.
         /// </summary>
         /// <returns></returns>
         protected override bool Init()
         {
             GiantDebug.Log($"{tag} - Init");
+            return true;
+        }
 
+        public bool InitWithScene(UnityEngine.SceneManagement.Scene scene)
+        {
             const string uiRoot = "UI/UIRoot";
-            var prefab = ResourcesManager.Instance.LoadInBuild<GameObject>(uiRoot);
-            var obj = Instantiate(prefab, transform);
-            if(obj == false)
+
+            var objs = scene.GetRootGameObjects();
+            var root = objs.FirstOrDefault(obj => obj.name == "UIRoot");
+            if (root == null)
             {
-                GiantDebug.LogError($"root is null.");
-                return false;
+                var prefab = ResourcesManager.Instance.LoadInBuild<GameObject>(uiRoot);
+                var obj = Instantiate(prefab, null);
+                if (obj == false)
+                {
+                    GiantDebug.LogError($"root is null.");
+                    return false;
+                }
+
+                obj.name = "UIRoot";
+                obj.transform.position = new Vector3(100, 0, 0);
+                rootObject = obj.GetComponent<UIRoot>();
+                GiantDebug.Log($"{tag} - Init return true.");
             }
-
-            obj.name = "UIRoot";
-            obj.transform.position = new Vector3(100,0,0);
-            rootObject = obj.GetComponent<UIRoot>();
-
-            GiantDebug.Log($"{tag} - Init return true.");
+            else
+            {
+                root.name = "UIRoot";
+                root.transform.position = new Vector3(100, 0, 0);
+                rootObject = root.GetComponent<UIRoot>();
+                GiantDebug.Log($"{tag} - Init return true.");
+            }
             return true;
         }
 
@@ -188,6 +205,9 @@ namespace Common.Global
         /// </summary>
         public void Clear()
         {
+            if (rootObject == null)
+                return;
+
             _cover.SetParent(rootObject.transform);
 
             if (_controllerMenu != null)

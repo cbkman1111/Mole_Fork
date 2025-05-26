@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 namespace Common.UIObject
 {
+    [Path("UI/Prefabs/Popup")]
     public class PopupBase : UIObject
     {
 

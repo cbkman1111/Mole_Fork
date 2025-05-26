@@ -1,4 +1,4 @@
-using Common.Global.Singleton;
+﻿using Common.Global.Singleton;
 using UnityEngine;
 using GoogleMobileAds.Api;
 using Common.Utils;
@@ -9,11 +9,11 @@ namespace Common.Global
 {
     public class AdMobManager : MonoSingleton<AdMobManager>
     {
-        /// ��������/���� ID
+        /// 광고단위/지면 ID
         private const string aosUnit = "ca-app-pub-1994103802600464/6773347431";
         private const string iosUnit = "ca-app-pub-1994103802600464/8992215030";
 
-        /// �׽�Ʈ ���� ID
+        /// 테스트 지면 ID
         private const string aosUnitTest = "ca-app-pub-3940256099942544/5224354917";
         private const string iosUnitTest = "ca-app-pub-3940256099942544/1712485313";
 
@@ -30,8 +30,11 @@ namespace Common.Global
 #if UNITY_IOS
             MobileAds.SetiOSAppPauseOnBackground(true);
 #endif
+            SetGDPRConsent(true);
+            SetCCPADoNotSell(true);
+
             MobileAds.Initialize(initStatus => {
-                // Partner Mediation SDK ������ ���������� �����Ǿ����� üũ
+                // Partner Mediation SDK 설정이 정상적으로 설정되었는지 체크
                 var adapterStatusMap = initStatus.getAdapterStatusMap();
 
                 foreach (var status in adapterStatusMap)
@@ -53,9 +56,62 @@ namespace Common.Global
             return true;
         }
 
-        private void Start()
+        /// <summary>
+        /// GDPR 동의 상태 설정.
+        /// GDPR(General Data Protection Regulation)은 유럽연합(EU)의 개인정보 보호법
+        /// https://www.cloudflare.com/ko-kr/learning/privacy/what-is-the-gdpr/
+        /// 
+        /// Google EU 사용자 동의 정책에 따라 개발자는 기기 식별자 및 개인 정보 사용과 관련하여 유럽 경제 지역 
+        /// (EEA) 사용자에게 특정 정보를 공개하고 동의를 얻어야 합니다. 
+        /// 이 정책에는 EU 온라인 개인 정보 보호 지침 및 개인 정보 보호법 (GDPR)의 요구사항이 반영되어 있습니다. 
+        /// 동의를 얻으려면 개인 정보를 수집, 수신 또는 사용할 수 있는 미디에이션 체인의 각 광고 네트워크를 식별하고 
+        /// 각 네트워크의 사용에 관한 정보를 제공해야 합니다. 
+        /// 
+        /// 현재 Google은 이러한 네트워크에 사용자의 동의 여부를 자동으로 전달할 수 없습니다.
+        /// </summary>
+        /// <param name="consent"></param>
+        private void SetGDPRConsent(bool consent)
         {
+            GoogleMobileAds.Mediation.IronSource.Api.IronSource.SetConsent(consent);
+            GoogleMobileAds.Mediation.AppLovin.Api.AppLovin.SetHasUserConsent(consent);
+            GoogleMobileAds.Mediation.AppLovin.Api.AppLovin.SetIsAgeRestrictedUser(consent); // 사용자가 연령 제한 카테고리에 속하는 것으로 알려진 경우 아래 플래그를 true로 설정할 수도 있습니다.
 
+#if UNITY_IOS
+            GoogleMobileAds.Mediation.LiftoffMonetize.Api.LiftoffMonetize.SetGDPRStatus(true, "v1.0.0");
+#else
+            GoogleMobileAds.Mediation.LiftoffMonetize.Api.LiftoffMonetize.SetGDPRMessageVersion("v1.0.0");
+#endif
+
+            GoogleMobileAds.Mediation.DTExchange.Api.DTExchange.SetGDPRConsent(consent);
+            GoogleMobileAds.Mediation.DTExchange.Api.DTExchange.SetGDPRConsentString("myGDPRConsentString");
+
+            Debug.Log($"GDPR consent set to: {consent}");
+        }
+
+        /// <summary>
+        /// CCPA "Do Not Sell" 상태 설정.
+        /// CCPA(캘리포니아 소비자 개인정보 보호법)
+        /// https://www.cloudflare.com/ko-kr/learning/privacy/what-is-the-ccpa/
+        /// 
+        /// 미국 주 개인 정보 보호법 은 사용자에게 법률에 정의된 바에 따라 '개인 정보'의 '판매'를 거부할 권리를 부여합니다. 
+        /// 개인 정보 판매 거부 권리는 '판매'하는 회사의 홈페이지에 명시된 'Do Not Sell My Personal Information(내 개인 정보 판매 거부)' 
+        /// 링크를 통해 행사할 수 있습니다. 미국 주 개인 정보 보호법 준수 가이드에서는 Google 광고 게재에 제한적인 
+        /// 데이터 처리를 사용 설정하는 기능을 제공하지만 Google은 미디에이션 체인의 각 광고 네트워크에 이 설정을 적용할 수 없습니다. 
+        /// 따라서 개인 정보 판매에 참여할 수 있는 미디에이션 체인의 각 광고 네트워크를 파악하고 
+        /// 각 네트워크의 안내에 따라 규정을 준수해야 합니다.
+        /// </summary>
+        /// <param name="doNotSell"></param>
+        private void SetCCPADoNotSell(bool doNotSell)
+        {
+            // Set CCPA "Do Not Sell" status
+            GoogleMobileAds.Mediation.IronSource.Api.IronSource.SetMetaData("do_not_sell", doNotSell ? "true" : "false");
+            GoogleMobileAds.Mediation.AppLovin.Api.AppLovin.SetDoNotSell(doNotSell);
+
+            GoogleMobileAds.Mediation.LiftoffMonetize.Api.LiftoffMonetize.SetCCPAStatus(doNotSell);
+            GoogleMobileAds.Mediation.DTExchange.Api.DTExchange.ClearCCPAString();
+            GoogleMobileAds.Mediation.DTExchange.Api.DTExchange.SetCCPAString("do not sell");
+
+            Debug.Log($"CCPA 'Do Not Sell' set to: {doNotSell}");
         }
 
         /// <summary>
@@ -109,7 +165,7 @@ namespace Common.Global
                 });
         }
         /// <summary>
-        /// ���� ���� ID ��ȯ.
+        /// 광고 지면 ID 반환.
         /// </summary>
         /// <returns></returns>
         public string GetUnitUI()
@@ -149,7 +205,7 @@ namespace Common.Global
             }
             else
             {
-                GiantDebug.Log("�غ���� �ʾ� 2ȸ�� ��� �õ�.");  
+                GiantDebug.Log("준비되지 않아 2회차 재생 시도.");  
                 if (LoadAndShow.IsRunning == false)
                 {
                     LoadAndShow = MEC.Timing.RunCoroutine(LoadAndShowAd(onComplete, onFailed));
