@@ -56,6 +56,8 @@ namespace Common.Global
                 root.name = "UIRoot";
                 root.transform.position = new Vector3(100, 0, 0);
                 rootObject = root.GetComponent<UIRoot>();
+
+                
                 GiantDebug.Log($"{tag} - Init return true.");
             }
             return true;

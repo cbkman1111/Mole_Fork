@@ -283,11 +283,11 @@ namespace Scenes
 
         public void SaveGame()
         {
-            player.UpdateData();
-            monsters.ForEach(m => m.UpdateData());
+            player?.UpdateData();
+            monsters?.ForEach(m => m.UpdateData());
 
-            mapData.Save();
-            playerData.Save();
+            mapData?.Save();
+            playerData?.Save();
         }
 
         /// <summary>

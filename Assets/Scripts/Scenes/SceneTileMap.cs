@@ -135,6 +135,8 @@ namespace Scenes
 
             // 카메라 위치 초기화.
             MainCamera.transform.position = Vector3.zero;
+
+            
             return true;
         }
 
@@ -161,14 +163,14 @@ namespace Scenes
             
             PoolManager.Instance.RemoveAll();
             
-            MainCamera.transform.DOKill();
-            _player.transform.DOKill();
+            MainCamera?.transform.DOKill();
+            _player?.transform.DOKill();
         }
 
         /// <summary>
         /// 미리 로딩해야 할 데이터 처리.
         /// </summary>
-        public async override void Load(Action<float> update)
+        public async override void Load(Action<float> update = null)
         {
             _mapData = new MapData();
 

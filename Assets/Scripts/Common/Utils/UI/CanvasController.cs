@@ -1,5 +1,6 @@
 using Common.Global;
 using Common.Utils;
+using SweetSugar.Scripts.System;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,12 @@ namespace Common.Global
         private void Awake()
         {
             _canvas = GetComponent<Canvas>();
+            var children = transform.GetChildren();
+            for (int i = 0; i < children.Length; i++)
+            {
+                var child = children[i];
+                child.gameObject.SetActive(false);
+            }
         }
 
         /// <summary>
@@ -73,6 +80,7 @@ namespace Common.Global
 
             if (ret != null && _list.Contains(ret) == false)
             {
+                ret.gameObject.SetActive(true);
                 _list.Add(ret);
             }
 

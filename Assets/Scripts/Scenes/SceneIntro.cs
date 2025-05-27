@@ -8,6 +8,9 @@ namespace Scenes
 {
     public class SceneIntro : SceneBase
     {
+        [SerializeField] GameObject Cube = null;
+        public float RotationSpeed = 100f;
+
         public override bool Init(JSONObject param)
         {
             GiantDebug.Log($"SceneIntro init. start.");
@@ -23,6 +26,12 @@ namespace Scenes
             
             menu.InitMenu();
             return true;
+        }
+
+        public override void OnUpdate()
+        {
+            float horizontal = Input.GetAxis("Horizontal");
+            Cube.transform.Rotate(1,1,1);
         }
 
         public override void OnTouchBean(Vector3 position)

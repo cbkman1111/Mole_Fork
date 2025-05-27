@@ -126,7 +126,14 @@ namespace Common.Global
                         _loadingPercent = 1.0f;
                         if (loadingMenu.Complete() == true)
                         {
-                            asyncNextOperator.allowSceneActivation = true;
+                            _loadingPercent = 0;
+                            Task.Run(() => {
+                                CurrScene.Load((percent) => {
+                                    _loadingPercent = percent;
+                                });
+                            }).ContinueWith(preTask => {
+                                asyncNextOperator.allowSceneActivation = true;
+                            }, TaskScheduler.FromCurrentSynchronizationContext());
                         }
                         else
                             yield return null;
