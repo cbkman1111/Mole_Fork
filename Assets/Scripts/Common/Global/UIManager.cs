@@ -33,7 +33,7 @@ namespace Common.Global
         public bool InitWithScene(UnityEngine.SceneManagement.Scene scene)
         {
             const string uiRoot = "UI/UIRoot";
-
+            
             var objs = scene.GetRootGameObjects();
             var root = objs.FirstOrDefault(obj => obj.name == "UIRoot");
             if (root == null)
@@ -56,10 +56,9 @@ namespace Common.Global
                 root.name = "UIRoot";
                 root.transform.position = new Vector3(100, 0, 0);
                 rootObject = root.GetComponent<UIRoot>();
-
-                
                 GiantDebug.Log($"{tag} - Init return true.");
             }
+
             return true;
         }
 

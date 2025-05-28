@@ -43,7 +43,8 @@ namespace Scenes
             //MainCamera.transparencySortMode = UnityEngine.TransparencySortMode.Orthographic;
             //MainCamera.transparencySortAxis = new Vector3(0, 0, 1);
 
-            _beefalo.Init(100, 101, Vector3.one);
+            if(_beefalo != null)
+                _beefalo.Init(100, 101, Vector3.one);
 
             _menu = UIManager.Instance.OpenMenu<UIMenuTileMap>();
             if (_menu != null)

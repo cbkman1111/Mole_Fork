@@ -119,48 +119,44 @@ namespace Common.Global
                 // 다음 씬을 로드 시작.
                 asyncNextOperator = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
                 asyncNextOperator.allowSceneActivation = false;
-                while (asyncNextOperator.allowSceneActivation == false)
+                asyncNextOperator.completed += (AsyncOperation operation) => {
+                    UIManager.Instance.InitWithScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
+                    _currScene.MainCamera = Camera.main;
+                    _currScene.Init(_param);
+
+                    _loadingPercent = 0;
+                };
+
+                bool completed = false;
+                while (completed == false)
                 {
                     if (asyncNextOperator.progress == 0.9f)
                     {
-                        _loadingPercent = 1.0f;
-                        if (loadingMenu.Complete() == true)
-                        {
-                            _loadingPercent = 0;
-                            Task.Run(() => {
-                                CurrScene.Load((percent) => {
-                                    _loadingPercent = percent;
-                                });
-                            }).ContinueWith(preTask => {
-                                asyncNextOperator.allowSceneActivation = true;
-                            }, TaskScheduler.FromCurrentSynchronizationContext());
+                        if (loadingMenu.Complete() == false)
+                        { 
+                            _loadingPercent = 1.0f;
+                            completed = true;
                         }
-                        else
-                            yield return null;
-                    }
+                     }
                     else
                     {
                         _loadingPercent = asyncNextOperator.progress;
-                        
                     }
 
                     yield return null;
                 }
 
-                asyncNextOperator.completed += (AsyncOperation operation) => {
-                    
-                    Task.Run(() => {
-                        
-                    }).
-                    // 테스크 완료후 동기로 받음.
-                    ContinueWith(preTask => {
-                        UIManager.Instance.InitWithScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
 
-                        _currScene = CreateSceneObject(sceneName);
-                        _currScene.MainCamera = Camera.main;
-                        _currScene.Init(_param);
-                    }, TaskScheduler.FromCurrentSynchronizationContext());
-                };
+                _currScene = CreateSceneObject(sceneName);
+
+                Task.Run(() => {
+                    CurrScene.Load((percent) => {
+                        _loadingPercent = percent;
+                    });
+                }).ContinueWith(preTask => {
+                    asyncNextOperator.allowSceneActivation = true;
+
+                }, TaskScheduler.FromCurrentSynchronizationContext());
             }
             else
             {

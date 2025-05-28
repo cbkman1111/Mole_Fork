@@ -13,45 +13,9 @@ namespace UI.Menu
     
     public class UIMenu : MenuBase
     {
-        public enum eContents
-        {
-            Main,
-            Shop,
-            Upgrade,
-            Gacha,
-            Max,
-        }
-
-        public GameObject[] Contents = new GameObject[(int)eContents.Max];
-        public eContents Content = eContents.Main;
-
         public bool InitMenu()
         {
-
-            SetContent(eContents.Main);
             return true;
-        }
-
-        private void SetContent(eContents content)
-        {
-            Content = content;
-
-            var screenW = Screen.width;
-            
-            for (int i = 0; i < (int)eContents.Max; i++)
-            {
-                if (i == (int)Content)
-                {
-                    Contents[i].transform.localPosition = new Vector3(screenW, 0, 0);
-                    Contents[i].transform.DOLocalMoveX(0, 0.5f);
-                    
-                }
-                else
-                {
-                    //Contents[i].SetActive(false);
-                    Contents[i].transform.DOLocalMoveX(-screenW, 0.5f);
-                }
-            }
         }
 
         private void Foo()
@@ -159,22 +123,6 @@ namespace UI.Menu
             else if (name == "Button - Pocker")
             {
                 AppManager.Instance.ChangeScene(SceneBase.Scenes.ScenePoker);
-            }
-            else if (name == "Button-Shop")
-            {
-                SetContent(eContents.Shop);
-            }
-            else if (name == "Button-Upgrade")
-            {
-                SetContent(eContents.Upgrade);
-            }
-            else if (name == "Button-Gacha")
-            {
-                SetContent(eContents.Gacha);
-            }
-            else if (name == "Button-Main")
-            {
-                SetContent(eContents.Main);
             }
         }
     }

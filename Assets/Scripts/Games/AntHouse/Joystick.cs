@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Common.Global;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -22,7 +23,8 @@ namespace Ant
 
         public bool Init(Action<Vector3, float> move, Action stop)
         {
-            center = RectTrans.position;
+            
+            center = AppManager.Instance.CurrScene.MainCamera.ViewportToWorldPoint(RectTrans.anchoredPosition);
             radius = RectTrans.rect.width * 0.5f;
             OnMove = move;
             OnStop = stop;
@@ -49,19 +51,19 @@ namespace Ant
         {
             if (clicked == true)
             {
-                Handler.position = position;
-
                 var distance = Mathf.Abs(Vector2.Distance(center, position));
                 var angle = GetAngle(center, position);
                 var newDirection = (position - center).normalized;
 
-                if (distance > radius)
+                if (distance >= radius)
                 {
-                    var edge = newDirection * radius;
-                    Handler.localPosition = edge;
-
-                    Debug.DrawRay(center, edge, Color.blue);
+                    Handler.position = center + newDirection * radius; ;
                 }
+                else
+                {
+                    Handler.position = position;
+                }
+
 
                 OnMove(newDirection, angle);
             }
