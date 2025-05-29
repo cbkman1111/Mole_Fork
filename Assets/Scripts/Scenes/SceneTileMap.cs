@@ -10,6 +10,7 @@ using Games.TileMap.Datas;
 using Spine.Unity;
 using UI.Menu;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Scenes
 {
@@ -476,11 +477,14 @@ namespace Scenes
 
         public override void OnTouchBean(Vector3 position)
         {
+            if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+                return;
+
             _menu.SetObjectInfo(string.Empty);
             
             Ray ray = MainCamera.ScreenPointToRay(position);
             Debug.DrawRay(ray.origin, ray.direction * 100, Color.green, 2f);
-            //, LayerMask.NameToLayer("WorldObject")
+            
             var count = Physics.RaycastNonAlloc(ray.origin, ray.direction, _hits,100f);
             if (count > 0 && _hits.Length > 0)
             {
@@ -496,33 +500,15 @@ namespace Scenes
                     }
                 }
 
-                //var nearList = _hits.OrderBy(h => Vector3.Distance(h.transform.position, position)).ToList();
                 var obj = _hits[nearIndex].collider.gameObject;
                 var worldObject = obj.GetComponent<WorldObject>();
                 if (worldObject != null)
                 {
-                    worldObject.ChangeState(ObjectState.Click);
+                    //worldObject.ChangeState(ObjectState.Click);
                     _menu.SetObjectInfo(obj.name);
                 }
             }
 
-            /*
-            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity))
-            {
-                var layer = hit.collider.gameObject.layer;
-                if (layer == LayerMask.NameToLayer("WorldObject"))
-                {
-                    var obj = hit.collider.gameObject;
-                    var worldObject = obj.GetComponent<WorldObject>();
-                    worldObject.SetState(ObjectState.Click);
-                    _menu.SetObjectInfo(obj.name);
-                }
-
-                Debug.DrawRay(ray.origin, ray.direction * 20, Color.red, 5f);
-                Debug.Log(hit.point);
-            }
-            */
-            
             _menu.joystick.TouchBegin(position);
         }
 

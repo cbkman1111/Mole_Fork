@@ -23,12 +23,11 @@ namespace Ant
 
         public bool Init(Action<Vector3, float> move, Action stop)
         {
-            
-            center = AppManager.Instance.CurrScene.MainCamera.ViewportToWorldPoint(RectTrans.anchoredPosition);
             radius = RectTrans.rect.width * 0.5f;
             OnMove = move;
             OnStop = stop;
 
+            RectTrans.gameObject.SetActive(false);
             return true;
         }
 
@@ -40,10 +39,15 @@ namespace Ant
 
         public void TouchBegin(Vector3 position)
         {
-            float distance = Mathf.Abs(Vector3.Distance(center, position));
-            if (distance <= radius)
+            center = position;
+            clicked = true;
+            RectTrans.position = position;
+
+            RectTrans.gameObject.SetActive(true);
+            //float distance = Mathf.Abs(Vector3.Distance(center, position));
+            //if (distance <= radius)
             {
-                clicked = true;
+                
             }
         }
 
@@ -64,7 +68,6 @@ namespace Ant
                     Handler.position = position;
                 }
 
-
                 OnMove(newDirection, angle);
             }
         }
@@ -76,6 +79,7 @@ namespace Ant
                 OnStop();
             }
 
+            RectTrans.gameObject.SetActive(false);
             Handler.localPosition = Vector3.zero;
             clicked = false;
         }
