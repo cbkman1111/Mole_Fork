@@ -32,23 +32,24 @@ public class UIPopupLoading : PopupBase
     private IEnumerator<float> AddPercent()
     {
         Slider slider = GetObject<Slider>("Slider - Percent");
-        float remain = Percent - slider.value;
-
-        float addAmount = remain * 0.1f;
+        var remain = Percent - slider.value;
+        var amount = remain * 0.1f;
         while (slider.value < Percent)
         {
-            float amount = slider.value + addAmount;
-            if(amount >= 0.99f)
-                amount = 1.0f;
-            
-            slider.value = amount;
+            slider.value += amount;
+            if(slider.value > Percent)
+            {
+                slider.value = Percent;
+                break;
+            }
+
             yield return MEC.Timing.WaitForOneFrame;
         }
     }
 
-    public bool Complete()
+    public bool Complete(float percent)
     {
         Slider slider = GetObject<Slider>("Slider - Percent");
-        return slider.value == 1.0f;
+        return slider.value >= percent || Mathf.Approximately(slider.value, percent);
     }
 }

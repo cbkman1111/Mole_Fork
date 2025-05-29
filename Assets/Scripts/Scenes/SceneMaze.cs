@@ -633,9 +633,7 @@ namespace Scenes
 
         public async override void Load(Action<float> update)
         {
-            //Amount = 1f;
-
-            update(0.1f);
+            update(1f);
         }
        
         public void OnGameOver()

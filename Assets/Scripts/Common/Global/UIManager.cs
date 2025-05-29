@@ -11,8 +11,10 @@ namespace Common.Global
 {
     public class UIManager : MonoSingleton<UIManager>
     {
+        private UIRootDontDestroy rootDontDestroy = null;
+        private CanvasController _controllerDontDestroy { get => rootDontDestroy._controller; }
+
         private UIRoot rootObject = null;
-        
         private CanvasGroup _canvasMain { get => rootObject._canvasMain; }
         private CanvasController _controllerMenu { get => rootObject._controllerMenu; }
         private CanvasController _controllerHud { get => rootObject._controllerHud; }
@@ -26,6 +28,18 @@ namespace Common.Global
         /// <returns></returns>
         protected override bool Init()
         {
+            const string uiRootLoading = "UI/UIRootDontDestroy";
+            var prefab = ResourcesManager.Instance.LoadInBuild<GameObject>(uiRootLoading);
+            var obj = Instantiate(prefab, transform);
+            if (obj == false)
+            {
+                GiantDebug.LogError($"root is null.");
+                return false;
+            }
+
+            obj.name = "UIRoot";
+            obj.transform.position = new Vector3(100, 0, 0);
+            rootDontDestroy = obj.GetComponent<UIRootDontDestroy>();
             GiantDebug.Log($"{tag} - Init");
             return true;
         }
@@ -73,6 +87,18 @@ namespace Common.Global
             return attribute.ResourcePath;
         }
 
+        public T OpenDontDesroyPopup<T>() where T : PopupBase
+        {
+            var path = GetPath<T>();
+            var name = typeof(T).Name;
+            var ret = _controllerDontDestroy.Open<T>(path, name);
+            if (ret != null)
+            {
+                ret.OnInit();
+            }
+
+            return ret;
+        }
 
         public T OpenMenu<T>() where T : MenuBase
         {
@@ -161,6 +187,12 @@ namespace Common.Global
         {
             _controllerPopup.Close(name);
             CoverCheck();
+        }
+
+        public void CloseDontDestroyPopup<T>()
+        {
+            string name = typeof(T).Name;
+            _controllerDontDestroy.Close(name);
         }
 
         public void ClosePopup(string name)

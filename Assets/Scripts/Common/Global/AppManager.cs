@@ -2,6 +2,7 @@ using Common.Global.Singleton;
 using Common.Scene;
 using Common.Utils;
 using Common.Utils.Pool;
+using DG.Tweening;
 using Network;
 using Scenes;
 using System;
@@ -112,69 +113,52 @@ namespace Common.Global
             if (loading == true)
             {
                 // 로딩 메뉴를 띄우고 수치를 갱신.
-                var loadingMenu = UIManager.Instance.OpenPopup<UIPopupLoading>();
+                var loadingMenu = UIManager.Instance.OpenDontDesroyPopup<UIPopupLoading>();
                 var gameObjectLoading = loadingMenu.gameObject;
-                MEC.Timing.RunCoroutine(UpdateLoadPercent(loadingMenu).CancelWith(gameObjectLoading));
+                var handlerLoading = MEC.Timing.RunCoroutine(UpdateLoadPercent(loadingMenu).CancelWith(loadingMenu));
 
-                // 다음 씬을 로드 시작.
-                asyncNextOperator = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
+                // 비동기 씬 로딩 시작.
+                asyncNextOperator = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
                 asyncNextOperator.allowSceneActivation = false;
-                asyncNextOperator.completed += (AsyncOperation operation) => {
-                    UIManager.Instance.InitWithScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
-                    _currScene.MainCamera = Camera.main;
-                    _currScene.Init(_param);
 
-                    _loadingPercent = 0;
-                };
-
-                bool completed = false;
-                while (completed == false)
+                bool loadDone = false;
+                while (loadDone == false)
                 {
-                    if (asyncNextOperator.progress == 0.9f)
-                    {
-                        if (loadingMenu.Complete() == false)
-                        { 
-                            _loadingPercent = 1.0f;
-                            completed = true;
-                        }
-                     }
-                    else
-                    {
-                        _loadingPercent = asyncNextOperator.progress;
-                    }
+                    _loadingPercent = asyncNextOperator.progress;
 
+                    if (asyncNextOperator.progress >= 0.9f)
+                        loadDone = true;
+                    
                     yield return null;
                 }
 
-
-                _currScene = CreateSceneObject(sceneName);
-
+                asyncNextOperator.allowSceneActivation = true;
+                yield return new WaitUntil(() => asyncNextOperator.isDone == true);
+                
+                _currScene = FindSceneObject(sceneName);
+                UIManager.Instance.InitWithScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
                 Task.Run(() => {
-                    CurrScene.Load((percent) => {
-                        _loadingPercent = percent;
+                    _currScene.Load((percent) => {
+                        _loadingPercent = 0.9f + (0.1f * percent);
                     });
-                }).ContinueWith(preTask => {
-                    asyncNextOperator.allowSceneActivation = true;
+                });
 
-                }, TaskScheduler.FromCurrentSynchronizationContext());
+                yield return new WaitUntil(() => loadingMenu.Complete(1.0f) == true);
+                yield return new WaitForSeconds(0.1f);
+
+                UIManager.Instance.CloseDontDestroyPopup<UIPopupLoading>();
+                _currScene.MainCamera = Camera.main;
+                _currScene.Init(_param);
             }
             else
             {
                 asyncNextOperator = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
                 asyncNextOperator.allowSceneActivation = true;
                 asyncNextOperator.completed += (AsyncOperation operation) => {
-                    SceneBase changeScnene = CreateSceneObject(sceneName);
-
-                    Task.Run(() => {
-                        _loadingPercent = operation.progress;
-                    }).
-                    ContinueWith(preTask => {
-                        UIManager.Instance.InitWithScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
-
-                        _currScene = changeScnene;
-                        _currScene.MainCamera = Camera.main;
-                        _currScene.Init(_param);
-                    }, TaskScheduler.FromCurrentSynchronizationContext());
+                    _currScene = FindSceneObject(sceneName);
+                    UIManager.Instance.InitWithScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
+                    _currScene.MainCamera = Camera.main;
+                    _currScene.Init(_param);
                 };
 
                 yield return null;
@@ -186,83 +170,33 @@ namespace Common.Global
         /// </summary>
         /// <param name="sceneName"></param>
         /// <returns>참조된 씬 객체</returns>
-        private SceneBase CreateSceneObject(string sceneName)
+        private SceneBase FindSceneObject(string sceneName)
         {
             SceneBase scene = null;
-            var activeScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
-            var root = activeScene.GetRootGameObjects()[0];
-
-            GameObject sceneObject = GameObject.Find(sceneName);
-            if (sceneObject == null)
+            var activeScene = SceneManager.GetActiveScene();
+            var count = SceneManager.sceneCount;
+            for(int i = 0; i < count; i++)
             {
-                var obj = new GameObject(sceneName);
-                obj.transform.SetParent(root.transform.parent);
-
-                switch (StringToEnum<SceneBase.Scenes>(sceneName))
+                var s = SceneManager.GetSceneAt(i);
+                if (s.name == sceneName)
                 {
-                    case SceneBase.Scenes.SceneIntro:
-                        scene = obj.AddComponent<SceneIntro>();
-                        break;
-                    case SceneBase.Scenes.SceneMenu:
-                        scene = obj.AddComponent<SceneMenu>();
-                        break;
-                    case SceneBase.Scenes.SceneGostop:
-                        scene = obj.AddComponent<SceneGostop>();
-                        break;
-                    case SceneBase.Scenes.SceneTileMap:
-                        scene = obj.AddComponent<SceneTileMap>();
-                        break;
-                    case SceneBase.Scenes.SceneAntHouse:
-                        scene = obj.AddComponent<SceneAntHouse>();
-                        break;
-                    case SceneBase.Scenes.game:
-                        scene = obj.AddComponent<SceneMatch3>();
-                        break;
-                    case SceneBase.Scenes.SceneChatScroll:
-                        scene = obj.AddComponent<SceneChatScroll>();
-                        break;
-                    case SceneBase.Scenes.SceneTest:
-                        scene = obj.AddComponent<SceneTest>();
-                        break;
-                    case SceneBase.Scenes.SceneBundle:
-                        scene = obj.AddComponent<SceneBundle>();
-                        break;
-                    case SceneBase.Scenes.SceneMaze:
-                        scene = obj.AddComponent<SceneMaze>();
-                        break;
-                    case SceneBase.Scenes.SceneBehaviorTree:
-                        scene = obj.AddComponent<SceneBehaviorTree>();
-                        break;
-                    case SceneBase.Scenes.ScenePuzzle:
-                        scene = obj.AddComponent<ScenePuzzle>();
-                        break;
-                    case SceneBase.Scenes.SceneTetris:
-                        scene = obj.AddComponent<SceneTetris>();
-                        break;
-                    case SceneBase.Scenes.SceneDotween:
-                        scene = obj.AddComponent<SceneDotween>();
-                        break;
-                    case SceneBase.Scenes.SceneMatch3:
-                        scene = obj.AddComponent<SceneMatch3>();
-                        break;
-                    case SceneBase.Scenes.SceneHash:
-                        scene = obj.AddComponent<SceneHash>();
-                        break;
-                    case SceneBase.Scenes.SceneAdMob:
-                        scene = obj.AddComponent<SceneAdMob>();
-                        break;
-                    case SceneBase.Scenes.ScenePoker:
-                        scene = obj.AddComponent<ScenePoker>();
-                        break;
-                    default:
+                    activeScene = s;
+                    break;
+                }
+            }
+
+            var objects = activeScene.GetRootGameObjects();
+            for(int i = 0; i < objects.Length; i++)
+            {
+                var obj = objects[i];
+                if (obj.name == sceneName)
+                {
+                    scene = obj.GetComponent<SceneBase>();
+                    if (scene != null)
                         break;
                 }
             }
-            else 
-            {
-                scene = sceneObject.GetComponent<SceneBase>();
-            }
-            
+  
             return scene;
         }
 

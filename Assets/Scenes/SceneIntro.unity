@@ -375,6 +375,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Cube: {fileID: 113185854}
+  RotationSpeed: 100
 --- !u!4 &615387232
 Transform:
   m_ObjectHideFlags: 0
