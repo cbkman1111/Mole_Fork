@@ -1084,7 +1084,7 @@ GameObject:
   - component: {fileID: 7079700493719227061}
   - component: {fileID: 4525000588835021635}
   m_Layer: 5
-  m_Name: Text - Pocker
+  m_Name: Text - TileMap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1663,7 +1663,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Ant House
+  m_text: Chat Scroll
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f228c7992977742ea88a762eb5b00435, type: 2}
   m_sharedMaterial: {fileID: -3804156100462592922, guid: f228c7992977742ea88a762eb5b00435,
@@ -6780,7 +6780,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 8352611763540036056}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.6785714
+  m_Size: 0.26298702
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

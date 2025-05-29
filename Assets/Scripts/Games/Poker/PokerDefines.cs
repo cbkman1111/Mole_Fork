@@ -49,7 +49,7 @@ namespace Poker
     public enum SevenPokerState
     {
         None = 0,
-        Start,
+        //Start,
         CardDeal3, // 3장 돌리기
         OpenFirstCard, // 1장 오픈
         Bet1, // 1차 베팅(3구)

@@ -13,7 +13,7 @@ namespace Poker
         public Dictionary<PlayUser, Player> Players { get; set; } = null;
 
         public bool GameOver => State == SevenPokerState.GameOver;
-        public SevenPokerState State = SevenPokerState.None;
+        public SevenPokerState State = SevenPokerState.CardDeal3;
 
         public SevenPokerData(long[] players)
         {
@@ -35,7 +35,7 @@ namespace Poker
                 { PlayUser.Observer5, new Player(players[9]) }
             };
 
-            State = SevenPokerState.Start;
+            State = SevenPokerState.CardDeal3;
         }
 
         /// <summary>

@@ -80,10 +80,11 @@ namespace UI.Menu
                     // ป๓ลย.
                     switch (GlobalGameManager.Instance.PockerGameData.State)
                     {
+                        /*
                         case SevenPokerState.Start: 
                             GlobalGameManager.Instance.PockerGameData.State = SevenPokerState.CardDeal3;
                             break;
-
+                        */
                         case SevenPokerState.CardDeal3:
                             GlobalGameManager.Instance.PockerGameData.DealCard(3, true);
                             GlobalGameManager.Instance.PockerGameData.UpdateHandRank();

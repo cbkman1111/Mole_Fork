@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using Common.UIObject;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UICellTest : UIObject
 {
     public Image color = null;
-    public Text msg = null;
+    public TextMeshProUGUI msg = null;
 
     public override void OnInit()
     {
