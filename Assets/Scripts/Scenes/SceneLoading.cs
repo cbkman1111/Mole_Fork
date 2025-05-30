@@ -1,3 +1,4 @@
+using System;
 using Common.Global;
 using Common.Scene;
 using UI.Menu;
@@ -19,5 +20,12 @@ namespace Scenes
 
             return true;
         }
+
+        public override async void Load(Action<float> update)
+        {
+
+            update(1f);
+        }
+
     }
 }

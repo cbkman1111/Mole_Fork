@@ -172,7 +172,7 @@ namespace Scenes
         /// <summary>
         /// 미리 로딩해야 할 데이터 처리.
         /// </summary>
-        public async override void Load(Action<float> update = null)
+        public async override void Load(Action<float> update)
         {
             _mapData = new MapData();
 

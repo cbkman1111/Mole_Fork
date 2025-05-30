@@ -67,8 +67,11 @@ namespace Scenes
             grid = GameObject.Instantiate<Grid>(prefabMap);
 
             var prefabBuilder = ResourcesManager.Instance.LoadInBuild<NavMeshSurface>("Builder");
-            surface = GameObject.Instantiate<NavMeshSurface>(prefabBuilder);
-            surface.BuildNavMesh();
+            if (prefabBuilder != null)
+            {
+                surface = GameObject.Instantiate<NavMeshSurface>(prefabBuilder);
+                surface.BuildNavMesh();
+            }
 
             InitMapData(mapId);
             InitPlayer();
