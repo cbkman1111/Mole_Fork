@@ -20,9 +20,7 @@ namespace Scenes
         //private int width = 0;
         //private int height = 0;
         //private float size = 1.0f;
-
         //public PoolManager poolManager = null;
-
         //public MeshRenderer meshRender = null;
 
         public Pool<SpriteRenderer> poolSprite = null;
@@ -92,8 +90,7 @@ namespace Scenes
                      SetEase(Ease.Linear));
                 sequnce.AppendInterval(0.2f);
                 sequnce.Append(sprite.DOFade(0, 0.5f));
-                sequnce.AppendCallback(() =>
-                {
+                sequnce.AppendCallback(() => {
                     poolSprite.ReturnObject(sprite);
                 });
 
@@ -106,17 +103,30 @@ namespace Scenes
         /// </summary>
         public async override void Load(Action<float> update)
         {
-            int total = 99000000;
+            int total = 1000;
             List<int> list = new List<int>();
             for (int i = 0; i < total; i++)
             {
                 float percent = (float)i / (float)total;
                 list.Add(i);
 
+                var pos = GetSpiral(i);
+                var obj = Instantiate(targetCube, pos, Quaternion.identity);
+                obj.name = $"Object_{i}";
+
                 update(percent);
             }
 
             update(1f);
+        }
+
+        private Vector3 GetSpiral(int i)
+        {
+            float angle = i * 137.5f; // 황금각
+            float radius = Mathf.Sqrt(i) * 0.1f; // 반지름 증가
+            float x = radius * Mathf.Cos(angle * Mathf.Deg2Rad);
+            float z = radius * Mathf.Sin(angle * Mathf.Deg2Rad);
+            return new Vector3(x, 0, z);
         }
 
         public override void OnTouchBean(Vector3 position)

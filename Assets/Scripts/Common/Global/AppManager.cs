@@ -138,10 +138,14 @@ namespace Common.Global
                 _currScene = FindSceneObject(sceneName);
                 UIManager.Instance.InitWithScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
                 Task.Run(() => {
+
+                }).ContinueWith(task => {
+                    // Unity 오브젝트에 결과 반영
+                    //myText.text = task.Result.ToString();
                     _currScene.Load((percent) => {
                         _loadingPercent = 0.9f + (0.1f * percent);
                     });
-                });
+                }, TaskScheduler.FromCurrentSynchronizationContext());
 
                 yield return new WaitUntil(() => loadingMenu.Complete(1.0f) == true);
                 yield return new WaitForSeconds(0.1f);

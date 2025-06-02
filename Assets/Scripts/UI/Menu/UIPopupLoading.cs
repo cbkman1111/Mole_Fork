@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Common.UIObject;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class UIPopupLoading : PopupBase
 {
@@ -32,6 +33,8 @@ public class UIPopupLoading : PopupBase
     private IEnumerator<float> AddPercent()
     {
         Slider slider = GetObject<Slider>("Slider - Percent");
+        TextMeshProUGUI text = GetObject<TextMeshProUGUI>("Text - Percent");
+
         var remain = Percent - slider.value;
         var amount = remain * 0.1f;
         while (slider.value < Percent)
@@ -43,6 +46,7 @@ public class UIPopupLoading : PopupBase
                 break;
             }
 
+            text.text = $"{slider.value * 100f:0.00}%";
             yield return MEC.Timing.WaitForOneFrame;
         }
     }

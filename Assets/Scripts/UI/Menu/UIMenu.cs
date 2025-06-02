@@ -46,19 +46,15 @@ namespace UI.Menu
         protected override void OnClick(Button btn)
         {
             string name = btn.name;
-            if (name == "Button - Start1")
+            if (name == "Button - TileMap")
             {
                 AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneTileMap);
             }
-            else if (name == "Button - Start2")
+            else if (name == "Button - Gostop")
             {
                 AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneGostop);
             }
-            else if (name == "Button - Test")
-            {
-                AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneTest);
-            }
-            else if (name == "Button - Start4")
+            else if (name == "Button - AntHouse")
             {
                 JSONObject jsonParam = new JSONObject();
                 jsonParam.SetField("map_no", 3);
@@ -72,7 +68,7 @@ namespace UI.Menu
             {
                 AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneChatScroll);
             }
-            else if (name.CompareTo("Button - Bundle") == 0)
+            else if (name.CompareTo("Button - AddressableBundle") == 0)
             {
                 AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneBundle);
             }
@@ -80,14 +76,16 @@ namespace UI.Menu
             {
                 AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneMaze);
             }
-            else if (name == "Button - Behavior")
+            else if (name == "Button - BehaviorTree")
             {
                 AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneBehaviorTree);
             }
+            /*
             else if (name == "Button - Puzzle")
             {
                 AppManager.Instance.ChangeScene(SceneBase.Scenes.ScenePuzzle);
             }
+            */
             else if (name == "Button - Tetris")
             {
                 AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneTetris);
@@ -123,6 +121,10 @@ namespace UI.Menu
             else if (name == "Button - Pocker")
             {
                 AppManager.Instance.ChangeScene(SceneBase.Scenes.ScenePoker);
+            }
+            else if (name == "Button - Test")
+            {
+                AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneTest);
             }
         }
     }
