@@ -2,9 +2,7 @@ using Common.Global.Singleton;
 using Common.Scene;
 using Common.Utils;
 using Common.Utils.Pool;
-using DG.Tweening;
 using Network;
-using Scenes;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -77,7 +75,7 @@ namespace Common.Global
         /// <param name="loading"></param>
         /// <returns></returns>
         //private IEnumerator UpdateLoadPercent(UILoadingMenu loading)
-        private IEnumerator<float> UpdateLoadPercent(UIPopupLoading loading)
+        private IEnumerator<float> UpdatePercent(UIPopupLoading loading)
 		{
 			yield return MEC.Timing.WaitForOneFrame;
             bool done = false;
@@ -101,7 +99,6 @@ namespace Common.Global
         /// <returns></returns>
         private IEnumerator LoadScene(string sceneName, bool loading)
         {
-            GiantDebug.Log("AppManager - LoadScene 1");
             _loadingPercent = 0f;
             if (_currScene != null)
             {
@@ -115,7 +112,7 @@ namespace Common.Global
                 // 로딩 메뉴를 띄우고 수치를 갱신.
                 var loadingMenu = UIManager.Instance.OpenDontDesroyPopup<UIPopupLoading>();
                 var gameObjectLoading = loadingMenu.gameObject;
-                var handlerLoading = MEC.Timing.RunCoroutine(UpdateLoadPercent(loadingMenu).CancelWith(loadingMenu));
+                var handlerLoading = MEC.Timing.RunCoroutine(UpdatePercent(loadingMenu).CancelWith(loadingMenu));
 
                 // 비동기 씬 로딩 시작.
                 asyncNextOperator = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
@@ -137,18 +134,20 @@ namespace Common.Global
                 
                 _currScene = FindSceneObject(sceneName);
                 UIManager.Instance.InitWithScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
+
+                // 비동기로 데이터는 로드가 되는데, 게임 오브젝트 같은건 안됨. 
                 Task.Run(() => {
 
                 }).ContinueWith(task => {
-                    // Unity 오브젝트에 결과 반영
-                    //myText.text = task.Result.ToString();
+
                     _currScene.Load((percent) => {
                         _loadingPercent = 0.9f + (0.1f * percent);
                     });
                 }, TaskScheduler.FromCurrentSynchronizationContext());
 
                 yield return new WaitUntil(() => loadingMenu.Complete(1.0f) == true);
-                yield return new WaitForSeconds(0.1f);
+                yield return new WaitForEndOfFrame();
+
 
                 UIManager.Instance.CloseDontDestroyPopup<UIPopupLoading>();
                 _currScene.MainCamera = Camera.main;
@@ -157,13 +156,34 @@ namespace Common.Global
             else
             {
                 asyncNextOperator = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
-                asyncNextOperator.allowSceneActivation = true;
-                asyncNextOperator.completed += (AsyncOperation operation) => {
-                    _currScene = FindSceneObject(sceneName);
-                    UIManager.Instance.InitWithScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
-                    _currScene.MainCamera = Camera.main;
-                    _currScene.Init(_param);
-                };
+                asyncNextOperator.allowSceneActivation = false;
+
+                bool loadDone = false;
+                while (loadDone == false)
+                {
+                    _loadingPercent = asyncNextOperator.progress;
+
+                    if (asyncNextOperator.progress >= 0.9f)
+                        loadDone = true;
+
+                    yield return null;
+                }
+
+                _currScene = FindSceneObject(sceneName);
+                UIManager.Instance.InitWithScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
+                Task.Run(() => {
+
+                }).ContinueWith(task => {
+                    _currScene.Load((percent) => {
+                        _loadingPercent = 0.9f + (0.1f * percent);
+                    });
+                }, TaskScheduler.FromCurrentSynchronizationContext());
+
+                yield return new WaitUntil(() => _loadingPercent == 1.0f);
+                yield return new WaitForEndOfFrame();
+
+                _currScene.MainCamera = Camera.main;
+                _currScene.Init(_param);
 
                 yield return null;
             }
@@ -335,8 +355,6 @@ namespace Common.Global
         {
             UIManager.Instance.BackKey();
         }
-
-
     }
 }
 

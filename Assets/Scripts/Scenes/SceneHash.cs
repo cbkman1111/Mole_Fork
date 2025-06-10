@@ -3,6 +3,7 @@ using Common.Scene;
 using Common.Utils;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 using UI.Menu;
@@ -16,7 +17,7 @@ public class SceneHash : SceneBase
         menu = UIManager.Instance.OpenMenu<UIMenuHash>();
         if (menu != null)
         {
-            menu.InitMenu(ConvertSHA, ConvertMD5, ConvertBase64);
+            menu.InitMenu(ConvertSHA, ConvertMD5, ConvertBase64, ConvertHashCode);
         }
 
         Hashtable table = new Hashtable(7);
@@ -32,13 +33,31 @@ public class SceneHash : SceneBase
         table.Add(10, "Ten");
         table.Add(11, "Eleven");
         table.Add(12, "Twelve");
+        table.Add("one", 1);
+        table.Add("two", 2);
+        table.Add("three", 3);
+        table.Add("four", 4);
+        table.Add("five", 5);
 
         foreach (DictionaryEntry entry in table)
         {
-            string msg = $"{entry.Key.GetHashCode()} => {entry.Key.GetHashCode() % table.Count} / {entry.Value}";
-            GiantDebug.Log(msg);
+            string msg = $"{entry.Key.GetHashCode()} => index = {entry.Key.GetHashCode() % table.Count}";
+            GiantDebug.Log($"{tag} - {msg}");
         }
 
+        GiantDebug.Log($"{tag} -------------");
+        Dictionary<string, int> dic = new();
+        dic.Add("one", 1);
+        dic.Add("two", 2);
+        dic.Add("three", 3);
+        dic.Add("four", 4);
+        dic.Add("five", 5);
+
+        foreach (var entry in dic)
+        {
+            string msg = $"{entry.Key.GetHashCode()} => index = {entry.Key.GetHashCode() % dic.Count}";
+            GiantDebug.Log($"{tag} - {msg}");
+        }
         return true;
     }
 
@@ -63,6 +82,13 @@ public class SceneHash : SceneBase
         var base64 = Base64(str);
         GiantDebug.Log(base64);
         menu.SetResult(base64);
+    }
+
+    private void ConvertHashCode(string str)
+    {
+        var hashCode = str.GetHashCode();
+        GiantDebug.Log($"{hashCode}");
+        menu.SetResult(hashCode.ToString());
     }
 
     public string SHA256Hash(string data)

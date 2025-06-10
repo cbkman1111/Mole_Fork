@@ -2,7 +2,6 @@ using System;
 using Common.Global;
 using Common.Scene;
 using Common.UIObject;
-using Common.Utils.Pool;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -51,15 +50,15 @@ namespace UI.Menu
 
         public void SetObjectInfo(string objName)
         {
-            if (objName == string.Empty)
+            if (objName != string.Empty)
             {
-                SetText("Text - ObjectInfo", objName);
-                SetActive("Image - TopInfo", false);
+                SetActive("Image - TopInfo", true);
+                SetTextMeshPro("Text - ObjectInfo", objName);
             }
             else
             {
-                SetActive("Image - TopInfo", true);
-                SetText("Text - ObjectInfo", objName);
+                SetActive("Image - TopInfo", false);
+                SetTextMeshPro("Text - ObjectInfo", string.Empty);
             }
         }
 

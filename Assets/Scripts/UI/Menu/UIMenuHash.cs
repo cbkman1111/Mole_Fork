@@ -19,12 +19,14 @@ namespace UI.Menu
         private Action<string> OnConvertSHA;
         private Action<string> OnConvertMD5;
         private Action<string> OnConvertBase64;
+        private Action<string> OnConvertHashCode;
 
-        public bool InitMenu(Action<string> convertSHA256, Action<string> convertMD5, Action<string> convertBase64)
+        public bool InitMenu(Action<string> convertSHA256, Action<string> convertMD5, Action<string> convertBase64, Action<string> convertHashcode)
         {
             OnConvertSHA = convertSHA256;
             OnConvertMD5 = convertMD5;
             OnConvertBase64 = convertBase64;
+            OnConvertHashCode = convertHashcode;
             return true;
         }
 
@@ -41,15 +43,19 @@ namespace UI.Menu
             {
                 OnConvertSHA(InputField.text);
             }
-            else if(name == "Button - Convert MD5")
+            else if (name == "Button - Convert MD5")
             {
                 OnConvertMD5(InputField.text);
             }
-            else if(name == "Button - Convert Base64")
+            else if (name == "Button - Convert Base64")
             {
                 OnConvertBase64(InputField.text);
             }
-            else if(name == "Button - Back")
+            else if (name == "Button - GetHashCode")
+            {
+                OnConvertHashCode(InputField.text);
+            }
+            else if (name == "Button - Back")
             {
                 AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneMenu);
             }

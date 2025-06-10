@@ -482,7 +482,7 @@ GameObject:
   - component: {fileID: 2165608045874771363}
   - component: {fileID: 8938654805103141554}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: Panel - Information
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2516,8 +2516,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 86.7
-  m_fontSizeBase: 86.7
+  m_fontSize: 60
+  m_fontSizeBase: 60
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
