@@ -19,6 +19,8 @@ namespace Common.Global
 
         private AudioMixer mixer = null;
 
+        private bool loaded = false;
+
         protected override bool Init()
         {
             mixer = ResourcesManager.Instance.LoadInBuild<AudioMixer>("AudioMixer");
@@ -33,12 +35,16 @@ namespace Common.Global
 
         public bool Load()
         {
+            if (loaded == true)
+                return false;
+
             AudioClip[] clips = ResourcesManager.Instance.LoadnBuildAllI<AudioClip>("Sounds");
             foreach (var clip in clips)
             {
                 soundTable.Add(clip.name, clip);
             }
 
+            loaded = true;
             return true;
         }
 

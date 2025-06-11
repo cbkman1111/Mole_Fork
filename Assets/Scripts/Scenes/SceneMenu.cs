@@ -1,3 +1,4 @@
+using System;
 using Common.Global;
 using Common.Scene;
 using Network;
@@ -23,6 +24,19 @@ namespace Scenes
             return true;
         }
 
+        public override void Load(Action<float> update)
+        {
+            SoundManager.Instance.Load();
+            DataManager.Instance.Load();
+            ResourcesManager.Instance.Load();
+
+            update(1f);
+        }
+
+        public override void UnLoad()
+        {
+            
+        }
         public override void OnTouchBean(Vector3 position)
         {
             SoundManager.Instance.PlayEffect("EFF_shoot");

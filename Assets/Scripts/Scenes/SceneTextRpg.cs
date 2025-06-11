@@ -28,6 +28,12 @@ namespace Scenes
                 table2.Data.ForEach(data => Debug.Log(data.Name));
             }
 
+            var tableHero = DataManager.Instance.Get<TableHero>();
+            if (tableHero != null)
+            {
+                tableHero.Data.ForEach(data => Debug.Log($"{data.ID} {data.NAME_TID} {data.AGE} {data.ENABLE}"));
+            }
+
             return true;
         }
 

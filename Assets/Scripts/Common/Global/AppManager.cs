@@ -38,9 +38,9 @@ namespace Common.Global
         /// <returns></returns>
         protected override bool Init()
         {
-            SoundManager.Instance.Load();
-            DataManager.Instance.Load();
-            ResourcesManager.Instance.Load();
+            //SoundManager.Instance.Load();
+            //DataManager.Instance.Load();
+            //ResourcesManager.Instance.Load();
 
             //_ = AdMobManager.Instance;
             //NetworkManager.Instance.Connect();

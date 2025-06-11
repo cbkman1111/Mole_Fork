@@ -21,7 +21,10 @@ namespace Common.Global
             //UnityWebRequest's DownloadHandlerAssetBundle
             //WWW.LoadFromCacheOrDownload (on Unity 5.6 or older)
             //AssetBundleManifest manifest = (AssetBundleManifest)ab.LoadAsset("AssetBundleManifest");
-            bundle = AssetBundle.LoadFromFile(path);
+
+            if(bundle == null)
+                bundle = AssetBundle.LoadFromFile(path);
+
             return bundle != null;
         }
 

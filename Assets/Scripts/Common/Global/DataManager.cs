@@ -7,19 +7,15 @@ using System;
 
 namespace Common.Global
 {
-    public class Excel
-    { 
-
-    }
-
     public class DataManager : MonoSingleton<DataManager>
     {
         private readonly Dictionary<string, DataTable> tables = new();
+        private bool loaded = false;
 
         protected override bool Init()
         {
             tables.Clear();
-
+            loaded = false;
             return true;
         }
 
@@ -27,11 +23,15 @@ namespace Common.Global
         /// 
         /// </summary>
         public void Load()
-        {   
+        {
+            if (loaded == true)
+                return;
+
             string path = "TableData/";
             string[] tableNames = { 
                 "TableTemp1", 
                 "TableTemp2",
+                "TableHero"
             }; 
 
             foreach (string tableName in tableNames)
@@ -48,6 +48,8 @@ namespace Common.Global
                 object table = JsonConvert.DeserializeObject(asset.ToString(), tableType);
                 tables.Add(tableName, table as DataTable);
             }
+
+            loaded = true;
         }
 
         

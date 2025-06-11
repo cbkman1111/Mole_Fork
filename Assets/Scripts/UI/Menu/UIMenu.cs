@@ -76,16 +76,14 @@ namespace UI.Menu
             {
                 AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneMaze);
             }
-            else if (name == "Button - BehaviorTree")
+            else if (name == "Button - ExcelData")
             {
-                AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneBehaviorTree);
+                AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneTextRpg);
             }
-            /*
             else if (name == "Button - Puzzle")
             {
                 AppManager.Instance.ChangeScene(SceneBase.Scenes.ScenePuzzle);
             }
-            */
             else if (name == "Button - Tetris")
             {
                 AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneTetris);
