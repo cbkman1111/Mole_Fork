@@ -12,6 +12,7 @@ using UnityEngine.AddressableAssets.ResourceLocators;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.U2D;
 using Debug = UnityEngine.Debug;
+using Common.Utils;
 
 namespace Scenes
 {
@@ -37,11 +38,11 @@ namespace Scenes
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            var textAsset = ResourcesManager.Instance.LoadInBuild<TextAsset>("TableJsonTest");
-            var jsonString = textAsset.ToString();
+            //var textAsset = ResourcesManager.Instance.LoadInBuild<TextAsset>("TableJsonTest");
+            //var jsonString = textAsset.ToString();
             
             //JSONObject json = new JSONObject(jsonString); // 지난 시간 : 00:00:04.7732221 - http://www.opensource.org/licenses/lgpl-2.1.php
-            JObject json = JObject.Parse(jsonString); // 지난 시간 : 00:00:01.3933306 - Newton
+            //JObject json = JObject.Parse(jsonString); // 지난 시간 : 00:00:01.3933306 - Newton
             //var json = JsonMapper.ToObject(jsonString); // 지난 시간 : 00:00:02.2555544 - LitJson
             
             stopwatch.Stop();
@@ -51,11 +52,12 @@ namespace Scenes
 
         private IEnumerator<float> BundleCheck()
         {
-            string key = "Test";
+            string key = "default";
             Addressables.ClearDependencyCacheAsync(key);
             //Addressables.CleanBundleCache();
-                
             //ddressables.ClearResourceLocators(); // 먼가 다 제거되서 객체 생성 안되게됨. 
+
+            
             bool checkComplete = false;
             List<string> catalogsToUpdate = new List<string>();
             Addressables.CheckForCatalogUpdates().Completed += (op) =>
@@ -81,9 +83,11 @@ namespace Scenes
             }
             else
             {
-                Debug.LogError("No Available Update");
+                //Debug.LogError("No Available Update");
+                GiantDebug.Log("리소스 변경 내역 없음.");
             }
 
+            /*
             var sizeCheck = Addressables.GetDownloadSizeAsync(key);
             if(sizeCheck.IsDone == false)
                 yield return MEC.Timing.WaitForOneFrame;
@@ -95,12 +99,9 @@ namespace Scenes
                 if(downloadDependencies.IsDone == false)
                     yield return MEC.Timing.WaitForOneFrame;
             }
-            
-            
-
+            */
         }
 
-        
         public override void OnTouchBean(Vector3 position)
         {
 

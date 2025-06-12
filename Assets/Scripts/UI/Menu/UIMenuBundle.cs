@@ -1,4 +1,5 @@
 using System;
+using System.Resources;
 using Common.Global;
 using Common.Scene;
 using Common.UIObject;
@@ -15,7 +16,10 @@ namespace UI.Menu
     {
         public Image test;
         public SpriteAtlas atlas = null;
-        
+
+        [SerializeField]
+        private AssetReference assetReference;
+
         public override void OnInit()
         {
 
@@ -70,11 +74,27 @@ namespace UI.Menu
         protected override void OnClick(Button btn)
         {
             string name = btn.name;
-            if(name == "Button - Back")
+            if (name == "Button - Back")
             {
                 AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneMenu);
             }
-            else if (name == "Button - AdressBundle 2")
+            else if (name == "Button - Create LoadAssetAsync")
+            {
+                string key = "Prefabs/Test/Cube.prefab";
+                var prefab = ResourcesManager.Instance.LoadAddressable<GameObject>(key);
+
+                Instantiate(prefab);
+            }
+            else if (name == "Button - Create Reference InstantiateAsync")
+            {
+                assetReference.InstantiateAsync();
+            }
+            else if (name == "Button - Create InstantiateAsync")
+            {
+                string key = "Prefabs/Test/Cube.prefab";
+                var prefab = ResourcesManager.Instance.InstantiateAsync<GameObject>(key);
+            }
+            else if (name == "Button - Sprite LoadAssetAsync")
             {
                 if (atlas == null)
                 {
@@ -87,11 +107,11 @@ namespace UI.Menu
                                 atlas = loadAtals.Result;
                                 //test.sprite = sprite;
                                 //test.SetNativeSize();
-                                
+
                                 var sprite = atlas.GetSprite("mango");
                                 test.sprite = sprite;
                                 break;
-                        
+
                             case AsyncOperationStatus.Failed:
                                 break;
 
@@ -106,8 +126,6 @@ namespace UI.Menu
                     test.sprite = sprite;
                 }
 
-                
-     
                 /*
                 var loadAtals = Addressables.LoadAssetAsync<SpriteAtlas>("TestAtlas.spriteatlas");
                 loadAtals.Completed += handle =>
@@ -116,14 +134,10 @@ namespace UI.Menu
                     var sprite = atlas.GetSprite("mango");
                     test.sprite = sprite;
                 };
-      */
-                
-                string adress = "TestAddressable2";
-                Addressables.InstantiateAsync(adress);
-            }
-            else if (name == "Button - Button - AseetBundle")
-            {
-                //
+                */
+
+                //string adress = "TestAddressable2";
+                //Addressables.InstantiateAsync(adress);
             }
         }
     }

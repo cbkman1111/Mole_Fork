@@ -23,13 +23,14 @@ namespace Common.Global
 
         protected override bool Init()
         {
-            mixer = ResourcesManager.Instance.LoadInBuild<AudioMixer>("AudioMixer");
-            
-            AudioSource prefabBGM = ResourcesManager.Instance.LoadInBuild<AudioSource>("Audio Source - BGM");
-            AudioSource prefabEffect = ResourcesManager.Instance.LoadInBuild<AudioSource>("Audio Source - Effect");
+            //mixer = ResourcesManager.Instance.LoadInBuild<AudioMixer>("Sound/AudioMixer");
+            mixer = ResourcesManager.Instance.LoadAddressable<AudioMixer>("AudioMixer.mixer");
 
-            musics = Pool<AudioSource>.Create(prefabBGM, transform, 1);
-            effect = Pool<AudioSource>.Create(prefabEffect, transform, 10);
+            var prefabBGM = ResourcesManager.Instance.LoadAddressable<GameObject>("Audio Source - BGM.prefab");
+            var prefabEffect = ResourcesManager.Instance.LoadAddressable<GameObject>("Audio Source - Effect.prefab");
+
+            musics = Pool<AudioSource>.Create(prefabBGM.GetComponent<AudioSource>(), transform, 1);
+            effect = Pool<AudioSource>.Create(prefabEffect.GetComponent<AudioSource>(), transform, 10);
             return true;
         }
 
@@ -38,7 +39,7 @@ namespace Common.Global
             if (loaded == true)
                 return false;
 
-            AudioClip[] clips = ResourcesManager.Instance.LoadnBuildAllI<AudioClip>("Sounds");
+            AudioClip[] clips = ResourcesManager.Instance.LoadAddressableAll<AudioClip>("Sound");
             foreach (var clip in clips)
             {
                 soundTable.Add(clip.name, clip);

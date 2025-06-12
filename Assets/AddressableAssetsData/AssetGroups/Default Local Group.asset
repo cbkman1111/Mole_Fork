@@ -17,13 +17,69 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: e5efbc5d5e70a7940ad8dbf21596420b
   m_SerializeEntries:
-  - m_GUID: 3d945a8b249643d4391af7f4ee5f22c4
-    m_Address: Assets/BundleTestResource/Texture/mango.png
+  - m_GUID: 1bdb242829d4b354091a093bdba6d35c
+    m_Address: Assets/AddressableAssets/UniversalRenderPipelineAsset_Renderer.asset
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Local
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 40a812bbf9386804c8efbcede1d50178
+    m_Address: Assets/AddressableAssets/BillingMode.json
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Local
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 52ace32ffbf1818408ef55b662fbe358
+    m_Address: Assets/AddressableAssets/UIRootDontDestroy.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Local
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 75b67d7af2971614b97025e950a29f51
+    m_Address: Assets/AddressableAssets/DOTweenSettings.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Local
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7bd2bce51c520204eb93bb49c47283f2
+    m_Address: Assets/AddressableAssets/UIRoot.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Local
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 86c88c6e047baa84dabab9a8b4d39164
+    m_Address: Assets/AddressableAssets/2D Renderer Data.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Local
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 99720b6181b2f0a4a90d19aed2606578
+    m_Address: Assets/AddressableAssets/Audio Source - BGM.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Local
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b8f7abf1551761d4e9aaeabf6093e872
+    m_Address: Assets/AddressableAssets/AudioMixer.mixer
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Local
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d82ccff8f81546f42912d782cecc861b
+    m_Address: Assets/AddressableAssets/UniversalRenderPipelineAsset.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Local
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f33060433b0cc87468bd2b1947c7ffea
+    m_Address: Assets/AddressableAssets/Audio Source - Effect.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Local
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 7316e3f390a26024fbaa6fd7f1497b13, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: 6eff4a7aa6631ca42b4f550d136c0443, type: 2}
     - {fileID: 11400000, guid: b313a5b16dd25a3429f7d05508cc5dd8, type: 2}
+    - {fileID: 11400000, guid: 6eff4a7aa6631ca42b4f550d136c0443, type: 2}

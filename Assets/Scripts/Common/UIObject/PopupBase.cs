@@ -5,10 +5,11 @@ using UnityEngine.UI;
 
 namespace Common.UIObject
 {
-    [Path("UI/Prefabs/Popup")]
+    //[Path("UI/Prefabs/Popup")]
+    // Assets/AddressableAssets/Local/Prefabs
+    [Path("Prefabs/UI/Popup")]
     public class PopupBase : UIObject
     {
-
         public override void OnInit() 
         {
             /*

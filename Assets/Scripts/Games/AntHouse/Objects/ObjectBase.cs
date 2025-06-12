@@ -8,7 +8,7 @@ namespace Games.AntHouse.Objects
     {
         public static T Create<T>(ObjectData data, bool enableAgent = true) where T : ObjectBase
         {
-            var prefab = ResourcesManager.Instance.LoadInBuild<GameObject>("Object");
+            var prefab = ResourcesManager.Instance.LoadAddressable<GameObject>("Object");
             var obj = Instantiate<GameObject>(prefab);
             if (obj == null)
             {

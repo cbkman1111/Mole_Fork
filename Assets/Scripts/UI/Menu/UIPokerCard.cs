@@ -25,7 +25,7 @@ namespace Pocker
             string[] pathKinds = { "Clubs", "Hearts", "Diamond", "Spades" };
             string path = $"Sprites/{Card.Kind.ToString()} {Card.Value}";
 
-            var sprite = ResourcesManager.Instance.LoadInBuild<Sprite>(path);
+            var sprite = ResourcesManager.Instance.LoadAddressable<Sprite>(path);
             SetSprite(ImageFront, sprite);
 
             if (sprite == null)

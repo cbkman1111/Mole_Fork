@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: e5efbc5d5e70a7940ad8dbf21596420b
   m_currentHash:
     serializedVersion: 2
-    Hash: 0521c387155199c43e914c01e9f42bd3
+    Hash: 00000000000000000000000000000000
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 1
   m_BundleLocalCatalog: 0
@@ -55,11 +55,11 @@ MonoBehaviour:
   m_ProfileSettings:
     m_Profiles:
     - m_InheritedParent: 
-      m_Id: 584ee9b4546334e4d834449f1db06b3c
-      m_ProfileName: LocalHost
+      m_Id: dbded6931519a2141b1f3e60ae5a746a
+      m_ProfileName: Default
       m_Values:
       - m_Id: 192b73298c1fc974f91226f7427c4778
-        m_Value: http://localhost:80
+        m_Value: http://[PrivateIpAddress]:[HostingServicePort]
       - m_Id: 4f6e846c5cb233748973538b8e384c28
         m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/[BuildTarget]'
       - m_Id: 8458432b6d45b9649952019ed7a19898
@@ -69,11 +69,11 @@ MonoBehaviour:
       - m_Id: e79738c9417c46240bd547fe24f92486
         m_Value: ServerData/[BuildTarget]
     - m_InheritedParent: 
-      m_Id: dbded6931519a2141b1f3e60ae5a746a
-      m_ProfileName: Default
+      m_Id: 584ee9b4546334e4d834449f1db06b3c
+      m_ProfileName: LocalHost
       m_Values:
       - m_Id: 192b73298c1fc974f91226f7427c4778
-        m_Value: http://[PrivateIpAddress]:[HostingServicePort]
+        m_Value: http://localhost/FTP/000001/Android
       - m_Id: 4f6e846c5cb233748973538b8e384c28
         m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/[BuildTarget]'
       - m_Id: 8458432b6d45b9649952019ed7a19898
@@ -104,6 +104,9 @@ MonoBehaviour:
     - default
     - Test
     - Atlas
+    - Local
+    - Table
+    - Sound
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 3ad7c06e752579a40a75c8a3a7822d3a, type: 2}

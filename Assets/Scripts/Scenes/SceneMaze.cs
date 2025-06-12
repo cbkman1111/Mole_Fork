@@ -331,7 +331,7 @@ namespace Scenes
             /// </summary>
             public void PrintMaze()
             {
-                var prefab = ResourcesManager.Instance.LoadInBuild<GameObject>("Prefab/MazeBlock");
+                var prefab = ResourcesManager.Instance.LoadResources<GameObject>("Prefab/MazeBlock");
 
                 float TileSize = 0.9f;
                 var startX = (width * TileSize) * -0.5f;
@@ -540,6 +540,7 @@ namespace Scenes
 
         //MazeGenerator mazeGenerator = null;
         public Maze mazeGenerator = null;
+        private MazeMouse mazeMouse = null;
         /// <summary>
         /// 
         /// </summary>
@@ -561,16 +562,16 @@ namespace Scenes
             //int n2 = EscapeMaze2(mazeGenerator.maze);
             //mazeGenerator.SolveMaze();
 
-            var prefabPlayer = ResourcesManager.Instance.LoadInBuild<MazeMouse>("Prefab/MazeMouse");
-            var player = GameObject.Instantiate<MazeMouse>(prefabPlayer);
-            player.Coordinate = Vector2Int.zero;
-            player.transform.position = mazeGenerator.maze[0, 0].block.transform.position;
+            var prefabPlayer = ResourcesManager.Instance.LoadResources<MazeMouse>("Prefab/MazeMouse");
+            mazeMouse = GameObject.Instantiate<MazeMouse>(prefabPlayer);
+            mazeMouse.Coordinate = Vector2Int.zero;
+            mazeMouse.transform.position = mazeGenerator.maze[0, 0].block.transform.position;
 
-            var prefabStart = ResourcesManager.Instance.LoadInBuild<GameObject>("Prefab/MazeStart");
+            var prefabStart = ResourcesManager.Instance.LoadResources<GameObject>("Prefab/MazeStart");
             var start = GameObject.Instantiate<GameObject>(prefabStart);
             start.transform.position = mazeGenerator.maze[0, 0].block.transform.position;
 
-            var prefabGoal = ResourcesManager.Instance.LoadInBuild<GameObject>("Prefab/MazeGoal");
+            var prefabGoal = ResourcesManager.Instance.LoadResources<GameObject>("Prefab/MazeGoal");
             var goal = GameObject.Instantiate<GameObject>(prefabGoal);
             goal.transform.position = mazeGenerator.maze[rows -1, cols - 1].block.transform.position;
 
@@ -636,6 +637,11 @@ namespace Scenes
             update(1f);
         }
        
+        public override void UnLoad()
+        {
+            GameObject.Destroy(mazeMouse.gameObject);
+        }
+
         public void OnGameOver()
         {
             var popup = UIManager.Instance.OpenPopup<UIPopupNormal>();

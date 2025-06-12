@@ -3,7 +3,9 @@ using UnityEngine.UI;
 
 namespace Common.UIObject
 {
-    [Path("UI/Prefabs/Menu")]
+    //[Path("UI/Prefabs/Menu")]
+    //[Path("AddressableLocal/Prefabs/UI/Menu")]
+    [Path("Prefabs/UI/Menu")]
     public abstract class MenuBase : UIObject
     {
         public override void OnInit() { }

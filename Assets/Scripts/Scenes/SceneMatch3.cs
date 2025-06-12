@@ -32,7 +32,7 @@ namespace Scenes
             level = new();
 
             var path = $"Level/Level_{1}";
-            var levelScriptable = ResourcesManager.Instance.LoadInBuild<LevelContainer>(path);
+            var levelScriptable = ResourcesManager.Instance.LoadAddressable<LevelContainer>(path);
             //var levelScriptable = Resources.Load("Level/Level_" + 1) as LevelContainer;
             if (levelScriptable != null)
             {
@@ -53,10 +53,10 @@ namespace Scenes
                         switch (blockData)
                         {
                             case BlockTypes.Empty:
-                                blockPrefab = ResourcesManager.Instance.LoadInBuild<BlockBase>("BlockEmpty");
+                                blockPrefab = ResourcesManager.Instance.LoadAddressable<BlockBase>("BlockEmpty");
                                 break;
                             case BlockTypes.Sugar:
-                                blockPrefab = ResourcesManager.Instance.LoadInBuild<BlockBase>("BlockSugar");
+                                blockPrefab = ResourcesManager.Instance.LoadAddressable<BlockBase>("BlockSugar");
                                 break;
                         }
 
@@ -72,22 +72,22 @@ namespace Scenes
                     switch (square.candy)
                     {
                         case CandyTypes.Red:
-                            prefab = ResourcesManager.Instance.LoadInBuild<CandyColor>("CandyRed");
+                            prefab = ResourcesManager.Instance.LoadAddressable<CandyColor>("CandyRed");
                             break;
                         case CandyTypes.Yellow:
-                            prefab = ResourcesManager.Instance.LoadInBuild<CandyColor>("CandyYellow");
+                            prefab = ResourcesManager.Instance.LoadAddressable<CandyColor>("CandyYellow");
                             break;
                         case CandyTypes.Green:
-                            prefab = ResourcesManager.Instance.LoadInBuild<CandyColor>("CandyGreen");
+                            prefab = ResourcesManager.Instance.LoadAddressable<CandyColor>("CandyGreen");
                             break;
                         case CandyTypes.Purple:
-                            prefab = ResourcesManager.Instance.LoadInBuild<CandyColor>("CandyPurple");
+                            prefab = ResourcesManager.Instance.LoadAddressable<CandyColor>("CandyPurple");
                             break;
                         case CandyTypes.Sky:
-                            prefab = ResourcesManager.Instance.LoadInBuild<CandyColor>("CandySky");
+                            prefab = ResourcesManager.Instance.LoadAddressable<CandyColor>("CandySky");
                             break;
                         case CandyTypes.Orange:
-                            prefab = ResourcesManager.Instance.LoadInBuild<CandyColor>("CandyOrange");
+                            prefab = ResourcesManager.Instance.LoadAddressable<CandyColor>("CandyOrange");
                             break;
                     }
 

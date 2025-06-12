@@ -63,10 +63,10 @@ namespace Scenes
             }
         
             string mapName = $"Map_00{mapId}";
-            var prefabMap = ResourcesManager.Instance.LoadInBuild<Grid>(mapName);
+            var prefabMap = ResourcesManager.Instance.LoadResources<Grid>(mapName);
             grid = GameObject.Instantiate<Grid>(prefabMap);
 
-            var prefabBuilder = ResourcesManager.Instance.LoadInBuild<NavMeshSurface>("Builder");
+            var prefabBuilder = ResourcesManager.Instance.LoadResources<NavMeshSurface>("Builder");
             if (prefabBuilder != null)
             {
                 surface = GameObject.Instantiate<NavMeshSurface>(prefabBuilder);

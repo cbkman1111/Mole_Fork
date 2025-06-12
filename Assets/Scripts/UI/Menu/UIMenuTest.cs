@@ -30,7 +30,7 @@ namespace UI.Menu
 
         public bool InitMenu()
         {
-            var prefab = ResourcesManager.Instance.LoadInBuild<UIJumpCoin>("UIJumpCoin");
+            var prefab = ResourcesManager.Instance.LoadAddressable<UIJumpCoin>("UIJumpCoin");
             pool = Common.Utils.Pool.Pool<UIJumpCoin>.Create(prefab, targetCube, 30);
 
             return true;

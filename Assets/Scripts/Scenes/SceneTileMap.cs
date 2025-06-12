@@ -94,23 +94,23 @@ namespace Scenes
 
             string pathPrefab = "Prefab";
             string pathCretures = $"{pathPrefab}/Creature";
+
             PoolManager.Instance.InitList(
-                ResourcesManager.Instance.LoadInBuild<Transform>($"{pathPrefab}/TileGround"),
-                ResourcesManager.Instance.LoadInBuild<Transform>($"{pathPrefab}/TileWater"),
-                
-                ResourcesManager.Instance.LoadInBuild<Transform>($"{pathCretures}/Bush"),
-                ResourcesManager.Instance.LoadInBuild<Transform>($"{pathCretures}/PineTree"),
-                ResourcesManager.Instance.LoadInBuild<Transform>($"{pathCretures}/Sapling"),
-                ResourcesManager.Instance.LoadInBuild<Transform>($"{pathCretures}/SeaWeed"),
-                ResourcesManager.Instance.LoadInBuild<Transform>($"{pathCretures}/Mushroom_empty"),
-                ResourcesManager.Instance.LoadInBuild<Transform>($"{pathCretures}/Mushroom_green"),
-                ResourcesManager.Instance.LoadInBuild<Transform>($"{pathCretures}/Mushroom_red"),
-                ResourcesManager.Instance.LoadInBuild<Transform>($"{pathCretures}/Mushroom_seed"),
-                ResourcesManager.Instance.LoadInBuild<Transform>($"{pathCretures}/Mushroom_sky"),
-                ResourcesManager.Instance.LoadInBuild<Transform>($"{pathCretures}/Bee"),
-                ResourcesManager.Instance.LoadInBuild<Transform>($"{pathCretures}/Spider"),
-                ResourcesManager.Instance.LoadInBuild<Transform>($"{pathCretures}/FishMan"),
-                ResourcesManager.Instance.LoadInBuild<Transform>($"{pathCretures}/FishA"));
+                ResourcesManager.Instance.LoadResources<Transform>($"{pathPrefab}/TileGround"),
+                ResourcesManager.Instance.LoadResources<Transform>($"{pathPrefab}/TileWater"),
+                ResourcesManager.Instance.LoadResources<Transform>($"{pathCretures}/Bush"),
+                ResourcesManager.Instance.LoadResources<Transform>($"{pathCretures}/PineTree"),
+                ResourcesManager.Instance.LoadResources<Transform>($"{pathCretures}/Sapling"),
+                ResourcesManager.Instance.LoadResources<Transform>($"{pathCretures}/SeaWeed"),
+                ResourcesManager.Instance.LoadResources<Transform>($"{pathCretures}/Mushroom_empty"),
+                ResourcesManager.Instance.LoadResources<Transform>($"{pathCretures}/Mushroom_green"),
+                ResourcesManager.Instance.LoadResources<Transform>($"{pathCretures}/Mushroom_red"),
+                ResourcesManager.Instance.LoadResources<Transform>($"{pathCretures}/Mushroom_seed"),
+                ResourcesManager.Instance.LoadResources<Transform>($"{pathCretures}/Mushroom_sky"),
+                ResourcesManager.Instance.LoadResources<Transform>($"{pathCretures}/Bee"),
+                ResourcesManager.Instance.LoadResources<Transform>($"{pathCretures}/Spider"),
+                ResourcesManager.Instance.LoadResources<Transform>($"{pathCretures}/FishMan"),
+                ResourcesManager.Instance.LoadResources<Transform>($"{pathCretures}/FishA"));
             
             var startX = _mapData.X;
             var startZ = _mapData.Z;
@@ -122,13 +122,13 @@ namespace Scenes
             const int displayUpSide = 10;
             const int displayDownSide = 10;
 
-            var prefabMap = ResourcesManager.Instance.LoadInBuild<Map>($"{pathPrefab}/Map");
+            var prefabMap = ResourcesManager.Instance.LoadResources<Map>($"{pathPrefab}/Map");
             _map = GameObject.Instantiate<Map>(prefabMap);
             _map.transform.position = Vector3.zero;
             _map.Init(_mapData, startX, startZ, displayW, displayUpSide, displayDownSide);
             
             // 캐릭터 생성.
-            var prefab = ResourcesManager.Instance.LoadInBuild<Human>($"{pathPrefab}/Player");
+            var prefab = ResourcesManager.Instance.LoadResources<Human>($"{pathPrefab}/Player");
             _luke = GameObject.Instantiate<Human>(prefab);
             _luke.name = "luke";
             _luke.Init(startX, startZ, Vector3.one);

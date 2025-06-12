@@ -49,12 +49,10 @@ namespace Common.Global
 
             if (trans == false)
             {
-                string resourcePath = $"{path}/{name}";
-                T prefab = ResourcesManager.Instance.LoadBundle<T>(resourcePath);
-                if (prefab == null)
-                {
-                    prefab = ResourcesManager.Instance.LoadInBuild<T>(resourcePath);
-                }
+                string resourcePath = $"{path}/{name}.prefab";
+                
+                var obj = ResourcesManager.Instance.LoadAddressable<GameObject>(resourcePath);
+                T prefab = obj.GetComponent<T>();
 
                 if (prefab == false)
                 {

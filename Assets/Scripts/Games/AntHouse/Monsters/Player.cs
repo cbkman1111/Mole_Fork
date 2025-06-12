@@ -17,7 +17,7 @@ namespace Ant
         /// <returns></returns>
         protected override bool LoadSprite()
         {
-            var prefab = ResourcesManager.Instance.LoadInBuild<SkeletonAnimation>("SpinePlayer");
+            var prefab = ResourcesManager.Instance.LoadResources<SkeletonAnimation>("SpinePlayer");
             if (prefab == null)
             {
                 return false;

@@ -28,8 +28,8 @@ namespace Common.Global
         /// <returns></returns>
         protected override bool Init()
         {
-            const string uiRootLoading = "UI/UIRootDontDestroy";
-            var prefab = ResourcesManager.Instance.LoadInBuild<GameObject>(uiRootLoading);
+            const string uiRootLoading = "UIRootDontDestroy.prefab";
+            var prefab = ResourcesManager.Instance.LoadAddressable<GameObject>(uiRootLoading);
             var obj = Instantiate(prefab, transform);
             if (obj == false)
             {
@@ -46,13 +46,13 @@ namespace Common.Global
 
         public bool InitWithScene(UnityEngine.SceneManagement.Scene scene)
         {
-            const string uiRoot = "UI/UIRoot";
+            const string uiRoot = "UIRoot.prefab";
             
             var objs = scene.GetRootGameObjects();
             var root = objs.FirstOrDefault(obj => obj.name == "UIRoot");
             if (root == null)
             {
-                var prefab = ResourcesManager.Instance.LoadInBuild<GameObject>(uiRoot);
+                var prefab = ResourcesManager.Instance.LoadAddressable<GameObject>(uiRoot);
                 var obj = Instantiate(prefab, null);
                 if (obj == false)
                 {

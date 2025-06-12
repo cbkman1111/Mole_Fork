@@ -1,15 +1,24 @@
+using System.Linq;
 using Common.Global.Singleton;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.ResourceLocations;
+using System.Collections.Generic;
 
 namespace Common.Global
 {
     public class ResourcesManager : MonoSingleton<ResourcesManager>
     {
-        string path = "Assets/AssetBundles/AssetBundles";
-        private AssetBundle bundle = null;
+        //string path = "Assets/AssetBundles/AssetBundles";
+        private string AddressableAssetPath = "Assets/AddressableAssets";
+        //private string LocalPath = "Local";
+        //private string RemotePath = "Remote";
+        //private AssetBundle bundle = null;
 
         protected override bool Init()
         {
+            Addressables.InitializeAsync();
+
             return true;
         }
         
@@ -21,21 +30,59 @@ namespace Common.Global
             //UnityWebRequest's DownloadHandlerAssetBundle
             //WWW.LoadFromCacheOrDownload (on Unity 5.6 or older)
             //AssetBundleManifest manifest = (AssetBundleManifest)ab.LoadAsset("AssetBundleManifest");
+            //if(bundle == null)
+            //    bundle = AssetBundle.LoadFromFile(path);
+            //return bundle != null;
 
-            if(bundle == null)
-                bundle = AssetBundle.LoadFromFile(path);
-
-            return bundle != null;
+            return true;
         }
+
+        public bool ExistsInAddressablesRemote(string key)
+        {
+            IList<IResourceLocation> locations;
+            bool found = Addressables.ResourceLocators.Any(locator => locator.Locate(key, typeof(UnityEngine.Object), out locations));
+            return found;
+        }
+
+        public T LoadAddressable<T>(string path) where T : Object
+        {
+            string assetPath = $"{AddressableAssetPath}/{path}";
+            var asyncOperation = Addressables.LoadAssetAsync<T>(assetPath);
+            T obj = asyncOperation.WaitForCompletion();
+            return obj;
+        }
+
+        public T InstantiateAsync<T>(string path) where T : Object
+        {
+            string assetPath = $"{AddressableAssetPath}/{path}";
+            var asyncOperation = Addressables.InstantiateAsync(assetPath);
+            GameObject go = asyncOperation.WaitForCompletion();
+            if (go == null)
+                return null;
+
+            return go.GetComponent<T>();
+        }
+        public T[] LoadAddressableAll<T>(string label) where T : Object
+        {
+            var asyncOperation = Addressables.LoadAssetsAsync<T>(label, null);
+            T[] array = asyncOperation.WaitForCompletion().ToArray();
+            return array;
+        }
+        public T LoadResources<T>(string path) where T : Object
+        {
+            return Resources.Load<T>(path);
+        }
+
+        /*
+        public T[] LoadInBuildAllI<T>(string path) where T : Object
+        {
+            return Resources.LoadAll<T>(path);
+        }
+
 
         public T LoadInBuild<T>(string path) where T : Object
         {
             return Resources.Load<T>(path);
-        }
-    
-        public T[] LoadnBuildAllI<T>(string path) where T : Object
-        {
-            return Resources.LoadAll<T>(path);
         }
 
         public T LoadBundle<T>(string path) where T : Object
@@ -68,6 +115,7 @@ namespace Common.Global
             return bundle.LoadAssetWithSubAssets<T>(path);
         }
 
+        */
         /*
         public static AsyncOperationHandle<GameObject> InstantiateAsync(string path, Transform parent, Vector3 position, Quaternion rotation, bool isLocalRes = false)
         {
@@ -83,8 +131,7 @@ namespace Common.Global
                   GameObject go = op.Result;
               });
 #endif
-          return handle;
-  
+          return handle
         }
         */
 

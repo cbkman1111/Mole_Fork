@@ -40,7 +40,7 @@ namespace Scenes
                 menu.ClickCreateObject = CreateObject;
             }
 
-            var prefab = ResourcesManager.Instance.LoadInBuild<SpriteRenderer>("Star");
+            var prefab = ResourcesManager.Instance.LoadResources<SpriteRenderer>("Star");
             poolSprite = Pool<SpriteRenderer>.Create(prefab, targetCube, 30);
             return true;
         }

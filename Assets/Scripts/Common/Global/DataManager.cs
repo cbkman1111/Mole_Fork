@@ -26,27 +26,21 @@ namespace Common.Global
         {
             if (loaded == true)
                 return;
-
-            string path = "TableData/";
-            string[] tableNames = { 
-                "TableTemp1", 
-                "TableTemp2",
-                "TableHero"
-            }; 
-
-            foreach (string tableName in tableNames)
+   
+            TextAsset[] array = ResourcesManager.Instance.LoadAddressableAll<TextAsset>("Table");
+            for(int i = 0; i < array.Length; i++)
             {
-                TextAsset asset = ResourcesManager.Instance.LoadInBuild<TextAsset>($"{path}{tableName}");
-                Type tableType = Type.GetType($"Common.Table.{tableName}");
+                var asset = array[i];
+                Type tableType = Type.GetType($"Common.Table.{asset.name}");
                 if (tableType == null)
                 {
-                    Debug.LogError($"Class {tableName} not found");
+                    Debug.LogError($"Class {asset.name} not found");
                     continue;
                 }
 
                 // JSON 문자열을 해당 클래스의 인스턴스로 역직렬화합니다.
                 object table = JsonConvert.DeserializeObject(asset.ToString(), tableType);
-                tables.Add(tableName, table as DataTable);
+                tables.Add(asset.name, table as DataTable);
             }
 
             loaded = true;

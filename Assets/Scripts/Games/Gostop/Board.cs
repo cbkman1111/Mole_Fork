@@ -55,7 +55,7 @@ namespace Gostop
         /// <returns></returns>
         public static Board Create(Action<Player, Score> updateScore)
         {
-            Board prefab = ResourcesManager.Instance.LoadInBuild<Board>("Board");
+            Board prefab = ResourcesManager.Instance.LoadResources<Board>("Board");
             Board board = Instantiate<Board>(prefab);
             if (board != null && board.Init(updateScore))
             {
@@ -71,7 +71,7 @@ namespace Gostop
         /// <returns></returns>
         public bool Init(Action<Player, Score> score)
         {
-            setting = ResourcesManager.Instance.LoadInBuild<BoardSetting>("BoardSetting");
+            setting = ResourcesManager.Instance.LoadResources<BoardSetting>("BoardSetting");
             //setting = container.setting.DeepClone();
 
             updateScore = score;
