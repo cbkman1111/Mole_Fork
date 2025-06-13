@@ -1,15 +1,17 @@
 using Common.Global.Singleton;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace Common.Global
 {
     public class ResourcesManager : MonoSingleton<ResourcesManager>
     {
         string path = "Assets/AssetBundles/AssetBundles";
-        private AssetBundle bundle = null;
+        //private AssetBundle bundle = null;
 
         protected override bool Init()
         {
+            Addressables.InitializeAsync();
             return true;
         }
         
@@ -22,10 +24,15 @@ namespace Common.Global
             //WWW.LoadFromCacheOrDownload (on Unity 5.6 or older)
             //AssetBundleManifest manifest = (AssetBundleManifest)ab.LoadAsset("AssetBundleManifest");
 
-            if(bundle == null)
-                bundle = AssetBundle.LoadFromFile(path);
+            //if(bundle == null)
+            //    bundle = AssetBundle.LoadFromFile(path);
+            //return bundle != null;
+            return true;
+        }
 
-            return bundle != null;
+        public T LoadAddressableBuild<T>(string path, string name) where T : Object
+        {
+            return Resources.Load<T>($"{path}/{name}");
         }
 
         public T LoadInBuild<T>(string path) where T : Object
@@ -38,6 +45,7 @@ namespace Common.Global
             return Resources.LoadAll<T>(path);
         }
 
+        /*
         public T LoadBundle<T>(string path) where T : Object
         {
             if(bundle == null)
@@ -57,7 +65,7 @@ namespace Common.Global
 
             return default;
         }
-
+        
         public T[] LoadBudleAll<T>() where T : Object
         {
             return bundle.LoadAllAssets<T>();
@@ -67,7 +75,7 @@ namespace Common.Global
         {
             return bundle.LoadAssetWithSubAssets<T>(path);
         }
-
+        */
         /*
         public static AsyncOperationHandle<GameObject> InstantiateAsync(string path, Transform parent, Vector3 position, Quaternion rotation, bool isLocalRes = false)
         {

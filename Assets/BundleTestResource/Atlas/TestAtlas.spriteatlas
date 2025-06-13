@@ -38,13 +38,19 @@ SpriteAtlas:
     cachedData: {fileID: 0}
     packedSpriteRenderDataKeys:
     - 5f7ee12379f20dd45a4562823b93c52f: 21300000
+    - 1ae385e36bf7a8b4ea9f89fc69d547c6: 21300000
+    - f4a606962ee72554a9f3ee2261629af2: 21300000
     - 3d945a8b249643d4391af7f4ee5f22c4: 21300000
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
   - {fileID: 21300000, guid: 5f7ee12379f20dd45a4562823b93c52f, type: 3}
+  - {fileID: 21300000, guid: 1ae385e36bf7a8b4ea9f89fc69d547c6, type: 3}
+  - {fileID: 21300000, guid: f4a606962ee72554a9f3ee2261629af2, type: 3}
   - {fileID: 21300000, guid: 3d945a8b249643d4391af7f4ee5f22c4, type: 3}
   m_PackedSpriteNamesToIndex:
   - test
+  - netmarble
+  - youtube
   - mango
   m_RenderDataMap: {}
   m_Tag: TestAtlas

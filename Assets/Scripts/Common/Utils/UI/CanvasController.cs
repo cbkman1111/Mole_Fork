@@ -50,12 +50,13 @@ namespace Common.Global
             if (trans == false)
             {
                 string resourcePath = $"{path}/{name}";
-                T prefab = ResourcesManager.Instance.LoadBundle<T>(resourcePath);
-                if (prefab == null)
-                {
-                    prefab = ResourcesManager.Instance.LoadInBuild<T>(resourcePath);
-                }
+                //T prefab = ResourcesManager.Instance.LoadBundle<T>(resourcePath);
+                //if (prefab == null)
+                //{
+                    //prefab = ResourcesManager.Instance.LoadInBuild<T>(resourcePath);
+                //}
 
+                T prefab = ResourcesManager.Instance.LoadInBuild<T>(resourcePath);
                 if (prefab == false)
                 {
                     Debug.LogError($"{resourcePath} - prefab is null.");
