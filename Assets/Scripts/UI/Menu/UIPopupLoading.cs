@@ -12,10 +12,6 @@ public class UIPopupLoading : PopupBase
     private MEC.CoroutineHandle handler;
 
 
-    public override void OnInit()
-    {
-
-    }
 
     public bool InitMenu()
     {

@@ -16,10 +16,8 @@ namespace UI.Popup
         /// <summary>
         ///  
         /// </summary>
-        public override void OnInit() 
+        public void Init() 
         {
-            base.OnInit();
-
             var list = new List<ScrollData>();
             for (var i = 0; i < 200; i++)
             {
@@ -61,7 +59,7 @@ namespace UI.Popup
         protected override void OnClick(Button button)
         {
             var name = button.name;
-            if (name == "Button - Ok")
+            if (name == "Button - Exit")
             {
                 Close();
             }

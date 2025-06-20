@@ -8,10 +8,6 @@ namespace UI.Menu
 {
     public class UIMenuPuzzle : MenuBase
     {
-        public override void OnInit()
-        {
-
-        }
 
         public bool InitMenu()
         {

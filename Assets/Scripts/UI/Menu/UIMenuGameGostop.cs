@@ -5,10 +5,6 @@ namespace UI.Menu
 {
     public class UIMenuGameGostop : MenuBase
     {
-        public override void OnInit()
-        {
-            
-        }
 
         public bool InitMenu()
         {

@@ -99,7 +99,7 @@ namespace UI.Menu
         protected override void OnClick(Button btn)
         {
             string name = btn.name;
-            if(name == "Button - Exit")
+            if(name == "Button - Back")
             {
                 AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneMenu);
             }

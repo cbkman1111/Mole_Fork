@@ -14,11 +14,6 @@ namespace UI.Menu
         public Ant.Joystick Joystick = null;
         public Camera miniMapCamera = null;
 
-        public override void OnInit()
-        {
-
-        }
-
         public bool InitMenu(Action<Vector3> move, Action stop)
         {
             Joystick.Init((Vector3 direct, float angle) => {

@@ -20,7 +20,7 @@ namespace Common.UIObject
     {
         protected Dictionary<string, Component> List = null;
 
-        private void Awake()
+        protected virtual void Awake()
         {
             List = new Dictionary<string, Component>();
 
@@ -229,8 +229,6 @@ namespace Common.UIObject
 
         public virtual void OnOpen() { }
         public virtual void OnClose() { }
-        public abstract void OnInit();
-  
         public abstract void Close();
     }
 }

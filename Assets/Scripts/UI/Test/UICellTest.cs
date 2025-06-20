@@ -10,11 +10,6 @@ public class UICellTest : UIObject
     public Image color = null;
     public TextMeshProUGUI msg = null;
 
-    public override void OnInit()
-    {
-
-    }
-
     public void SetUI(ScrollData data)
     {
         msg.text = data.GetName();

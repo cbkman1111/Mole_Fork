@@ -7,10 +7,6 @@ namespace UI.Menu
 {
     public class UIMenuTextRpg : MenuBase
     {
-        public override void OnInit()
-        {
-
-        }
 
         public bool InitMenu()
         {

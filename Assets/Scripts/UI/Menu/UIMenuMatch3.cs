@@ -12,10 +12,6 @@ namespace UI.Menu
 
         public Action<int> OnStartGame { get; set;}
 
-        public override void OnInit()
-        {
-
-        }
 
         public bool InitMenu()
         {

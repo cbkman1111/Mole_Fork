@@ -92,11 +92,6 @@ namespace Common.Global
             var path = GetPath<T>();
             var name = typeof(T).Name;
             var ret = _controllerDontDestroy.Open<T>(path, name);
-            if (ret != null)
-            {
-                ret.OnInit();
-            }
-
             return ret;
         }
 
@@ -105,11 +100,7 @@ namespace Common.Global
             var path = GetPath<T>();
             var name = typeof(T).Name;
             var ret = _controllerMenu.Open<T>(path, name);
-            if (ret != null)
-            {
-                ret.OnInit();
-            }
-        
+
             return ret;
         }
 
@@ -118,10 +109,6 @@ namespace Common.Global
             var path = GetPath<T>();
             var name = typeof(T).Name;
             var ret = _controllerPopup.Open<T>(path, name);
-            if (ret == true)
-            {
-                ret.OnInit();
-            }
 
             return ret;
         }
@@ -132,10 +119,6 @@ namespace Common.Global
             var path = GetPath<T>();
             var name = typeof(T).Name;
             var ret = _controllerPopup.Open<T>(path, name);
-            if (ret == true)
-            {
-                ret.OnInit();
-            }
 
             CoverCheck();
             return ret;
@@ -146,10 +129,6 @@ namespace Common.Global
             var path = GetPath<T>();
             var name = typeof(T).Name;
             var ret = _controllerPopup.Open<T>(path, name);
-            if (ret == true)
-            {
-                ret.OnInit();
-            }
 
             CoverCheck();
             return ret;

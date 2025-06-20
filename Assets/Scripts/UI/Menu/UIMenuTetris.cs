@@ -9,10 +9,7 @@ namespace UI.Menu
 {
     public class UIMenuTetris : MenuBase
     {
-        public override void OnInit()
-        {
 
-        }
 
         public bool InitMenu()
         {

@@ -1,69 +1,57 @@
 using Newtonsoft.Json;
-using NPOI.SS.Formula.Functions;
 using NPOI.SS.UserModel;
+using NPOI.SS.Util;
 using NPOI.XSSF.UserModel;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using UnityEditor;
-using UnityEditor.Search;
 using UnityEngine;
 
 namespace ExcelConverter.Editor
 {
+    /// <summary>
+    /// ExcelConverter Editor Window to convert Excel files to JSON format.
+    /// </summary>
     public partial class ExcelConverter : EditorWindow
     {
-        private const string MenuNameRoot = "엑셀/엑셀 익스포터";
-        private const string MenuNameOpen = MenuNameRoot + "/열기";
-        
-        private string excelFilePath = string.Empty; // Path to Excel File
-        private string jsonOutputPath = string.Empty; // Path to Save Json File
-        private int sheetNum = 0; // Sheet Number to Convert
-
-        /// <summary>
-        /// 매치3 -> 스테이지 에디터 -> 열기
-        /// </summary>
-        [MenuItem(MenuNameOpen)]
-        private static void Open()
-        {
-            var editorWindow = GetWindow(typeof(ExcelConverter));
-            editorWindow.titleContent = new GUIContent("엑셀 익스포터");
-
-            ExcelConverter levelEditor = editorWindow as ExcelConverter;
-            levelEditor.Init();
-        }
+        private int SheetNum = 0; // Sheet Number to Convert
+        private IFormulaEvaluator Evaluator;
 
         /// <summary>
         /// 초기화.
         /// </summary>
         public void Init()
         {
-            excelFilePath = string.Empty;
-            jsonOutputPath = string.Empty;
-            sheetNum = 0;
+            ExcelFilePath = string.Empty;
+            JsonOutputPath = string.Empty;
+            SheetNum = 0;
         }
 
-
+        /// <summary>
+        /// C# 클래스로 변환하는 기능은 현재 구현되어 있지 않습니다.   
+        /// </summary>
         public void ConvertCSharpClass()
-        {
-            
-        }
+        {}
 
+
+        /// <summary>
+        /// 엑셀 파일을 읽어서 JSON 파일로 변환합니다.
+        /// </summary>
+        /// <param name="sheetNum"></param>
         public void ConvertExcelToJson(int sheetNum)
         {
-            if (string.IsNullOrEmpty(excelFilePath) || string.IsNullOrEmpty(jsonOutputPath))
+            if (string.IsNullOrEmpty(ExcelFilePath) || string.IsNullOrEmpty(JsonOutputPath))
             {
                 Debug.LogError("Excel Path, Json Path is NULL");
                 return;
             }
 
-            using (FileStream stream = new FileStream(excelFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-            //using (FileStream stream = new FileStream(excelFilePath, FileMode.Open, FileAccess.Read))
+            // 파일 오픈.
+            using (FileStream stream = new FileStream(ExcelFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
+                // 워크 시트 열기.
                 IWorkbook workbook = new XSSFWorkbook(stream);
-
-                var root = new Dictionary<string, object>();
+                Evaluator = workbook.GetCreationHelper().CreateFormulaEvaluator();
 
                 for (int sheetIdx = 0; sheetIdx < workbook.NumberOfSheets; sheetIdx++)
                 {
@@ -71,103 +59,80 @@ namespace ExcelConverter.Editor
                     if (sheet == null)
                         continue;
 
-                    var rows = new List<Dictionary<string, object>>();
-                   
-                    IRow headerRow = sheet.GetRow(0);
-                    var tableName = headerRow.GetCell(0).ToString().Replace("#", ""); // Get Table Name from Header Row
-                    int cellCount = headerRow.LastCellNum;
+                    // 헤더 정보를 추출.
+                    var header = GetHeader(sheet);
 
-                    // Extract Data looping every row in sheet
-                    for (int i = 1; i <= sheet.LastRowNum; i++) // 0 is Header
+                    // 데이터 취합.
+                    for (int i = header.GetDataRowLine(); i < sheet.LastRowNum; i++)
                     {
                         IRow row = sheet.GetRow(i);
-                        var rowData = new Dictionary<string, object>();
+                        if (row == null)
+                            continue;
 
-                        ICell mergedCell = null;
-                        for (int j = 1; j < cellCount; j++)
+                        Dictionary<string, object> data = new();
+                        foreach (var pair in header.DataKey)
                         {
-                            ICell cellHeader = headerRow.GetCell(j);
-                            if (cellHeader.IsMergedCell == true)
+                            var key = pair.Key;
+
+                            if (key.Contains("[]") == true)
                             {
-                                if (mergedCell == null)
+                                var name = key.Replace("[]", "");
+                                var list = pair.Value as List<CellAddress>;
+                                var dataList = new List<object>();
+
+                                foreach (var cell in list)
                                 {
-                                    mergedCell = cellHeader;
-                                    rowData[mergedCell.ToString()] = new List<object>();
+                                    var address = cell as CellAddress;
+                                    dataList.Add(GetValueFromCell(GetCell(row, address.Column)));
                                 }
 
-                                var list = rowData.Last().Value as List<object>;
-                                ICell cellData = row.GetCell(j);
-                                list.Add(GetValueFromCell(row.GetCell(j))); //Get Cell Value
+                                data.Add(name, dataList);
+                            }
+                            else if (key.Contains("[{}]") == true)
+                            {
+                                var name = key.Replace("[{}]", "");
+                                var list = pair.Value as List<object>;
+                                var dataList = new List<object>();
+                                
+                                foreach (var obj in list)
+                                {
+                                    var dic = obj as Dictionary<string, CellAddress>;
+                                    var dataDic = new Dictionary<string, object>();
+                                    dataList.Add(dataDic);
+                                    foreach (var p in dic)
+                                    {
+                                        Debug.Log($"Column Name: {p.Key}, Address: {p.Value}");
+                                        dataDic.Add(p.Key, GetValueFromCell(GetCell(row, p.Value.Column)));
+                                    }
+                                }
+
+                                data.Add(name, dataList);
                             }
                             else
                             {
-                                mergedCell = null;
-                                ICell cellData = row.GetCell(j);
-                                string columnName = cellHeader.ToString(); //Get ColumnName from Header
-                                rowData[columnName] = GetValueFromCell(cellData); //Get Cell Value
+                                var name = key;
+                                var address = pair.Value as CellAddress;
+                                var cell = GetCell(row, address.Column);
+                                var value = GetValueFromCell(cell);
+                                data.Add(name, value);
                             }
                         }
 
-                        rows.Add(rowData); // Add Row data to List
+                        header.Data.Add(data);
                     }
 
-                    //save Data after convert Json
-                    // 감싸는 객체 생성
-
-                    //if (root.TryGetValue(tableName, out var existRows))
-                    if (root.TryGetValue(tableName, out var obj))
-                    {
-                        var existRows = obj as List<Dictionary<string, object>>;
-                        existRows.AddRange(rows); // Add new rows to existing rows
-                    }
-                    else 
-                    {
-                        root.Add(tableName, rows);//
-                    }
-                }
-
-                // 엑셀 파일에서 추출된 정보를 json 파일로 저장.
-                foreach (var pair in root)
-                {
-                    var key = pair.Key;
-                    var value = pair.Value as List<Dictionary<string, object>>;
+                    // 엑셀 파일에서 추출된 정보를 json 파일로 저장.
                     var table = new Dictionary<string, object> {
-                        { "Data", value }
-                    };
+                            { "Data", header.Data }
+                        };
 
                     string json = JsonConvert.SerializeObject(table, Formatting.Indented);
-                    string path = $"{jsonOutputPath}/{key}.json";
-                    
+                    string path = $"{JsonOutputPath}/{header.TableName}.json";
                     File.WriteAllText(path, json);
-                    Debug.Log($"Convert Excel To Json : {path}");
-                    Debug.Log($"{json.ToString()}");
                 }
 
-            }
-        }
-
-        
-        private object GetValueFromCell(ICell cell)
-        {
-            if (cell == null || cell.CellType == CellType.Blank)
-                return null;
-            switch (cell.CellType)
-            {
-                case CellType.String:
-                    return cell.StringCellValue;
-                case CellType.Numeric:
-                    // 정수/소수 구분
-                    double d = cell.NumericCellValue;
-                    if (Math.Floor(d) == d)
-                        return (int)d; // 정수로 반환
-                    else
-                        return d;      // 소수(실수)로 반환
-                case CellType.Boolean:
-                    return cell.BooleanCellValue;
-                case CellType.Formula:
-                    return cell.CellFormula; // or evaluate the formula
-                default:
-                    return cell.ToString();
+                // 완료 팝업.
+                EditorUtility.DisplayDialog("Excel to Json Conversion", "Conversion completed successfully!", "OK");
             }
         }
     }
