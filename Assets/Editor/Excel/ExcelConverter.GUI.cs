@@ -1,4 +1,4 @@
-using System.IO;
+﻿using System.IO;
 using UnityEditor;
 using UnityEngine;
 
@@ -9,67 +9,62 @@ namespace ExcelConverter.Editor
     /// </summary>
     public partial class ExcelConverter : EditorWindow
     {
+        /// <summary>
+        /// GUI Draw
+        /// </summary>
         void OnGUI()
         {
             try
             {
-                GUILayout.Label("Select Excel File Path", EditorStyles.boldLabel);
+                DrawTitle();
 
-                if (GUILayout.Button("Select Excel File"))
-                {
-                    string path = EditorUtility.OpenFilePanel("Select Excel File", "", "xlsx");
-                    if (!string.IsNullOrEmpty(path))
-                    {
-                        excelFilePath = path;
-                    }
-                }
+                DrawFilePath();
 
-                EditorGUILayout.TextField("Excel File Path", excelFilePath);
-
-                GUILayout.Space(5);
-
-                GUILayout.Label("Sheet Number", EditorStyles.boldLabel);
-                sheetNum = EditorGUILayout.IntField("Enter Sheet Number", sheetNum);
-
-                GUILayout.Space(10);
-
-                GUILayout.Label("Json Output Path", EditorStyles.boldLabel);
-
-                //string outputFileName = Path.GetFileNameWithoutExtension(excelFilePath);
-                //string outputfolder = EditorUtility.OpenFolderPanel("Select Json Output Folder", "", "");
-                if (GUILayout.Button("Select Json Output Path"))
-                {
-                    jsonOutputPath = EditorUtility.OpenFolderPanel("Select Json Output Folder", "", "");
-                    /*
-                    string path = EditorUtility.SaveFilePanel("Select Json Output Path", "", outputfolder, "json");
-                    if (!string.IsNullOrEmpty(path))
-                    {
-                        jsonOutputPath = path;
-                    }
-                    */
-                }
-
-                EditorGUILayout.TextField("Json File Path", jsonOutputPath);
-
-                GUILayout.Space(10);
-
-                if (GUILayout.Button("Convert Excel To Json"))
-                {
-                    ConvertExcelToJson(sheetNum);
-                }
-
-                GUILayout.Space(10);
-
-                GUILayout.Label("Json to C# class", EditorStyles.boldLabel);
-
-                if (GUILayout.Button("Convert Json To c#"))
-                {
-                    ConvertCSharpClass();
-                }
+                DrawExportButton();
             }
             catch (System.Exception e)
             {
                 Debug.LogError($"ExcelConverter OnGUI Error: {e.Message}");
+            }
+        }
+
+        /// <summary>
+        /// 제목
+        /// </summary>
+        private void DrawTitle()
+        {
+            GUILayout.Label("Select Excel File Path", EditorStyles.boldLabel);
+        }
+
+        /// <summary>
+        /// 입력 파일 & 출력 경로
+        /// </summary>
+        private void DrawFilePath()
+        {
+            if (GUILayout.Button("Select Excel File"))
+            {
+                string path = EditorUtility.OpenFilePanel("Select Excel File", ExcelInputPath, "xlsx");
+                ExcelFilePath = path;
+                ExcelFile = Path.GetFileName(path);
+            }
+
+            EditorGUI.BeginDisabledGroup(true);
+            EditorGUILayout.TextField("Input", ExcelFile);
+            EditorGUILayout.TextField("OutPut", JsonOutputPath);
+
+            EditorGUI.EndDisabledGroup();
+        }
+
+        /// <summary>
+        /// Json 익스포트
+        /// </summary>
+        private void DrawExportButton()
+        {
+            GUILayout.Space(10);
+
+            if (GUILayout.Button("Convert Excel To Json"))
+            {
+                ConvertExcelToJson();
             }
         }
     }

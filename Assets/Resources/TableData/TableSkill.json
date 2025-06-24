@@ -1,95 +1,88 @@
 {
-  "Data": [
-    {
-      "ID": 100000,
-      "NAME_TID": "스킬명",
-      "RANGE": 1,
-      "COOL_TIME": 1,
-      "PROJECTILE": "1000000"
-    },
-    {
+  "Data": {
+    "100001": {
       "ID": 100001,
       "NAME_TID": "스킬명",
       "RANGE": 1,
       "COOL_TIME": 1,
       "PROJECTILE": "1000010"
     },
-    {
+    "100011": {
       "ID": 100011,
       "NAME_TID": "스킬명",
       "RANGE": 1,
       "COOL_TIME": 1,
       "PROJECTILE": "1000110"
     },
-    {
+    "100012": {
       "ID": 100012,
       "NAME_TID": "스킬명",
       "RANGE": 1,
       "COOL_TIME": 1,
       "PROJECTILE": "1000120"
     },
-    {
+    "100021": {
       "ID": 100021,
       "NAME_TID": "스킬명",
       "RANGE": 1,
       "COOL_TIME": 1,
       "PROJECTILE": "1000210"
     },
-    {
+    "100022": {
       "ID": 100022,
       "NAME_TID": "스킬명",
       "RANGE": 1,
       "COOL_TIME": 1,
       "PROJECTILE": "1000220"
     },
-    {
+    "200001": {
       "ID": 200001,
       "NAME_TID": "스킬명",
       "RANGE": 1,
       "COOL_TIME": 1,
       "PROJECTILE": "2000010"
     },
-    {
+    "200002": {
       "ID": 200002,
       "NAME_TID": "스킬명",
       "RANGE": 1,
       "COOL_TIME": 1,
       "PROJECTILE": "2000020"
     },
-    {
+    "200011": {
       "ID": 200011,
       "NAME_TID": "스킬명",
       "RANGE": 1,
       "COOL_TIME": 1,
       "PROJECTILE": "2000110"
     },
-    {
+    "200012": {
       "ID": 200012,
       "NAME_TID": "스킬명",
       "RANGE": 1,
       "COOL_TIME": 1,
       "PROJECTILE": "2000120"
     },
-    {
+    "200021": {
       "ID": 200021,
       "NAME_TID": "스킬명",
       "RANGE": 1,
       "COOL_TIME": 1,
       "PROJECTILE": "2000210"
     },
-    {
+    "200022": {
       "ID": 200022,
       "NAME_TID": "스킬명",
       "RANGE": 1,
       "COOL_TIME": 1,
       "PROJECTILE": "2000220"
     },
-    {
+    "200031": {
       "ID": 200031,
       "NAME_TID": "스킬명",
       "RANGE": 1,
       "COOL_TIME": 1,
       "PROJECTILE": "2000310"
     }
-  ]
+  }
 }

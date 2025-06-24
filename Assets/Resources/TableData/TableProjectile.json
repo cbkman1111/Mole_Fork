@@ -1,27 +1,6 @@
 {
-  "Data": [
-    {
-      "ID": 1000000,
-      "NAME_TID": "Name_1000000",
-      "PREFAB": "Prefab/Cube.prefab",
-      "HIT_STATE": [
-        {
-          "STATE_TYPE": 100,
-          "ID": 1
-        },
-        {
-          "STATE_TYPE": 200,
-          "ID": 2
-        }
-      ],
-      "TEST": [
-        1,
-        2,
-        3
-      ],
-      "LAST": 123
-    },
-    {
+  "Data": {
+    "1000001": {
       "ID": 1000001,
       "NAME_TID": "Name_1000001",
       "PREFAB": "Prefab/Cube.prefab",
@@ -42,7 +21,7 @@
       ],
       "LAST": 123
     },
-    {
+    "1000010": {
       "ID": 1000010,
       "NAME_TID": "Name_1000010",
       "PREFAB": "Prefab/Cube.prefab",
@@ -63,7 +42,7 @@
       ],
       "LAST": 123
     },
-    {
+    "1000011": {
       "ID": 1000011,
       "NAME_TID": "Name_1000011",
       "PREFAB": "Prefab/Cube.prefab",
@@ -84,7 +63,7 @@
       ],
       "LAST": 123
     },
-    {
+    "1000110": {
       "ID": 1000110,
       "NAME_TID": "Name_1000110",
       "PREFAB": "Prefab/Cube.prefab",
@@ -105,7 +84,7 @@
       ],
       "LAST": 123
     },
-    {
+    "1000111": {
       "ID": 1000111,
       "NAME_TID": "Name_1000111",
       "PREFAB": "Prefab/Cube.prefab",
@@ -126,7 +105,7 @@
       ],
       "LAST": 123
     },
-    {
+    "1000120": {
       "ID": 1000120,
       "NAME_TID": "Name_1000120",
       "PREFAB": "Prefab/Cube.prefab",
@@ -147,7 +126,7 @@
       ],
       "LAST": 123
     },
-    {
+    "1000121": {
       "ID": 1000121,
       "NAME_TID": "Name_1000121",
       "PREFAB": "Prefab/Cube.prefab",
@@ -168,7 +147,7 @@
       ],
       "LAST": 123
     },
-    {
+    "1000210": {
       "ID": 1000210,
       "NAME_TID": "Name_1000210",
       "PREFAB": "Prefab/Cube.prefab",
@@ -189,7 +168,7 @@
       ],
       "LAST": 123
     },
-    {
+    "1000211": {
       "ID": 1000211,
       "NAME_TID": "Name_1000211",
       "PREFAB": "Prefab/Cube.prefab",
@@ -210,7 +189,7 @@
       ],
       "LAST": 123
     },
-    {
+    "1000220": {
       "ID": 1000220,
       "NAME_TID": "Name_1000220",
       "PREFAB": "Prefab/Cube.prefab",
@@ -231,7 +210,7 @@
       ],
       "LAST": 123
     },
-    {
+    "1000221": {
       "ID": 1000221,
       "NAME_TID": "Name_1000221",
       "PREFAB": "Prefab/Cube.prefab",
@@ -252,7 +231,7 @@
       ],
       "LAST": 123
     },
-    {
+    "2000010": {
       "ID": 2000010,
       "NAME_TID": "Name_2000010",
       "PREFAB": "Prefab/Cube.prefab",
@@ -273,7 +252,7 @@
       ],
       "LAST": 123
     },
-    {
+    "2000011": {
       "ID": 2000011,
       "NAME_TID": "Name_2000011",
       "PREFAB": "Prefab/Cube.prefab",
@@ -294,7 +273,7 @@
       ],
       "LAST": 123
     },
-    {
+    "2000020": {
       "ID": 2000020,
       "NAME_TID": "Name_2000020",
       "PREFAB": "Prefab/Cube.prefab",
@@ -315,7 +294,7 @@
       ],
       "LAST": 123
     },
-    {
+    "2000021": {
       "ID": 2000021,
       "NAME_TID": "Name_2000021",
       "PREFAB": "Prefab/Cube.prefab",
@@ -336,7 +315,7 @@
       ],
       "LAST": 123
     },
-    {
+    "2000110": {
       "ID": 2000110,
       "NAME_TID": "Name_2000110",
       "PREFAB": "Prefab/Cube.prefab",
@@ -357,7 +336,7 @@
       ],
       "LAST": 123
     },
-    {
+    "2000111": {
       "ID": 2000111,
       "NAME_TID": "Name_2000111",
       "PREFAB": "Prefab/Cube.prefab",
@@ -378,7 +357,7 @@
       ],
       "LAST": 123
     },
-    {
+    "2000120": {
       "ID": 2000120,
       "NAME_TID": "Name_2000120",
       "PREFAB": "Prefab/Cube.prefab",
@@ -399,7 +378,7 @@
       ],
       "LAST": 123
     },
-    {
+    "2000121": {
       "ID": 2000121,
       "NAME_TID": "Name_2000121",
       "PREFAB": "Prefab/Cube.prefab",
@@ -420,7 +399,7 @@
       ],
       "LAST": 123
     },
-    {
+    "2000210": {
       "ID": 2000210,
       "NAME_TID": "Name_2000210",
       "PREFAB": "Prefab/Cube.prefab",
@@ -441,7 +420,7 @@
       ],
       "LAST": 123
     },
-    {
+    "2000211": {
       "ID": 2000211,
       "NAME_TID": "Name_2000211",
       "PREFAB": "Prefab/Cube.prefab",
@@ -462,7 +441,7 @@
       ],
       "LAST": 123
     },
-    {
+    "2000220": {
       "ID": 2000220,
       "NAME_TID": "Name_2000220",
       "PREFAB": "Prefab/Cube.prefab",
@@ -483,7 +462,7 @@
       ],
       "LAST": 123
     },
-    {
+    "2000221": {
       "ID": 2000221,
       "NAME_TID": "Name_2000221",
       "PREFAB": "Prefab/Cube.prefab",
@@ -504,7 +483,7 @@
       ],
       "LAST": 123
     },
-    {
+    "2000310": {
       "ID": 2000310,
       "NAME_TID": "Name_2000310",
       "PREFAB": "Prefab/Cube.prefab",
@@ -525,7 +504,7 @@
       ],
       "LAST": 123
     },
-    {
+    "2000311": {
       "ID": 2000311,
       "NAME_TID": "Name_2000311",
       "PREFAB": "Prefab/Cube.prefab",
@@ -546,7 +525,7 @@
       ],
       "LAST": 123
     },
-    {
+    "2000320": {
       "ID": 2000320,
       "NAME_TID": "Name_2000320",
       "PREFAB": "Prefab/Cube.prefab",
@@ -567,5 +546,5 @@
       ],
       "LAST": 123
     }
-  ]
+  }
 }

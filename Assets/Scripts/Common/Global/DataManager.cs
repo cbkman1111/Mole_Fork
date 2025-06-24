@@ -31,7 +31,9 @@ namespace Common.Global
             string[] tableNames = { 
                 "TableTemp1", 
                 "TableTemp2",
-                "TableHero"
+                "TableHero",
+                "TableProjectile",
+                "TableSkill",
             }; 
 
             foreach (string tableName in tableNames)

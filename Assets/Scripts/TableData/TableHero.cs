@@ -7,10 +7,11 @@ namespace Common.Table
     public class Hero
     {
         public int ID { get; set; }
+        public int TYPE { get; set; }
         public string NAME_TID { get; set; }
         public int AGE { get; set; }
         public int ENABLE { get; set; }
-        public List<int> SKILLS { get; set; }
+        public string SKILLS { get; set; }
     }
 
     [Serializable]
