@@ -17,7 +17,7 @@ namespace Common.Table
     [Serializable]
     public class TableHero : DataTable
     {
-        public List<Hero> Data {get; set;}
+        public Dictionary<long, Hero> Data {get; set;}
 
         TableHero()
         {

@@ -34,8 +34,9 @@ namespace Common.Global
                 "TableHero",
                 "TableProjectile",
                 "TableSkill",
-            }; 
+            };
 
+            tables.Clear();
             foreach (string tableName in tableNames)
             {
                 TextAsset asset = ResourcesManager.Instance.LoadInBuild<TextAsset>($"{path}{tableName}");

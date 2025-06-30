@@ -31,7 +31,13 @@ namespace Scenes
             var tableHero = DataManager.Instance.Get<TableHero>();
             if (tableHero != null)
             {
-                tableHero.Data.ForEach(data => Debug.Log($"{data.ID} {data.NAME_TID} {data.AGE} {data.ENABLE}"));
+                foreach (var pair in tableHero.Data)
+                {
+                    var data = pair.Value;
+                    var key = pair.Key;
+                    Debug.Log($"{key} - {data.ID} {data.NAME_TID} {data.AGE} {data.ENABLE}");
+                }
+                //tableHero.Data.ForEach(data => Debug.Log($"{data.ID} {data.NAME_TID} {data.AGE} {data.ENABLE}"));
             }
 
             return true;
