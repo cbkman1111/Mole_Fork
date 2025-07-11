@@ -1,0 +1,14 @@
+{
+  "Data": {
+    "2001": {
+      "ID": 2001,
+      "NAME_TID": "STATE_TID_2001",
+      "ICON": "a.png",
+      "START_TIME": 0.1,
+      "INTERVAL": 1,
+      "DURATION": 5,
+      "VALUE": 0.1,
+      "EFFECT_ID": 1001
+    }
+  }
+}

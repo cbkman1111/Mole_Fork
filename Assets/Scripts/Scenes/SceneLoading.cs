@@ -1,6 +1,7 @@
 using System;
 using Common.Global;
 using Common.Scene;
+using Common.Utils;
 using UI.Menu;
 using UnityEngine;
 
@@ -27,24 +28,34 @@ namespace Scenes
 
         public override async void Load(Action<float> update)
         {
-            for (int i = 0; i < 100; i++)
+            try
             {
-                var obj = Instantiate<GameObject>(loadingCube);
-                if(obj == null)
+                const int COUNT = 40000;
+                for (int i = 0; i < COUNT; i++)
                 {
-                    continue;
+                    var obj = Instantiate<GameObject>(loadingCube);
+                    if (obj == null)
+                    {
+                        continue;
+                    }
+
+                    var x = UnityEngine.Random.Range(-50f, 50f);
+                    var z = UnityEngine.Random.Range(-50f, 50f);
+                    var y = UnityEngine.Random.Range(0f, 10f);
+                    obj.transform.position = new Vector3(x, y, z);
+
+                    var renderer = obj.GetComponent<MeshRenderer>();
+                    renderer.sharedMaterial = MaterialLoadingCube;
+
+                    update((float)i / (float)COUNT);
                 }
-
-                var x = UnityEngine.Random.Range(-10f, 10f);
-                var z = UnityEngine.Random.Range(-10f, 10f);
-                var y = UnityEngine.Random.Range(0f, 5f);
-                obj.transform.position = new Vector3(x, y, z);
-                
-                var renderer = obj.GetComponent<MeshRenderer>();
-                renderer.sharedMaterial = MaterialLoadingCube;
-
-                update(i / 100f);
             }
+            catch (System.Exception e)
+            {
+                // handled below
+                GiantDebug.LogError($"{name} - {e.ToString()}");
+            }
+           
             update(1f);
         }
 

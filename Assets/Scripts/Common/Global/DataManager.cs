@@ -34,6 +34,8 @@ namespace Common.Global
                 "TableHero",
                 "TableProjectile",
                 "TableSkill",
+                "TableStatus",
+                "TableHeal",
             };
 
             tables.Clear();

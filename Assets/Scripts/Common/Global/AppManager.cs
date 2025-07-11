@@ -136,14 +136,23 @@ namespace Common.Global
                 UIManager.Instance.InitWithScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
 
                 // 비동기로 데이터는 로드가 되는데, 게임 오브젝트 같은건 안됨. 
-                Task.Run(() => {
+                bool usingTask = false;
+                if (usingTask == true)
+                {
+                    Task.Run(() => {
 
-                }).ContinueWith(task => {
-
+                    }).ContinueWith(task => {
+                        _currScene.Load((percent) => {
+                            _loadingPercent = 0.9f + (0.1f * percent);
+                        });
+                    }, TaskScheduler.FromCurrentSynchronizationContext());
+                }
+                else 
+                {
                     _currScene.Load((percent) => {
                         _loadingPercent = 0.9f + (0.1f * percent);
                     });
-                }, TaskScheduler.FromCurrentSynchronizationContext());
+                }
 
                 yield return new WaitUntil(() => loadingMenu.Complete(1.0f) == true);
                 yield return new WaitForEndOfFrame();
@@ -171,6 +180,11 @@ namespace Common.Global
 
                 _currScene = FindSceneObject(sceneName);
                 UIManager.Instance.InitWithScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
+                _currScene.Load((percent) => {
+                    _loadingPercent = 0.9f + (0.1f * percent);
+                });
+
+                /*
                 Task.Run(() => {
 
                 }).ContinueWith(task => {
@@ -178,7 +192,7 @@ namespace Common.Global
                         _loadingPercent = 0.9f + (0.1f * percent);
                     });
                 }, TaskScheduler.FromCurrentSynchronizationContext());
-
+                */
                 yield return new WaitUntil(() => _loadingPercent == 1.0f);
                 yield return new WaitForEndOfFrame();
 

@@ -5,16 +5,19 @@ using Common.UIObject;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Drawing;
+using Image = UnityEngine.UI.Image;
 
 public class UIPopupLoading : PopupBase
 {
     private float Percent = 0f;
+    private float RotationSpeed = 180f; // 1초에 180도 회전
     private MEC.CoroutineHandle handler;
-
 
 
     public bool InitMenu()
     {
+
         return true;
     }
 
@@ -51,5 +54,14 @@ public class UIPopupLoading : PopupBase
     {
         Slider slider = GetObject<Slider>("Slider - Percent");
         return slider.value >= percent || Mathf.Approximately(slider.value, percent);
+    }
+
+    private void Update()
+    {
+        var icon = GetObject<Image>("Image - Icon");
+        if (icon != null)
+        {
+            icon.transform.Rotate(0f, 0f, RotationSpeed * Time.deltaTime);
+        }
     }
 }

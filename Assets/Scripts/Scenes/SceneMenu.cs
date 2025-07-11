@@ -1,6 +1,7 @@
 using System;
 using Common.Global;
 using Common.Scene;
+using Common.Utils;
 using Network;
 using UI.Menu;
 using UnityEngine;
@@ -26,9 +27,18 @@ namespace Scenes
 
         public override void Load(Action<float> update)
         {
-            SoundManager.Instance.Load();
-            DataManager.Instance.Load();
-            ResourcesManager.Instance.Load();
+            try
+            {
+                SoundManager.Instance.Load();
+                DataManager.Instance.Load();
+                ResourcesManager.Instance.Load();
+
+            }
+            catch (System.Exception e)
+            {
+                // handled below
+                GiantDebug.LogError($"{name} - {e.ToString()}");
+            }
 
             update(1f);
         }

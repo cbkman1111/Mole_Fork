@@ -9,42 +9,92 @@ namespace Giant.Excel
     public class ExcelHeader
     {
         private ISheet Sheet = null;
-        public string TableName { get; set; } // Name of the Table
-        public Dictionary<string, object> DataKey { get; set; } // Dictionary to hold column names and their corresponding cell addresses or values
-        public Dictionary<long, object> Data { get; set; }
-        public int HeaderLine { get; set; } // Header Row Line
-        public int DataLine => HeaderLine + 1;
+        public string TableName { get; set; } 
+        public Dictionary<string, object> DataKey { get; set; } 
+        public int HeaderLine { get; set; }
+        public int DataLine => HeaderLine;
         public int LastRow => Sheet.LastRowNum;
 
         public ExcelHeader(ISheet sheet)
         {
             Sheet = sheet;
-
-            int headerIndex = 0;
-            IRow rowFirst = GetRow(headerIndex);
-            TableName = rowFirst.GetCell(0).ToString().Replace("#", "");
             DataKey = new Dictionary<string, object>();
-            Data = new Dictionary<long, object>();
 
-            // Çì´õÀÇ Ã¹¹øÂ° ¼¿Àº Å×ÀÌºí ÀÌ¸§ÀÌ¹Ç·Î Á¦¿ÜÇÏ°í ½ÃÀÛ.
-            for (int i = 1; i < rowFirst.LastCellNum; i++)
+            IRow row0 = GetRow(0);
+            TableName = row0.GetCell(0).ToString().Replace("#", "");
+            
+            // í—¤ë”ì˜ ì²«ë²ˆì§¸ ì…€ì€ í…Œì´ë¸” ì´ë¦„ì´ë¯€ë¡œ ì œì™¸í•˜ê³  ì‹œì‘.
+            for (int i = 1; i < row0.LastCellNum; i++)
             {
-                ICell cell = rowFirst.GetCell(i);
+                ICell cell = row0.GetCell(i);
                 CellAddress address = cell.Address;
 
                 var name = cell.ToString();
-                if (name == string.Empty)
+                
+                if (string.IsNullOrEmpty(name) == true || name.Contains("!") == true)
                 {
                     continue;
                 }
 
-                // ¹è¿­.
-                if (name.Contains("[]") == true)
+                // ë°°ì—´ ë¬¶ìŒ
+                else if (name.Contains("[{}]") == true)
+                {
+                    // ë¦¬ìŠ¤íŠ¸ë¥¼ ë„£ê³ .
+                    var list = new List<object>();
+
+                    // ë°°ì—´ì˜ ìˆ˜ëŸ‰ ëŒ€ì….
+                    IRow row1 = GetRow(1);
+                    List<object> children = new();
+
+                    // 1. ì»¬ëŸ¼ ìˆ˜ëŸ‰ ê³„ì‚°.
+                    int totalColumns = 0;
+                    for (int col = i; col < row1.LastCellNum; col++)
+                    {
+                        ICell cellTop = row0.GetCell(col);
+                        if (cell != cellTop && cellTop.CellType != CellType.Blank)
+                            break;
+
+
+                        totalColumns++;
+                    }
+                    
+                    int lastColumn = i + totalColumns;
+                    for (int col = i; col < lastColumn; col++)
+                    {
+                        ICell cellNext = row1.GetCell(col);
+                        if (cellNext.ToString() == "{}")
+                            children.Add(cellNext.Address);
+                    }
+
+                    // 2. ê° ë°°ì—´ ë¬¶ìŒì˜ í•˜ìœ„ í•„ë“œëª… ì¶”ì¶œ
+                    int dataSize = totalColumns / children.Count;
+                    IRow row2 = GetRow(2);
+
+                    for (int j = 0; j < children.Count; j++)
+                    {
+                        CellAddress childAddress = children[j] as CellAddress;
+                        var dic = new Dictionary<string, CellAddress>();
+                        for (int k = 0; k < dataSize; k++)
+                        {
+                            ICell cellNext = row2.GetCell(childAddress.Column + k);
+                            if (cellNext == null || cellNext.CellType == CellType.Blank || cellNext.ToString().Contains("!") == true)
+                                continue;
+
+                            dic.Add(cellNext.ToString(), cellNext.Address);
+                        }
+
+                        list.Add(dic);
+                    }
+
+                    DataKey.Add(name, list);
+                }
+                // ë°°ì—´ì˜ ê°’.
+                else if (name.Contains("[]") == true)
                 {
                     var list = new List<CellAddress>();
-                    for (int j = i; j < rowFirst.LastCellNum; j++)
+                    for (int j = i; j < row0.LastCellNum; j++)
                     {
-                        ICell cellTop = rowFirst.GetCell(j);
+                        ICell cellTop = row0.GetCell(j);
                         if (cellTop == null)
                             continue;
 
@@ -56,53 +106,7 @@ namespace Giant.Excel
 
                     DataKey.Add(name, list);
                 }
-                // ¹è¿­ ¹­À½
-                else if (name.Contains("[{}]") == true)
-                {
-                    // ¸®½ºÆ®¸¦ ³Ö°í.
-                    var list = new List<object>();
-
-                    // ¹è¿­ÀÇ ¼ö·® ´ëÀÔ.
-                    int size = 0;
-                    IRow rowSecond = GetRow(headerIndex + 1);
-                    List<object> childs = new();
-                    for (int j = i; j < rowSecond.LastCellNum; j++)
-                    {
-                        ICell cellTop = rowFirst.GetCell(j);
-                        ICell cellNext = rowSecond.GetCell(j);
-                        if (cellNext == null)
-                            continue;
-
-                        if (j > i && cellTop.CellType != CellType.Blank)
-                            break;
-
-                        if (cellNext.ToString() == "{}")
-                            childs.Add(cellNext.Address);
-
-                        size++;
-                    }
-
-                    int dataSize = size / childs.Count;
-                    IRow rowArrayData = GetRow(headerIndex + 2);
-                    for (int j = 0; j < childs.Count; j++)
-                    {
-                        CellAddress childAddress = childs[j] as CellAddress;
-                        var dic = new Dictionary<string, CellAddress>();
-                        for (int k = 0; k < dataSize; k++)
-                        {
-                            ICell cellNext = rowArrayData.GetCell(childAddress.Column + k);
-                            if (cellNext == null || cellNext.CellType == CellType.Blank)
-                                continue;
-
-                            dic.Add(cellNext.ToString(), cellNext.Address);
-                        }
-
-                        list.Add(dic);
-                    }
-
-                    DataKey.Add(name, list);
-                }
-                // ÀÏ¹İ Çì´õ.
+                // ì¼ë°˜ í—¤ë”.
                 else
                 {
                     DataKey.Add(name, address);
@@ -121,7 +125,7 @@ namespace Giant.Excel
         }
 
         /// <summary>
-        /// Çì´õ ´ÙÀ½ Row ¸®ÅÏ. (µ¥ÀÌÅÍÀÇ ½ÃÀÛ)
+        /// í—¤ë” ë‹¤ìŒ Row ë¦¬í„´. (ë°ì´í„°ì˜ ì‹œì‘)
         /// </summary>
         /// <returns></returns>
         private int GetHeaderLine()
@@ -150,7 +154,7 @@ namespace Giant.Excel
                 }
             }
 
-            // ¸ğµç °´Ã¼¸¦ µ¹¾Æ¼­ Row Á© ³ôÀº°Å + 1 
+            // ëª¨ë“  ê°ì²´ë¥¼ ëŒì•„ì„œ Row ì ¤ ë†’ì€ê±° + 1 
             return row + 1;
         }
     }

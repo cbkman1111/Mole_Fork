@@ -43,9 +43,8 @@ namespace ExcelConverter.Editor
         {
             if (GUILayout.Button("Select Excel File"))
             {
-                string path = EditorUtility.OpenFilePanel("Select Excel File", ExcelInputPath, "xlsx");
-                ExcelFilePath = path;
-                ExcelFile = Path.GetFileName(path);
+                ExcelFilePath = EditorUtility.OpenFilePanel("Select Excel File", ExcelInputPath, "xlsx");
+                ExcelFile = Path.GetFileName(ExcelFilePath);
             }
 
             EditorGUI.BeginDisabledGroup(true);

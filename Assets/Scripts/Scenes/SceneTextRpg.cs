@@ -35,9 +35,17 @@ namespace Scenes
                 {
                     var data = pair.Value;
                     var key = pair.Key;
-                    Debug.Log($"{key} - {data.ID} {data.NAME_TID} {data.AGE} {data.ENABLE}");
+                    Debug.Log($"{key} - {data.ID} {data.NAME_TID} {data.AGE} {data.LEVEL_GROUP_ID}");
                 }
                 //tableHero.Data.ForEach(data => Debug.Log($"{data.ID} {data.NAME_TID} {data.AGE} {data.ENABLE}"));
+            }
+
+            var tableSkill = DataManager.Instance.Get<TableSkill>();
+            foreach (var pair in tableSkill.Data)
+            {
+                var data = pair.Value;
+                var key = pair.Key;
+                Debug.Log($"{key} - {data.ID} {data.NAME_TID} {data.SKILL_STATES.ToString()} {data.PROJECTILE_STATES.ToString()}");
             }
 
             return true;

@@ -8,6 +8,8 @@ using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using UnityEditor;
 using Newtonsoft.Json;
+using System.Runtime.Remoting.Messaging;
+using MathNet.Numerics.LinearAlgebra;
 
 namespace Giant.Excel
 {
@@ -64,17 +66,25 @@ namespace Giant.Excel
         /// </summary>
         private void ConvertToJson()
         {
+            Dictionary<string, Dictionary<long, object>> combineData = new();
+            //Dictionary<long, object> combineData = new();
+            //string tableName = string.Empty;
+
             for (int sheetIdx = 0; sheetIdx < Workbook.NumberOfSheets; sheetIdx++)
             {
                 ISheet sheet = Workbook.GetSheetAt(sheetIdx);
                 if (sheet == null)
                     continue;
 
+                if (sheet.SheetName == "NOTE")
+                    continue;
+
                 // 헤더 정보를 추출.
                 var header = new ExcelHeader(sheet);
+                //tableName = header.TableName;
 
                 // row 데이터 취합.
-                for (int i = header.DataLine; i < header.LastRow; i++)
+                for (int i = header.DataLine; i <= header.LastRow; i++)
                 {
                     IRow row = header.GetRow(i);
                     if (row == null)
@@ -130,12 +140,30 @@ namespace Giant.Excel
 
                     rowData.TryGetValue("ID", out object id);
                     var uniqueKey = long.Parse(id.ToString());
-                    header.Data.Add(uniqueKey, rowData);
-                }
 
-                WriteJson(header);
+                    if(combineData.TryGetValue(header.TableName, out var existingData))
+                    {
+                        // 이미 존재하는 키라면 덮어쓰기
+                        existingData[uniqueKey] = rowData;
+                    }
+                    else
+                    {
+                        // 새로운 테이블 이름으로 추가
+                        var tableData = new Dictionary<long, object> { { uniqueKey, rowData } };
+                        combineData.Add(header.TableName, tableData);
+                    }
+
+                    //combineData.Add(uniqueKey, rowData);
+                }
             }
 
+            foreach (var data in combineData)
+            {
+                var key = data.Key;
+                var dic = data.Value;
+                WriteJson(key, dic);
+            }
+                
             // 완료 팝업.
             EditorUtility.DisplayDialog("Excel to Json Conversion", "Conversion completed successfully!", "OK");
         }
@@ -144,15 +172,15 @@ namespace Giant.Excel
         /// 헤더 정보를 JSON 파일로 저장합니다.
         /// </summary>
         /// <param name="header"></param>
-        private void WriteJson(ExcelHeader header)
+        private void WriteJson(string tableName, Dictionary<long, object> data)
         {                 
             // 엑셀 파일에서 추출된 정보를 json 파일로 저장.
             var table = new Dictionary<string, object> {
-                        { "Data", header.Data }
+                        { "Data", data }
                     };
 
             string json = JsonConvert.SerializeObject(table, Formatting.Indented);
-            string path = $"{FileOutput}/{header.TableName}.json";
+            string path = $"{FileOutput}/{tableName}.json";
             
             File.WriteAllText(path, json);
         }

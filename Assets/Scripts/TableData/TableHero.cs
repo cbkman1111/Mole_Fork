@@ -9,9 +9,14 @@ namespace Common.Table
         public int ID { get; set; }
         public int TYPE { get; set; }
         public string NAME_TID { get; set; }
-        public int AGE { get; set; }
-        public int ENABLE { get; set; }
-        public string SKILLS { get; set; }
+        public float RADIUS { get; set; }
+        public string PREFAB { get; set; }
+        public string ICON { get; set; }
+        public int TIER { get; set; }    
+        public int AGE { get; set; } 
+        public long LEVEL_GROUP_ID { get; set; }
+        public List<int> KEYWORDS { get; set; }
+        public List<long> SKILLS { get; set; }
     }
 
     [Serializable]

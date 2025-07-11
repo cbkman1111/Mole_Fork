@@ -1,5 +1,26 @@
 {
   "Data": {
+    "1000000": {
+      "ID": 1000000,
+      "NAME_TID": "Name_1000000",
+      "PREFAB": "Prefab/Cube.prefab",
+      "HIT_STATE": [
+        {
+          "STATE_TYPE": 100,
+          "ID": 1
+        },
+        {
+          "STATE_TYPE": 200,
+          "ID": 2
+        }
+      ],
+      "TEST": [
+        1,
+        2,
+        3
+      ],
+      "LAST": 123
+    },
     "1000001": {
       "ID": 1000001,
       "NAME_TID": "Name_1000001",
@@ -528,6 +549,27 @@
     "2000320": {
       "ID": 2000320,
       "NAME_TID": "Name_2000320",
+      "PREFAB": "Prefab/Cube.prefab",
+      "HIT_STATE": [
+        {
+          "STATE_TYPE": 100,
+          "ID": 1
+        },
+        {
+          "STATE_TYPE": 200,
+          "ID": 2
+        }
+      ],
+      "TEST": [
+        1,
+        2,
+        3
+      ],
+      "LAST": 123
+    },
+    "2000321": {
+      "ID": 2000321,
+      "NAME_TID": "Name_2000321",
       "PREFAB": "Prefab/Cube.prefab",
       "HIT_STATE": [
         {

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Common.Global;
 using Common.Scene;
+using Common.Utils;
 using Common.Utils.Pool;
 using DG.Tweening;
 using UI.Menu;
@@ -103,18 +104,29 @@ namespace Scenes
         /// </summary>
         public async override void Load(Action<float> update)
         {
-            int total = 1000;
-            List<int> list = new List<int>();
-            for (int i = 0; i < total; i++)
+
+            try
             {
-                float percent = (float)i / (float)total;
-                list.Add(i);
 
-                var pos = GetSpiral(i);
-                var obj = Instantiate(targetCube, pos, Quaternion.identity);
-                obj.name = $"Object_{i}";
+                int total = 1000;
+                List<int> list = new List<int>();
+                for (int i = 0; i < total; i++)
+                {
+                    float percent = (float)i / (float)total;
+                    list.Add(i);
 
-                update(percent);
+                    var pos = GetSpiral(i);
+                    var obj = Instantiate(targetCube, pos, Quaternion.identity);
+                    obj.name = $"Object_{i}";
+
+                    update(percent);
+                }
+
+            }
+            catch (System.Exception e)
+            {
+                // handled below
+                GiantDebug.LogError($"{name} - {e.ToString()}");
             }
 
             update(1f);

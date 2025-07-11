@@ -8,6 +8,7 @@ using Scenes.EllersAlgorithm;
 using UI.Popup;
 using Unity.Jobs;
 using Unity.Collections;
+using Common.Utils;
 
 namespace Scenes
 {
@@ -633,6 +634,16 @@ namespace Scenes
 
         public async override void Load(Action<float> update)
         {
+            try
+            {
+                
+            }
+            catch (System.Exception e)
+            {
+                // handled below
+                GiantDebug.LogError($"{name} - {e.ToString()}");
+            }
+
             update(1f);
         }
        

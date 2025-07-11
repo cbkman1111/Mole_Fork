@@ -1,20 +1,104 @@
 {
   "Data": {
-    "20001": {
-      "ID": 20001,
-      "TYPE": 2,
-      "NAME_TID": "철수",
-      "AGE": 12,
-      "ENABLE": 1,
-      "SKILLS": "200010"
+    "10000": {
+      "ID": 10000,
+      "TYPE": 1,
+      "NAME_TID": "이순신",
+      "RADIUS": 1,
+      "PREFAB": "a.prefab",
+      "ICON": "b.png",
+      "TIER": 1,
+      "AGE": 11,
+      "LEVEL_GROUP_ID": 0,
+      "KEYWORDS": [
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "SKILLS": [
+        10000,
+        10001,
+        0,
+        0,
+        0
+      ]
     },
-    "20002": {
-      "ID": 20002,
-      "TYPE": 2,
-      "NAME_TID": "영희",
+    "10001": {
+      "ID": 10001,
+      "TYPE": 1,
+      "NAME_TID": "류관순",
+      "RADIUS": 1,
+      "PREFAB": "a.prefab",
+      "ICON": "b.png",
+      "TIER": 1,
+      "AGE": 12,
+      "LEVEL_GROUP_ID": 0,
+      "KEYWORDS": [
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "SKILLS": [
+        10000,
+        10001,
+        0,
+        0,
+        0
+      ]
+    },
+    "10002": {
+      "ID": 10002,
+      "TYPE": 1,
+      "NAME_TID": "이문세",
+      "RADIUS": 1,
+      "PREFAB": "a.prefab",
+      "ICON": "b.png",
+      "TIER": 1,
       "AGE": 134,
-      "ENABLE": 0,
-      "SKILLS": "200020"
+      "LEVEL_GROUP_ID": 0,
+      "KEYWORDS": [
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "SKILLS": [
+        10000,
+        10001,
+        0,
+        0,
+        0
+      ]
+    },
+    "10003": {
+      "ID": 10003,
+      "TYPE": 1,
+      "NAME_TID": "정관장",
+      "RADIUS": 1,
+      "PREFAB": "a.prefab",
+      "ICON": "b.png",
+      "TIER": 1,
+      "AGE": 20,
+      "LEVEL_GROUP_ID": 0,
+      "KEYWORDS": [
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "SKILLS": [
+        10000,
+        10001,
+        0,
+        0,
+        0
+      ]
     }
   }
 }

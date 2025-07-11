@@ -1,0 +1,44 @@
+{
+  "Data": {
+    "1001": {
+      "ID": 1001,
+      "NAME_TID": "STATE_TID_1001",
+      "ICON": "a.png",
+      "GROUP": 1,
+      "ORDER": 1,
+      "STAT_TYPE": 1,
+      "CALCULATION_TYPE": 0,
+      "VALUE": 0.1
+    },
+    "1002": {
+      "ID": 1002,
+      "NAME_TID": "STATE_TID_1002",
+      "ICON": "a.png",
+      "GROUP": 1,
+      "ORDER": 2,
+      "STAT_TYPE": 2,
+      "CALCULATION_TYPE": 0,
+      "VALUE": 0.1
+    },
+    "1003": {
+      "ID": 1003,
+      "NAME_TID": "STATE_TID_1003",
+      "ICON": "a.png",
+      "GROUP": 1,
+      "ORDER": 3,
+      "STAT_TYPE": 3,
+      "CALCULATION_TYPE": 0,
+      "VALUE": 0.1
+    },
+    "1004": {
+      "ID": 1004,
+      "NAME_TID": "STATE_TID_1004",
+      "ICON": "a.png",
+      "GROUP": 1,
+      "ORDER": 4,
+      "STAT_TYPE": 4,
+      "CALCULATION_TYPE": 0,
+      "VALUE": 0.1
+    }
+  }
+}

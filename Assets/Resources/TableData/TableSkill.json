@@ -1,88 +1,108 @@
 {
   "Data": {
-    "100001": {
-      "ID": 100001,
-      "NAME_TID": "스킬명",
-      "RANGE": 1,
+    "10000": {
+      "ID": 10000,
+      "TYPE": 1,
+      "NAME_TID": "SKILL_NAME_TID_10000",
+      "ICON": "a.png",
       "COOL_TIME": 1,
-      "PROJECTILE": "1000010"
+      "RANGE": 1,
+      "FACTOR": 10000,
+      "FRAME": 0.48,
+      "PROJECTILE_STATES": [
+        {
+          "START_TIME": 0.5,
+          "RANGE_TYPE": 0,
+          "PROJECTILE_TYPE": 0,
+          "PROJECTILE_ID": 1000000
+        }
+      ],
+      "SKILL_STATES": [
+        {
+          "START_TIME": "100001",
+          "STATE_TARGET": 1,
+          "STATE_TYPE": 0,
+          "STATE_ID": 0
+        }
+      ]
     },
-    "100011": {
-      "ID": 100011,
-      "NAME_TID": "스킬명",
+    "10001": {
+      "ID": 10001,
+      "TYPE": 1,
+      "NAME_TID": "SKILL_NAME_TID_10001",
+      "ICON": "a.png",
+      "COOL_TIME": 2,
       "RANGE": 1,
-      "COOL_TIME": 1,
-      "PROJECTILE": "1000110"
+      "FACTOR": 10000,
+      "FRAME": 0.48,
+      "PROJECTILE_STATES": [
+        {
+          "START_TIME": 0.5,
+          "RANGE_TYPE": 0,
+          "PROJECTILE_TYPE": 1,
+          "PROJECTILE_ID": 1000001
+        }
+      ],
+      "SKILL_STATES": [
+        {
+          "START_TIME": "100011",
+          "STATE_TARGET": 2,
+          "STATE_TYPE": 0,
+          "STATE_ID": 0
+        }
+      ]
     },
-    "100012": {
-      "ID": 100012,
-      "NAME_TID": "스킬명",
-      "RANGE": 1,
-      "COOL_TIME": 1,
-      "PROJECTILE": "1000120"
+    "10002": {
+      "ID": 10002,
+      "TYPE": 1,
+      "NAME_TID": "SKILL_NAME_TID_10002",
+      "ICON": "a.png",
+      "COOL_TIME": 3,
+      "RANGE": 0,
+      "FACTOR": 10000,
+      "FRAME": 0.48,
+      "PROJECTILE_STATES": [
+        {
+          "START_TIME": 0.5,
+          "RANGE_TYPE": 1,
+          "PROJECTILE_TYPE": 2,
+          "PROJECTILE_ID": 1000002
+        }
+      ],
+      "SKILL_STATES": [
+        {
+          "START_TIME": "100021",
+          "STATE_TARGET": 3,
+          "STATE_TYPE": 0,
+          "STATE_ID": 0
+        }
+      ]
     },
-    "100021": {
-      "ID": 100021,
-      "NAME_TID": "스킬명",
+    "10003": {
+      "ID": 10003,
+      "TYPE": 1,
+      "NAME_TID": "SKILL_NAME_TID_10003",
+      "ICON": "a.png",
+      "COOL_TIME": 4,
       "RANGE": 1,
-      "COOL_TIME": 1,
-      "PROJECTILE": "1000210"
-    },
-    "100022": {
-      "ID": 100022,
-      "NAME_TID": "스킬명",
-      "RANGE": 1,
-      "COOL_TIME": 1,
-      "PROJECTILE": "1000220"
-    },
-    "200001": {
-      "ID": 200001,
-      "NAME_TID": "스킬명",
-      "RANGE": 1,
-      "COOL_TIME": 1,
-      "PROJECTILE": "2000010"
-    },
-    "200002": {
-      "ID": 200002,
-      "NAME_TID": "스킬명",
-      "RANGE": 1,
-      "COOL_TIME": 1,
-      "PROJECTILE": "2000020"
-    },
-    "200011": {
-      "ID": 200011,
-      "NAME_TID": "스킬명",
-      "RANGE": 1,
-      "COOL_TIME": 1,
-      "PROJECTILE": "2000110"
-    },
-    "200012": {
-      "ID": 200012,
-      "NAME_TID": "스킬명",
-      "RANGE": 1,
-      "COOL_TIME": 1,
-      "PROJECTILE": "2000120"
-    },
-    "200021": {
-      "ID": 200021,
-      "NAME_TID": "스킬명",
-      "RANGE": 1,
-      "COOL_TIME": 1,
-      "PROJECTILE": "2000210"
-    },
-    "200022": {
-      "ID": 200022,
-      "NAME_TID": "스킬명",
-      "RANGE": 1,
-      "COOL_TIME": 1,
-      "PROJECTILE": "2000220"
-    },
-    "200031": {
-      "ID": 200031,
-      "NAME_TID": "스킬명",
-      "RANGE": 1,
-      "COOL_TIME": 1,
-      "PROJECTILE": "2000310"
+      "FACTOR": 10000,
+      "FRAME": 0.96,
+      "PROJECTILE_STATES": [
+        {
+          "START_TIME": 0.5,
+          "RANGE_TYPE": 2,
+          "PROJECTILE_TYPE": 3,
+          "PROJECTILE_ID": 1000003
+        }
+      ],
+      "SKILL_STATES": [
+        {
+          "START_TIME": "100031",
+          "STATE_TARGET": 4,
+          "STATE_TYPE": 0,
+          "STATE_ID": 0
+        }
+      ]
     }
   }
 }

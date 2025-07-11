@@ -37,11 +37,10 @@ namespace Scenes
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            var textAsset = ResourcesManager.Instance.LoadInBuild<TextAsset>("TableJsonTest");
-            var jsonString = textAsset.ToString();
-            
+            //var textAsset = ResourcesManager.Instance.LoadInBuild<TextAsset>("TableJsonTest");
+            //var jsonString = textAsset.ToString();
             //JSONObject json = new JSONObject(jsonString); // 지난 시간 : 00:00:04.7732221 - http://www.opensource.org/licenses/lgpl-2.1.php
-            JObject json = JObject.Parse(jsonString); // 지난 시간 : 00:00:01.3933306 - Newton
+            //JObject json = JObject.Parse(jsonString); // 지난 시간 : 00:00:01.3933306 - Newton
             //var json = JsonMapper.ToObject(jsonString); // 지난 시간 : 00:00:02.2555544 - LitJson
             
             stopwatch.Stop();
