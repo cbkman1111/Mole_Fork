@@ -124,6 +124,10 @@ namespace UI.Menu
             {
                 AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneTest);
             }
+            else if (name == "Button - Shooting")
+            {
+                AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneShooting);
+            }
         }
     }
 }

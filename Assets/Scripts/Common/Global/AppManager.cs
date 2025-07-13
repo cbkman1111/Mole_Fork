@@ -1,6 +1,5 @@
 using Common.Global.Singleton;
 using Common.Scene;
-using Common.Utils;
 using Common.Utils.Pool;
 using Network;
 using System;
@@ -41,7 +40,6 @@ namespace Common.Global
             //SoundManager.Instance.Load();
             //DataManager.Instance.Load();
             //ResourcesManager.Instance.Load();
-
             //_ = AdMobManager.Instance;
             //NetworkManager.Instance.Connect();
 
@@ -135,24 +133,9 @@ namespace Common.Global
                 _currScene = FindSceneObject(sceneName);
                 UIManager.Instance.InitWithScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
 
-                // 비동기로 데이터는 로드가 되는데, 게임 오브젝트 같은건 안됨. 
-                bool usingTask = false;
-                if (usingTask == true)
-                {
-                    Task.Run(() => {
-
-                    }).ContinueWith(task => {
-                        _currScene.Load((percent) => {
-                            _loadingPercent = 0.9f + (0.1f * percent);
-                        });
-                    }, TaskScheduler.FromCurrentSynchronizationContext());
-                }
-                else 
-                {
-                    _currScene.Load((percent) => {
-                        _loadingPercent = 0.9f + (0.1f * percent);
-                    });
-                }
+                _currScene.Load((percent) => {
+                    _loadingPercent = 0.9f + (0.1f * percent);
+                });
 
                 yield return new WaitUntil(() => loadingMenu.Complete(1.0f) == true);
                 yield return new WaitForEndOfFrame();
@@ -184,15 +167,6 @@ namespace Common.Global
                     _loadingPercent = 0.9f + (0.1f * percent);
                 });
 
-                /*
-                Task.Run(() => {
-
-                }).ContinueWith(task => {
-                    _currScene.Load((percent) => {
-                        _loadingPercent = 0.9f + (0.1f * percent);
-                    });
-                }, TaskScheduler.FromCurrentSynchronizationContext());
-                */
                 yield return new WaitUntil(() => _loadingPercent == 1.0f);
                 yield return new WaitForEndOfFrame();
 

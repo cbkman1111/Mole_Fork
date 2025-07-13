@@ -30,6 +30,7 @@ namespace Common.Scene
             SceneHash,
 
             ScenePoker, // 포커
+            SceneShooting, // 슈팅
 
         }
 
