@@ -9,7 +9,9 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
+using UnityEngine.U2D;
 
 namespace Common.Global
 {
@@ -130,6 +132,7 @@ namespace Common.Global
                 asyncNextOperator.allowSceneActivation = true;
                 yield return new WaitUntil(() => asyncNextOperator.isDone == true);
                 
+                
                 _currScene = FindSceneObject(sceneName);
                 UIManager.Instance.InitWithScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
 
@@ -140,10 +143,12 @@ namespace Common.Global
                 yield return new WaitUntil(() => loadingMenu.Complete(1.0f) == true);
                 yield return new WaitForEndOfFrame();
 
-
                 UIManager.Instance.CloseDontDestroyPopup<UIPopupLoading>();
                 _currScene.MainCamera = Camera.main;
                 _currScene.Init(_param);
+
+                yield return new WaitForEndOfFrame();
+                Resources.UnloadUnusedAssets();
             }
             else
             {
