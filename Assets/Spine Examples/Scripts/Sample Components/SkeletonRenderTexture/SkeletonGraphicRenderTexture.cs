@@ -1,16 +1,16 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated July 28, 2023. Replaces all prior versions.
+ * Last updated April 5, 2025. Replaces all prior versions.
  *
- * Copyright (c) 2013-2023, Esoteric Software LLC
+ * Copyright (c) 2013-2025, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
  * conditions of Section 2 of the Spine Editor License Agreement:
  * http://esotericsoftware.com/spine-editor-license
  *
- * Otherwise, it is permitted to integrate the Spine Runtimes into software or
- * otherwise create derivative works of the Spine Runtimes (collectively,
+ * Otherwise, it is permitted to integrate the Spine Runtimes into software
+ * or otherwise create derivative works of the Spine Runtimes (collectively,
  * "Products"), provided that each user of the Products must obtain their own
  * Spine Editor license and redistribution of the Products in any form must
  * include this license and copyright notice.
@@ -23,8 +23,8 @@
  * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
  * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE
- * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
 #if UNITY_2017_2_OR_NEWER
@@ -40,7 +40,7 @@ namespace Spine.Unity.Examples {
 
 	/// <summary>
 	/// When enabled, this component renders a skeleton to a RenderTexture and
-	/// then draws this RenderTexture at a UI RawImage quad of the same size.
+	/// then draws this RenderTexture at a UI SkeletonSubmeshGraphic quad of the same size.
 	/// This allows changing transparency at a single quad, which produces a more
 	/// natural fadeout effect.
 	/// Note: It is recommended to keep this component disabled as much as possible
@@ -64,8 +64,21 @@ namespace Spine.Unity.Examples {
 		protected SkeletonGraphic skeletonGraphic;
 		public List<TextureMaterialPair> meshRendererMaterialForTexture = new List<TextureMaterialPair>();
 		protected CanvasRenderer quadCanvasRenderer;
-		protected RawImage quadRawImage;
+		protected SkeletonSubmeshGraphic quadMaskableGraphic;
 		protected readonly Vector3[] worldCorners = new Vector3[4];
+
+		public void ResetMeshRendererMaterials () {
+			meshRendererMaterialForTexture.Clear();
+			AtlasAssetBase[] atlasAssets = skeletonGraphic.SkeletonDataAsset.atlasAssets;
+			for (int i = 0; i < atlasAssets.Length; ++i) {
+				foreach (Material material in atlasAssets[i].Materials) {
+					if (material.mainTexture != null) {
+						meshRendererMaterialForTexture.Add(
+							new TextureMaterialPair(material.mainTexture, material));
+					}
+				}
+			}
+		}
 
 		protected override void Awake () {
 			base.Awake();
@@ -79,28 +92,32 @@ namespace Spine.Unity.Examples {
 		}
 
 		void CreateQuadChild () {
-			quad = new GameObject(this.name + " RenderTexture", typeof(CanvasRenderer), typeof(RawImage));
+			quad = new GameObject(this.name + " RenderTexture", typeof(CanvasRenderer), typeof(SkeletonSubmeshGraphic));
 			quad.transform.SetParent(this.transform.parent, false);
 			quadCanvasRenderer = quad.GetComponent<CanvasRenderer>();
-			quadRawImage = quad.GetComponent<RawImage>();
+			quadMaskableGraphic = quad.GetComponent<SkeletonSubmeshGraphic>();
 
 			quadMesh = new Mesh();
 			quadMesh.MarkDynamic();
 			quadMesh.name = "RenderTexture Quad";
 			quadMesh.hideFlags = HideFlags.DontSaveInBuild | HideFlags.DontSaveInEditor;
+
+			if (quadMaterial == null) {
+				quadMaterial = new Material(Shader.Find("Spine/SkeletonGraphic"));
+				quadMaterial.EnableKeyword("_CANVAS_GROUP_COMPATIBLE");
+			}
 		}
 
 		void Reset () {
 			skeletonGraphic = this.GetComponent<SkeletonGraphic>();
-			AtlasAssetBase[] atlasAssets = skeletonGraphic.SkeletonDataAsset.atlasAssets;
-			for (int i = 0; i < atlasAssets.Length; ++i) {
-				foreach (Material material in atlasAssets[i].Materials) {
-					if (material.mainTexture != null) {
-						meshRendererMaterialForTexture.Add(
-							new TextureMaterialPair(material.mainTexture, material));
-					}
-				}
+			ResetMeshRendererMaterials();
+#if UNITY_EDITOR
+			string[] assets = UnityEditor.AssetDatabase.FindAssets("t:material RenderQuadGraphicMaterial");
+			if (assets.Length > 0) {
+				string materialPath = UnityEditor.AssetDatabase.GUIDToAssetPath(assets[0]);
+				quadMaterial = UnityEditor.AssetDatabase.LoadAssetAtPath<Material>(materialPath);
 			}
+#endif
 		}
 
 		void OnEnable () {
@@ -109,6 +126,7 @@ namespace Spine.Unity.Examples {
 			skeletonGraphic.AssignMeshOverrideMultipleRenderers += RenderMultipleMeshesToRenderTexture;
 			skeletonGraphic.disableMeshAssignmentOnOverride = true;
 			skeletonGraphic.OnMeshAndMaterialsUpdated += RenderOntoQuad;
+			skeletonGraphic.OnAnimationRebuild += OnRebuild;
 			List<CanvasRenderer> canvasRenderers = skeletonGraphic.canvasRenderers;
 			for (int i = 0; i < canvasRenderers.Count; ++i)
 				canvasRenderers[i].cull = true;
@@ -123,6 +141,7 @@ namespace Spine.Unity.Examples {
 			skeletonGraphic.AssignMeshOverrideMultipleRenderers -= RenderMultipleMeshesToRenderTexture;
 			skeletonGraphic.disableMeshAssignmentOnOverride = false;
 			skeletonGraphic.OnMeshAndMaterialsUpdated -= RenderOntoQuad;
+			skeletonGraphic.OnAnimationRebuild -= OnRebuild;
 			List<CanvasRenderer> canvasRenderers = skeletonGraphic.canvasRenderers;
 			for (int i = 0; i < canvasRenderers.Count; ++i)
 				canvasRenderers[i].cull = false;
@@ -141,6 +160,10 @@ namespace Spine.Unity.Examples {
 
 		void RenderOntoQuad (SkeletonGraphic skeletonRenderer) {
 			AssignAtQuad();
+		}
+
+		void OnRebuild (ISkeletonAnimation skeletonGraphic) {
+			ResetMeshRendererMaterials();
 		}
 
 		protected void PrepareForMesh () {
@@ -194,8 +217,10 @@ namespace Spine.Unity.Examples {
 		}
 
 		protected void RenderSingleMeshToRenderTexture (Mesh mesh, Material graphicMaterial, Texture texture) {
+			if (mesh.subMeshCount == 0) return;
 			Material meshRendererMaterial = MeshRendererMaterialForTexture(texture);
-			commandBuffer.DrawMesh(mesh, transform.localToWorldMatrix, meshRendererMaterial, 0, -1);
+			foreach (int shaderPass in shaderPasses)
+				commandBuffer.DrawMesh(mesh, transform.localToWorldMatrix, meshRendererMaterial, 0, shaderPass);
 			Graphics.ExecuteCommandBuffer(commandBuffer);
 		}
 
@@ -203,19 +228,23 @@ namespace Spine.Unity.Examples {
 			Mesh[] meshes, Material[] graphicMaterials, Texture[] textures) {
 
 			for (int i = 0; i < meshCount; ++i) {
+				Mesh mesh = meshes[i];
+				if (mesh.subMeshCount == 0) continue;
+
 				Material meshRendererMaterial = MeshRendererMaterialForTexture(textures[i]);
-				commandBuffer.DrawMesh(meshes[i], transform.localToWorldMatrix, meshRendererMaterial, 0, -1);
+				foreach (int shaderPass in shaderPasses)
+					commandBuffer.DrawMesh(mesh, transform.localToWorldMatrix, meshRendererMaterial, 0, shaderPass);
 			}
 			Graphics.ExecuteCommandBuffer(commandBuffer);
 		}
 
 		protected void SetupQuad () {
-			quadRawImage.texture = this.renderTexture;
-			quadRawImage.color = color;
+			quadCanvasRenderer.SetMaterial(quadMaterial, this.renderTexture);
+			quadMaskableGraphic.color = color;
 			quadCanvasRenderer.SetColor(color);
 
 			RectTransform srcRectTransform = skeletonGraphic.rectTransform;
-			RectTransform dstRectTransform = quadRawImage.rectTransform;
+			RectTransform dstRectTransform = quadMaskableGraphic.rectTransform;
 
 			dstRectTransform.anchorMin = srcRectTransform.anchorMin;
 			dstRectTransform.anchorMax = srcRectTransform.anchorMax;
@@ -231,24 +260,30 @@ namespace Spine.Unity.Examples {
 			commandBuffer.SetRenderTarget(renderTexture);
 			commandBuffer.ClearRenderTarget(true, true, Color.clear);
 
-			Rect canvasRect = skeletonGraphic.canvas.pixelRect;
-
-			Matrix4x4 projectionMatrix = Matrix4x4.Ortho(
-				canvasRect.x, canvasRect.x + canvasRect.width,
-				canvasRect.y, canvasRect.y + canvasRect.height,
-				float.MinValue, float.MaxValue);
+			Vector2 targetViewportSize = new Vector2(
+				screenSpaceMax.x - screenSpaceMin.x,
+				screenSpaceMax.y - screenSpaceMin.y);
 
 			RenderMode canvasRenderMode = skeletonGraphic.canvas.renderMode;
 			if (canvasRenderMode == RenderMode.ScreenSpaceOverlay) {
+				Rect canvasRect = skeletonGraphic.canvas.pixelRect;
+				canvasRect.x += screenSpaceMin.x;
+				canvasRect.y += screenSpaceMin.y;
+				canvasRect.width = targetViewportSize.x;
+				canvasRect.height = targetViewportSize.y;
+				Matrix4x4 projectionMatrix = Matrix4x4.Ortho(
+					canvasRect.x, canvasRect.x + canvasRect.width,
+					canvasRect.y, canvasRect.y + canvasRect.height,
+					float.MinValue, float.MaxValue);
 				commandBuffer.SetViewMatrix(Matrix4x4.identity);
 				commandBuffer.SetProjectionMatrix(projectionMatrix);
 			} else {
 				commandBuffer.SetViewMatrix(targetCamera.worldToCameraMatrix);
-				commandBuffer.SetProjectionMatrix(targetCamera.projectionMatrix);
+				Matrix4x4 projectionMatrix = CalculateProjectionMatrix(targetCamera,
+					screenSpaceMin, screenSpaceMax, skeletonGraphic.canvas.pixelRect.size);
+				commandBuffer.SetProjectionMatrix(projectionMatrix);
 			}
-
-			Vector2 targetCameraViewportSize = targetCamera.pixelRect.size;
-			Rect viewportRect = new Rect(-screenSpaceMin * downScaleFactor, targetCameraViewportSize * downScaleFactor);
+			Rect viewportRect = new Rect(Vector2.zero, targetViewportSize * downScaleFactor);
 			commandBuffer.SetViewport(viewportRect);
 		}
 

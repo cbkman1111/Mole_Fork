@@ -1,16 +1,16 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated July 28, 2023. Replaces all prior versions.
+ * Last updated April 5, 2025. Replaces all prior versions.
  *
- * Copyright (c) 2013-2023, Esoteric Software LLC
+ * Copyright (c) 2013-2025, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
  * conditions of Section 2 of the Spine Editor License Agreement:
  * http://esotericsoftware.com/spine-editor-license
  *
- * Otherwise, it is permitted to integrate the Spine Runtimes into software or
- * otherwise create derivative works of the Spine Runtimes (collectively,
+ * Otherwise, it is permitted to integrate the Spine Runtimes into software
+ * or otherwise create derivative works of the Spine Runtimes (collectively,
  * "Products"), provided that each user of the Products must obtain their own
  * Spine Editor license and redistribution of the Products in any form must
  * include this license and copyright notice.
@@ -23,8 +23,8 @@
  * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
  * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE
- * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
 #pragma warning disable 0219
@@ -61,6 +61,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using UnityEditor;
+using UnityEditor.VersionControl;
 using UnityEngine;
 using CompatibilityProblemInfo = Spine.Unity.SkeletonDataCompatibility.CompatibilityProblemInfo;
 
@@ -218,7 +219,7 @@ namespace Spine.Unity.Editor {
 				} else {
 					// On a "Reimport All" the order of imports can be wrong, thus LoadAssetAtPath() above could return null.
 					// as a workaround, we provide a fallback reader.
-					input = File.Open(skeletonDataPath, FileMode.Open, FileAccess.Read);
+					input = File.Open(skeletonDataPath, System.IO.FileMode.Open, FileAccess.Read);
 				}
 				binary.ReadSkeletonData(input);
 			} finally {
@@ -493,6 +494,8 @@ namespace Spine.Unity.Editor {
 					}
 				}
 			}
+
+			RevertUnchangedOnPerforce(atlasPaths, skeletonPaths, newAtlases);
 		}
 
 		static void AddDependentAtlasIfImageChanged (List<string> atlasPaths, List<string> imagePaths) {
@@ -523,6 +526,32 @@ namespace Spine.Unity.Editor {
 					if (textAsset != null && IsSpineData(textAsset, out compatibilityProblemInfo, ref problemDescription))
 						skeletonPaths.Add(new PathAndProblemInfo(usedSkeletonPath, compatibilityProblemInfo, problemDescription));
 				}
+			}
+		}
+
+		/// <summary>Prevents automatic check-out of unchanged, identically re-created assets (e.g. when re-imported)
+		/// when using Perforce VCS.</summary>
+		static void RevertUnchangedOnPerforce (List<string> atlasPaths, List<PathAndProblemInfo> skeletonPaths, List<AtlasAssetBase> newAtlases) {
+			Plugin versionControl = Provider.GetActivePlugin();
+			if (versionControl != null && versionControl.name == "Perforce") {
+				AssetList assets = new AssetList();
+
+				foreach (string atlasPath in atlasPaths) {
+					assets.Add(Provider.GetAssetByPath(atlasPath));
+				}
+				foreach (PathAndProblemInfo skeletonPathInfo in skeletonPaths) {
+					if (skeletonPathInfo.compatibilityProblems == null)
+						assets.Add(Provider.GetAssetByPath(skeletonPathInfo.path));
+				}
+				foreach (AtlasAssetBase atlas in newAtlases) {
+					if (atlas != null)
+						assets.Add(Provider.GetAssetByPath(AssetDatabase.GetAssetPath(atlas)));
+					foreach (Material atlasMaterial in atlas.Materials) {
+						if (atlasMaterial != null)
+							assets.Add(Provider.GetAssetByPath(AssetDatabase.GetAssetPath(atlasMaterial)));
+					}
+				}
+				Provider.Revert(assets, RevertMode.Unchanged);
 			}
 		}
 
@@ -629,7 +658,6 @@ namespace Spine.Unity.Editor {
 				foreach (Material m in atlasAsset.materials)
 					vestigialMaterials.Add(m);
 			}
-
 			protectFromStackGarbageCollection.Add(atlasAsset);
 			atlasAsset.atlasFile = atlasText;
 
@@ -640,8 +668,10 @@ namespace Spine.Unity.Editor {
 				foreach (AtlasPage page in atlas.Pages)
 					pageFiles.Add(page.name);
 			}
+			bool atlasHasCustomMaterials = HasCustomMaterialsAssigned(vestigialMaterials, primaryName, pageFiles);
 
 			List<Material> populatingMaterials = new List<Material>(pageFiles.Count);
+			string materialDirectory = GetMaterialDirectory(assetPath, vestigialMaterials);
 
 			for (int i = 0; i < pageFiles.Count; i++) {
 				string texturePath = assetPath + "/" + pageFiles[i];
@@ -655,14 +685,9 @@ namespace Spine.Unity.Editor {
 				}
 
 				string pageName = Path.GetFileNameWithoutExtension(pageFiles[i]);
-
-				//because this looks silly
-				if (pageName == primaryName && pageFiles.Count == 1)
-					pageName = "Material";
-
-				string materialPath = assetPath + "/" + primaryName + "_" + pageName + ".mat";
+				string materialFileName = GetPageMaterialName(primaryName, pageName, pageFiles) + ".mat";
+				string materialPath = materialDirectory + "/" + materialFileName;
 				Material material = (Material)AssetDatabase.LoadAssetAtPath(materialPath, typeof(Material));
-
 				if (material == null) {
 					Shader defaultShader = GetDefaultShader();
 					material = defaultShader != null ? new Material(defaultShader) : null;
@@ -685,10 +710,11 @@ namespace Spine.Unity.Editor {
 				}
 			}
 
-			atlasAsset.materials = populatingMaterials.ToArray();
-
-			for (int i = 0; i < vestigialMaterials.Count; i++)
-				AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(vestigialMaterials[i]));
+			if (!atlasHasCustomMaterials) {
+				atlasAsset.materials = populatingMaterials.ToArray();
+				for (int i = 0; i < vestigialMaterials.Count; i++)
+					AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(vestigialMaterials[i]));
+			}
 
 			if (AssetDatabase.GetAssetPath(atlasAsset) == "")
 				AssetDatabase.CreateAsset(atlasAsset, atlasPath);
@@ -698,9 +724,14 @@ namespace Spine.Unity.Editor {
 			EditorUtility.SetDirty(atlasAsset);
 			AssetDatabase.SaveAssets();
 
-			if (pageFiles.Count != atlasAsset.materials.Length)
-				Debug.LogWarning(string.Format("{0} :: Not all atlas pages were imported. If you rename your image files, please make sure you also edit the filenames specified in the atlas file.", atlasAsset.name), atlasAsset);
-			else
+			if (pageFiles.Count != atlasAsset.materials.Length) {
+				if (atlasHasCustomMaterials)
+					Debug.LogWarning(string.Format("{0} :: Found custom materials at atlas asset, but atlas page count " +
+						"changed. Please update the Materials list accordingly.", atlasAsset.name), atlasAsset);
+				else
+					Debug.LogWarning(string.Format("{0} :: Not all atlas pages were imported. If you rename your image " +
+						"files, please make sure you also edit the filenames specified in the atlas file.", atlasAsset.name), atlasAsset);
+			} else
 				Debug.Log(string.Format("{0} :: Imported with {1} material", atlasAsset.name, atlasAsset.materials.Length), atlasAsset);
 
 			// Iterate regions and bake marked.
@@ -735,6 +766,15 @@ namespace Spine.Unity.Editor {
 			// asset returns null, regardless of refresh calls.
 			AtlasAssetBase loadedAtlas = (AtlasAssetBase)AssetDatabase.LoadAssetAtPath(atlasPath, typeof(AtlasAssetBase));
 			return loadedAtlas != null ? loadedAtlas : atlasAsset;
+		}
+
+		static bool HasCustomMaterialsAssigned (List<Material> vestigialMaterials, string primaryName, List<string> pageFiles) {
+			if (pageFiles.Count == 0 || vestigialMaterials.Count == 0)
+				return false;
+
+			string firstPageName = Path.GetFileNameWithoutExtension(pageFiles[0]);
+			string defaultMaterialName = GetPageMaterialName(primaryName, firstPageName, pageFiles);
+			return vestigialMaterials[0].name != defaultMaterialName;
 		}
 
 		public static Shader GetDefaultShader () {
@@ -836,7 +876,6 @@ namespace Spine.Unity.Editor {
 
 			string primaryName = spriteAtlas.name;
 			string assetPath = Path.GetDirectoryName(AssetDatabase.GetAssetPath(spriteAtlas)).Replace('\\', '/');
-
 			string atlasPath = assetPath + "/" + primaryName + SpriteAtlasSuffix + ".asset";
 
 			SpineSpriteAtlasAsset atlasAsset = AssetDatabase.LoadAssetAtPath<SpineSpriteAtlasAsset>(atlasPath);
@@ -898,6 +937,22 @@ namespace Spine.Unity.Editor {
 
 			protectFromStackGarbageCollection.Remove(atlasAsset);
 			return (AtlasAssetBase)AssetDatabase.LoadAssetAtPath(atlasPath, typeof(AtlasAssetBase));
+		}
+
+		static string GetPageMaterialName (string primaryName, string pageName, List<string> pageFiles) {
+			// use skeleton_Material.mat instead of skeleton_skeleton.mat if we have just a single atlas page
+			if (pageName == primaryName && pageFiles.Count == 1)
+				pageName = "Material";
+			return primaryName + "_" + pageName;
+		}
+
+		static string GetMaterialDirectory (string assetPath, List<Material> previousMaterials) {
+			if (previousMaterials.Count > 0 && previousMaterials[0] != null) {
+				string materialPath = AssetDatabase.GetAssetPath(previousMaterials[0]);
+				string materialDirectory = Path.GetDirectoryName(materialPath).Replace('\\', '/');
+				return materialDirectory;
+			}
+			return assetPath;
 		}
 
 		static bool SetDefaultTextureSettings (string texturePath, SpineAtlasAsset atlasAsset) {

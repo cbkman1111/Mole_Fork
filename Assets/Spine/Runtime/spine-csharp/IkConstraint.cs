@@ -1,16 +1,16 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated July 28, 2023. Replaces all prior versions.
+ * Last updated April 5, 2025. Replaces all prior versions.
  *
- * Copyright (c) 2013-2023, Esoteric Software LLC
+ * Copyright (c) 2013-2025, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
  * conditions of Section 2 of the Spine Editor License Agreement:
  * http://esotericsoftware.com/spine-editor-license
  *
- * Otherwise, it is permitted to integrate the Spine Runtimes into software or
- * otherwise create derivative works of the Spine Runtimes (collectively,
+ * Otherwise, it is permitted to integrate the Spine Runtimes into software
+ * or otherwise create derivative works of the Spine Runtimes (collectively,
  * "Products"), provided that each user of the Products must obtain their own
  * Spine Editor license and redistribution of the Products in any form must
  * include this license and copyright notice.
@@ -23,8 +23,8 @@
  * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
  * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE
- * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
 using System;
@@ -52,26 +52,24 @@ namespace Spine {
 		public IkConstraint (IkConstraintData data, Skeleton skeleton) {
 			if (data == null) throw new ArgumentNullException("data", "data cannot be null.");
 			this.data = data;
-			mix = data.mix;
-			softness = data.softness;
-			bendDirection = data.bendDirection;
-			compress = data.compress;
-			stretch = data.stretch;
 
 			bones = new ExposedList<Bone>(data.bones.Count);
 			foreach (BoneData boneData in data.bones)
 				bones.Add(skeleton.bones.Items[boneData.index]);
 
 			target = skeleton.bones.Items[data.target.index];
+
+			mix = data.mix;
+			softness = data.softness;
+			bendDirection = data.bendDirection;
+			compress = data.compress;
+			stretch = data.stretch;
 		}
 
 		/// <summary>Copy constructor.</summary>
-		public IkConstraint (IkConstraint constraint) {
-			if (constraint == null) throw new ArgumentNullException("constraint", "constraint cannot be null.");
-			data = constraint.data;
-			bones = new ExposedList<Bone>(constraint.Bones.Count);
-			bones.AddRange(constraint.Bones);
-			target = constraint.target;
+		public IkConstraint (IkConstraint constraint, Skeleton skeleton)
+			: this(constraint.data, skeleton) {
+
 			mix = constraint.mix;
 			softness = constraint.softness;
 			bendDirection = constraint.bendDirection;
@@ -330,8 +328,9 @@ namespace Spine {
 					q = -(c1 + q) * 0.5f;
 					float r0 = q / c2, r1 = c / q;
 					float r = Math.Abs(r0) < Math.Abs(r1) ? r0 : r1;
-					if (r * r <= dd) {
-						y = (float)Math.Sqrt(dd - r * r) * bendDir;
+					r0 = dd - r * r;
+					if (r0 >= 0) {
+						y = (float)Math.Sqrt(r0) * bendDir;
 						a1 = ta - (float)Math.Atan2(y, r);
 						a2 = (float)Math.Atan2(y / psy, (r - l1) / psx);
 						goto break_outer; // break outer;

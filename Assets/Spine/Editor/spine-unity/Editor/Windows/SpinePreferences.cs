@@ -1,16 +1,16 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated July 28, 2023. Replaces all prior versions.
+ * Last updated April 5, 2025. Replaces all prior versions.
  *
- * Copyright (c) 2013-2023, Esoteric Software LLC
+ * Copyright (c) 2013-2025, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
  * conditions of Section 2 of the Spine Editor License Agreement:
  * http://esotericsoftware.com/spine-editor-license
  *
- * Otherwise, it is permitted to integrate the Spine Runtimes into software or
- * otherwise create derivative works of the Spine Runtimes (collectively,
+ * Otherwise, it is permitted to integrate the Spine Runtimes into software
+ * or otherwise create derivative works of the Spine Runtimes (collectively,
  * "Products"), provided that each user of the Products must obtain their own
  * Spine Editor license and redistribution of the Products in any form must
  * include this license and copyright notice.
@@ -23,8 +23,8 @@
  * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
  * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE
- * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
 #if UNITY_2017_2_OR_NEWER
@@ -37,6 +37,14 @@
 
 #if UNITY_2020_2_OR_NEWER
 #define HAS_ON_POSTPROCESS_PREFAB
+#endif
+
+#if UNITY_2021_2_OR_NEWER
+#define TEXT_ASSET_HAS_GET_DATA_BYTES
+#endif
+
+#if TEXT_ASSET_HAS_GET_DATA_BYTES
+#define HAS_ANY_UNSAFE_OPTIONS
 #endif
 
 using System.Threading;
@@ -353,6 +361,18 @@ namespace Spine.Unity.Editor {
 					SkeletonRenderer.fixPrefabOverrideViaMeshFilterGlobal = settings.FindProperty("fixPrefabOverrideViaMeshFilter").boolValue;
 
 					EditorGUILayout.PropertyField(settings.FindProperty("removePrefabPreviewMeshes"), new GUIContent("Optimize Preview Meshes", "When enabled, Spine prefab preview meshes will be removed in a pre-build step to reduce build size. This increases build time as all prefabs in the project will be processed."));
+				}
+#endif
+
+#if HAS_ANY_UNSAFE_OPTIONS
+				GUILayout.Space(20);
+				EditorGUILayout.LabelField("Unsafe Build Defines", EditorStyles.boldLabel);
+				using (new GUILayout.HorizontalScope()) {
+					EditorGUILayout.PrefixLabel(new GUIContent("Direct data access", "Allow unsafe direct data access. Currently affects reading .skel.bytes files, reading with fewer allocations."));
+					if (GUILayout.Button("Enable", GUILayout.Width(64)))
+						SpineBuildEnvUtility.EnableBuildDefine(SpineBuildEnvUtility.SPINE_ALLOW_UNSAFE_CODE);
+					if (GUILayout.Button("Disable", GUILayout.Width(64)))
+						SpineBuildEnvUtility.DisableBuildDefine(SpineBuildEnvUtility.SPINE_ALLOW_UNSAFE_CODE);
 				}
 #endif
 

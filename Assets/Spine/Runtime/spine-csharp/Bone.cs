@@ -1,16 +1,16 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated July 28, 2023. Replaces all prior versions.
+ * Last updated April 5, 2025. Replaces all prior versions.
  *
- * Copyright (c) 2013-2023, Esoteric Software LLC
+ * Copyright (c) 2013-2025, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
  * conditions of Section 2 of the Spine Editor License Agreement:
  * http://esotericsoftware.com/spine-editor-license
  *
- * Otherwise, it is permitted to integrate the Spine Runtimes into software or
- * otherwise create derivative works of the Spine Runtimes (collectively,
+ * Otherwise, it is permitted to integrate the Spine Runtimes into software
+ * or otherwise create derivative works of the Spine Runtimes (collectively,
  * "Products"), provided that each user of the Products must obtain their own
  * Spine Editor license and redistribution of the Products in any form must
  * include this license and copyright notice.
@@ -23,8 +23,8 @@
  * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
  * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE
- * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
 using System;
@@ -221,11 +221,12 @@ namespace Spine {
 				break;
 			}
 			case Inherit.NoRotationOrReflection: {
+				float sx = 1 / skeleton.scaleX, sy = 1 / skeleton.ScaleY;
+				pa *= sx;
+				pc *= sy;
 				float s = pa * pa + pc * pc, prx;
 				if (s > 0.0001f) {
-					s = Math.Abs(pa * pd - pb * pc) / s;
-					pa /= skeleton.scaleX;
-					pc /= skeleton.ScaleY;
+					s = Math.Abs(pa * pd * sy - pb * sx * pc) / s;
 					pb = pc * s;
 					pd = pa * s;
 					prx = MathUtils.Atan2Deg(pc, pa);
@@ -334,10 +335,9 @@ namespace Spine {
 				switch (inherit) {
 				case Inherit.NoRotationOrReflection: {
 					float s = Math.Abs(pa * pd - pb * pc) / (pa * pa + pc * pc);
-					float sa = pa / skeleton.scaleX;
-					float sc = pc / skeleton.ScaleY;
-					pb = -sc * s * skeleton.scaleX;
-					pd = sa * s * skeleton.ScaleY;
+					float skeletonScaleY = skeleton.ScaleY;
+					pb = -pc * skeleton.scaleX * s / skeletonScaleY;
+					pd = pa * skeletonScaleY * s / skeleton.scaleX;
 					pid = 1 / (pa * pd - pb * pc);
 					ia = pd * pid;
 					ib = pb * pid;

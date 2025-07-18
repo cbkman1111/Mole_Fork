@@ -1,0 +1,431 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd929b4571dc14e00bea524f0f6fe76d, type: 3}
+  m_Name: PresetData
+  m_EditorClassIdentifier: 
+  presetItems:
+  - index: 0
+    parts:
+    - partType: 1
+      value: 15
+    - partType: 2
+      value: -1
+    - partType: 3
+      value: 13
+    - partType: 4
+      value: 8
+    - partType: 5
+      value: 5
+    - partType: 6
+      value: 11
+    - partType: 7
+      value: 13
+    - partType: 8
+      value: 9
+    - partType: 9
+      value: 9
+    - partType: 10
+      value: 22
+    - partType: 11
+      value: 0
+    - partType: 12
+      value: -1
+    - partType: 13
+      value: 9
+    - partType: 14
+      value: 11
+    - partType: 15
+      value: 22
+    - partType: 16
+      value: 0
+    colors:
+    - slotName: hair
+      color: {r: 1, g: 0.5882353, b: 0.25882354, a: 1}
+    - slotName: beard
+      color: {r: 0.41960785, g: 0.5882353, b: 0, a: 1}
+    - slotName: brow
+      color: {r: 1, g: 0.69803923, b: 0.22352941, a: 1}
+    - slotName: body
+      color: {r: 1, g: 0.7647059, b: 0.5803922, a: 1}
+    positions:
+    - partType: 8
+      position: {x: 0.6833636, y: 0.37245855}
+    - partType: 2
+      position: {x: 0.8663696, y: 0.7137953}
+    - partType: 5
+      position: {x: 0.71726245, y: 0.38737357}
+    - partType: 16
+      position: {x: 0.6720641, y: 0.20093688}
+  - index: 3
+    parts:
+    - partType: 1
+      value: 0
+    - partType: 2
+      value: -1
+    - partType: 3
+      value: 28
+    - partType: 4
+      value: 50
+    - partType: 5
+      value: 0
+    - partType: 6
+      value: 12
+    - partType: 7
+      value: 11
+    - partType: 8
+      value: 7
+    - partType: 9
+      value: 7
+    - partType: 10
+      value: 27
+    - partType: 11
+      value: 3
+    - partType: 12
+      value: -1
+    - partType: 13
+      value: 28
+    - partType: 14
+      value: 31
+    - partType: 15
+      value: 11
+    - partType: 16
+      value: 0
+    colors:
+    - slotName: hair
+      color: {r: 1, g: 0.78039217, b: 0.4392157, a: 1}
+    - slotName: beard
+      color: {r: 0, g: 0.20392157, b: 0.3882353, a: 1}
+    - slotName: brow
+      color: {r: 0, g: 0.21176471, b: 0.3882353, a: 1}
+    - slotName: body
+      color: {r: 1, g: 0.7490196, b: 0.654902, a: 1}
+    positions:
+    - partType: 8
+      position: {x: 0.72102946, y: 0.282969}
+    - partType: 2
+      position: {x: 0.009153684, y: 0.8124492}
+    - partType: 5
+      position: {x: 0.0016202326, y: 0.81990683}
+    - partType: 16
+      position: {x: 0.6494648, y: 0.17856446}
+  - index: 5
+    parts:
+    - partType: 1
+      value: 27
+    - partType: 2
+      value: -1
+    - partType: 3
+      value: 9
+    - partType: 4
+      value: 4
+    - partType: 5
+      value: 1
+    - partType: 6
+      value: 12
+    - partType: 7
+      value: 34
+    - partType: 8
+      value: 9
+    - partType: 9
+      value: 9
+    - partType: 10
+      value: 23
+    - partType: 11
+      value: 3
+    - partType: 12
+      value: 20
+    - partType: 13
+      value: 35
+    - partType: 14
+      value: 6
+    - partType: 15
+      value: 20
+    - partType: 16
+      value: 0
+    colors:
+    - slotName: hair
+      color: {r: 0.17311972, g: 0.17311972, b: 0.17311972, a: 1}
+    - slotName: beard
+      color: {r: 0, g: 0.20392157, b: 0.3882353, a: 1}
+    - slotName: brow
+      color: {r: 0.12745756, g: 0.12745756, b: 0.12745756, a: 1}
+    - slotName: body
+      color: {r: 0.8922979, g: 0.57035506, b: 0.4429771, a: 1}
+    positions:
+    - partType: 8
+      position: {x: 0, y: 0.17311972}
+    - partType: 2
+      position: {x: 0.009153684, y: 0.8124492}
+    - partType: 5
+      position: {x: 0, y: 0.12745756}
+    - partType: 16
+      position: {x: 0.5035547, y: 0.8922979}
+  - index: 1
+    parts:
+    - partType: 1
+      value: 16
+    - partType: 2
+      value: -1
+    - partType: 3
+      value: 16
+    - partType: 4
+      value: 16
+    - partType: 5
+      value: 7
+    - partType: 6
+      value: 6
+    - partType: 7
+      value: -1
+    - partType: 8
+      value: 10
+    - partType: 9
+      value: 10
+    - partType: 10
+      value: -1
+    - partType: 11
+      value: 9
+    - partType: 12
+      value: -1
+    - partType: 13
+      value: 23
+    - partType: 14
+      value: -1
+    - partType: 15
+      value: 27
+    - partType: 16
+      value: 0
+    colors:
+    - slotName: hair
+      color: {r: 1, g: 0.59607846, b: 0.96862745, a: 1}
+    - slotName: beard
+      color: {r: 1, g: 0.654902, b: 0.654902, a: 1}
+    - slotName: brow
+      color: {r: 0.7411765, g: 1, b: 0.6862745, a: 1}
+    - slotName: body
+      color: {r: 0.5612475, g: 0.3082514, b: 0.20815247, a: 1}
+    positions:
+    - partType: 8
+      position: {x: 0.37074113, y: 0.20093688}
+    - partType: 2
+      position: {x: 0.5930628, y: 0.17779148}
+    - partType: 5
+      position: {x: 0.9952655, y: 0.15538216}
+    - partType: 16
+      position: {x: 0.62912536, y: 0.5612475}
+  - index: 4
+    parts:
+    - partType: 1
+      value: 13
+    - partType: 2
+      value: -1
+    - partType: 3
+      value: 8
+    - partType: 4
+      value: 9
+    - partType: 5
+      value: 7
+    - partType: 6
+      value: 15
+    - partType: 7
+      value: 16
+    - partType: 8
+      value: 28
+    - partType: 9
+      value: 28
+    - partType: 10
+      value: 24
+    - partType: 11
+      value: 1
+    - partType: 12
+      value: 22
+    - partType: 13
+      value: 21
+    - partType: 14
+      value: -1
+    - partType: 15
+      value: 21
+    - partType: 16
+      value: 0
+    colors:
+    - slotName: hair
+      color: {r: 0.94937557, g: 0.38514426, b: 0.11367179, a: 1}
+    - slotName: beard
+      color: {r: 0, g: 0.20392157, b: 0.3882353, a: 1}
+    - slotName: brow
+      color: {r: 0, g: 0.21176471, b: 0.3882353, a: 1}
+    - slotName: body
+      color: {r: 0.92654437, g: 0.5544111, b: 0.37536266, a: 1}
+    positions:
+    - partType: 8
+      position: {x: 0.8802668, y: 0.94937557}
+    - partType: 2
+      position: {x: 0.009153684, y: 0.8124492}
+    - partType: 5
+      position: {x: 0.0016202326, y: 0.81990683}
+    - partType: 16
+      position: {x: 0.5948789, y: 0.92654437}
+  - index: 2
+    parts:
+    - partType: 1
+      value: 17
+    - partType: 2
+      value: 5
+    - partType: 3
+      value: 5
+    - partType: 4
+      value: 29
+    - partType: 5
+      value: 0
+    - partType: 6
+      value: 2
+    - partType: 7
+      value: 17
+    - partType: 8
+      value: 17
+    - partType: 9
+      value: 17
+    - partType: 10
+      value: 2
+    - partType: 11
+      value: 8
+    - partType: 12
+      value: -1
+    - partType: 13
+      value: 39
+    - partType: 14
+      value: 18
+    - partType: 15
+      value: 9
+    - partType: 16
+      value: 0
+    colors:
+    - slotName: hair
+      color: {r: 0.5270011, g: 0.5270011, b: 0.5270011, a: 1}
+    - slotName: beard
+      color: {r: 0.31010598, g: 0.31010598, b: 0.31010598, a: 1}
+    - slotName: brow
+      color: {r: 0.4128458, g: 0.4128458, b: 0.4128458, a: 1}
+    - slotName: body
+      color: {r: 0.6183252, g: 0.44623318, b: 0.36343277, a: 1}
+    positions:
+    - partType: 8
+      position: {x: 0, y: 0.5270011}
+    - partType: 2
+      position: {x: 0, y: 0.31010598}
+    - partType: 5
+      position: {x: 0, y: 0.4128458}
+    - partType: 16
+      position: {x: 0.41223037, y: 0.6183252}
+  - index: 6
+    parts:
+    - partType: 1
+      value: 23
+    - partType: 2
+      value: -1
+    - partType: 3
+      value: 13
+    - partType: 4
+      value: 14
+    - partType: 5
+      value: 0
+    - partType: 6
+      value: 2
+    - partType: 7
+      value: 17
+    - partType: 8
+      value: 11
+    - partType: 9
+      value: 11
+    - partType: 10
+      value: 58
+    - partType: 11
+      value: 8
+    - partType: 12
+      value: 8
+    - partType: 13
+      value: 19
+    - partType: 14
+      value: 13
+    - partType: 15
+      value: 44
+    - partType: 16
+      value: 0
+    colors:
+    - slotName: hair
+      color: {r: 0.31461492, g: 0.42159155, b: 0.7553114, a: 1}
+    - slotName: beard
+      color: {r: 0.31010598, g: 0.31010598, b: 0.31010598, a: 1}
+    - slotName: brow
+      color: {r: 0.4128458, g: 0.4128458, b: 0.4128458, a: 1}
+    - slotName: body
+      color: {r: 0.93795985, g: 0.78694737, b: 0.61554813, a: 1}
+    positions:
+    - partType: 8
+      position: {x: 0.5834633, y: 0.7553114}
+    - partType: 2
+      position: {x: 0, y: 0.31010598}
+    - partType: 5
+      position: {x: 0, y: 0.4128458}
+    - partType: 16
+      position: {x: 0.34373724, y: 0.93795985}
+  - index: 7
+    parts:
+    - partType: 1
+      value: 2
+    - partType: 2
+      value: -1
+    - partType: 3
+      value: 1
+    - partType: 4
+      value: 6
+    - partType: 5
+      value: 0
+    - partType: 6
+      value: 2
+    - partType: 7
+      value: 0
+    - partType: 8
+      value: 16
+    - partType: 9
+      value: 16
+    - partType: 10
+      value: -1
+    - partType: 11
+      value: 8
+    - partType: 12
+      value: 17
+    - partType: 13
+      value: 20
+    - partType: 14
+      value: -1
+    - partType: 15
+      value: 2
+    - partType: 16
+      value: 0
+    colors:
+    - slotName: hair
+      color: {r: 0.93795985, g: 0.859871, b: 0.5834261, a: 1}
+    - slotName: beard
+      color: {r: 0.31010598, g: 0.31010598, b: 0.31010598, a: 1}
+    - slotName: brow
+      color: {r: 0.4128458, g: 0.4128458, b: 0.4128458, a: 1}
+    - slotName: body
+      color: {r: 0.54983205, g: 0.3424571, b: 0.26040834, a: 1}
+    positions:
+    - partType: 8
+      position: {x: 0.37798393, y: 0.93795985}
+    - partType: 2
+      position: {x: 0, y: 0.31010598}
+    - partType: 5
+      position: {x: 0, y: 0.4128458}
+    - partType: 16
+      position: {x: 0.52638566, y: 0.54983205}

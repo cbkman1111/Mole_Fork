@@ -32,6 +32,7 @@ namespace Common.Scene
             ScenePoker, // 포커
             SceneShooting, // 슈팅
 
+            SceneDemoFantasy, // 판타지 RPG 데모
         }
 
         //public float Amount { get; set; } = 0;

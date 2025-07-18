@@ -1,16 +1,16 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated July 28, 2023. Replaces all prior versions.
+ * Last updated April 5, 2025. Replaces all prior versions.
  *
- * Copyright (c) 2013-2023, Esoteric Software LLC
+ * Copyright (c) 2013-2025, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
  * conditions of Section 2 of the Spine Editor License Agreement:
  * http://esotericsoftware.com/spine-editor-license
  *
- * Otherwise, it is permitted to integrate the Spine Runtimes into software or
- * otherwise create derivative works of the Spine Runtimes (collectively,
+ * Otherwise, it is permitted to integrate the Spine Runtimes into software
+ * or otherwise create derivative works of the Spine Runtimes (collectively,
  * "Products"), provided that each user of the Products must obtain their own
  * Spine Editor license and redistribution of the Products in any form must
  * include this license and copyright notice.
@@ -23,8 +23,8 @@
  * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
  * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE
- * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
 #if (UNITY_5 || UNITY_5_3_OR_NEWER || UNITY_WSA || UNITY_WP8 || UNITY_WP8_1)
@@ -144,13 +144,7 @@ namespace Spine {
 			// Slots.
 			if (root.ContainsKey("slots")) {
 				foreach (Dictionary<string, Object> slotMap in (List<Object>)root["slots"]) {
-					string slotName = (string)slotMap["name"]; //, path = null;
-					int slash = slotName.LastIndexOf('/');
-					if (slash != -1) {
-						//path = slotName.Substring(0, slash);
-						slotName = slotName.Substring(slash + 1);
-					}
-
+					string slotName = (string)slotMap["name"];
 					string boneName = (string)slotMap["bone"];
 					BoneData boneData = skeletonData.FindBone(boneName);
 					if (boneData == null) throw new Exception("Slot bone not found: " + boneName);
@@ -178,7 +172,6 @@ namespace Spine {
 					else
 						data.blendMode = BlendMode.Normal;
 					//data.visible = slotMap.getBoolean("visible", true);
-					//data.path = path;
 					skeletonData.slots.Add(data);
 				}
 			}
