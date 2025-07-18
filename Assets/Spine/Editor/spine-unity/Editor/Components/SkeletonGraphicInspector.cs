@@ -1,16 +1,16 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated July 28, 2023. Replaces all prior versions.
+ * Last updated April 5, 2025. Replaces all prior versions.
  *
- * Copyright (c) 2013-2023, Esoteric Software LLC
+ * Copyright (c) 2013-2025, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
  * conditions of Section 2 of the Spine Editor License Agreement:
  * http://esotericsoftware.com/spine-editor-license
  *
- * Otherwise, it is permitted to integrate the Spine Runtimes into software or
- * otherwise create derivative works of the Spine Runtimes (collectively,
+ * Otherwise, it is permitted to integrate the Spine Runtimes into software
+ * or otherwise create derivative works of the Spine Runtimes (collectively,
  * "Products"), provided that each user of the Products must obtain their own
  * Spine Editor license and redistribution of the Products in any form must
  * include this license and copyright notice.
@@ -23,8 +23,8 @@
  * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
  * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE
- * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
 #if UNITY_2018_3 || UNITY_2019 || UNITY_2018_3_OR_NEWER
@@ -57,19 +57,19 @@ namespace Spine.Unity.Editor {
 		static GUILayoutOption ReloadButtonWidth { get { return reloadButtonWidth = reloadButtonWidth ?? GUILayout.Width(GUI.skin.label.CalcSize(new GUIContent(ReloadButtonString)).x + 20); } }
 		static GUIStyle ReloadButtonStyle { get { return EditorStyles.miniButton; } }
 
-		SerializedProperty material, color;
-		SerializedProperty additiveMaterial, multiplyMaterial, screenMaterial;
-		SerializedProperty skeletonDataAsset, initialSkinName;
-		SerializedProperty startingAnimation, startingLoop, timeScale, freeze,
+		protected SerializedProperty material, color;
+		protected SerializedProperty additiveMaterial, multiplyMaterial, screenMaterial;
+		protected SerializedProperty skeletonDataAsset, initialSkinName;
+		protected SerializedProperty startingAnimation, startingLoop, timeScale, freeze,
 			updateTiming, updateWhenInvisible, unscaledTime, layoutScaleMode, editReferenceRect;
-		SerializedProperty physicsPositionInheritanceFactor, physicsRotationInheritanceFactor, physicsMovementRelativeTo;
-		SerializedProperty initialFlipX, initialFlipY;
-		SerializedProperty meshGeneratorSettings;
-		SerializedProperty useClipping, zSpacing, tintBlack, canvasGroupCompatible, pmaVertexColors, addNormals, calculateTangents, immutableTriangles;
+		protected SerializedProperty physicsPositionInheritanceFactor, physicsRotationInheritanceFactor, physicsMovementRelativeTo;
+		protected SerializedProperty initialFlipX, initialFlipY;
+		protected SerializedProperty meshGeneratorSettings;
+		protected SerializedProperty useClipping, zSpacing, tintBlack, canvasGroupCompatible, pmaVertexColors, addNormals, calculateTangents, immutableTriangles;
 
-		SerializedProperty allowMultipleCanvasRenderers, separatorSlotNames, enableSeparatorSlots,
+		protected SerializedProperty allowMultipleCanvasRenderers, separatorSlotNames, enableSeparatorSlots,
 			updateSeparatorPartLocation, updateSeparatorPartScale;
-		SerializedProperty raycastTarget, maskable;
+		protected SerializedProperty raycastTarget, maskable;
 
 		readonly GUIContent UseClippingLabel = new GUIContent("Use Clipping",
 			"When disabled, clipping attachments are ignored. This may be used to save performance.");
@@ -94,7 +94,7 @@ namespace Spine.Unity.Editor {
 			"Calculates the tangents per frame. Use this if you are using lit shaders (usually with normal maps) that " +
 			"require vertex tangents.");
 		readonly GUIContent ImmutableTrianglesLabel = new GUIContent("Immutable Triangles",
-			"Enable to optimize rendering for skeletons that never change attachment visbility");
+			"Enable to optimize rendering for skeletons that never change attachment visibility");
 
 		readonly GUIContent UnscaledTimeLabel = new GUIContent("Unscaled Time",
 			"If enabled, AnimationState uses unscaled game time (Time.unscaledDeltaTime), " +
@@ -126,19 +126,22 @@ namespace Spine.Unity.Editor {
 			get {
 				if (serializedObject.isEditingMultipleObjects) {
 					foreach (UnityEngine.Object c in targets) {
-						SkeletonGraphic component = (SkeletonGraphic)c;
+						SkeletonGraphic component = c as SkeletonGraphic;
+						if (component == null) continue;
 						if (!component.IsValid)
 							return false;
 					}
 					return true;
 				} else {
-					SkeletonGraphic component = (SkeletonGraphic)target;
+					SkeletonGraphic component = target as SkeletonGraphic;
+					if (component == null)
+						return false;
 					return component.IsValid;
 				}
 			}
 		}
 
-		void OnEnable () {
+		protected virtual void OnEnable () {
 #if NEW_PREFAB_SYSTEM
 			isInspectingPrefab = false;
 #else
@@ -211,7 +214,7 @@ namespace Spine.Unity.Editor {
 #endif
 		}
 
-		void OnDisable () {
+		protected virtual void OnDisable () {
 #if NEWPLAYMODECALLBACKS
 			EditorApplication.playModeStateChanged -= OnPlaymodeChanged;
 #else
@@ -221,16 +224,17 @@ namespace Spine.Unity.Editor {
 		}
 
 #if NEWPLAYMODECALLBACKS
-		void OnPlaymodeChanged (PlayModeStateChange mode) {
+		protected virtual void OnPlaymodeChanged (PlayModeStateChange mode) {
 #else
 		void OnPlaymodeChanged () {
 #endif
 			DisableEditReferenceRectMode();
 		}
 
-		void DisableEditReferenceRectMode () {
+		protected virtual void DisableEditReferenceRectMode () {
 			foreach (UnityEngine.Object c in targets) {
-				SkeletonGraphic component = (SkeletonGraphic)c;
+				SkeletonGraphic component = c as SkeletonGraphic;
+				if (component == null) continue;
 				component.EditReferenceRect = false;
 			}
 		}
@@ -279,8 +283,10 @@ namespace Spine.Unity.Editor {
 					EditorGUILayout.PropertyField(material);
 					if (GUILayout.Button("Detect", EditorStyles.miniButton, GUILayout.Width(67f))) {
 						Undo.RecordObjects(targets, "Detect Material");
-						foreach (UnityEngine.Object skeletonGraphic in targets) {
-							DetectMaterial((SkeletonGraphic)skeletonGraphic);
+						foreach (UnityEngine.Object target in targets) {
+							SkeletonGraphic skeletonGraphic = target as SkeletonGraphic;
+							if (skeletonGraphic == null) continue;
+							DetectMaterial(skeletonGraphic);
 						}
 					}
 				}
@@ -321,8 +327,10 @@ namespace Spine.Unity.Editor {
 								EditorStyles.miniButton, GUILayout.Width(100f))) {
 
 								Undo.RecordObjects(targets, "Trim Renderers");
-								foreach (UnityEngine.Object skeletonGraphic in targets) {
-									((SkeletonGraphic)skeletonGraphic).TrimRenderers();
+								foreach (UnityEngine.Object target in targets) {
+									SkeletonGraphic skeletonGraphic = target as SkeletonGraphic;
+									if (skeletonGraphic == null) continue;
+									skeletonGraphic.TrimRenderers();
 								}
 							}
 							EditorGUILayout.EndHorizontal();
@@ -337,8 +345,10 @@ namespace Spine.Unity.Editor {
 										EditorStyles.miniButton, GUILayout.Width(100f))) {
 
 										Undo.RecordObjects(targets, "Detect Blend Mode Materials");
-										foreach (UnityEngine.Object skeletonGraphic in targets) {
-											DetectBlendModeMaterials((SkeletonGraphic)skeletonGraphic);
+										foreach (UnityEngine.Object target in targets) {
+											SkeletonGraphic skeletonGraphic = target as SkeletonGraphic;
+											if (skeletonGraphic == null) continue;
+											DetectBlendModeMaterials(skeletonGraphic);
 										}
 									}
 									EditorGUILayout.EndHorizontal();
@@ -445,8 +455,10 @@ namespace Spine.Unity.Editor {
 				EditorGUILayout.BeginHorizontal(GUILayout.Height(EditorGUIUtility.singleLineHeight + 5));
 				EditorGUILayout.PrefixLabel("Match RectTransform with Mesh");
 				if (GUILayout.Button("Match", EditorStyles.miniButton, GUILayout.Width(65f))) {
-					foreach (UnityEngine.Object skeletonGraphic in targets) {
-						MatchRectTransformWithBounds((SkeletonGraphic)skeletonGraphic);
+					foreach (UnityEngine.Object target in targets) {
+						SkeletonGraphic skeletonGraphic = target as SkeletonGraphic;
+						if (skeletonGraphic == null) continue;
+						MatchRectTransformWithBounds(skeletonGraphic);
 					}
 				}
 				EditorGUILayout.EndHorizontal();
@@ -471,7 +483,8 @@ namespace Spine.Unity.Editor {
 
 			if (slotsReapplyRequired && UnityEngine.Event.current.type == EventType.Repaint) {
 				foreach (UnityEngine.Object target in targets) {
-					SkeletonGraphic skeletonGraphic = (SkeletonGraphic)target;
+					SkeletonGraphic skeletonGraphic = target as SkeletonGraphic;
+					if (skeletonGraphic == null) continue;
 					skeletonGraphic.ReapplySeparatorSlotNames();
 					skeletonGraphic.LateUpdate();
 					SceneView.RepaintAll();
@@ -494,8 +507,10 @@ namespace Spine.Unity.Editor {
 					EditorGUILayout.PropertyField(tintBlack, TintBlackLabel);
 					if (GUILayout.Button("Detect", EditorStyles.miniButton, GUILayout.Width(65f))) {
 						Undo.RecordObjects(targets, "Detect Tint Black");
-						foreach (UnityEngine.Object skeletonGraphic in targets) {
-							DetectTintBlack((SkeletonGraphic)skeletonGraphic);
+						foreach (UnityEngine.Object target in targets) {
+							SkeletonGraphic skeletonGraphic = target as SkeletonGraphic;
+							if (skeletonGraphic == null) continue;
+							DetectTintBlack(skeletonGraphic);
 						}
 					}
 				}
@@ -503,8 +518,10 @@ namespace Spine.Unity.Editor {
 					EditorGUILayout.PropertyField(canvasGroupCompatible, CanvasGroupCompatibleLabel);
 					if (GUILayout.Button("Detect", EditorStyles.miniButton, GUILayout.Width(65f))) {
 						Undo.RecordObjects(targets, "Detect CanvasGroup Compatible");
-						foreach (UnityEngine.Object skeletonGraphic in targets) {
-							DetectCanvasGroupCompatible((SkeletonGraphic)skeletonGraphic);
+						foreach (UnityEngine.Object target in targets) {
+							SkeletonGraphic skeletonGraphic = target as SkeletonGraphic;
+							if (skeletonGraphic == null) continue;
+							DetectCanvasGroupCompatible(skeletonGraphic);
 						}
 					}
 				}
@@ -512,8 +529,10 @@ namespace Spine.Unity.Editor {
 					EditorGUILayout.PropertyField(pmaVertexColors, PMAVertexColorsLabel);
 					if (GUILayout.Button("Detect", EditorStyles.miniButton, GUILayout.Width(65f))) {
 						Undo.RecordObjects(targets, "Detect PMA Vertex Colors");
-						foreach (UnityEngine.Object skeletonGraphic in targets) {
-							DetectPMAVertexColors((SkeletonGraphic)skeletonGraphic);
+						foreach (UnityEngine.Object target in targets) {
+							SkeletonGraphic skeletonGraphic = target as SkeletonGraphic;
+							if (skeletonGraphic == null) continue;
+							DetectPMAVertexColors(skeletonGraphic);
 						}
 					}
 				}
@@ -521,16 +540,20 @@ namespace Spine.Unity.Editor {
 					GUILayout.FlexibleSpace();
 					if (GUILayout.Button("Detect Settings", EditorStyles.miniButton, GUILayout.Width(100f))) {
 						Undo.RecordObjects(targets, "Detect Settings");
-						foreach (UnityEngine.Object skeletonGraphic in targets) {
-							DetectTintBlack((SkeletonGraphic)skeletonGraphic);
-							DetectCanvasGroupCompatible((SkeletonGraphic)skeletonGraphic);
-							DetectPMAVertexColors((SkeletonGraphic)skeletonGraphic);
+						foreach (UnityEngine.Object targets in targets) {
+							SkeletonGraphic skeletonGraphic = target as SkeletonGraphic;
+							if (skeletonGraphic == null) continue;
+							DetectTintBlack(skeletonGraphic);
+							DetectCanvasGroupCompatible(skeletonGraphic);
+							DetectPMAVertexColors(skeletonGraphic);
 						}
 					}
 					if (GUILayout.Button("Detect Material", EditorStyles.miniButton, GUILayout.Width(100f))) {
 						Undo.RecordObjects(targets, "Detect Material");
-						foreach (UnityEngine.Object skeletonGraphic in targets) {
-							DetectMaterial((SkeletonGraphic)skeletonGraphic);
+						foreach (UnityEngine.Object target in targets) {
+							SkeletonGraphic skeletonGraphic = target as SkeletonGraphic;
+							if (skeletonGraphic == null) continue;
+							DetectMaterial(skeletonGraphic);
 						}
 					}
 				}
@@ -543,7 +566,8 @@ namespace Spine.Unity.Editor {
 
 		protected bool SkeletonHasMultipleSubmeshes () {
 			foreach (UnityEngine.Object target in targets) {
-				SkeletonGraphic skeletonGraphic = (SkeletonGraphic)target;
+				SkeletonGraphic skeletonGraphic = target as SkeletonGraphic;
+				if (skeletonGraphic == null) continue;
 				if (skeletonGraphic.HasMultipleSubmeshInstructions())
 					return true;
 			}
@@ -552,12 +576,16 @@ namespace Spine.Unity.Editor {
 
 		protected void OnSceneGUI () {
 			SkeletonGraphic skeletonGraphic = (SkeletonGraphic)target;
-			if (skeletonGraphic.EditReferenceRect) {
-				SpineHandles.DrawRectTransformRect(skeletonGraphic, Color.gray);
-				SpineHandles.DrawReferenceRect(skeletonGraphic, Color.green);
-			} else {
-				SpineHandles.DrawReferenceRect(skeletonGraphic, Color.blue);
+
+			if (skeletonGraphic.layoutScaleMode != SkeletonGraphic.LayoutMode.None) {
+				if (skeletonGraphic.EditReferenceRect) {
+					SpineHandles.DrawRectTransformRect(skeletonGraphic, Color.gray);
+					SpineHandles.DrawReferenceRect(skeletonGraphic, Color.green);
+				} else {
+					SpineHandles.DrawReferenceRect(skeletonGraphic, Color.blue);
+				}
 			}
+			SpineHandles.DrawPivotOffsetHandle(skeletonGraphic, Color.green);
 		}
 
 		public static void SetSeparatorSlotNames (SkeletonRenderer skeletonRenderer, string[] newSlotNames) {

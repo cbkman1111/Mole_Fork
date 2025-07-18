@@ -1,16 +1,16 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated July 28, 2023. Replaces all prior versions.
+ * Last updated April 5, 2025. Replaces all prior versions.
  *
- * Copyright (c) 2013-2023, Esoteric Software LLC
+ * Copyright (c) 2013-2025, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
  * conditions of Section 2 of the Spine Editor License Agreement:
  * http://esotericsoftware.com/spine-editor-license
  *
- * Otherwise, it is permitted to integrate the Spine Runtimes into software or
- * otherwise create derivative works of the Spine Runtimes (collectively,
+ * Otherwise, it is permitted to integrate the Spine Runtimes into software
+ * or otherwise create derivative works of the Spine Runtimes (collectively,
  * "Products"), provided that each user of the Products must obtain their own
  * Spine Editor license and redistribution of the Products in any form must
  * include this license and copyright notice.
@@ -23,8 +23,8 @@
  * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
  * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE
- * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
 #if UNITY_2018_3 || UNITY_2019 || UNITY_2018_3_OR_NEWER
@@ -77,7 +77,9 @@ namespace Spine.Unity {
 		public float timeScale = 1f;
 		public bool freeze;
 		protected float meshScale = 1f;
+		protected Vector2 meshOffset = Vector2.zero;
 		public float MeshScale { get { return meshScale; } }
+		public Vector2 MeshOffset { get { return meshOffset; } }
 
 		public enum LayoutMode {
 			None = 0,
@@ -88,7 +90,10 @@ namespace Spine.Unity {
 		}
 		public LayoutMode layoutScaleMode = LayoutMode.None;
 		[SerializeField] protected Vector2 referenceSize = Vector2.one;
+		/// <summary>Offset relative to the pivot position, before potential layout scale is applied.</summary>
+		[SerializeField] protected Vector2 pivotOffset = Vector2.zero;
 		[SerializeField] protected float referenceScale = 1f;
+		[SerializeField] protected float layoutScale = 1f;
 #if UNITY_EDITOR
 		protected LayoutMode previousLayoutScaleMode = LayoutMode.None;
 		[SerializeField] protected Vector2 rectTransformSize = Vector2.zero;
@@ -400,12 +405,13 @@ namespace Spine.Unity {
 				if (physicsPositionInheritanceFactor != Vector2.zero) {
 					Vector2 position = GetPhysicsTransformPosition();
 					Vector2 positionDelta = (position - lastPosition) / meshScale;
+
+					positionDelta = transform.InverseTransformVector(positionDelta);
 					if (physicsMovementRelativeTo != null) {
-						positionDelta.x *= physicsMovementRelativeTo.lossyScale.x;
-						positionDelta.y *= physicsMovementRelativeTo.lossyScale.y;
+						positionDelta = physicsMovementRelativeTo.TransformVector(positionDelta);
 					}
-					positionDelta.x *= physicsPositionInheritanceFactor.x / transform.lossyScale.x;
-					positionDelta.y *= physicsPositionInheritanceFactor.y / transform.lossyScale.y;
+					positionDelta.x *= physicsPositionInheritanceFactor.x;
+					positionDelta.y *= physicsPositionInheritanceFactor.y;
 
 					skeleton.PhysicsTranslate(positionDelta.x, positionDelta.y);
 					lastPosition = position;
@@ -645,6 +651,11 @@ namespace Spine.Unity {
 		readonly ExposedList<Material> usedMaterials = new ExposedList<Material>();
 		readonly ExposedList<Texture> usedTextures = new ExposedList<Texture>();
 
+		/// <summary>Returns the <see cref="SkeletonClipping"/> used by this renderer for use with e.g.
+		/// <see cref="Skeleton.GetBounds(out float, out float, out float, out float, ref float[], SkeletonClipping)"/>
+		/// </summary>
+		public SkeletonClipping SkeletonClipping { get { return meshGenerator.SkeletonClipping; } }
+
 		public ExposedList<Mesh> MeshesMultipleCanvasRenderers { get { return meshes; } }
 		public ExposedList<Material> MaterialsMultipleCanvasRenderers { get { return usedMaterials; } }
 		public ExposedList<Texture> TexturesMultipleCanvasRenderers { get { return usedTextures; } }
@@ -732,8 +743,9 @@ namespace Spine.Unity {
 				SetRectTransformSize(submeshGraphic, size);
 				submeshGraphic.rectTransform.pivot = p;
 			}
-
 			this.referenceSize = size;
+			referenceScale = referenceScale * layoutScale;
+			layoutScale = 1f;
 		}
 
 		public static void SetRectTransformSize (Graphic target, Vector2 size) {
@@ -933,10 +945,19 @@ namespace Spine.Unity {
 			meshScale = (canvas == null) ? 100 : canvas.referencePixelsPerUnit;
 			if (layoutScaleMode != LayoutMode.None) {
 				meshScale *= referenceScale;
-				if (!EditReferenceRect)
-					meshScale *= GetLayoutScale(layoutScaleMode);
+				layoutScale = GetLayoutScale(layoutScaleMode);
+				if (!EditReferenceRect) {
+					meshScale *= layoutScale;
+				}
+				meshOffset = pivotOffset * layoutScale;
+			} else {
+				meshOffset = pivotOffset;
 			}
-			meshGenerator.ScaleVertexData(meshScale);
+			if (meshOffset == Vector2.zero)
+				meshGenerator.ScaleVertexData(meshScale);
+			else
+				meshGenerator.ScaleAndOffsetVertexData(meshScale, meshOffset);
+
 			if (OnPostProcessVertices != null) OnPostProcessVertices.Invoke(this.meshGenerator.Buffers);
 
 			Mesh mesh = smartMesh.mesh;
@@ -1024,8 +1045,13 @@ namespace Spine.Unity {
 			meshScale = (canvas == null) ? 100 : canvas.referencePixelsPerUnit;
 			if (layoutScaleMode != LayoutMode.None) {
 				meshScale *= referenceScale;
-				if (!EditReferenceRect)
-					meshScale *= GetLayoutScale(layoutScaleMode);
+				layoutScale = GetLayoutScale(layoutScaleMode);
+				if (!EditReferenceRect) {
+					meshScale *= layoutScale;
+				}
+				meshOffset = pivotOffset * layoutScale;
+			} else {
+				meshOffset = pivotOffset;
 			}
 			// Generate meshes.
 			int submeshCount = currentInstructions.submeshInstructions.Count;
@@ -1046,7 +1072,10 @@ namespace Spine.Unity {
 				meshGenerator.AddSubmesh(submeshInstructionItem);
 
 				Mesh targetMesh = meshesItems[i];
-				meshGenerator.ScaleVertexData(meshScale);
+				if (meshOffset == Vector2.zero)
+					meshGenerator.ScaleVertexData(meshScale);
+				else
+					meshGenerator.ScaleAndOffsetVertexData(meshScale, meshOffset);
 				if (OnPostProcessVertices != null) OnPostProcessVertices.Invoke(this.meshGenerator.Buffers);
 				meshGenerator.FillVertexData(targetMesh);
 				meshGenerator.FillTriangles(targetMesh);
@@ -1345,9 +1374,9 @@ namespace Spine.Unity {
 					SetRectTransformSize(this, rectTransformSize);
 				}
 			}
-			if (editReferenceRect || layoutScaleMode == LayoutMode.None) {
+			if (editReferenceRect || layoutScaleMode == LayoutMode.None)
 				referenceSize = GetCurrentRectSize();
-			}
+
 			previousLayoutScaleMode = layoutScaleMode;
 		}
 
@@ -1368,13 +1397,7 @@ namespace Spine.Unity {
 			float referenceAspect = referenceSize.x / referenceSize.y;
 			Vector2 newSize = GetCurrentRectSize();
 
-			LayoutMode mode = previousLayoutScaleMode;
-			float frameAspect = newSize.x / newSize.y;
-			if (mode == LayoutMode.FitInParent)
-				mode = frameAspect > referenceAspect ? LayoutMode.HeightControlsWidth : LayoutMode.WidthControlsHeight;
-			else if (mode == LayoutMode.EnvelopeParent)
-				mode = frameAspect > referenceAspect ? LayoutMode.WidthControlsHeight : LayoutMode.HeightControlsWidth;
-
+			LayoutMode mode = GetEffectiveLayoutMode(previousLayoutScaleMode);
 			if (mode == LayoutMode.WidthControlsHeight)
 				newSize.y = newSize.x / referenceAspect;
 			else if (mode == LayoutMode.HeightControlsWidth)
@@ -1385,9 +1408,36 @@ namespace Spine.Unity {
 		public Vector2 GetReferenceRectSize () {
 			return referenceSize * GetLayoutScale(layoutScaleMode);
 		}
+
+		public Vector2 GetPivotOffset () {
+			return pivotOffset;
+		}
+
+		public Vector2 GetScaledPivotOffset () {
+			return pivotOffset * GetLayoutScale(layoutScaleMode);
+		}
 #endif
+		public void SetScaledPivotOffset (Vector2 pivotOffsetScaled) {
+			pivotOffset = pivotOffsetScaled / GetLayoutScale(layoutScaleMode);
+		}
 
 		protected float GetLayoutScale (LayoutMode mode) {
+			Vector2 currentSize = GetCurrentRectSize();
+			mode = GetEffectiveLayoutMode(mode);
+			if (mode == LayoutMode.WidthControlsHeight) {
+				return currentSize.x / referenceSize.x;
+			} else if (mode == LayoutMode.HeightControlsWidth) {
+				return currentSize.y / referenceSize.y;
+			}
+			return 1f;
+		}
+
+		/// <summary>
+		/// <c>LayoutMode FitInParent</c> and <c>EnvelopeParent</c> actually result in
+		/// <c>HeightControlsWidth</c> or <c>WidthControlsHeight</c> depending on the actual vs reference aspect ratio.
+		/// This method returns the respective <c>LayoutMode</c> of the two for any given input <c>mode</c>.
+		/// </summary>
+		protected LayoutMode GetEffectiveLayoutMode (LayoutMode mode) {
 			Vector2 currentSize = GetCurrentRectSize();
 			float referenceAspect = referenceSize.x / referenceSize.y;
 			float frameAspect = currentSize.x / currentSize.y;
@@ -1395,13 +1445,7 @@ namespace Spine.Unity {
 				mode = frameAspect > referenceAspect ? LayoutMode.HeightControlsWidth : LayoutMode.WidthControlsHeight;
 			else if (mode == LayoutMode.EnvelopeParent)
 				mode = frameAspect > referenceAspect ? LayoutMode.WidthControlsHeight : LayoutMode.HeightControlsWidth;
-
-			if (mode == LayoutMode.WidthControlsHeight) {
-				return currentSize.x / referenceSize.x;
-			} else if (mode == LayoutMode.HeightControlsWidth) {
-				return currentSize.y / referenceSize.y;
-			}
-			return 1f;
+			return mode;
 		}
 
 		private Vector2 GetCurrentRectSize () {

@@ -1,16 +1,16 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated July 28, 2023. Replaces all prior versions.
+ * Last updated April 5, 2025. Replaces all prior versions.
  *
- * Copyright (c) 2013-2023, Esoteric Software LLC
+ * Copyright (c) 2013-2025, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
  * conditions of Section 2 of the Spine Editor License Agreement:
  * http://esotericsoftware.com/spine-editor-license
  *
- * Otherwise, it is permitted to integrate the Spine Runtimes into software or
- * otherwise create derivative works of the Spine Runtimes (collectively,
+ * Otherwise, it is permitted to integrate the Spine Runtimes into software
+ * or otherwise create derivative works of the Spine Runtimes (collectively,
  * "Products"), provided that each user of the Products must obtain their own
  * Spine Editor license and redistribution of the Products in any form must
  * include this license and copyright notice.
@@ -23,14 +23,15 @@
  * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
  * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE
- * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
 using System;
 
 namespace Spine {
 	public class Skeleton {
+		static private readonly int[] quadTriangles = { 0, 1, 2, 2, 3, 0 };
 		internal SkeletonData data;
 		internal ExposedList<Bone> bones;
 		internal ExposedList<Slot> slots;
@@ -67,7 +68,7 @@ namespace Spine {
 		/// <summary>The skeleton's transform constraints.</summary>
 		public ExposedList<TransformConstraint> TransformConstraints { get { return transformConstraints; } }
 
-		/// <summary>The skeleton's current skin.</summary>
+		/// <summary>The skeleton's current skin. May be null. See <see cref="SetSkin(Spine.Skin)"/></summary>
 		public Skin Skin {
 			/// <summary>The skeleton's current skin. May be null.</summary>
 			get { return skin; }
@@ -187,19 +188,19 @@ namespace Spine {
 
 			ikConstraints = new ExposedList<IkConstraint>(skeleton.ikConstraints.Count);
 			foreach (IkConstraint ikConstraint in skeleton.ikConstraints)
-				ikConstraints.Add(new IkConstraint(ikConstraint));
+				ikConstraints.Add(new IkConstraint(ikConstraint, skeleton));
 
 			transformConstraints = new ExposedList<TransformConstraint>(skeleton.transformConstraints.Count);
 			foreach (TransformConstraint transformConstraint in skeleton.transformConstraints)
-				transformConstraints.Add(new TransformConstraint(transformConstraint));
+				transformConstraints.Add(new TransformConstraint(transformConstraint, skeleton));
 
 			pathConstraints = new ExposedList<PathConstraint>(skeleton.pathConstraints.Count);
 			foreach (PathConstraint pathConstraint in skeleton.pathConstraints)
-				pathConstraints.Add(new PathConstraint(pathConstraint));
+				pathConstraints.Add(new PathConstraint(pathConstraint, skeleton));
 
 			physicsConstraints = new ExposedList<PhysicsConstraint>(skeleton.physicsConstraints.Count);
 			foreach (PhysicsConstraint physicsConstraint in skeleton.physicsConstraints)
-				physicsConstraints.Add(new PhysicsConstraint(physicsConstraint));
+				physicsConstraints.Add(new PhysicsConstraint(physicsConstraint, skeleton));
 
 			skin = skeleton.skin;
 			r = skeleton.r;
@@ -489,7 +490,7 @@ namespace Spine {
 		public void PhysicsRotate (float x, float y, float degrees) {
 			PhysicsConstraint[] physicsConstraints = this.physicsConstraints.Items;
 			for (int i = 0, n = this.physicsConstraints.Count; i < n; i++)
-				physicsConstraints[i].Rotate(r, y, degrees);
+				physicsConstraints[i].Rotate(x, y, degrees);
 		}
 
 		/// <summary>Increments the skeleton's <see cref="time"/>.</summary>
@@ -560,7 +561,7 @@ namespace Spine {
 			return null;
 		}
 
-		/// <summary>Sets a skin by name (see <see cref="SetSkin(Skin)"/>).</summary>
+		/// <summary>Sets a skin by name (see <see cref="SetSkin(Spine.Skin)"/>).</summary>
 		public void SetSkin (string skinName) {
 			Skin foundSkin = data.FindSkin(skinName);
 			if (foundSkin == null) throw new ArgumentException("Skin not found: " + skinName, "skinName");
@@ -696,7 +697,9 @@ namespace Spine {
 		/// <param name="width">The width of the AABB</param>
 		/// <param name="height">The height of the AABB.</param>
 		/// <param name="vertexBuffer">Reference to hold a float[]. May be a null reference. This method will assign it a new float[] with the appropriate size as needed.</param>
-		public void GetBounds (out float x, out float y, out float width, out float height, ref float[] vertexBuffer) {
+		public void GetBounds (out float x, out float y, out float width, out float height, ref float[] vertexBuffer,
+			SkeletonClipping clipper = null) {
+
 			float[] temp = vertexBuffer;
 			temp = temp ?? new float[8];
 			Slot[] drawOrder = this.drawOrder.Items;
@@ -706,6 +709,7 @@ namespace Spine {
 				if (!slot.bone.active) continue;
 				int verticesLength = 0;
 				float[] vertices = null;
+				int[] triangles = null;
 				Attachment attachment = slot.attachment;
 				RegionAttachment region = attachment as RegionAttachment;
 				if (region != null) {
@@ -713,6 +717,7 @@ namespace Spine {
 					vertices = temp;
 					if (vertices.Length < 8) vertices = temp = new float[8];
 					region.ComputeWorldVertices(slot, temp, 0, 2);
+					triangles = quadTriangles;
 				} else {
 					MeshAttachment mesh = attachment as MeshAttachment;
 					if (mesh != null) {
@@ -720,10 +725,23 @@ namespace Spine {
 						vertices = temp;
 						if (vertices.Length < verticesLength) vertices = temp = new float[verticesLength];
 						mesh.ComputeWorldVertices(slot, 0, verticesLength, temp, 0, 2);
+						triangles = mesh.Triangles;
+					} else if (clipper != null) {
+						ClippingAttachment clip = attachment as ClippingAttachment;
+						if (clip != null) {
+							clipper.ClipStart(slot, clip);
+							continue;
+						}
 					}
 				}
 
 				if (vertices != null) {
+					if (clipper != null && clipper.IsClipping) {
+						clipper.ClipTriangles(vertices, triangles, triangles.Length);
+						vertices = clipper.ClippedVertices.Items;
+						verticesLength = clipper.ClippedVertices.Count;
+					}
+
 					for (int ii = 0; ii < verticesLength; ii += 2) {
 						float vx = vertices[ii], vy = vertices[ii + 1];
 						minX = Math.Min(minX, vx);
@@ -732,7 +750,9 @@ namespace Spine {
 						maxY = Math.Max(maxY, vy);
 					}
 				}
+				if (clipper != null) clipper.ClipEnd(slot);
 			}
+			if (clipper != null) clipper.ClipEnd();
 			x = minX;
 			y = minY;
 			width = maxX - minX;

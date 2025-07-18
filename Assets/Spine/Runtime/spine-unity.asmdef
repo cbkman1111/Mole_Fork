@@ -1,4 +1,5 @@
 ﻿{
 	"name": "spine-unity",
-	"references": [ "spine-csharp" ]
+	"references": [ "spine-csharp" ],
+    "allowUnsafeCode": true
 }

@@ -73,6 +73,7 @@ Material:
     - _DstBlend: 10
     - _EmissionPower: 1
     - _EnableExternalAlpha: 0
+    - _Fill: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _Hue: 0
@@ -93,6 +94,7 @@ Material:
     - _ThresholdEnd: 0.25
     - _TintBlack: 0
     - _Use8Neighbourhood: 1
+    - _UseScreenSpaceOutlineWidth: 0
     - _ZWrite: 0
     m_Colors:
     - _Black: {r: 0, g: 0, b: 0, a: 0}
