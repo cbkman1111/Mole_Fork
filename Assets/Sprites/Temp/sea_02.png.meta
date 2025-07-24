@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: c1a3b03e494ad0449b54e78df320c19b
+guid: b2d77950b49dc85478475aa3a697a9c8
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 8509550459451208454
-    second: water_0
+      213: -701665150428306143
+    second: sea_02_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: water_0
+      name: sea_02_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 1590
-        height: 881
+        width: 456
+        height: 652
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 603f9ddae0ff71670800000000000000
-      internalID: 8509550459451208454
+      spriteID: 1252375634f2346f0800000000000000
+      internalID: -701665150428306143
       vertices: []
       indices: 
       edges: []
@@ -138,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5291c9c7f2839834bbd4eec22d07ee6b
     internalID: 0
     vertices: []
     indices: 
@@ -146,7 +146,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      water_0: 8509550459451208454
+      sea_02_0: -701665150428306143
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

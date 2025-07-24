@@ -1,9 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Common.Global;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace Ant
 {
@@ -18,14 +14,14 @@ namespace Ant
         private float radius = 0;
         private Vector3 center = Vector3.zero;
         
-        public Action<Vector3, float> OnMove { get; set; }
-        public Action OnStop { get; set; }
+        public System.Action<Vector3, float> OnMove { get; set; }
+        public System.Action OnStop { get; set; }
 
-        public bool Init(Action<Vector3, float> move, Action stop)
+        public bool Init()
         {
             radius = RectTrans.rect.width * 0.5f;
-            OnMove = move;
-            OnStop = stop;
+            OnMove = null;
+            OnStop = null;
 
             RectTrans.gameObject.SetActive(false);
             return true;

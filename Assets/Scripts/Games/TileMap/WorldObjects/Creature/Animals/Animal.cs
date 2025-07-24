@@ -65,7 +65,7 @@ namespace Creature
             var duration = 0.1f;
             var speed = 0.1f;
             var target = angle * speed;
-            target.y = 0.0f;
+            //target.y = 0.0f;
 
             transform.DOKill();
             TweenMove = transform.DOMove(transform.position + target, duration).
@@ -81,8 +81,8 @@ namespace Creature
             OnDash(angle);
 
             var duration = 0.4f;
-            var speed = 2;
-            var target = angle * speed;// * Time.deltaTime;
+            var speed = 5;
+            var target = angle * speed * Time.deltaTime;
             target.y = 0.0f;
 
             transform.DOKill();

@@ -45,8 +45,8 @@ namespace Scenes
             if (menu != null)
             {
                 menu.InitMenu(
-                    move: (Vector3 angle) => {
-                        OnMove(angle);
+                    move: (Vector3 direct, float angle) => {
+                        OnMove(direct);
                     }, 
                     stop: () => {
                         OnStop();

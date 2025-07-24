@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: c1a3b03e494ad0449b54e78df320c19b
+guid: b966af1bc7ab760468f6a769817eda4d
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 8509550459451208454
-    second: water_0
+      213: 3333604345969917063
+    second: "ChatGPT Image 2025\uB144 7\uC6D4 21\uC77C \uC624\uC804 10_35_15_0"
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: water_0
+      name: "ChatGPT Image 2025\uB144 7\uC6D4 21\uC77C \uC624\uC804 10_35_15_0"
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 1590
-        height: 881
+        width: 1024
+        height: 1024
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 603f9ddae0ff71670800000000000000
-      internalID: 8509550459451208454
+      spriteID: 78c3c3f8d77534e20800000000000000
+      internalID: 3333604345969917063
       vertices: []
       indices: 
       edges: []
@@ -146,7 +146,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      water_0: 8509550459451208454
+      "ChatGPT Image 2025\uB144 7\uC6D4 21\uC77C \uC624\uC804 10_35_15_0": 3333604345969917063
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

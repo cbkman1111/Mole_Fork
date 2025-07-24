@@ -52,7 +52,7 @@ namespace Scenes
             if (_menu != null)
             {
                 _menu.InitMenu(
-                    move: (Vector3 angle) => {
+                    move: (Vector3 angle, float f) => {
                         lastMove = angle;
                         OnMove(lastMove);
                     },

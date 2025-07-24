@@ -14,18 +14,11 @@ namespace UI.Menu
         public Ant.Joystick Joystick = null;
         public Camera miniMapCamera = null;
 
-        public bool InitMenu(Action<Vector3> move, Action stop)
+        public bool InitMenu(Action<Vector3, float> move, Action stop)
         {
-            Joystick.Init((Vector3 direct, float angle) => {
-                    SetText("Text - Debug", $"Angle : {angle}");
-
-                    move?.Invoke(direct);
-                },
-                () =>
-                {
-                    stop?.Invoke();
-                });
-
+            Joystick.Init();
+            Joystick.OnMove = move;
+            Joystick.OnStop = stop;
 
             var mainCamera = AppManager.Instance.CurrScene.MainCamera;
             miniMapCamera.transform.SetParent(mainCamera.transform);

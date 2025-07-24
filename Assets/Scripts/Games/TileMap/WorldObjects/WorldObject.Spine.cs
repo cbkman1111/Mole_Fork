@@ -41,7 +41,7 @@ namespace Creature
             var animation = _skel.skeleton.Data.FindAnimation(name);
             if (animation == null)
             {
-                GiantDebug.Log($"Animation '{name}' not found");
+                GiantDebug.LogError($"Animation '{name}' not found");
                 return;
             }
 

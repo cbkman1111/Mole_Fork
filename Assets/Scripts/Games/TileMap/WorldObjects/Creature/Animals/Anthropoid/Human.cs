@@ -7,10 +7,12 @@ namespace Creature
     {
         private void UpdateStateAnimation()
         {
+            Vector3 flip = Vector3.one;
             switch (State)
             {
                 case ObjectState.Stop:
                 case ObjectState.Idle:
+                    /*
                     if (direct == Direct.Left)
                     {
                         Play("movement/idle-left", true);
@@ -27,9 +29,12 @@ namespace Creature
                     {
                         Play("movement/idle-front", true);
                     }
+                    */
+                    Play("Idle", true);
                     break;
 
                 case ObjectState.Move:
+                    /*
                     if (direct == Direct.Left)
                     {
                         Play("movement/trot-left", true);
@@ -46,8 +51,15 @@ namespace Creature
                     {
                         Play("movement/trot-front", true);
                     }
+                    */
+                    Play("Run", true);
                     break;
             }
+
+            if (direct == Direct.Left)
+                flip.x = -1;
+
+            _skel.transform.localScale = flip;
         }
 
         /// <summary>

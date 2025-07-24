@@ -20,17 +20,11 @@ namespace UI.Menu
         private Action seat = null;
         private Action unSeat = null;
 
-        public bool InitMenu(Action<Vector3> move, Action stop, Action save, Action<float> zoom, Action nextHead, Action nextWeapone, Action seat, Action unSeat)
+        public bool InitMenu(Action<Vector3, float> move, Action stop, Action save, Action<float> zoom, Action nextHead, Action nextWeapone, Action seat, Action unSeat)
         {
-            joystick.Init((Vector3 direct, float angle) => {
-                    SetText("Text - Debug", $"Angle : {angle}");
-
-                    move?.Invoke(direct);
-                },
-                () =>
-                {
-                    stop?.Invoke();
-                });
+            joystick.Init();
+            joystick.OnMove = move;
+            joystick.OnStop = stop;
 
             this.saveGame = save;
             this.zoomCamera = zoom;
