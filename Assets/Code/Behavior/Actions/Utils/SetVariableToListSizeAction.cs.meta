@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 6cd4436868e02b34ebf2dfff40c86a4a
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Code/Behavior/Actions/Utils/SetVariableToListSizeAction.cs
+  uploadId: 703500

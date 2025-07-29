@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 32c1ed23dee745f488b5df6bb8ccf51c
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Art/Characters/Turret/Materials/MazeTurretHousing_Mat.mat
+  uploadId: 703500

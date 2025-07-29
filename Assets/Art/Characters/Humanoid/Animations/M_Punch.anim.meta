@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: fd84eff75651e294a8041d6f6d385b86
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Art/Characters/Humanoid/Animations/M_Punch.anim
+  uploadId: 703500

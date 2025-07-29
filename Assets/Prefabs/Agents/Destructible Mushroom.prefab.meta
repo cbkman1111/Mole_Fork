@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: ed6a61bccf6adfa40a99c425b860ba7c
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Prefabs/Agents/Destructible Mushroom.prefab
+  uploadId: 703500

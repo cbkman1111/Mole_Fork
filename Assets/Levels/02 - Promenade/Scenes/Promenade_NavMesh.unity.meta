@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 27dd6cf0dca58d646bd312b9c7db48c2
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Levels/02 - Promenade/Scenes/Promenade_NavMesh.unity
+  uploadId: 703500

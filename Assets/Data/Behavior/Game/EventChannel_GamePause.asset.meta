@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: e24920615d94f0b498a23e2c5d709a89
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Data/Behavior/Game/EventChannel_GamePause.asset
+  uploadId: 703500

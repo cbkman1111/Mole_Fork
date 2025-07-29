@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 22dfad828b3197a46aba9ccaa31c2db0
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Art/Materials/Ally.mat
+  uploadId: 703500

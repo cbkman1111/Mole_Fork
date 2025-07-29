@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 65989e9d9fc85ad448566cc6e3e1bc02
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Prefabs/Environments/Flower_4.prefab
+  uploadId: 703500

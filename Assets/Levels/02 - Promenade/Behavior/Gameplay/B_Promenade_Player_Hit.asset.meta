@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 13769bfb54591f64c857e96544ba4a08
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Levels/02 - Promenade/Behavior/Gameplay/B_Promenade_Player_Hit.asset
+  uploadId: 703500

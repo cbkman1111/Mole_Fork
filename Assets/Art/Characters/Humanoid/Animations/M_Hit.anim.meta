@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 58945ef90d65d874dac33638bbfd14fc
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Art/Characters/Humanoid/Animations/M_Hit.anim
+  uploadId: 703500

@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: dc80a969bfa32be49ad9c8f444ea2a26
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Code/Behavior/Conditions/NullCheckCondition.cs
+  uploadId: 703500

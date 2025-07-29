@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 73e3c4f496fe98a4ba49b6b68f715d11
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Prefabs/Props/Destination.prefab
+  uploadId: 703500

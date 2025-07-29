@@ -6,72 +6,68 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Scene3Match.unity
+    guid: 23acbf83499eee1408c9bdead8389d93
+  - enabled: 1
+    path: Assets/Scenes/SceneAdMob.unity
+    guid: 8f07b817205b90648ab7613be17a139e
+  - enabled: 1
+    path: Assets/Scenes/SceneAntHouse.unity
+    guid: c2c9d8401baf4334cbabe98cea2e5595
+  - enabled: 1
+    path: Assets/Scenes/SceneBehaviorTree.unity
+    guid: 3a2c3df3a98a62f449c19c40083975be
+  - enabled: 1
+    path: Assets/Scenes/SceneBundle.unity
+    guid: c9edd177243ba0a4788430c1c8cbc47c
+  - enabled: 1
+    path: Assets/Scenes/SceneChatScroll.unity
+    guid: b937e39710fa0d14b9405aedac89c950
+  - enabled: 1
+    path: Assets/Scenes/SceneDotween.unity
+    guid: fbb13a7e6b01dc546a84a231928a2b20
+  - enabled: 1
+    path: Assets/Scenes/SceneGostop.unity
+    guid: 596f783663ff4a54aaada7a1d1e68c88
+  - enabled: 1
+    path: Assets/Scenes/SceneHash.unity
+    guid: bababe9ca72ca034e822f55cd0262437
+  - enabled: 1
     path: Assets/Scenes/SceneIntro.unity
     guid: afd8bc31ae6e70541bd2e1db2081d0e8
   - enabled: 1
     path: Assets/Scenes/SceneLoading.unity
     guid: 66d1b2eb416a5874a9aa4cf9ddf092a8
   - enabled: 1
-    path: Assets/Scenes/SceneTest.unity
-    guid: bb74305562969dc44a154397aae382f0
-  - enabled: 1
-    path: Assets/Scenes/SceneAntHouse.unity
-    guid: c2c9d8401baf4334cbabe98cea2e5595
-  - enabled: 1
-    path: Assets/Scenes/SceneGostop.unity
-    guid: 596f783663ff4a54aaada7a1d1e68c88
-  - enabled: 1
-    path: Assets/Scenes/SceneMenu.unity
-    guid: 05991571ebbad2c4895b133bab6a0db1
-  - enabled: 1
-    path: Assets/Scenes/SceneTileMap.unity
-    guid: be0b2091a6befbd46ae0f2a89ad5fdf7
-  - enabled: 1
     path: Assets/Scenes/SceneMatch3.unity
     guid: dfd48550591e34644a7dc3ab26110a55
-  - enabled: 1
-    path: Assets/Scenes/SceneChatScroll.unity
-    guid: b937e39710fa0d14b9405aedac89c950
-  - enabled: 1
-    path: Assets/SweetSugar/Scenes/game.unity
-    guid: e1598a256fd12c548bf8bcbe4d821fe7
-  - enabled: 1
-    path: Assets/Scenes/SceneBundle.unity
-    guid: c9edd177243ba0a4788430c1c8cbc47c
   - enabled: 1
     path: Assets/Scenes/SceneMaze.unity
     guid: 546549a7da67ac54ca5a6fcef833d213
   - enabled: 1
-    path: Assets/Scenes/SceneBehaviorTree.unity
-    guid: 3a2c3df3a98a62f449c19c40083975be
-  - enabled: 1
-    path: Assets/Scenes/SceneTetris.unity
-    guid: 66819441e5617ee4f95fb77761ee8e36
-  - enabled: 1
-    path: Assets/Scenes/SceneDotween.unity
-    guid: fbb13a7e6b01dc546a84a231928a2b20
-  - enabled: 1
-    path: Assets/Scenes/ScenePuzzle.unity
-    guid: 754099599cae54049b51a780f8fac464
-  - enabled: 1
-    path: Assets/Scenes/SceneTextRpg.unity
-    guid: 6cc2511ab0fe0594d983487f4332b443
-  - enabled: 1
-    path: Assets/Scenes/SceneHash.unity
-    guid: bababe9ca72ca034e822f55cd0262437
-  - enabled: 1
-    path: Assets/Scenes/SceneAdMob.unity
-    guid: 8f07b817205b90648ab7613be17a139e
+    path: Assets/Scenes/SceneMenu.unity
+    guid: 05991571ebbad2c4895b133bab6a0db1
   - enabled: 1
     path: Assets/Scenes/ScenePoker.unity
     guid: 42aa3f571c4057f4b9fe43b4463920a5
   - enabled: 1
+    path: Assets/Scenes/ScenePuzzle.unity
+    guid: 754099599cae54049b51a780f8fac464
+  - enabled: 1
     path: Assets/Scenes/SceneShooting.unity
     guid: 4fe26a7e81fd44049ac4966698b5c642
   - enabled: 1
-    path: Assets/Layer Lab/2D Art Maker/AMFantasy Character/Demo/Scenes/SceneDemoFantasy.unity
-    guid: 03c01235d83a1475ab7c9b2d80d36c07
+    path: Assets/Scenes/SceneTest.unity
+    guid: bb74305562969dc44a154397aae382f0
+  - enabled: 1
+    path: Assets/Scenes/SceneTetris.unity
+    guid: 66819441e5617ee4f95fb77761ee8e36
+  - enabled: 1
+    path: Assets/Scenes/SceneTextRpg.unity
+    guid: 6cc2511ab0fe0594d983487f4332b443
+  - enabled: 1
+    path: Assets/Scenes/SceneTileMap.unity
+    guid: be0b2091a6befbd46ae0f2a89ad5fdf7
   m_configObjects:
-    com.unity.addressableassets: {fileID: 11400000, guid: f11489fc9e0119a41a7424443fc3e23c,
-      type: 2}
+    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 6f01ade188ee41041a542c6a0584ed21, type: 3}
   m_UseUCBPForAssetBundles: 0

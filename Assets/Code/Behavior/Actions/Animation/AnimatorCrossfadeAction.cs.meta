@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 69bd425114c020a46a96666f8b331f8a
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Code/Behavior/Actions/Animation/AnimatorCrossfadeAction.cs
+  uploadId: 703500

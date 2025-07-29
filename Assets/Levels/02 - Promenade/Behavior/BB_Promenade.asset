@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dd922ae02c94c87a66e46a10a7319b9, type: 3}
+  m_Name: BB_Promenade
+  m_EditorClassIdentifier: 
+  AssetID:
+    m_Value0: 17636360012097620064
+    m_Value1: 3386046277028359274
+  m_Variables:
+  - rid: 8328026927502721299
+  m_VersionTimestamp: 638642605430855917
+  m_CommandBuffer:
+    m_Commands: []
+  m_RuntimeBlackboardAsset: {fileID: 4322429208931153248}
+  references:
+    version: 2
+    RefIds:
+    - rid: 8328026927502721299
+      type: {class: 'TypedVariableModel`1[[Unity.Behavior.Demo.BehaviorAgentFactory, Assembly-CSharp]]', ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 5556485289160261353
+          m_Value1: 5865274392474214369
+        Name: Coin Factory
+        IsExposed: 0
+        m_IsShared: 0
+        m_Value: {fileID: 0}
+--- !u!114 &4322429208931153248
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c02bb70996b49eba31d0c206e28da24, type: 3}
+  m_Name: BB_Promenade
+  m_EditorClassIdentifier: 
+  VersionTimestamp: 638642605430855917
+  AssetID:
+    m_Value0: 17636360012097620064
+    m_Value1: 3386046277028359274
+  m_Blackboard:
+    m_Variables:
+    - rid: 1736227208448704794
+  m_SharedBlackboardVariableGuids:
+  - m_Value0: 5556485289160261353
+    m_Value1: 5865274392474214369
+  references:
+    version: 2
+    RefIds:
+    - rid: 1736227208448704794
+      type: {class: 'BlackboardVariable`1[[Unity.Behavior.Demo.BehaviorAgentFactory, Assembly-CSharp]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 5556485289160261353
+          m_Value1: 5865274392474214369
+        Name: Coin Factory
+        m_Value: {fileID: 0}

@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 977f27f92310d8449bd71b3348e27ec6
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Code/Behavior/Actions/Agents/SetAllAgentsInputActive.cs
+  uploadId: 703500

@@ -1,0 +1,179 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dd922ae02c94c87a66e46a10a7319b9, type: 3}
+  m_Name: BB_Level_Transition
+  m_EditorClassIdentifier: 
+  AssetID:
+    m_Value0: 7271836905280677646
+    m_Value1: 17788002106839917017
+  m_Variables:
+  - rid: 1312152367328395793
+  - rid: 1312152254863900813
+  - rid: 1312152254863900814
+  - rid: 1312152368732438725
+  - rid: 1312152254863901275
+  - rid: 1312152254863901274
+  m_VersionTimestamp: 638645197280699935
+  m_CommandBuffer:
+    m_Commands: []
+  m_RuntimeBlackboardAsset: {fileID: 3864261121734294246}
+  references:
+    version: 2
+    RefIds:
+    - rid: 1312152254863900813
+      type: {class: 'TypedVariableModel`1[[System.String, mscorlib]]', ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 2244104768303393749
+          m_Value1: 11292501022757300602
+        Name: Audio Mixer Master Volume Param
+        IsExposed: 0
+        m_IsShared: 1
+        m_Value: Master_Vol
+    - rid: 1312152254863900814
+      type: {class: 'TypedVariableModel`1[[System.Single, mscorlib]]', ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 13676549956571505569
+          m_Value1: 6477606395563409630
+        Name: Audio Mixer Fade Duration
+        IsExposed: 0
+        m_IsShared: 1
+        m_Value: 1
+    - rid: 1312152254863901274
+      type: {class: 'TypedVariableModel`1[[System.String, mscorlib]]', ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 11283365949141121535
+          m_Value1: 6672352705648408268
+        Name: Screen Fader Animator Fade Out Param
+        IsExposed: 0
+        m_IsShared: 1
+        m_Value: Fade Out
+    - rid: 1312152254863901275
+      type: {class: 'TypedVariableModel`1[[System.String, mscorlib]]', ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 17502203709978595030
+          m_Value1: 15198362961278675646
+        Name: Screen Fader Animator Fade In Param
+        IsExposed: 0
+        m_IsShared: 1
+        m_Value: Fade In
+    - rid: 1312152367328395793
+      type: {class: 'TypedVariableModel`1[[UnityEngine.Audio.AudioMixer, UnityEngine.AudioModule]]', ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 14734315711493722158
+          m_Value1: 17686654933176892992
+        Name: Audio Mixer
+        IsExposed: 0
+        m_IsShared: 1
+        m_Value: {fileID: 24100000, guid: 66d3f340d26d7d648bed14716b8760c9, type: 2}
+    - rid: 1312152368732438725
+      type: {class: 'TypedVariableModel`1[[UnityEngine.Animator, UnityEngine.AnimationModule]]', ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 3662212248210169418
+          m_Value1: 15452016800510087027
+        Name: Screen Fader
+        IsExposed: 0
+        m_IsShared: 1
+        m_Value: {fileID: 0}
+--- !u!114 &3864261121734294246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c02bb70996b49eba31d0c206e28da24, type: 3}
+  m_Name: BB_Level_Transition
+  m_EditorClassIdentifier: 
+  VersionTimestamp: 638645197280699935
+  AssetID:
+    m_Value0: 7271836905280677646
+    m_Value1: 17788002106839917017
+  m_Blackboard:
+    m_Variables:
+    - rid: 1736227207139295877
+    - rid: 1736227207139295878
+    - rid: 1736227207139295879
+    - rid: 1736227207139295880
+    - rid: 1736227207139295881
+    - rid: 1736227207139295882
+  m_SharedBlackboardVariableGuids:
+  - m_Value0: 14734315711493722158
+    m_Value1: 17686654933176892992
+  - m_Value0: 2244104768303393749
+    m_Value1: 11292501022757300602
+  - m_Value0: 13676549956571505569
+    m_Value1: 6477606395563409630
+  - m_Value0: 3662212248210169418
+    m_Value1: 15452016800510087027
+  - m_Value0: 17502203709978595030
+    m_Value1: 15198362961278675646
+  - m_Value0: 11283365949141121535
+    m_Value1: 6672352705648408268
+  references:
+    version: 2
+    RefIds:
+    - rid: 1736227207139295877
+      type: {class: 'BlackboardVariable`1[[UnityEngine.Audio.AudioMixer, UnityEngine.AudioModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 14734315711493722158
+          m_Value1: 17686654933176892992
+        Name: Audio Mixer
+        m_Value: {fileID: 24100000, guid: 66d3f340d26d7d648bed14716b8760c9, type: 2}
+    - rid: 1736227207139295878
+      type: {class: 'BlackboardVariable`1[[System.String, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 2244104768303393749
+          m_Value1: 11292501022757300602
+        Name: Audio Mixer Master Volume Param
+        m_Value: Master_Vol
+    - rid: 1736227207139295879
+      type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 13676549956571505569
+          m_Value1: 6477606395563409630
+        Name: Audio Mixer Fade Duration
+        m_Value: 1
+    - rid: 1736227207139295880
+      type: {class: 'BlackboardVariable`1[[UnityEngine.Animator, UnityEngine.AnimationModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 3662212248210169418
+          m_Value1: 15452016800510087027
+        Name: Screen Fader
+        m_Value: {fileID: 0}
+    - rid: 1736227207139295881
+      type: {class: 'BlackboardVariable`1[[System.String, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 17502203709978595030
+          m_Value1: 15198362961278675646
+        Name: Screen Fader Animator Fade In Param
+        m_Value: Fade In
+    - rid: 1736227207139295882
+      type: {class: 'BlackboardVariable`1[[System.String, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 11283365949141121535
+          m_Value1: 6672352705648408268
+        Name: Screen Fader Animator Fade Out Param
+        m_Value: Fade Out

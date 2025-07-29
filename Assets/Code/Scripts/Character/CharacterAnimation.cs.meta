@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 50d572a5aa7533b49935ef5094912c2b
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Code/Scripts/Character/CharacterAnimation.cs
+  uploadId: 703500

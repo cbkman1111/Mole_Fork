@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 81ef01f5f501c7c438a8548b0cdc8914
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Data/Behavior/Game/EventChannel_GameState.asset
+  uploadId: 703500

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 3d34bb6a4bd0a53479942e2a1911bfd2
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Levels/02 - Promenade/Scenes/Promenade_Gameplay/Promenade_BakingSet.asset
+  uploadId: 703500

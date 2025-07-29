@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 2b5b63cc22851d64f97fed525ddc265a
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Code/Behavior/Enums/CharacterState.cs
+  uploadId: 703500

@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 5e353d37f28c0904e9b85fe1cc68a19d
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Code/Behavior/EventChannels/NpcStateEventChannel.cs
+  uploadId: 703500

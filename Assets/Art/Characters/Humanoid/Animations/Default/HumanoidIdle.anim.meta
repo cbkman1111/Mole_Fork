@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 8085e8d6fcface648900d27de48c15cd
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 7400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Art/Characters/Humanoid/Animations/Default/HumanoidIdle.anim
+  uploadId: 703500

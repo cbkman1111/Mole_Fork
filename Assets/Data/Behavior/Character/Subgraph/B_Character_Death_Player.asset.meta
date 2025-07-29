@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: fadbbce8897a05f449687d0465da6a0b
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Data/Behavior/Character/Subgraph/B_Character_Death_Player.asset
+  uploadId: 703500

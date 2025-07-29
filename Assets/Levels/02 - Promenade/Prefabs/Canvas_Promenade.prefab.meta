@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: ef4d53bac65159a47bb987ec37fc4774
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Levels/02 - Promenade/Prefabs/Canvas_Promenade.prefab
+  uploadId: 703500

@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-6495557989605159455
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c02bb70996b49eba31d0c206e28da24, type: 3}
+  m_Name: BB_GameMode
+  m_EditorClassIdentifier: 
+  VersionTimestamp: 638645234999290993
+  AssetID:
+    m_Value0: 13015221463696460278
+    m_Value1: 11786833742683882218
+  m_Blackboard:
+    m_Variables:
+    - rid: 1736227208448704667
+  m_SharedBlackboardVariableGuids:
+  - m_Value0: 7362847423259602900
+    m_Value1: 3127198003604450623
+  references:
+    version: 2
+    RefIds:
+    - rid: 1736227208448704667
+      type: {class: 'BlackboardVariable`1[[Unity.Behavior.Demo.GameModeStateEventChannel, Assembly-CSharp]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 7362847423259602900
+          m_Value1: 3127198003604450623
+        Name: Game Mode State Channel
+        m_Value: {fileID: 11400000, guid: 0a48fde3dd9b2f04d94c27296a4bcda5, type: 2}
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dd922ae02c94c87a66e46a10a7319b9, type: 3}
+  m_Name: BB_GameMode
+  m_EditorClassIdentifier: 
+  AssetID:
+    m_Value0: 13015221463696460278
+    m_Value1: 11786833742683882218
+  m_Variables:
+  - rid: 1736226935876354442
+  m_VersionTimestamp: 638645234999290993
+  m_CommandBuffer:
+    m_Commands: []
+  m_RuntimeBlackboardAsset: {fileID: -6495557989605159455}
+  references:
+    version: 2
+    RefIds:
+    - rid: 1736226935876354442
+      type: {class: 'TypedVariableModel`1[[Unity.Behavior.Demo.GameModeStateEventChannel, Assembly-CSharp]]', ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 7362847423259602900
+          m_Value1: 3127198003604450623
+        Name: Game Mode State Channel
+        IsExposed: 0
+        m_IsShared: 1
+        m_Value: {fileID: 11400000, guid: 0a48fde3dd9b2f04d94c27296a4bcda5, type: 2}

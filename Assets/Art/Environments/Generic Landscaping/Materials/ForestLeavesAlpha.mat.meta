@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 3e5f25bb091f61b4db9a335481c22825
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Art/Environments/Generic Landscaping/Materials/ForestLeavesAlpha.mat
+  uploadId: 703500

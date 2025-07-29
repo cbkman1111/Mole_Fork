@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 37065051debd1d7478715c5d38402fb7
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Code/Behavior/Modifier/ForeachStringModifier.cs
+  uploadId: 703500

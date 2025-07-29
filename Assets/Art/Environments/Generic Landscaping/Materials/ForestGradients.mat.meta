@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: b2b288acc1df3864caf68675d24b5dc4
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Art/Environments/Generic Landscaping/Materials/ForestGradients.mat
+  uploadId: 703500

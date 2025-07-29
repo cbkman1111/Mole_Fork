@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 060cdfe47d33926459fb17f1c204e38a
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Code/Behavior/EventChannels/ComboStrikeEventChannel.cs
+  uploadId: 703500

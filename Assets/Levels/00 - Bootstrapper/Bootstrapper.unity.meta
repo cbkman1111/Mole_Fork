@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 8332054eadbb5d340bb2e73805a39b47
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Levels/00 - Bootstrapper/Bootstrapper.unity
+  uploadId: 703500

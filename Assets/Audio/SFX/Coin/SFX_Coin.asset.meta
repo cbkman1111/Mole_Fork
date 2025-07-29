@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: d58723b89f804a949bb364e590152ab3
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 6418180475301049370
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Audio/SFX/Coin/SFX_Coin.asset
+  uploadId: 703500

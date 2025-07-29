@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 94524182aba28dd43b1472b852c8faaa
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Data/Behavior/BB_AudioSourceReferences.asset
+  uploadId: 703500

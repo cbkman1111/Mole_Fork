@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 27154e0a2d621d548962e6206fd7331c
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Prefabs/Environments/mushroom_01.prefab
+  uploadId: 703500

@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 7205695a0e0d7b44caa96f5b24bb1b6c
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Prefabs/Props/Teleporter.prefab
+  uploadId: 703500

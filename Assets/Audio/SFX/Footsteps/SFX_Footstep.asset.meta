@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 60b742a8b245ffd48b49c721a4289dff
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 6418180475301049370
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Audio/SFX/Footsteps/SFX_Footstep.asset
+  uploadId: 703500

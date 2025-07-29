@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: fc4b712a7e18fca448f29deb798009b0
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Code/Behavior/ICharacterStateChannelModifier.cs
+  uploadId: 703500

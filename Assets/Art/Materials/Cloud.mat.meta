@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 7654e5aff5ba0a142b95504249dd06ac
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Art/Materials/Cloud.mat
+  uploadId: 703500

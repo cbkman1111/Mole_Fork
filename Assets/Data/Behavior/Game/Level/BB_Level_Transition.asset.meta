@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 0ea7d43323c1ea64d9e117daabaddbf6
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Data/Behavior/Game/Level/BB_Level_Transition.asset
+  uploadId: 703500

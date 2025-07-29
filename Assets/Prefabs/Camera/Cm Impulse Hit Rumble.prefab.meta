@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 0aeb4e70caf5e294da484e7a0f336aac
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Prefabs/Camera/Cm Impulse Hit Rumble.prefab
+  uploadId: 703500

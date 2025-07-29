@@ -55,8 +55,10 @@ namespace Scenes
 
         public override void OnTouchEnd(Vector3 position)
         {
-            var world = MainCamera.ScreenToWorldPoint(position);
+            if (MainCamera == false)
+                return;
 
+            var world = MainCamera.ScreenToWorldPoint(position);
             Ray ray = MainCamera.ScreenPointToRay(world);
             //RaycastHit2D hit = Physics2D.Raycast(world, transform.forward);
             //if (hit.collider != null)

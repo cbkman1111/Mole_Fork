@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: c4c64ae8420ca5f458b75aefd8c80265
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Code/Behavior/Actions/Utils/SpawnObjectFromPoolAction.cs
+  uploadId: 703500

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 7a8b0e88059e0f54f86dbaf08cb62141
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 9100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Art/Characters/Humanoid/Animations/HumanoidAnimations.controller
+  uploadId: 703500

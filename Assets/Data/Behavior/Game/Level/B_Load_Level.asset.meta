@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: b5b375ba6d4bb4e4f8c79c4c47ae30d9
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Data/Behavior/Game/Level/B_Load_Level.asset
+  uploadId: 703500

@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 3e3f7dae1b3e29e43b115230b13d5093
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Code/Behavior/Actions/Math/IntegerOperation.cs
+  uploadId: 703500

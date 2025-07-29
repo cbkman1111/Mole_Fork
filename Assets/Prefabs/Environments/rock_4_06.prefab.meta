@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 9f1bcd51cc97c6c47a91e2336417a3f7
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Prefabs/Environments/rock_4_06.prefab
+  uploadId: 703500

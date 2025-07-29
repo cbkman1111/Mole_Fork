@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: e4adc7187c945584e8dd06078a11af7e
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Code/Scripts/UI/UICharacterHealth.cs
+  uploadId: 703500

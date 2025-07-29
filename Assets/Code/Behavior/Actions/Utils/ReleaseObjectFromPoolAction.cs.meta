@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: c6bc9dcb79d22b449884a6effc1e58dc
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Code/Behavior/Actions/Utils/ReleaseObjectFromPoolAction.cs
+  uploadId: 703500

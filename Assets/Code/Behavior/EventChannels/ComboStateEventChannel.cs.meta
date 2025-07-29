@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 6cf6329ab38e4384fa54934ff86dc071
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Code/Behavior/EventChannels/ComboStateEventChannel.cs
+  uploadId: 703500

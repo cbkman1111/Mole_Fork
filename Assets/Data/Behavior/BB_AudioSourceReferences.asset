@@ -1,0 +1,91 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dd922ae02c94c87a66e46a10a7319b9, type: 3}
+  m_Name: BB_AudioSourceReferences
+  m_EditorClassIdentifier: 
+  AssetID:
+    m_Value0: 15316076765265351316
+    m_Value1: 12320379988232770619
+  m_Variables:
+  - rid: 1736226980258382024
+  - rid: 1736226980285121510
+  m_VersionTimestamp: 638645198139587853
+  m_CommandBuffer:
+    m_Commands: []
+  m_RuntimeBlackboardAsset: {fileID: 3686832719615447824}
+  references:
+    version: 2
+    RefIds:
+    - rid: 1736226980258382024
+      type: {class: 'TypedVariableModel`1[[UnityEngine.AudioSource, UnityEngine.AudioModule]]', ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 10876898328068763490
+          m_Value1: 14019241823950706610
+        Name: 3D SFX
+        IsExposed: 0
+        m_IsShared: 1
+        m_Value: {fileID: 8211050148330616121, guid: 20ac67085c6ee7c489dc3f5ce8ab6122, type: 3}
+    - rid: 1736226980285121510
+      type: {class: 'TypedVariableModel`1[[UnityEngine.AudioSource, UnityEngine.AudioModule]]', ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 12303244134935768981
+          m_Value1: 17698418586748997413
+        Name: 2D SFX
+        IsExposed: 0
+        m_IsShared: 1
+        m_Value: {fileID: 2990760370732019772, guid: bb0888da9627ef44ca1e3d869e8ed3d5, type: 3}
+--- !u!114 &3686832719615447824
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c02bb70996b49eba31d0c206e28da24, type: 3}
+  m_Name: BB_AudioSourceReferences
+  m_EditorClassIdentifier: 
+  VersionTimestamp: 638645198139587853
+  AssetID:
+    m_Value0: 15316076765265351316
+    m_Value1: 12320379988232770619
+  m_Blackboard:
+    m_Variables:
+    - rid: 1736227208448704703
+    - rid: 1736227208448704704
+  m_SharedBlackboardVariableGuids:
+  - m_Value0: 10876898328068763490
+    m_Value1: 14019241823950706610
+  - m_Value0: 12303244134935768981
+    m_Value1: 17698418586748997413
+  references:
+    version: 2
+    RefIds:
+    - rid: 1736227208448704703
+      type: {class: 'BlackboardVariable`1[[UnityEngine.AudioSource, UnityEngine.AudioModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 10876898328068763490
+          m_Value1: 14019241823950706610
+        Name: 3D SFX
+        m_Value: {fileID: 8211050148330616121, guid: 20ac67085c6ee7c489dc3f5ce8ab6122, type: 3}
+    - rid: 1736227208448704704
+      type: {class: 'BlackboardVariable`1[[UnityEngine.AudioSource, UnityEngine.AudioModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 12303244134935768981
+          m_Value1: 17698418586748997413
+        Name: 2D SFX
+        m_Value: {fileID: 2990760370732019772, guid: bb0888da9627ef44ca1e3d869e8ed3d5, type: 3}

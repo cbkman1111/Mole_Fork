@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 448cdeacc2f3aaa4eadde23331ff6bf2
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Prefabs/Agents/Player.prefab
+  uploadId: 703500

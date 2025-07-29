@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: a691bef1ad2f595499b9ba843af6a2ad
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Code/Behavior/Actions/Math/FloatOperation.cs
+  uploadId: 703500

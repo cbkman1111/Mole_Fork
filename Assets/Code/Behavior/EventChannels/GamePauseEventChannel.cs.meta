@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 11f00310e31ee0f4eb788f6158352863
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Code/Behavior/EventChannels/GamePauseEventChannel.cs
+  uploadId: 703500

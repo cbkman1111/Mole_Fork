@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: d86462e88c2af6e42826e216260d8e92
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Prefabs/Particles/VFX_CollectCoin.prefab
+  uploadId: 703500

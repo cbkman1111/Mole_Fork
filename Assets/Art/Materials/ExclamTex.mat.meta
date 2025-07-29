@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 65d2db3703fdea943b8e52136ce73fa2
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Art/Materials/ExclamTex.mat
+  uploadId: 703500

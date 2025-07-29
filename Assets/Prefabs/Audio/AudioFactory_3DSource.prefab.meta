@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: bb81c6d614c53fc4695a055e6679983e
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Prefabs/Audio/AudioFactory_3DSource.prefab
+  uploadId: 703500

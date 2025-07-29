@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 2799f1a7e14ab7f48af9dae0fe7a9081
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Code/Behavior/Modifier/InputEventModifier.cs
+  uploadId: 703500

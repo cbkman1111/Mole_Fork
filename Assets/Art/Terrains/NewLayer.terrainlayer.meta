@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 0597f807005656d489995f4521a9aeef
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 8574412962073106934
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Art/Terrains/NewLayer.terrainlayer
+  uploadId: 703500

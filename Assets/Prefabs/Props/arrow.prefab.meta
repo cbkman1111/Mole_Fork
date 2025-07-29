@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 40034ced401b6994786235b40aced514
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Prefabs/Props/arrow.prefab
+  uploadId: 703500

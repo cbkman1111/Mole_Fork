@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: f7fd037ded057f1488bba038fa4da043
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Code/Behavior/Enums/NpcCombatState.cs
+  uploadId: 703500

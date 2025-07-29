@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 4710205bbb95fcd46be222a9b45a79ce
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Code/Behavior/Actions/Utils/SetTextValue.cs
+  uploadId: 703500

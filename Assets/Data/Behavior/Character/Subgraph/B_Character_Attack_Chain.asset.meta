@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: e80a5176fbaf41240b58f17f18be62b5
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Data/Behavior/Character/Subgraph/B_Character_Attack_Chain.asset
+  uploadId: 703500

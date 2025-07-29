@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: d2636585180861845949c025f57d3be3
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Code/Scripts/Gameplay/TriggerBehavior.cs
+  uploadId: 703500

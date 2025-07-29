@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: dc9457215629b9649b9dbc1ddfb2882d
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Code/Scripts/Character/IDamageable.cs
+  uploadId: 703500

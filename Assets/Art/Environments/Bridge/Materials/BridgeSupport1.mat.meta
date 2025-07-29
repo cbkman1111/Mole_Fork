@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 6ad00a4b211959e42938b2e00a3a2488
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Art/Environments/Bridge/Materials/BridgeSupport1.mat
+  uploadId: 703500

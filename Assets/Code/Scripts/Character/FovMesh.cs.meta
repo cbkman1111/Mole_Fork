@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: b6e93194b56c5ca43bdeffe00f99192f
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Code/Scripts/Character/FovMesh.cs
+  uploadId: 703500

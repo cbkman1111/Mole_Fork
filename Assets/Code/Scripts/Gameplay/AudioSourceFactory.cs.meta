@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: b8633de9bf907524da655629834c2262
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Code/Scripts/Gameplay/AudioSourceFactory.cs
+  uploadId: 703500

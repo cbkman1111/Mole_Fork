@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 11607b8dc8bd9044d909a81ee1dd928c
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Art/Environments/Bridge/Materials/MuseMaterial.mat
+  uploadId: 703500

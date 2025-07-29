@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: ba0c9b0a8e231bc4ea0fd7e12ae5601e
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Code/Behavior/Actions/Utils/AssignValueFromListToVariable.cs
+  uploadId: 703500

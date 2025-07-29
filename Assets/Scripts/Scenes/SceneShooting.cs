@@ -15,7 +15,6 @@ public class SceneShooting : SceneBase
         Menu.InitMenu();
         Menu.Joystick.OnMove = OnMove;
         Menu.Joystick.OnStop = OnStop;
-
         return true;
     }
 
@@ -59,6 +58,9 @@ public class SceneShooting : SceneBase
     /// <param name="position"></param>
     public override void OnTouchBean(Vector3 position)
     {
+        if (Menu == null || Menu.Joystick == null)
+            return;
+
         Menu.Joystick.TouchBegin(position);
     }
 
@@ -68,6 +70,9 @@ public class SceneShooting : SceneBase
     /// <param name="position"></param>
     public override void OnTouchEnd(Vector3 position)
     {
+        if (Menu == null || Menu.Joystick == null)
+            return;
+
         Menu.Joystick.TouchEnd(position);
 
         if (EventSystem.current.IsPointerOverGameObject() == true)

@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dd922ae02c94c87a66e46a10a7319b9, type: 3}
+  m_Name: BB_Level
+  m_EditorClassIdentifier: 
+  AssetID:
+    m_Value0: 12997549967091095049
+    m_Value1: 3201613285615211947
+  m_Variables:
+  - rid: 1312152368621552097
+  m_VersionTimestamp: 638633996473494336
+  m_CommandBuffer:
+    m_Commands: []
+  m_RuntimeBlackboardAsset: {fileID: 6631547413089533509}
+  references:
+    version: 2
+    RefIds:
+    - rid: 1312152368621552097
+      type: {class: 'TypedVariableModel`1[[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]]', ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 17088898082675526061
+          m_Value1: 1327881459216689929
+        Name: Scenes
+        IsExposed: 1
+        IsShared: 0
+        m_Value: []
+--- !u!114 &6631547413089533509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c02bb70996b49eba31d0c206e28da24, type: 3}
+  m_Name: BB_Level
+  m_EditorClassIdentifier: 
+  VersionTimestamp: 638633996473494336
+  AssetID:
+    m_Value0: 12997549967091095049
+    m_Value1: 3201613285615211947
+  m_Blackboard:
+    m_Variables:
+    - rid: 1736226796624413312
+  m_SharedBlackboardVariableGuids: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 1736226796624413312
+      type: {class: 'BlackboardVariable`1[[System.Collections.Generic.List`1[[System.String, mscorlib]], mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 17088898082675526061
+          m_Value1: 1327881459216689929
+        Name: Scenes
+        m_Value: []

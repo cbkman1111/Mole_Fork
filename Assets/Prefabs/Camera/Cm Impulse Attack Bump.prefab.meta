@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: ef1d6397f0d308840b3f8d84c390da04
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Prefabs/Camera/Cm Impulse Attack Bump.prefab
+  uploadId: 703500

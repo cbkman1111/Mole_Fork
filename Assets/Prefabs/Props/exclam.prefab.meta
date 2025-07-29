@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: c2730bff36e00ca49b2d8b2949b1e381
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Prefabs/Props/exclam.prefab
+  uploadId: 703500

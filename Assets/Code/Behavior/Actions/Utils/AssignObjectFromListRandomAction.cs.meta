@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: a10f27583b854ee45b859c519749f39f
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Code/Behavior/Actions/Utils/AssignObjectFromListRandomAction.cs
+  uploadId: 703500

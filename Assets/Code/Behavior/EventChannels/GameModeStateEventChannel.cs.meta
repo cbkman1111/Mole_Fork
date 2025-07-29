@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: a2e2fdb6f28a57b45bfa89983d8c96e7
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Code/Behavior/EventChannels/GameModeStateEventChannel.cs
+  uploadId: 703500

@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: d7d50a88acc619e498bf9c5258440fc6
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Prefabs/Environments/Rough Wooden Bridge_centred mid.prefab
+  uploadId: 703500

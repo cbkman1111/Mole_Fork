@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 3f2a2f2ec5bbe7145a55a5d6bb0e6971
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 15600000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Art/Terrains/ParkourTerrain.asset
+  uploadId: 703500

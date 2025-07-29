@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 66d3f340d26d7d648bed14716b8760c9
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Audio/AudioMixer.mixer
+  uploadId: 703500

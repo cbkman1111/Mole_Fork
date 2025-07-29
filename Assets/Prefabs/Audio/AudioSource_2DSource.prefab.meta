@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: bb0888da9627ef44ca1e3d869e8ed3d5
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Prefabs/Audio/AudioSource_2DSource.prefab
+  uploadId: 703500

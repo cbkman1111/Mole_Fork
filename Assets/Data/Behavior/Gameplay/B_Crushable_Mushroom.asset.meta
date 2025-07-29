@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: dcbe15fff9c781e44be9aff21424d5c8
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Data/Behavior/Gameplay/B_Crushable_Mushroom.asset
+  uploadId: 703500

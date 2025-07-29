@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 1d45b7694cea9f0418f162d4c5e87d94
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Prefabs/Particles/VFX_Exclam.prefab
+  uploadId: 703500

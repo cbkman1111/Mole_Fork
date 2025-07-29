@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 38660c664b1d45a4fb22d6a190990293
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Code/Behavior/Actions/Cinemachine/SetCmCameraActiveAction.cs
+  uploadId: 703500

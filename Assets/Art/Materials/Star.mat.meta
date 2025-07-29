@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 43abfb230d0e1364db0326e445208ea8
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Art/Materials/Star.mat
+  uploadId: 703500

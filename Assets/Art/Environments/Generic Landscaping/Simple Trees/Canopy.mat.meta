@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 19c151a5917bf504fa15114bf6d2681a
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Art/Environments/Generic Landscaping/Simple Trees/Canopy.mat
+  uploadId: 703500

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: b425b1e2dac41834a838051eca61858e
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Levels/02 - Promenade/Behavior/B_Promenade_Start.asset
+  uploadId: 703500

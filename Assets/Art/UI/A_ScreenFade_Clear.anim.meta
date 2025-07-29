@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 883e4d41057932c46ac2a02ec6205383
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 7400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Art/UI/A_ScreenFade_Clear.anim
+  uploadId: 703500

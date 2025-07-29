@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: d577bdbcfce57ab4296c711d6359c21f
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Levels/01 - Hub/Scenes/Hub_Environment/Hub_Environment Baking
+    Set.asset
+  uploadId: 703500

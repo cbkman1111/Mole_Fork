@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 77e00448ba50ff544b9398abe3c166d7
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Prefabs/Agents/Agent Patrol.prefab
+  uploadId: 703500

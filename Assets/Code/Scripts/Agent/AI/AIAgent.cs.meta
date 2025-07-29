@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 207eea75e5ff36a41ad244e9ab1d04fd
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Code/Scripts/Agent/AI/AIAgent.cs
+  uploadId: 703500

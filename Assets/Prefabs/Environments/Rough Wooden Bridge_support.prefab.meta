@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 130822320e6f06f4fbd83b8a76508eb2
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Prefabs/Environments/Rough Wooden Bridge_support.prefab
+  uploadId: 703500

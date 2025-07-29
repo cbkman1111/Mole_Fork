@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 18a6ed6822b1abf4e93acb151cd9f595
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Code/Behavior/Actions/Navigation/SetNavMeshAgentNavigationAction.cs
+  uploadId: 703500

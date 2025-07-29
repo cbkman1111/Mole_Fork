@@ -6,6 +6,7 @@ using Common.Scene;
 using Games.AntHouse.Datas;
 using Games.AntHouse.Objects;
 using UI.Menu;
+using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.EventSystems;

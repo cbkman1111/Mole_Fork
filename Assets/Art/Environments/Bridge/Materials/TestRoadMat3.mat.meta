@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 2ed004328f1bdff488c88e7a5208acfc
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Art/Environments/Bridge/Materials/TestRoadMat3.mat
+  uploadId: 703500

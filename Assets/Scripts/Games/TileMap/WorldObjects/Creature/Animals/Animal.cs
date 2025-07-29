@@ -1,6 +1,7 @@
 using DG.Tweening;
 using Spine;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace Creature
 {
@@ -62,11 +63,16 @@ namespace Creature
                 OnDirectChanged(direct);
             }
 
-            var duration = 0.1f;
-            var speed = 0.1f;
-            var target = angle * speed;
-            //target.y = 0.0f;
+            //var duration = 0.1f;
+            var speed = 2f;
+            var target = angle * speed * Time.deltaTime;
+            target.y = 0.0f;
 
+            //_navMeshAgent.speed = speed;
+            //_navMeshAgent.updateRotation = false; // 雀傈篮 流立 贸府窃.
+            //_navMeshAgent.SetDestination(target);// = target;
+            transform.Translate(target, Space.World);
+            /*
             transform.DOKill();
             TweenMove = transform.DOMove(transform.position + target, duration).
                 SetEase(Ease.Linear).
@@ -74,17 +80,22 @@ namespace Creature
                     TweenMove = null;
                     //ChangeState(ObjectState.Idle);
                 });
+            */
         }
 
         public void Dash(Vector3 angle) 
         {
-            OnDash(angle);
+            //OnDash(angle);
 
-            var duration = 0.4f;
-            var speed = 5;
-            var target = angle * speed * Time.deltaTime;
+            //var duration = 0.4f;
+            var speed = 1;
+            var target = angle.normalized * speed * Time.deltaTime;
             target.y = 0.0f;
 
+            //_rigidbody.linearVelocity = target;
+            //_navMeshAgent.velocity = target;
+            //transform.Translate(target, Space.World);
+            /*
             transform.DOKill();
             TweenMove = transform.DOMove(transform.position + target, duration).
                 SetEase(Ease.Linear).
@@ -92,6 +103,7 @@ namespace Creature
                     TweenMove = null;
                     ChangeState(ObjectState.Stop);
                 });
+            */
         }
 
         public void Stop()

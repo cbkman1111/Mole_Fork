@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 672198a8c9e19054a94eecba6f4cfc80
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Prefabs/Environments/simple_tree_2.prefab
+  uploadId: 703500

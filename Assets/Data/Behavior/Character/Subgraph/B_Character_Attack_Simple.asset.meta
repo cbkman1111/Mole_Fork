@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: d0317d79236796947bcddf103a3c1bac
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Data/Behavior/Character/Subgraph/B_Character_Attack_Simple.asset
+  uploadId: 703500

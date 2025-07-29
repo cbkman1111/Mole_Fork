@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: f97046a81cd77d84780ef46e74421c27
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 9100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Art/UI/Fader.controller
+  uploadId: 703500

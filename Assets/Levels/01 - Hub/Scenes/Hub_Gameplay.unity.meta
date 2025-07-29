@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: bac2fafadf3cf654f940aa54fcf1ff3a
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Levels/01 - Hub/Scenes/Hub_Gameplay.unity
+  uploadId: 703500

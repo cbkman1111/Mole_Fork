@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 44ea27ca47da6e54198a5ed59fb25dd7
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 7400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Art/UI/A_ScreenFade_In.anim
+  uploadId: 703500

@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 291a13a5321df25469f004c552f2aac9
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Code/Scripts/Agent/Player/PlayerAgent.cs
+  uploadId: 703500

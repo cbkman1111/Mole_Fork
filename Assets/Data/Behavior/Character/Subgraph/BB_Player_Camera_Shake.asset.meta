@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: a0d7bc3a3dd709149811d1464185a052
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Data/Behavior/Character/Subgraph/BB_Player_Camera_Shake.asset
+  uploadId: 703500

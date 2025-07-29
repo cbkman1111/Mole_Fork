@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 38b07e27d1ddf2d4fb5a10bd9339edab
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Levels/02 - Promenade/Behavior/Gameplay/B_Promenade_Coin.asset
+  uploadId: 703500

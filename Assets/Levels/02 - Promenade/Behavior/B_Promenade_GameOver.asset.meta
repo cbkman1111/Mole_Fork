@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 877d503b8c37d7c4395047ddf889142a
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Levels/02 - Promenade/Behavior/B_Promenade_GameOver.asset
+  uploadId: 703500

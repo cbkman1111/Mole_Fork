@@ -1,0 +1,207 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dd922ae02c94c87a66e46a10a7319b9, type: 3}
+  m_Name: BB_Character_Attack
+  m_EditorClassIdentifier: 
+  AssetID:
+    m_Value0: 10727357183641166123
+    m_Value1: 15113742580505084073
+  m_Variables:
+  - rid: 1312152125778690693
+  - rid: 1312152123777745165
+  - rid: 1312152124107522341
+  - rid: 8328026974640144781
+  - rid: 8302083649116045353
+  - rid: 8328026974640144782
+  - rid: 8328026975341642040
+  - rid: 1312152215177658489
+  m_VersionTimestamp: 638642605430865951
+  m_CommandBuffer:
+    m_Commands: []
+  m_RuntimeBlackboardAsset: {fileID: 1805852669388694797}
+  references:
+    version: 2
+    RefIds:
+    - rid: 1312152123777745165
+      type: {class: 'TypedVariableModel`1[[Unity.Behavior.Demo.CharacterStateEventChannel, Assembly-CSharp]]', ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 7915422348595121032
+          m_Value1: 10740638270141206361
+        Name: Character State Channel
+        IsExposed: 1
+        m_IsShared: 0
+        m_Value: {fileID: 0}
+    - rid: 1312152124107522341
+      type: {class: 'TypedVariableModel`1[[UnityEngine.Animator, UnityEngine.AnimationModule]]', ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 2764296468354529233
+          m_Value1: 6485965399149716716
+        Name: Animator
+        IsExposed: 1
+        m_IsShared: 0
+        m_Value: {fileID: 0}
+    - rid: 1312152125778690693
+      type: {class: 'TypedVariableModel`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 546593213147697828
+          m_Value1: 4071466755284694397
+        Name: Striker
+        IsExposed: 1
+        m_IsShared: 0
+        m_Value: {fileID: 0}
+    - rid: 1312152215177658489
+      type: {class: 'TypedVariableModel`1[[System.Boolean, mscorlib]]', ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 12477624588197044445
+          m_Value1: 15249105553958706907
+        Name: Is Player
+        IsExposed: 1
+        m_IsShared: 0
+        m_Value: 0
+    - rid: 8302083649116045353
+      type: {class: 'TypedVariableModel`1[[System.Single, mscorlib]]', ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 14656871849813414624
+          m_Value1: 15883158176330871492
+        Name: Strike Active Duration
+        IsExposed: 1
+        m_IsShared: 0
+        m_Value: 0.3
+    - rid: 8328026974640144781
+      type: {class: 'TypedVariableModel`1[[System.Single, mscorlib]]', ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 17191231498948384959
+          m_Value1: 2387093063116072671
+        Name: Strike Hit Delay
+        IsExposed: 1
+        m_IsShared: 0
+        m_Value: 0.4
+    - rid: 8328026974640144782
+      type: {class: 'TypedVariableModel`1[[System.Single, mscorlib]]', ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 2856186371718882014
+          m_Value1: 10733926245073394579
+        Name: Strike Recovery Duration
+        IsExposed: 1
+        m_IsShared: 0
+        m_Value: 0.25
+    - rid: 8328026975341642040
+      type: {class: 'TypedVariableModel`1[[System.String, mscorlib]]', ns: Unity.Behavior.GraphFramework, asm: Unity.Behavior.GraphFramework}
+      data:
+        ID:
+          m_Value0: 15615640802373231114
+          m_Value1: 15120837915591734194
+        Name: Target Tag
+        IsExposed: 1
+        m_IsShared: 0
+        m_Value: 
+--- !u!114 &1805852669388694797
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c02bb70996b49eba31d0c206e28da24, type: 3}
+  m_Name: BB_Character_Attack
+  m_EditorClassIdentifier: 
+  VersionTimestamp: 638642605430865951
+  AssetID:
+    m_Value0: 10727357183641166123
+    m_Value1: 15113742580505084073
+  m_Blackboard:
+    m_Variables:
+    - rid: 1736227208448704874
+    - rid: 1736227208448704875
+    - rid: 1736227208448704876
+    - rid: 1736227208448704877
+    - rid: 1736227208448704878
+    - rid: 1736227208448704879
+    - rid: 1736227208448704880
+    - rid: 1736227208448704881
+  m_SharedBlackboardVariableGuids: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 1736227208448704874
+      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 546593213147697828
+          m_Value1: 4071466755284694397
+        Name: Striker
+        m_Value: {fileID: 0}
+    - rid: 1736227208448704875
+      type: {class: 'BlackboardVariable`1[[Unity.Behavior.Demo.CharacterStateEventChannel, Assembly-CSharp]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 7915422348595121032
+          m_Value1: 10740638270141206361
+        Name: Character State Channel
+        m_Value: {fileID: 0}
+    - rid: 1736227208448704876
+      type: {class: 'BlackboardVariable`1[[UnityEngine.Animator, UnityEngine.AnimationModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 2764296468354529233
+          m_Value1: 6485965399149716716
+        Name: Animator
+        m_Value: {fileID: 0}
+    - rid: 1736227208448704877
+      type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 17191231498948384959
+          m_Value1: 2387093063116072671
+        Name: Strike Hit Delay
+        m_Value: 0.4
+    - rid: 1736227208448704878
+      type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 14656871849813414624
+          m_Value1: 15883158176330871492
+        Name: Strike Active Duration
+        m_Value: 0.3
+    - rid: 1736227208448704879
+      type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 2856186371718882014
+          m_Value1: 10733926245073394579
+        Name: Strike Recovery Duration
+        m_Value: 0.25
+    - rid: 1736227208448704880
+      type: {class: 'BlackboardVariable`1[[System.String, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 15615640802373231114
+          m_Value1: 15120837915591734194
+        Name: Target Tag
+        m_Value: 
+    - rid: 1736227208448704881
+      type: {class: 'BlackboardVariable`1[[System.Boolean, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 12477624588197044445
+          m_Value1: 15249105553958706907
+        Name: Is Player
+        m_Value: 0

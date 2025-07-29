@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: dea3d5bca4932cc47989491365db727c
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Code/Behavior/Actions/Agents/RotateTowardTarget.cs
+  uploadId: 703500

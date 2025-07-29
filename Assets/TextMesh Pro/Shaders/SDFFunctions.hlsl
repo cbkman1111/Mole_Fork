@@ -62,7 +62,7 @@ void EvaluateLight_float(float4 faceColor, float3 n, out float4 color)
 	n.z = abs(n.z);
 	float3 light = normalize(float3(sin(_LightAngle), cos(_LightAngle), 1.0));
 
-	float3 col = max(faceColor.rgb, 0) + GetSpecular(n, light)* faceColor.a;
+	float3 col = max(faceColor.rgb, 0) + GetSpecular(n, light) * faceColor.a;
 	//faceColor.rgb += col * faceColor.a;
 	col *= 1 - (dot(n, light) * _Diffuse);
 	col *= lerp(_Ambient, 1, n.z * n.z);
@@ -74,7 +74,6 @@ void EvaluateLight_float(float4 faceColor, float3 n, out float4 color)
 }
 
 // Add custom function to handle time in HDRP
-
 
 //
 void GenerateUV_float(float2 inUV, float4 transform, float2 animSpeed, out float2 outUV)
@@ -91,7 +90,7 @@ void ScreenSpaceRatio2_float(float4x4 projection, float4 position, float2 object
 {
 	float2 pixelSize = position.w;
 	pixelSize /= (objectScale * mul((float2x2)projection, float2(screenWidth, screenHeight)));
-	SSR = rsqrt(dot(pixelSize, pixelSize)*2) * fontScale;
+	SSR = rsqrt(dot(pixelSize, pixelSize) * 2) * fontScale;
 }
 
 // UV			: Texture coordinate of the source distance field texture
@@ -99,11 +98,11 @@ void ScreenSpaceRatio2_float(float4x4 projection, float4 position, float2 object
 // Filter		: Enable perspective filter (soften)
 void ScreenSpaceRatio_float(float2 UV, float TextureSize, bool Filter, out float SSR)
 {
-	if(Filter)
+	if (Filter)
 	{
 		float2 a = float2(ddx(UV.x), ddy(UV.x));
 		float2 b = float2(ddx(UV.y), ddy(UV.y));
-		float s = lerp(dot(a,a), dot(b,b), 0.5);
+		float s = lerp(dot(a, a), dot(b, b), 0.5);
 		SSR = rsqrt(s) / TextureSize;
 	}
 	else
@@ -143,7 +142,7 @@ void ComputeSDF44_float(float SSR, float4 SD, float SDR, float4 isoPerimeter, fl
 {
 	softness *= SSR * SDR;
 	float4 d = (SD - 0.5f) * SDR;
-	if(outline) d.w = max(max(d.x, d.y), d.z);
+	if (outline) d.w = max(max(d.x, d.y), d.z);
 	outAlpha = saturate((d * 2.0f * SSR + 0.5f + isoPerimeter * SDR * SSR + softness * 0.5) / (1.0 + softness));
 }
 

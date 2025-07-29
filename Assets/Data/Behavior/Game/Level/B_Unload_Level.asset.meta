@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 2b7225a74dc29f34cade33671551cbe8
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Data/Behavior/Game/Level/B_Unload_Level.asset
+  uploadId: 703500

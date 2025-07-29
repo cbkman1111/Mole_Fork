@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 09c2ecbbbf253fc42a20569aa0b9a96d
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Code/Behavior/Enums/GameModeState.cs
+  uploadId: 703500

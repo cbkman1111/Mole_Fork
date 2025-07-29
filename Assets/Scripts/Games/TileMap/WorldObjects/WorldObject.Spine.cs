@@ -2,6 +2,7 @@ using Common.Utils;
 using Spine;
 using Spine.Unity;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace Creature
 {
@@ -12,6 +13,11 @@ namespace Creature
     {
         [SerializeField] 
         protected SkeletonAnimation _skel;
+        [SerializeField]
+        protected Rigidbody _rigidbody;
+        [SerializeField]
+        protected NavMeshAgent _navMeshAgent;
+
         public SkeletonAnimation Skel => _skel;
         
         public bool InitSpine()

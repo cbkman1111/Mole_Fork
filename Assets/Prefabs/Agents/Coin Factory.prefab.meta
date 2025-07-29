@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: ca71c3ef503b7304687c2f4b5bf42105
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Prefabs/Agents/Coin Factory.prefab
+  uploadId: 703500

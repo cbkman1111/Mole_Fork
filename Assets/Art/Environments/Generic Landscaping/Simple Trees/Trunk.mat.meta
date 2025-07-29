@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 34d4be9b35ce79d4cb35b884c6cc9b7e
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Art/Environments/Generic Landscaping/Simple Trees/Trunk.mat
+  uploadId: 703500

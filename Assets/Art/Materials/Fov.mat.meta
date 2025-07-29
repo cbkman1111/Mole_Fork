@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: deb3121a8a4f3354f901bbfe1ee856d8
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Art/Materials/Fov.mat
+  uploadId: 703500

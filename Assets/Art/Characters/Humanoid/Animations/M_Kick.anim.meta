@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 95740c2a8326d3a43a468910ec26482f
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Art/Characters/Humanoid/Animations/M_Kick.anim
+  uploadId: 703500

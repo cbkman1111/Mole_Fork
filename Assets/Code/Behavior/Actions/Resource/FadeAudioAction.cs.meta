@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 7676f11ef16032241aa0d2c7d94f837d
+AssetOrigin:
+  serializedVersion: 1
+  productId: 298313
+  packageName: Behavior Demo For Unity
+  packageVersion: 0.5
+  assetPath: Assets/Code/Behavior/Actions/Resource/FadeAudioAction.cs
+  uploadId: 703500
