@@ -1,10 +1,13 @@
+using System;
 using UnityEngine;
 
 namespace Giant.Shooting
 {
-    public class Telepoprt : MonoBehaviour
+    public class Teleport : MonoBehaviour
     {
         public int TargetID;
+        
+        public Action<int> OnEnter = null;
 
         // Collider 컴포넌트의 is Trigger가 false인 상태로 충돌을 시작했을 때
         private void OnCollisionEnter(Collision collision)
@@ -32,6 +35,10 @@ namespace Giant.Shooting
         private void OnTriggerStay(Collider other)
         {
             Debug.Log("트리거 중!");
+            if (OnEnter != null)
+            {
+                OnEnter(TargetID);
+            }
         }
 
         private void OnTriggerExit(Collider other)

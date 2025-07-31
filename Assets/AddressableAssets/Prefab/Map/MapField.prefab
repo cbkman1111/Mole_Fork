@@ -515,6 +515,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 702291603407403454}
+  - component: {fileID: 5100350466056780913}
   m_Layer: 0
   m_Name: MapField
   m_TagString: Untagged
@@ -544,6 +545,20 @@ Transform:
   - {fileID: 3269602182838332666}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5100350466056780913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8174793921577169726}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edd8017b7c1463540acdb1ff1d4ee59e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Teleports:
+  - {fileID: 4700533204407425916}
 --- !u!1001 &1062005728912997465
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -787,6 +802,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 702291603407403454}
     m_Modifications:
+    - target: {fileID: 181560356300468803, guid: 7205695a0e0d7b44caa96f5b24bb1b6c, type: 3}
+      propertyPath: TargetID
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3833716855335501527, guid: 7205695a0e0d7b44caa96f5b24bb1b6c, type: 3}
       propertyPath: m_Name
       value: Teleporter
@@ -836,6 +855,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7205695a0e0d7b44caa96f5b24bb1b6c, type: 3}
+--- !u!114 &4700533204407425916 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 181560356300468803, guid: 7205695a0e0d7b44caa96f5b24bb1b6c, type: 3}
+  m_PrefabInstance: {fileID: 4881530523831707967}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c039202e683581144b83171d087e9d09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &8748195091250077360 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4240555970351200143, guid: 7205695a0e0d7b44caa96f5b24bb1b6c, type: 3}
