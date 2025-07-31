@@ -80,42 +80,42 @@
     <type fullname="Unity.Behavior.NavigateToLocationAction" preserve="all"/>
   </assembly>
   <assembly fullname="Assembly-CSharp">
-    <type fullname="Unity.Behavior.Demo.SetVariableToListSizeAction" preserve="all"/>
-    <type fullname="Unity.Behavior.Demo.IntegerOperation" preserve="all"/>
-    <type fullname="Unity.Behavior.Demo.FadeAudioAction" preserve="all"/>
     <type fullname="Unity.Behavior.Demo.SpawnObjectFromPoolAction" preserve="all"/>
+    <type fullname="Unity.Behavior.Demo.SetTextValue" preserve="all"/>
+    <type fullname="Unity.Behavior.Demo.IntegerOperation" preserve="all"/>
+    <type fullname="Unity.Behavior.Demo.SetVariableToListSizeAction" preserve="all"/>
+    <type fullname="Unity.Behavior.Demo.ReleaseObjectFromPoolAction" preserve="all"/>
     <type fullname="Unity.Behavior.Demo.ForeachStringModifier" preserve="all"/>
     <type fullname="Unity.Behavior.RotateTowardTarget" preserve="all"/>
-    <type fullname="Unity.Behavior.Demo.SetTextValue" preserve="all"/>
-    <type fullname="Unity.Behavior.Demo.InputEventModifier" preserve="all"/>
-    <type fullname="Unity.Behavior.Demo.CharacterHealthAction" preserve="all"/>
+    <type fullname="Unity.Behavior.Demo.AnimatorCrossfadeAction" preserve="all"/>
+    <type fullname="Unity.Behavior.Demo.FadeAudioAction" preserve="all"/>
     <type fullname="Unity.Behavior.Demo.RumbleCameraAction" preserve="all"/>
-    <type fullname="Unity.Behavior.Demo.AssignObjectFromListRandomAction" preserve="all"/>
+    <type fullname="Unity.Behavior.Demo.SetCmCameraActiveAction" preserve="all"/>
+    <type fullname="Unity.Behavior.Demo.InputEventModifier" preserve="all"/>
+    <type fullname="Unity.Behavior.Demo.AssignValueFromListToVariable" preserve="all"/>
+    <type fullname="Unity.Behavior.Demo.SetAllAgentsInputActive" preserve="all"/>
+    <type fullname="Unity.Behavior.Demo.RandomPositionInCircleAction" preserve="all"/>
+    <type fullname="Unity.Behavior.Demo.SetNavMeshAgentNavigationAction" preserve="all"/>
     <type fullname="Unity.Behavior.Demo.SetAgentInputActive" preserve="all"/>
     <type fullname="Unity.Behavior.Demo.FloatOperation" preserve="all"/>
-    <type fullname="Unity.Behavior.Demo.SetCmCameraActiveAction" preserve="all"/>
-    <type fullname="Unity.Behavior.Demo.ReleaseObjectFromPoolAction" preserve="all"/>
-    <type fullname="Unity.Behavior.Demo.AnimatorCrossfadeAction" preserve="all"/>
-    <type fullname="Unity.Behavior.Demo.SetNavMeshAgentNavigationAction" preserve="all"/>
-    <type fullname="Unity.Behavior.Demo.RandomPositionInCircleAction" preserve="all"/>
-    <type fullname="Unity.Behavior.Demo.SetAllAgentsInputActive" preserve="all"/>
-    <type fullname="Unity.Behavior.Demo.AssignValueFromListToVariable" preserve="all"/>
+    <type fullname="Unity.Behavior.Demo.CharacterHealthAction" preserve="all"/>
+    <type fullname="Unity.Behavior.Demo.AssignObjectFromListRandomAction" preserve="all"/>
+    <type fullname="Unity.Behavior.Demo.NpcState" preserve="all"/>
+    <type fullname="Unity.Behavior.Demo.GameModeState" preserve="all"/>
+    <type fullname="Unity.Behavior.Demo.NpcCombatState" preserve="all"/>
+    <type fullname="Unity.Behavior.Demo.SetNavMeshAgentNavigationAction+ActionType" preserve="all"/>
     <type fullname="Unity.Behavior.Demo.CharacterHealthAction+ActionType" preserve="all"/>
     <type fullname="Unity.Behavior.Demo.GameState" preserve="all"/>
-    <type fullname="Unity.Behavior.Demo.NpcState" preserve="all"/>
-    <type fullname="Unity.Behavior.Demo.SetNavMeshAgentNavigationAction+ActionType" preserve="all"/>
-    <type fullname="Unity.Behavior.Demo.CharacterState" preserve="all"/>
-    <type fullname="Unity.Behavior.Demo.NpcCombatState" preserve="all"/>
-    <type fullname="Unity.Behavior.Demo.GameModeState" preserve="all"/>
-    <type fullname="Unity.Behavior.Demo.InputEventModifier+InputActionType" preserve="all"/>
     <type fullname="Unity.Behavior.Demo.ComboState" preserve="all"/>
-    <type fullname="Unity.Behavior.Demo.CharacterStateEventChannel" preserve="all"/>
-    <type fullname="Unity.Behavior.Demo.NpcStateEventChannel" preserve="all"/>
-    <type fullname="Unity.Behavior.Demo.ComboStateEventChannel" preserve="all"/>
-    <type fullname="Unity.Behavior.Demo.GameStateEventChannel" preserve="all"/>
+    <type fullname="Unity.Behavior.Demo.InputEventModifier+InputActionType" preserve="all"/>
+    <type fullname="Unity.Behavior.Demo.CharacterState" preserve="all"/>
     <type fullname="Unity.Behavior.Demo.ComboStrikeEventChannel" preserve="all"/>
+    <type fullname="Unity.Behavior.Demo.GameStateEventChannel" preserve="all"/>
+    <type fullname="Unity.Behavior.Demo.CharacterStateEventChannel" preserve="all"/>
     <type fullname="Unity.Behavior.Demo.GamePauseEventChannel" preserve="all"/>
     <type fullname="Unity.Behavior.Demo.GameModeStateEventChannel" preserve="all"/>
+    <type fullname="Unity.Behavior.Demo.NpcStateEventChannel" preserve="all"/>
+    <type fullname="Unity.Behavior.Demo.ComboStateEventChannel" preserve="all"/>
   </assembly>
 </linker>
 
