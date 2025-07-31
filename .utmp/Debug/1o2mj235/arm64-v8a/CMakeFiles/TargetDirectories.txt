@@ -1,0 +1,5 @@
+E:/projects/Mole_Fork/.utmp/Debug/1o2mj235/arm64-v8a/CMakeFiles/edit_cache.dir
+E:/projects/Mole_Fork/.utmp/Debug/1o2mj235/arm64-v8a/CMakeFiles/rebuild_cache.dir
+E:/projects/Mole_Fork/.utmp/Debug/1o2mj235/arm64-v8a/GameActivity/CMakeFiles/game.dir
+E:/projects/Mole_Fork/.utmp/Debug/1o2mj235/arm64-v8a/GameActivity/CMakeFiles/edit_cache.dir
+E:/projects/Mole_Fork/.utmp/Debug/1o2mj235/arm64-v8a/GameActivity/CMakeFiles/rebuild_cache.dir

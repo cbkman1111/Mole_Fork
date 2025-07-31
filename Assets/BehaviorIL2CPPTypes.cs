@@ -26,6 +26,24 @@ namespace Unity.Behavior
 		private TypedVariableModel<System.Collections.Generic.List<UnityEngine.Vector3>> m_TypedVariableModelSystemCollectionsGenericListUnityEngineVector3;
 		private TypedVariableModel<System.Collections.Generic.List<UnityEngine.Vector4>> m_TypedVariableModelSystemCollectionsGenericListUnityEngineVector4;
 		private TypedVariableModel<System.Collections.Generic.List<UnityEngine.Color>> m_TypedVariableModelSystemCollectionsGenericListUnityEngineColor;
+		private TypedVariableModel<Unity.Behavior.Demo.CharacterHealthAction.ActionType> m_TypedVariableModelUnityBehaviorDemoCharacterHealthActionActionType;
+		private TypedVariableModel<Unity.Behavior.Demo.GameState> m_TypedVariableModelUnityBehaviorDemoGameState;
+		private TypedVariableModel<Unity.Behavior.Demo.NpcState> m_TypedVariableModelUnityBehaviorDemoNpcState;
+		private TypedVariableModel<Unity.Behavior.Demo.SetNavMeshAgentNavigationAction.ActionType> m_TypedVariableModelUnityBehaviorDemoSetNavMeshAgentNavigationActionActionType;
+		private TypedVariableModel<Unity.Behavior.Demo.CharacterState> m_TypedVariableModelUnityBehaviorDemoCharacterState;
+		private TypedVariableModel<Unity.Behavior.Demo.NpcCombatState> m_TypedVariableModelUnityBehaviorDemoNpcCombatState;
+		private TypedVariableModel<Unity.Behavior.Demo.GameModeState> m_TypedVariableModelUnityBehaviorDemoGameModeState;
+		private TypedVariableModel<Unity.Behavior.Demo.InputEventModifier.InputActionType> m_TypedVariableModelUnityBehaviorDemoInputEventModifierInputActionType;
+		private TypedVariableModel<Unity.Behavior.Demo.ComboState> m_TypedVariableModelUnityBehaviorDemoComboState;
+		private EnumLinkField<Unity.Behavior.Demo.CharacterHealthAction.ActionType> m_UnityBehaviorDemoCharacterHealthActionActionTypeEnum;
+		private EnumLinkField<Unity.Behavior.Demo.GameState> m_UnityBehaviorDemoGameStateEnum;
+		private EnumLinkField<Unity.Behavior.Demo.NpcState> m_UnityBehaviorDemoNpcStateEnum;
+		private EnumLinkField<Unity.Behavior.Demo.SetNavMeshAgentNavigationAction.ActionType> m_UnityBehaviorDemoSetNavMeshAgentNavigationActionActionTypeEnum;
+		private EnumLinkField<Unity.Behavior.Demo.CharacterState> m_UnityBehaviorDemoCharacterStateEnum;
+		private EnumLinkField<Unity.Behavior.Demo.NpcCombatState> m_UnityBehaviorDemoNpcCombatStateEnum;
+		private EnumLinkField<Unity.Behavior.Demo.GameModeState> m_UnityBehaviorDemoGameModeStateEnum;
+		private EnumLinkField<Unity.Behavior.Demo.InputEventModifier.InputActionType> m_UnityBehaviorDemoInputEventModifierInputActionTypeEnum;
+		private EnumLinkField<Unity.Behavior.Demo.ComboState> m_UnityBehaviorDemoComboStateEnum;
 	}
 }
 

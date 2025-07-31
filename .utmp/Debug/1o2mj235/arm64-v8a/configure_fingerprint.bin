@@ -1,0 +1,165 @@
+C/C++ Structured Log‡
+„
+C:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefabC
+A
+?com.android.build.gradle.internal.cxx.io.EncodedFileFingerPrint	Óƒ»ü…3
+Œ
+‰C:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules	Óƒ»ü…3
+š
+—C:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity	Óƒ»ü…3¥
+¢
+ŸC:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity\include	Óƒ»ü…3¬
+©
+¦C:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity\include\common	Óƒ»ü…3½
+º
+·C:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity\include\common\gamesdk_common.h	Óƒ»ü…3‰ ı²…÷…3³
+°
+­C:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity\include\game-activity	Óƒ»ü…3Ä
+Á
+¾C:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity\include\game-activity\GameActivity.cpp	Óƒ»ü…3	êÚ ˆ³…÷…3Â
+¿
+¼C:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity\include\game-activity\GameActivity.h	Óƒ»ü…3
+ØÈ Œ³…÷…3Ê
+Ç
+ÄC:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity\include\game-activity\GameActivityEvents.cpp	Óƒ»ü…3¸f ³…÷…3È
+Å
+ÂC:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity\include\game-activity\GameActivityEvents.h	Óƒ»ü…3¼R “³…÷…3Ñ
+Î
+ËC:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity\include\game-activity\GameActivityEvents_internal.h	Óƒ»ü…3è –³…÷…3Å
+Â
+¿C:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity\include\game-activity\GameActivityLog.h	Óƒ»ü…3… ™³…÷…3Ã
+À
+½C:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity\include\game-activity\native_app_glue	Óƒ»ü…3İ
+Ú
+×C:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity\include\game-activity\native_app_glue\android_native_app_glue.c	Óƒ»ü…3±Ç ¥³…÷…3İ
+Ú
+×C:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity\include\game-activity\native_app_glue\android_native_app_glue.h	Óƒ»ü…3à} ©³…÷…3µ
+²
+¯C:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity\include\game-text-input	Ôƒ»ü…3Â
+¿
+¼C:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity\include\game-text-input\gamecommon.h	Ôƒ»ü…3‚ ³³…÷…3Ç
+Ä
+ÁC:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity\include\game-text-input\gametextinput.cpp	Ôƒ»ü…3©r ¾³…÷…3Å
+Â
+¿C:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity\include\game-text-input\gametextinput.h	Ôƒ»ü…3Ü´ Â³…÷…3¢
+Ÿ
+œC:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity\libs	Ôƒ»ü…3´
+±
+®C:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity\libs\android.arm64-v8a	Ôƒ»ü…3½
+º
+·C:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity\libs\android.arm64-v8a\abi.json	Ôƒ»ü…3[ é³…÷…3Ç
+Ä
+ÁC:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity\libs\android.arm64-v8a\libgame-activity.a	Ôƒ»ü…3ğ ë³…÷…3¶
+³
+°C:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity\libs\android.armeabi-v7a	Ôƒ»ü…3¿
+¼
+¹C:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity\libs\android.armeabi-v7a\abi.json	Ôƒ»ü…3] ÿ³…÷…3É
+Æ
+ÃC:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity\libs\android.armeabi-v7a\libgame-activity.a	Ôƒ»ü…3œ „´…÷…3®
+«
+¨C:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity\libs\android.x86	Ôƒ»ü…3·
+´
+±C:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity\libs\android.x86\abi.json	Ôƒ»ü…3U ’´…÷…3Á
+¾
+»C:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity\libs\android.x86\libgame-activity.a	Ôƒ»ü…3¨ –´…÷…3±
+®
+«C:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity\libs\android.x86_64	Ôƒ»ü…3 º
+·
+´C:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity\libs\android.x86_64\abi.json	Ôƒ»ü…3!X ¤´…÷…3Ä
+Á
+¾C:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity\libs\android.x86_64\libgame-activity.a	Ôƒ»ü…3"Ø ¦´…÷…3©
+¦
+£C:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity\module.json	Ôƒ»ü…3#- å²…÷…3¤
+¡
+C:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity_static	Ôƒ»ü…3$¬
+©
+¦C:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity_static\include	Ôƒ»ü…3%³
+°
+­C:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity_static\include\common	Ôƒ»ü…3&Ä
+Á
+¾C:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity_static\include\common\gamesdk_common.h	Ôƒ»ü…3'‰ Í´…÷…3º
+·
+´C:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity_static\include\game-activity	Ôƒ»ü…3(Ë
+È
+ÅC:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity_static\include\game-activity\GameActivity.cpp	Ôƒ»ü…3)êÚ æ´…÷…3É
+Æ
+ÃC:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity_static\include\game-activity\GameActivity.h	Ôƒ»ü…3*ØÈ é´…÷…3Ñ
+Î
+ËC:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity_static\include\game-activity\GameActivityEvents.cpp	Ôƒ»ü…3+¸f í´…÷…3Ï
+Ì
+ÉC:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity_static\include\game-activity\GameActivityEvents.h	Ôƒ»ü…3,¼R ò´…÷…3Ø
+Õ
+ÒC:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity_static\include\game-activity\GameActivityEvents_internal.h	Ôƒ»ü…3-è ö´…÷…3Ì
+É
+ÆC:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity_static\include\game-activity\GameActivityLog.h	Ôƒ»ü…3.… ú´…÷…3Ê
+Ç
+ÄC:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity_static\include\game-activity\native_app_glue	Ôƒ»ü…3/ä
+á
+ŞC:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity_static\include\game-activity\native_app_glue\android_native_app_glue.c	Ôƒ»ü…30±Ç „µ…÷…3ä
+á
+ŞC:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity_static\include\game-activity\native_app_glue\android_native_app_glue.h	Ôƒ»ü…31à} ‡µ…÷…3¼
+¹
+¶C:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity_static\include\game-text-input	Ôƒ»ü…32É
+Æ
+ÃC:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity_static\include\game-text-input\gamecommon.h	Ôƒ»ü…33‚ µ…÷…3Î
+Ë
+ÈC:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity_static\include\game-text-input\gametextinput.cpp	Õƒ»ü…34©r ’µ…÷…3Ì
+É
+ÆC:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity_static\include\game-text-input\gametextinput.h	Õƒ»ü…35Ü´ •µ…÷…3©
+¦
+£C:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity_static\libs	Õƒ»ü…36»
+¸
+µC:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity_static\libs\android.arm64-v8a	Õƒ»ü…37Ä
+Á
+¾C:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity_static\libs\android.arm64-v8a\abi.json	Õƒ»ü…38[ §µ…÷…3Õ
+Ò
+ÏC:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity_static\libs\android.arm64-v8a\libgame-activity_static.a	Õƒ»ü…39¸Ä6 ²µ…÷…3½
+º
+·C:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity_static\libs\android.armeabi-v7a	Õƒ»ü…3:Æ
+Ã
+ÀC:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity_static\libs\android.armeabi-v7a\abi.json	Õƒ»ü…3;] »µ…÷…3×
+Ô
+ÑC:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity_static\libs\android.armeabi-v7a\libgame-activity_static.a	Õƒ»ü…3<°™' Æµ…÷…3µ
+²
+¯C:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity_static\libs\android.x86	Õƒ»ü…3=¾
+»
+¸C:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity_static\libs\android.x86\abi.json	Õƒ»ü…3>U Ïµ…÷…3Ï
+Ì
+ÉC:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity_static\libs\android.x86\libgame-activity_static.a	Õƒ»ü…3?”¾$ Úµ…÷…3¸
+µ
+²C:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity_static\libs\android.x86_64	Õƒ»ü…3@Á
+¾
+»C:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity_static\libs\android.x86_64\abi.json	Õƒ»ü…3AX áµ…÷…3Ò
+Ï
+ÌC:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity_static\libs\android.x86_64\libgame-activity_static.a	Õƒ»ü…3B˜…4 íµ…÷…3°
+­
+ªC:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\modules\game-activity_static\module.json	Õƒ»ü…3C- ±´…÷…3“
+
+C:\Users\cbkman1111\.gradle\caches\transforms-3\0b57e695dbccd06c0995bb7b5d561ab1\transformed\jetified-games-activity-3.0.2\prefab\prefab.json	Õƒ»ü…3DJ É²…÷…3U
+S
+QE:\projects\Mole_Fork\.utmp\Debug\1o2mj235\arm64-v8a\additional_project_files.txt	Õƒ»ü…3EÜ ›ƒ»ü…3R
+P
+NE:\projects\Mole_Fork\.utmp\Debug\1o2mj235\arm64-v8a\android_gradle_build.json	Õƒ»ü…3Fî ƒ»ü…3W
+U
+SE:\projects\Mole_Fork\.utmp\Debug\1o2mj235\arm64-v8a\android_gradle_build_mini.json	Õƒ»ü…3Gö °ƒ»ü…3D
+B
+@E:\projects\Mole_Fork\.utmp\Debug\1o2mj235\arm64-v8a\build.ninja	Õƒ»ü…3HíÁ ‘‚»ü…3H
+F
+DE:\projects\Mole_Fork\.utmp\Debug\1o2mj235\arm64-v8a\build.ninja.txt	Õƒ»ü…3IM
+K
+IE:\projects\Mole_Fork\.utmp\Debug\1o2mj235\arm64-v8a\build_file_index.txt	Õƒ»ü…3J× ¡£”ü…3N
+L
+JE:\projects\Mole_Fork\.utmp\Debug\1o2mj235\arm64-v8a\compile_commands.json	Õƒ»ü…3KI Œ‚»ü…3R
+P
+NE:\projects\Mole_Fork\.utmp\Debug\1o2mj235\arm64-v8a\compile_commands.json.bin	Õƒ»ü…3Lá Œ‚»ü…3X
+V
+TE:\projects\Mole_Fork\.utmp\Debug\1o2mj235\arm64-v8a\metadata_generation_command.txt	Õƒ»ü…3M½
+ £”ü…3K
+I
+GE:\projects\Mole_Fork\.utmp\Debug\1o2mj235\arm64-v8a\prefab_config.json	Õƒ»ü…3Nç Ÿ£”ü…3P
+N
+LE:\projects\Mole_Fork\.utmp\Debug\1o2mj235\arm64-v8a\symbol_folder_index.txt	Õƒ»ü…3O}  £”ü…3h
+f
+dE:\projects\Mole_Fork\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\CMakeLists.txt	Õƒ»ü…3PW ÔÔ¹ü…3u
+s
+qE:\projects\Mole_Fork\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\CMakeLists.txt	Õƒ»ü…3Qø ±Ô¹ü…3

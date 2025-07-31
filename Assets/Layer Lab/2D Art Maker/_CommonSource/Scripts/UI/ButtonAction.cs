@@ -47,7 +47,9 @@ namespace LayerLab.ArtMaker
                         DemoControl.Instance.OnClick_Home();
                         break;
                     case ButtonType.SavePrefab:
+#if UNITY_EDITOR
                         CharacterPrefabUtility.Instance.CreateCharacterPrefab();
+#endif
                         break;
                     case ButtonType.LinkAssetStore:
                         AudioManager.Instance.PlaySound(SoundList.ButtonDefault);
