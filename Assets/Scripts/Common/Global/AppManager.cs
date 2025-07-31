@@ -7,11 +7,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
-using UnityEngine.U2D;
 
 namespace Common.Global
 {

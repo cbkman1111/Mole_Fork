@@ -1,12 +1,16 @@
+using System.Collections.Generic;
 using Common.Global.Singleton;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace Common.Global
 {
     public class ResourcesManager : MonoSingleton<ResourcesManager>
     {
-        string path = "Assets/AssetBundles/AssetBundles";
-        private AssetBundle bundle = null;
+        //string path = "Assets/AssetBundles/AssetBundles";
+        //private AssetBundle bundle = null;
+        //private Dictionary<string, AsyncOperationHandle<GameObject>> Handle;
 
         protected override bool Init()
         {
@@ -22,10 +26,10 @@ namespace Common.Global
             //WWW.LoadFromCacheOrDownload (on Unity 5.6 or older)
             //AssetBundleManifest manifest = (AssetBundleManifest)ab.LoadAsset("AssetBundleManifest");
 
-            if(bundle == null)
-                bundle = AssetBundle.LoadFromFile(path);
-
-            return bundle != null;
+            //if(bundle == null)
+            //    bundle = AssetBundle.LoadFromFile(path);
+            Addressables.InitializeAsync();
+            return true;//bundle != null;
         }
 
         public T LoadInBuild<T>(string path) where T : Object
@@ -38,55 +42,43 @@ namespace Common.Global
             return Resources.LoadAll<T>(path);
         }
 
-        public T LoadBundle<T>(string path) where T : Object
+        /// <summary>
+        /// 동기시긍로 주소로 오브젝트를 생성합니다.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="address"></param>
+        /// <param name="parent"></param>
+        /// <param name="position"></param>
+        /// <param name="rotation"></param>
+        /// <returns></returns>
+        public T InstantiateAsync<T>(string address, Transform parent, Vector3 position, Quaternion rotation) where T : Object
         {
-            if(bundle == null)
-                return default;
+            var op = Addressables.InstantiateAsync(address, position, rotation, parent);
+            var obj = op.WaitForCompletion();
 
-            T res = bundle.LoadAsset<T>(path);
-            if(res != null)
-            {
-                return res;
-            }
-
-            GameObject obj = bundle.LoadAsset<GameObject>(path);
-            if(obj != null)
-            {
+            if (obj != null)
                 return obj.GetComponent<T>();
-            }
-
+            else
+                Addressables.Release(op);
+            
             return default;
         }
 
-        public T[] LoadBudleAll<T>() where T : Object
+        /// <summary>
+        /// 주소로 오브젝트를 동기적으로 로드합니다.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public T LoadBundle<T>(string path) where T : Object
         {
-            return bundle.LoadAllAssets<T>();
+            var op = Addressables.LoadAssetAsync<T>(path);
+            if (op.Status == AsyncOperationStatus.Succeeded)
+                return op.WaitForCompletion();
+            else
+                Addressables.Release(op); 
+
+            return default;
         }
-
-        public T[] LoadBudleAll<T>(string path) where T : Object
-        {
-            return bundle.LoadAssetWithSubAssets<T>(path);
-        }
-
-        /*
-        public static AsyncOperationHandle<GameObject> InstantiateAsync(string path, Transform parent, Vector3 position, Quaternion rotation, bool isLocalRes = false)
-        {
-          return null;
-
-          var rootPath = isLocalRes == false ? RemoteRootPath : LocalRootPath;
-          var handle = Addressables.InstantiateAsync($"{rootPath}{path}", position, rotation, parent);
-
-#if UNITY_EDITOR
-          if (handle.IsValid())
-              handle.Completed += (op => 
-              {
-                  GameObject go = op.Result;
-              });
-#endif
-          return handle;
-  
-        }
-        */
-
     }
 }
