@@ -2,94 +2,122 @@ using Common.Global;
 using Common.Scene;
 using Creature;
 using UI.Menu;
+using UI.Popup;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class SceneShooting : SceneBase
+namespace Giant.Shooting
 {
-    public Human Player = null;
-    private UIMenuShooting Menu = null;
-    public override bool Init(JSONObject param)
+    public class SceneShooting : SceneBase
     {
-        Menu = UIManager.Instance.OpenMenu<UIMenuShooting>();
-        Menu.InitMenu();
-        Menu.Joystick.OnMove = OnMove;
-        Menu.Joystick.OnStop = OnStop;
-        return true;
-    }
+        private UIMenuShooting Menu = null;
 
-    public void OnMove(Vector3 angle, float f)
-    {
-        // 탑뷰 시점으로 변환.
-        angle.z = angle.y;
-        IMove moveAble = Player as IMove;
-        if (moveAble != null)
+        [SerializeField] private Human Player = null;
+        [SerializeField] private Map Map = null;
+
+        public override bool Init(JSONObject param)
         {
-            moveAble.Move(angle);
-        }
-    }
+            Menu = UIManager.Instance.OpenMenu<UIMenuShooting>();
+            Menu.InitMenu();
+            Menu.Joystick.OnMove = OnMove;
+            Menu.Joystick.OnStop = OnStop;
 
-    public void OnDash(Vector3 angle)
-    {
-        // 탑뷰 시점으로 변환.
-        angle.z = angle.y;
-        IMove moveAble = Player as IMove;
-        if (moveAble != null)
+            Map.Init();
+            Map.OnTeleport = OnTelepotMap;
+            return true;
+        }
+
+        private void OnTelepotMap(int id)
         {
-            moveAble.Dash(angle);
-        }
-    }
+            if (UIManager.Instance.FindPopup<UIPopupDungeonEnter>() == true)
+                return;
 
-    /// <summary>
-    /// 
-    /// </summary>
-    public void OnStop()
-    {
-        IMove moveAble = Player as IMove;
-        if (moveAble != null)
+            var popup = UIManager.Instance.OpenPopup<UIPopupDungeonEnter>();
+            if (popup != null && popup.Init(id) == true)
+            {
+                popup.OnEnter = LoadMap;
+            }
+        }
+
+        private void LoadMap(int id)
         {
-            moveAble.Stop();
+            var map = ResourcesManager.Instance.LoadInBuild<Map>("Assets/AddressableAssets/Prefab/Map/MapDungeon_0001.prefab");
         }
-    }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="position"></param>
-    public override void OnTouchBean(Vector3 position)
-    {
-        if (Menu == null || Menu.Joystick == null)
-            return;
-
-        Menu.Joystick.TouchBegin(position);
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="position"></param>
-    public override void OnTouchEnd(Vector3 position)
-    {
-        if (Menu == null || Menu.Joystick == null)
-            return;
-
-        Menu.Joystick.TouchEnd(position);
-
-        if (EventSystem.current.IsPointerOverGameObject() == true)
+        public void OnMove(Vector3 angle, float f)
         {
-            return;
+            // 탑뷰 시점으로 변환.
+            angle.z = angle.y;
+            IMove moveAble = Player as IMove;
+            if (moveAble != null)
+            {
+                moveAble.Move(angle);
+            }
         }
-    }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="position"></param>
-    public override void OnTouchMove(Vector3 position, Vector2 deltaPosition)
-    {
-        if (Menu == null || Menu.Joystick == null)
-            return;
+        public void OnDash(Vector3 angle)
+        {
+            // 탑뷰 시점으로 변환.
+            angle.z = angle.y;
+            IMove moveAble = Player as IMove;
+            if (moveAble != null)
+            {
+                moveAble.Dash(angle);
+            }
+        }
 
-        Menu.Joystick.TouchMove(position);
+        /// <summary>
+        /// 
+        /// </summary>
+        public void OnStop()
+        {
+            IMove moveAble = Player as IMove;
+            if (moveAble != null)
+            {
+                moveAble.Stop();
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="position"></param>
+        public override void OnTouchBean(Vector3 position)
+        {
+            if (Menu == null || Menu.Joystick == null)
+                return;
+
+            Menu.Joystick.TouchBegin(position);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="position"></param>
+        public override void OnTouchEnd(Vector3 position)
+        {
+            if (Menu == null || Menu.Joystick == null)
+                return;
+
+            Menu.Joystick.TouchEnd(position);
+
+            if (EventSystem.current.IsPointerOverGameObject() == true)
+            {
+                return;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="position"></param>
+        public override void OnTouchMove(Vector3 position, Vector2 deltaPosition)
+        {
+            if (Menu == null || Menu.Joystick == null)
+                return;
+
+            Menu.Joystick.TouchMove(position);
+        }
     }
 }
+

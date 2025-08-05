@@ -394,7 +394,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2538474132408085765}
   m_Layer: 0
-  m_Name: MapDungeon
+  m_Name: MapDungeon_0001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

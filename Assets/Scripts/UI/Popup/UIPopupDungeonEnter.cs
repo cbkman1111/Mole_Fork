@@ -1,6 +1,7 @@
 ﻿using Common.Global;
 using Common.UIObject;
 using DG.Tweening;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,6 +9,15 @@ namespace UI.Popup
 {
     public class UIPopupDungeonEnter : PopupBase
     {
+        public Action<int> OnEnter { get; set; }
+        private int Id= 0;
+
+        public bool Init(int id)
+        {
+            Id = id;
+            return true;
+        }
+
         public override void Close()
         {
             transform.DOMove(
@@ -21,13 +31,16 @@ namespace UI.Popup
         protected override void OnClick(Button button)
         {
             string name = button.name;
-            if(name == "Button - Ok")
+            if(name == "Button - Close")
             {
                 Close();
             }
-            else if (name == "Button - Other")
+            else if (name == "Button - Ok")
             {
-                var popup = UIManager.Instance.OpenPopup<UIPopupNormal>();
+                if(OnEnter != null)
+                {
+                    OnEnter(Id);
+                }
             }
         }
     }
