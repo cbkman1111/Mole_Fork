@@ -23,8 +23,8 @@ namespace UI.Menu
         public bool InitMenu(Action<Vector3, float> move, Action stop, Action save, Action<float> zoom, Action nextHead, Action nextWeapone, Action seat, Action unSeat)
         {
             joystick.Init();
-            joystick.OnMove = move;
-            joystick.OnStop = stop;
+            joystick.OnMove += move;
+            joystick.OnStop += stop;
 
             this.saveGame = save;
             this.zoomCamera = zoom;

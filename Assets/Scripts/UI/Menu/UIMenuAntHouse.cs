@@ -17,8 +17,8 @@ namespace UI.Menu
         public bool InitMenu(Action<Vector3, float> move, Action stop)
         {
             Joystick.Init();
-            Joystick.OnMove = move;
-            Joystick.OnStop = stop;
+            Joystick.OnMove += move;
+            Joystick.OnStop += stop;
 
             var mainCamera = AppManager.Instance.CurrScene.MainCamera;
             miniMapCamera.transform.SetParent(mainCamera.transform);
@@ -26,7 +26,6 @@ namespace UI.Menu
 
             return true;
         }
-
 
         protected override void OnClick(Button btn)
         {

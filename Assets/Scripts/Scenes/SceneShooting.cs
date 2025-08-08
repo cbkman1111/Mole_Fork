@@ -1,5 +1,6 @@
 using Common.Global;
 using Common.Scene;
+using Common.Utils;
 using Creature;
 using UI.Menu;
 using UI.Popup;
@@ -19,11 +20,12 @@ namespace Giant.Shooting
         {
             Menu = UIManager.Instance.OpenMenu<UIMenuShooting>();
             Menu.InitMenu();
-            Menu.Joystick.OnMove = OnMove;
-            Menu.Joystick.OnStop = OnStop;
+            Menu.Joystick.OnMove += OnMove;
+            Menu.Joystick.OnStop += OnStop;
+            Menu.OnSpeedModify += OnSpeedModify;
 
             Map.Init();
-            Map.OnTeleport = OnTelepotMap;
+            Map.OnTeleport += OnTelepotMap;
             return true;
         }
 
@@ -44,25 +46,26 @@ namespace Giant.Shooting
             var map = ResourcesManager.Instance.LoadInBuild<Map>("Assets/AddressableAssets/Prefab/Map/MapDungeon_0001.prefab");
         }
 
+
+        private void OnSpeedModify(int speed)
+        {
+            IMove moveAble = Player as IMove;
+            if (moveAble != null)
+            {
+                Player.Stat.SetStat(Stat.StatType.Speed, speed);
+            }
+        }
+
         public void OnMove(Vector3 angle, float f)
         {
+            GiantDebug.Log($"OnMove: {angle}, f: {f}");
+
             // 탑뷰 시점으로 변환.
             angle.z = angle.y;
             IMove moveAble = Player as IMove;
             if (moveAble != null)
             {
                 moveAble.Move(angle);
-            }
-        }
-
-        public void OnDash(Vector3 angle)
-        {
-            // 탑뷰 시점으로 변환.
-            angle.z = angle.y;
-            IMove moveAble = Player as IMove;
-            if (moveAble != null)
-            {
-                moveAble.Dash(angle);
             }
         }
 

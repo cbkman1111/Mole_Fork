@@ -23,24 +23,20 @@ namespace Creature
     public abstract class StateMachine : MonoBehaviour
     {
         protected ObjectState State = ObjectState.None;
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="change"></param>
+
         public void ChangeState(ObjectState change)
         {
             if(State == change)
                 return;
 
-            OnExitState(State);
+            OnStateExit(State);
 
             State = change;
 
-            OnEnterState(State);
+            OnStateEnter(State);
         }
 
-        public abstract void OnEnterState(ObjectState state);
-        public abstract void OnExitState(ObjectState state);
+        public abstract void OnStateEnter(ObjectState state);
+        public abstract void OnStateExit(ObjectState state);
     }
 }

@@ -17,6 +17,7 @@ namespace Common.Table
         public long LEVEL_GROUP_ID { get; set; }
         public List<int> KEYWORDS { get; set; }
         public List<long> SKILLS { get; set; }
+        public List<int> STATS { get; set; }
     }
 
     [Serializable]

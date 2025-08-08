@@ -4,25 +4,30 @@ using UnityEngine;
 
 namespace Creature
 {
-    public class Stat
-    {
-        public int hp;
-        public int attack;
-        public int defense;
-        public int speed;
-    }
-
     /// <summary>
     /// 모든 맵위의 객체들의 기본값.
     /// </summary>
     public partial class WorldObject : StateMachine
     {
+        [System.Flags]
+        public enum Direct
+        {
+            None = 0,
+            Up = 1 << 0, // 0001
+            Down = 1 << 1, // 0010
+            Left = 1 << 2, // 0100
+            Right = 1 << 3  // 1000
+        }
+
+        [HideInInspector]
+        public Direct Direction { get; set; } = Direct.Down;
+
         /// <summary>
         /// 타일의 좌표계.
         /// </summary>
         public int X { get; set; }
         public int Z { get; set; }
-        protected Stat Stat { get; set; } = new Stat();
+        public Stat Stat { get; set; } = new Stat();
 
         /// <summary>
         /// 객체 초기화.
@@ -40,10 +45,30 @@ namespace Creature
 
             InitSpine();
             ChangeState(ObjectState.Idle);
+
+            
             return true;
         }
 
-        public override void OnEnterState(ObjectState state) { }
-        public override void OnExitState(ObjectState state) { }
+        protected Direct GetDirect(Vector3 angle)
+        {
+            Direct dir = Direct.None;
+
+            if (angle.z > 0f)
+                dir = Direct.Up;
+            else if (angle.z < 0f)
+                dir = Direct.Down;
+
+            if (angle.x < 0f)
+                dir |= Direct.Left;
+            else
+                dir |= Direct.Right;
+
+            Common.Utils.GiantDebug.Log($"GetDirect: {angle} -> {dir}");
+            return dir;
+        }
+
+        public override void OnStateEnter(ObjectState state) { }
+        public override void OnStateExit(ObjectState state) { }
     }
 }

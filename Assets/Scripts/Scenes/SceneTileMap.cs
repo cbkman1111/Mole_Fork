@@ -399,7 +399,7 @@ namespace Scenes
             IMove moveAble = _player as IMove;
             if (moveAble != null)
             {
-                moveAble.Dash(angle);
+                //moveAble.Dash(angle);
             }
         }
 

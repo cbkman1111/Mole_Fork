@@ -54,7 +54,6 @@ namespace Giant.Excel
                         if (cell != cellTop && cellTop.CellType != CellType.Blank)
                             break;
 
-
                         totalColumns++;
                     }
                     
@@ -144,8 +143,21 @@ namespace Giant.Excel
                 else if (key.Contains("[]") == true)
                 {
                     var list = pair.Value as List<CellAddress>;
-                    var c = list.First().Row;
-                    row = Math.Max(row, c);
+                    var cell = list.First();
+                    for (int i = cell.Row + 1; i < 10; i++)
+                    {
+                        IRow rowNext = GetRow(i);
+                        var cellNext = rowNext.GetCell(cell.Column);
+                        var name = cellNext.ToString();
+
+                        if (string.IsNullOrEmpty(name) == true || name.Contains("!") == true)
+                            row = cellNext.Address.Row;
+                        else
+                            break;
+                    }
+
+                    row = Math.Max(row, list.First().Row);
+
                 }
                 else
                 {

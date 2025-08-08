@@ -56,6 +56,21 @@ namespace Common.UIObject
                     }
                 }
 
+                var inputTmp = child.GetComponent<TMP_InputField>();
+                if(inputTmp != null)
+                {
+                    if (List.ContainsKey(inputTmp.name) == false)
+                    {
+                        inputTmp.onValueChanged.AddListener((string str) =>
+                        {
+                            OnValueChanged(inputTmp, str);
+                        });
+
+                        List.Add(inputTmp.name, inputTmp);
+                        continue;
+                    }
+                }
+
                 var slider = child.GetComponent<Slider>();
                 if (slider != null)
                 {
@@ -218,6 +233,7 @@ namespace Common.UIObject
         protected virtual void OnClick(Button btn) { }
         protected virtual void OnValueChanged(Slider slider, float f) { }
         protected virtual void OnValueChanged(InputField input, string str) { }
+        protected virtual void OnValueChanged(TMP_InputField input, string str) { }
     }
 
     [Path("UI")]
@@ -226,6 +242,7 @@ namespace Common.UIObject
         protected override void OnClick(Button btn) { }
         protected override void OnValueChanged(Slider slider, float f) { }
         protected override void OnValueChanged(InputField input, string str) { }
+        protected override void OnValueChanged(TMP_InputField input, string str) { }
 
         public virtual void OnOpen() { }
         public virtual void OnClose() { }

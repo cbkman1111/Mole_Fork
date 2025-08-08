@@ -5,17 +5,15 @@ namespace Ant
 {
     public class Joystick : MonoBehaviour
     {
-        [SerializeField]
-        public RectTransform RectTrans = null;
-        [SerializeField]
-        public RectTransform Handler = null;
+        [SerializeField] private RectTransform RectTrans = null;
+        [SerializeField] private RectTransform Handler = null;
         
         private bool clicked = false;
         private float radius = 0;
         private Vector3 center = Vector3.zero;
-        
-        public System.Action<Vector3, float> OnMove { get; set; }
-        public System.Action OnStop { get; set; }
+
+        public event System.Action<Vector3, float> OnMove;
+        public event System.Action OnStop;
 
         public bool Init()
         {
@@ -40,11 +38,6 @@ namespace Ant
             RectTrans.position = position;
 
             RectTrans.gameObject.SetActive(true);
-            //float distance = Mathf.Abs(Vector3.Distance(center, position));
-            //if (distance <= radius)
-            {
-                
-            }
         }
 
         public void TouchMove(Vector3 position)
@@ -56,23 +49,21 @@ namespace Ant
                 var newDirection = (position - center).normalized;
 
                 if (distance >= radius)
-                {
-                    Handler.position = center + newDirection * radius; ;
-                }
+                    Handler.position = center + newDirection * radius;
                 else
-                {
                     Handler.position = position;
-                }
 
-                OnMove(newDirection, angle);
+                if(OnMove != null)
+                    OnMove(newDirection, angle);
             }
         }
 
         public void TouchEnd(Vector3 position)
         {
             if (clicked == true)
-            {
-                OnStop();
+            { 
+                if(OnStop != null)
+                    OnStop();
             }
 
             RectTrans.gameObject.SetActive(false);

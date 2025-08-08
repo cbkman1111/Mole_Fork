@@ -50,6 +50,14 @@ namespace Creature
                 GiantDebug.LogError($"Animation '{name}' not found");
                 return;
             }
+            
+            var trackEntry = _skel.state.GetCurrent(0); // 0번 트랙(기본 트랙)
+            if (trackEntry != null && trackEntry.Animation != null)
+            {
+                string animationName = trackEntry.Animation.Name;
+                if (animationName == name)
+                    return;
+            }
 
             _skel.state.SetAnimation(0, name, loop);
         }

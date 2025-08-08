@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
@@ -22,5 +23,23 @@ public static class Extention
             return (T)formatter.Deserialize(stream);
         }
     }
-  
+
+    public static void SetActive(this Component component, bool active)
+    {
+        if(component == null)
+        {
+            Debug.LogError("Component is null");
+            return;
+        }
+
+        GameObject gameObject = component.gameObject;
+        if (gameObject == null)
+        {
+            Debug.LogError("GameObject is null");
+            return;
+        }
+
+        if(gameObject.activeInHierarchy != active)
+            gameObject.SetActive(active);
+    }
 }
