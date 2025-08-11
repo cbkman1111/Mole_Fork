@@ -14,13 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_GroupName: Remote Group
   m_GUID: 0d71febfdb6b45649837329cf9e3f8d1
-  m_SerializeEntries:
-  - m_GUID: 73fae765edc08e243949df7052b72f22
-    m_Address: Assets/AddressableAssets
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - default
-    FlaggedDuringContentUpdateRestriction: 0
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 7316e3f390a26024fbaa6fd7f1497b13, type: 2}
   m_SchemaSet:

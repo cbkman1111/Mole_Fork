@@ -6,7 +6,9 @@ namespace Giant.Shooting
 {
     public class Map : MonoBehaviour
     {
-        [SerializeField] Teleport[] Teleports = null;
+        [SerializeField] public Teleport[] Teleports = null;
+        [SerializeField] public GameObject[] CameraArea = null;
+
         public event Action<int> OnTeleport = null;
 
         public bool Init()

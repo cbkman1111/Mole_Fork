@@ -5,10 +5,9 @@ using UnityEngine.UI;
 
 namespace Common.UIObject
 {
-    [Path("UI/Prefabs/Popup")]
+    [Path("Assets/AddressableAssets/UI/Prefabs/Popup")]
     public class PopupBase : UIObject
     {
-
         protected override void OnClick(Button button) { }
         public override void Close()
         {

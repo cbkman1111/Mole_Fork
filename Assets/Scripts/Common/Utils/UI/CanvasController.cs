@@ -49,7 +49,7 @@ namespace Common.Global
 
             if (trans == false)
             {
-                string resourcePath = $"{path}/{name}";
+                string resourcePath = $"{path}/{name}.prefab";
                 T prefab = ResourcesManager.Instance.LoadBundle<T>(resourcePath);
                 if (prefab == null)
                 {

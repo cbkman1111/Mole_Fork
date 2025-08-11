@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Common.Global.Singleton;
+using Common.Utils;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -60,7 +61,8 @@ namespace Common.Global
                 return obj.GetComponent<T>();
             else
                 Addressables.Release(op);
-            
+
+            GiantDebug.LogError($"{address} is null.");
             return default;
         }
 
@@ -70,14 +72,17 @@ namespace Common.Global
         /// <typeparam name="T"></typeparam>
         /// <param name="path"></param>
         /// <returns></returns>
-        public T LoadBundle<T>(string path) where T : Object
+        public T LoadBundle<T>(string address) where T : Object
         {
-            var op = Addressables.LoadAssetAsync<T>(path);
-            if (op.Status == AsyncOperationStatus.Succeeded)
-                return op.WaitForCompletion();
-            else
-                Addressables.Release(op); 
+            var op = Addressables.LoadAssetAsync<GameObject>(address);
+            var obj = op.WaitForCompletion();
 
+            if (obj != null)
+                return obj.GetComponent<T>();
+            else
+                Addressables.Release(op);
+
+            GiantDebug.LogError($"{address} is null.");
             return default;
         }
     }

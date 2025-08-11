@@ -2,6 +2,7 @@ using Common.Global;
 using Common.Scene;
 using Common.Utils;
 using Creature;
+using Giant.Camera;
 using UI.Menu;
 using UI.Popup;
 using UnityEngine;
@@ -14,7 +15,9 @@ namespace Giant.Shooting
         private UIMenuShooting Menu = null;
 
         [SerializeField] private Human Player = null;
+
         [SerializeField] private Map Map = null;
+        [SerializeField] private Map MapDungeon = null;
 
         public override bool Init(JSONObject param)
         {
@@ -26,6 +29,9 @@ namespace Giant.Shooting
 
             Map.Init();
             Map.OnTeleport += OnTelepotMap;
+
+            var cameraControl = MainCamera.GetComponent<Giant.Camera.CameraControl>();
+            cameraControl.SetBounds(MainCamera, Map.CameraArea);
             return true;
         }
 
@@ -43,9 +49,35 @@ namespace Giant.Shooting
 
         private void LoadMap(int id)
         {
-            var map = ResourcesManager.Instance.LoadBundle<Map>("Assets/AddressableAssets/Prefab/Map/MapDungeon_0001.prefab");
+            string path = "Assets/AddressableAssets/Prefab/Map/MapDungeon_0001.prefab";
+
+            UIManager.Instance.ClosePopup<UIPopupDungeonEnter>();
+            var loading = UIManager.Instance.OpenPopup<UIPopupLoading>();
+
+            Map.SetActive(false);
+
+            MapDungeon = ResourcesManager.Instance.InstantiateAsync<Map>(path, null, Vector3.zero, Quaternion.identity);
+            MapDungeon.Init();
+            MapDungeon.OnTeleport += OnTelepotHome;
+
+            var cameraControl = MainCamera.GetComponent<Giant.Camera.CameraControl>();
+            cameraControl.SetBounds(MainCamera, MapDungeon.CameraArea);
+
+            loading.Close();
         }
 
+        private void OnTelepotHome(int id)
+        {
+            Map.SetActive(true);
+            
+            var cameraControl = MainCamera.GetComponent<Giant.Camera.CameraControl>();
+            cameraControl.SetBounds(MainCamera, Map.CameraArea);
+
+            Player.transform.position = Map.Teleports[0].transform.position;
+
+            Destroy(MapDungeon.gameObject);
+            MapDungeon = null;
+        }
 
         private void OnSpeedModify(int speed)
         {

@@ -236,7 +236,7 @@ namespace Common.UIObject
         protected virtual void OnValueChanged(TMP_InputField input, string str) { }
     }
 
-    [Path("UI")]
+    [Path("Assets/AddressableAssets/UI")]
     public abstract class UIObject : UIBase
     {
         protected override void OnClick(Button btn) { }

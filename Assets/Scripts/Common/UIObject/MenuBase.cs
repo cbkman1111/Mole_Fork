@@ -4,7 +4,8 @@ using UnityEngine.UI;
 
 namespace Common.UIObject
 {
-    [Path("UI/Prefabs/Menu")]
+    //[Path("UI/Prefabs/Menu")]
+    [Path("Assets/AddressableAssets/UI/Prefabs/Menu")]
     public abstract class MenuBase : UIObject
     {
         protected override void Awake()

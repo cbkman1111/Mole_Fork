@@ -28,8 +28,13 @@ namespace Common.Global
         /// <returns></returns>
         protected override bool Init()
         {
-            const string uiRootLoading = "UI/UIRootDontDestroy";
-            var prefab = ResourcesManager.Instance.LoadInBuild<GameObject>(uiRootLoading);
+            const string address = "Assets/AddressableAssets/UI/UIRootDontDestroy.prefab";
+            var prefab = ResourcesManager.Instance.LoadBundle<GameObject>(address);
+            if (prefab == null)
+            {
+                return false;
+            }
+
             var obj = Instantiate(prefab, transform);
             if (obj == false)
             {
@@ -46,31 +51,27 @@ namespace Common.Global
 
         public bool InitWithScene(UnityEngine.SceneManagement.Scene scene)
         {
-            const string uiRoot = "UI/UIRoot";
-            
+            const string uiRoot = "Assets/AddressableAssets/UI/UIRoot.prefab";
             var objs = scene.GetRootGameObjects();
             var root = objs.FirstOrDefault(obj => obj.name == "UIRoot");
             if (root == null)
             {
-                var prefab = ResourcesManager.Instance.LoadInBuild<GameObject>(uiRoot);
+                var prefab = ResourcesManager.Instance.LoadBundle<GameObject>(uiRoot);
                 var obj = Instantiate(prefab, null);
                 if (obj == false)
                 {
-                    GiantDebug.LogError($"root is null.");
                     return false;
                 }
 
                 obj.name = "UIRoot";
                 obj.transform.position = new Vector3(100, 0, 0);
                 rootObject = obj.GetComponent<UIRoot>();
-                GiantDebug.Log($"{tag} - Init return true.");
             }
             else
             {
                 root.name = "UIRoot";
                 root.transform.position = new Vector3(100, 0, 0);
                 rootObject = root.GetComponent<UIRoot>();
-                GiantDebug.Log($"{tag} - Init return true.");
             }
 
             return true;
@@ -164,6 +165,7 @@ namespace Common.Global
 
         public void ClosePopup<T>()
         {
+            var name = typeof(T).Name;
             _controllerPopup.Close(name);
             CoverCheck();
         }
@@ -196,19 +198,19 @@ namespace Common.Global
             {
                 _cover.SetParent(_controllerEtc.GetTransform());
                 _cover.SetSiblingIndex(countEtc - 1);
-                _cover.gameObject.SetActive(true);
+                _cover.SetActive(true);
             }
             else if(countPopup > 0)
             {
                 _cover.SetParent(_controllerPopup.GetTransform());
                 _cover.SetSiblingIndex(countPopup - 1);
-                _cover.gameObject.SetActive(true);
+                _cover.SetActive(true);
             }
             else
             {
                 _cover.SetParent(_canvasMain.transform);
                 _cover.SetSiblingIndex(0);
-                _cover.gameObject.SetActive(false);
+                _cover.SetActive(false);
             }
         }
 

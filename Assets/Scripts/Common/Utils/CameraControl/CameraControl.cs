@@ -24,9 +24,14 @@ namespace Giant.Camera
         public UnityEngine.Camera Cam { get; private set; }
         public float targetZoom;
 
-        private void Awake()
+        public void SetBounds(UnityEngine.Camera cam, GameObject[] area)
         {
-            Cam = UnityEngine.Camera.main;
+            Cam = cam;
+            
+            boundLeft = area[0].transform;
+            boundTop = area[1].transform;
+            boundRight = area[2].transform;
+            boundBottom = area[3].transform;
 
             var desiredPosition = target.position + (Vector3)offset;
             desiredPosition.z = transform.position.z;
@@ -38,6 +43,9 @@ namespace Giant.Camera
         // Update is called once per frame
         void LateUpdate()
         {
+            if (Cam == null)
+                return;
+
             if (target == null) 
                 return;
 
@@ -46,6 +54,9 @@ namespace Giant.Camera
 
         private void Update()
         {
+            if (Cam == null)
+                return;
+
             HandleZoom();
         }
 
