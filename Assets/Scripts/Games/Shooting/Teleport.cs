@@ -8,6 +8,14 @@ namespace Giant.Shooting
         public int TargetID;
         
         public Action<int> OnEnter = null;
+        private TriggerType triggerType = TriggerType.None;
+        enum TriggerType
+        {
+            None,
+            Enter,
+            Stay,
+            Exit,
+        }
 
         // Collider 컴포넌트의 is Trigger가 false인 상태로 충돌을 시작했을 때
         private void OnCollisionEnter(Collision collision)
@@ -27,23 +35,30 @@ namespace Giant.Shooting
             Debug.Log("충돌 끝!");
         }
 
+
         private void OnTriggerEnter(Collider other)
         {
-            Debug.Log("트리거 시작!");
+            if (triggerType == TriggerType.None || triggerType == TriggerType.Exit)
+            {
+                Debug.Log("트리거 시작!");
+                triggerType = TriggerType.Enter;
+                if (OnEnter != null)
+                {
+                    OnEnter(TargetID);
+                }
+            }
         }
 
         private void OnTriggerStay(Collider other)
         {
             Debug.Log("트리거 중!");
-            if (OnEnter != null)
-            {
-                OnEnter(TargetID);
-            }
+            triggerType = TriggerType.Stay;
         }
 
         private void OnTriggerExit(Collider other)
         {
             Debug.Log("트리거 끝!");
+            triggerType = TriggerType.Exit;
         }
     }
 }

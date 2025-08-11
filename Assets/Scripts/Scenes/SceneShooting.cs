@@ -43,7 +43,7 @@ namespace Giant.Shooting
 
         private void LoadMap(int id)
         {
-            var map = ResourcesManager.Instance.LoadInBuild<Map>("Assets/AddressableAssets/Prefab/Map/MapDungeon_0001.prefab");
+            var map = ResourcesManager.Instance.LoadBundle<Map>("Assets/AddressableAssets/Prefab/Map/MapDungeon_0001.prefab");
         }
 
 
@@ -58,8 +58,7 @@ namespace Giant.Shooting
 
         public void OnMove(Vector3 angle, float f)
         {
-            GiantDebug.Log($"OnMove: {angle}, f: {f}");
-
+            //GiantDebug.Log($"OnMove: {angle}, f: {f}");
             // 탑뷰 시점으로 변환.
             angle.z = angle.y;
             IMove moveAble = Player as IMove;

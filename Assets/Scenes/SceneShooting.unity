@@ -38,12 +38,12 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 12
+  serializedVersion: 13
+  m_BakeOnSceneLoad: 0
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -273,15 +273,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2014447238292568730, guid: 8fa70c6c4314d0d44a4740d760c05b7e, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.901
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2014447238292568730, guid: 8fa70c6c4314d0d44a4740d760c05b7e, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2014447238292568730, guid: 8fa70c6c4314d0d44a4740d760c05b7e, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0.901
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3005313940274189453, guid: 8fa70c6c4314d0d44a4740d760c05b7e, type: 3}
       propertyPath: m_AnchorMax.x
@@ -432,6 +432,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3292906901934746088, guid: 7bd2bce51c520204eb93bb49c47283f2, type: 3}
+      propertyPath: m_AdditionalShaderChannelsFlag
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 3948743998509048420, guid: 7bd2bce51c520204eb93bb49c47283f2, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -785,9 +789,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3240614447131577455, guid: 6327ef88617ca524386c95772bb9a9df, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.196
+      objectReference: {fileID: 0}
+    - target: {fileID: 3240614447131577455, guid: 6327ef88617ca524386c95772bb9a9df, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.618
+      objectReference: {fileID: 0}
     - target: {fileID: 3675786415831128183, guid: 6327ef88617ca524386c95772bb9a9df, type: 3}
       propertyPath: m_Mesh
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3934411209373450359, guid: 6327ef88617ca524386c95772bb9a9df, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8174793921577169726, guid: 6327ef88617ca524386c95772bb9a9df, type: 3}
       propertyPath: m_Name
@@ -796,10 +812,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2679340159387032349, guid: 6327ef88617ca524386c95772bb9a9df, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6327ef88617ca524386c95772bb9a9df, type: 3}
 --- !u!114 &1017548441520332777 stripped
 MonoBehaviour:

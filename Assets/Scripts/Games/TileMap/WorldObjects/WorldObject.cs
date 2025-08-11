@@ -64,7 +64,7 @@ namespace Creature
             else
                 dir |= Direct.Right;
 
-            Common.Utils.GiantDebug.Log($"GetDirect: {angle} -> {dir}");
+            //Common.Utils.GiantDebug.Log($"GetDirect: {angle} -> {dir}");
             return dir;
         }
 
