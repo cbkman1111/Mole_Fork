@@ -33,6 +33,8 @@ namespace Common.Scene
             SceneShooting, // 슈팅
 
             SceneDemoFantasy, // 판타지 RPG 데모
+
+            SceneAI, // BT 테스트용.
         }
 
         //public float Amount { get; set; } = 0;

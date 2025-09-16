@@ -131,7 +131,8 @@ namespace Common.Global
                 
                 
                 _currScene = FindSceneObject(sceneName);
-                UIManager.Instance.InitWithScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
+                var activeScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
+                UIManager.Instance.InitWithScene(activeScene);
 
                 _currScene.Load((percent) => {
                     _loadingPercent = 0.9f + (0.1f * percent);

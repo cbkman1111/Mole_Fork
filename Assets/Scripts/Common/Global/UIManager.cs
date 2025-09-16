@@ -29,7 +29,7 @@ namespace Common.Global
         protected override bool Init()
         {
             const string address = "Assets/AddressableAssets/UI/UIRootDontDestroy.prefab";
-            var prefab = ResourcesManager.Instance.LoadBundle<GameObject>(address);
+            var prefab = ResourcesManager.Instance.LoadBundle<UIRootDontDestroy>(address);
             if (prefab == null)
             {
                 return false;
