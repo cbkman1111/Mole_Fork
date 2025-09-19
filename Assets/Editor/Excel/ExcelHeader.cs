@@ -13,7 +13,32 @@ namespace Giant.Excel
         public Dictionary<string, object> DataKey { get; set; } 
         public int HeaderLine { get; set; }
         public int DataLine => HeaderLine;
-        public int LastRow => Sheet.LastRowNum;
+        public int LastRow()
+        {
+            int lastDataRow = -1;
+            for (int i = 0; i <= Sheet.LastRowNum; i++)
+            {
+                IRow row = Sheet.GetRow(i);
+                if (row == null)
+                    continue;
+
+                // row에 실제 데이터가 있는지 확인
+                bool hasData = false;
+                for (int j = row.FirstCellNum; j < row.LastCellNum; j++)
+                {
+                    ICell cell = row.GetCell(j);
+                    if (cell != null && cell.CellType != NPOI.SS.UserModel.CellType.Blank && !string.IsNullOrEmpty(cell.ToString()))
+                    {
+                        hasData = true;
+                        break;
+                    }
+                }
+                if (hasData)
+                    lastDataRow = i;
+            }
+
+            return lastDataRow;
+        } 
 
         public ExcelHeader(ISheet sheet)
         {

@@ -10,6 +10,7 @@ namespace Creature
         public void Stop();
     }
 
+
     public class Creature : WorldObject, IMove
     {
         [HideInInspector] public Tween TweenMove { get; set; } = null;

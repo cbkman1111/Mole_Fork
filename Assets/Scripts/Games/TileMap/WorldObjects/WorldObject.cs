@@ -1,5 +1,4 @@
-using DG.Tweening;
-using Scenes.EllersAlgorithm;
+using Common.Global;
 using UnityEngine;
 
 namespace Creature
@@ -27,7 +26,24 @@ namespace Creature
         /// </summary>
         public int X { get; set; }
         public int Z { get; set; }
+        public int Y { get; set; }
         public Stat Stat { get; set; } = new Stat();
+
+        public static WorldObject Create(string path, Transform parent, int x, int z)
+        {
+            var go = ResourcesManager.Instance.LoadBundle<GameObject>($"{path}");
+            if (go == null)
+                return default;
+
+            var obj = go.GetComponent<WorldObject>();
+            if (obj != null && obj.Init(x, z) == true)
+            {
+                return obj;
+            }
+
+            Destroy(go);
+            return default;
+        }
 
         /// <summary>
         /// 객체 초기화.
@@ -36,20 +52,27 @@ namespace Creature
         /// <param name="posZ"></param>
         /// <param name="scale"></param>
         /// <returns></returns>
-        public bool Init(int x, int z, Vector3 scale)
+        public bool Init(int x, int z)
         {
             X = x;
             Z = z;
-            transform.position = new Vector3(X, 0, Z);
-            transform.localScale = scale;
+            Y = 0;
+
+            transform.position = new Vector3(X, Y, Z);
+            transform.localScale = Vector3.zero;
 
             InitSpine();
+
             ChangeState(ObjectState.Idle);
 
-            
             return true;
         }
 
+        /// <summary>
+        /// 방향 얻기.
+        /// </summary>
+        /// <param name="angle"></param>
+        /// <returns></returns>
         protected Direct GetDirect(Vector3 angle)
         {
             Direct dir = Direct.None;

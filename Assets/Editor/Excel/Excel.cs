@@ -84,7 +84,7 @@ namespace Giant.Excel
                 //tableName = header.TableName;
 
                 // row 데이터 취합.
-                for (int i = header.DataLine; i <= header.LastRow; i++)
+                for (int i = header.DataLine; i <= header.LastRow(); i++)
                 {
                     IRow row = header.GetRow(i);
                     if (row == null)
