@@ -1,8 +1,9 @@
+using System;
 using UnityEngine;
 
 namespace Common.Table
 {
-    [SerializeField]
+    [Serializable]
     public class TableStatus
     {
     }

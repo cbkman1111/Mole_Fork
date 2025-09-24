@@ -17,7 +17,7 @@ namespace Creature
 
         public void Move(Vector3 angle)
         {
-            ChangeState(ObjectState.Move);
+            //ChangeState(ObjectState.Move);
 
             var before = Direction;
             var curr = GetDirect(angle);
@@ -42,11 +42,12 @@ namespace Creature
                 TweenMove = null;
             }
 
-            ChangeState(ObjectState.Stop);
+            //ChangeState(ObjectState.Stop);
         }
 
         private void UpdateStateAnimation()
         {
+            /*
             switch (State)
             {
                 case ObjectState.Stop:
@@ -79,12 +80,14 @@ namespace Creature
                 flip.x = -1;
 
             _skel.transform.localScale = flip;
+            */
         }
 
         /// <summary>
         /// 다른 상태로 바뀜.
         /// </summary>
         /// <param name="state"></param>
+        /*
         public override void OnStateEnter(ObjectState state)
         {
             UpdateStateAnimation();
@@ -109,7 +112,7 @@ namespace Creature
                     break;
             }
         }
-
+        */
         protected virtual void OnDirectChanged(Direct direct) 
         {
             UpdateStateAnimation();

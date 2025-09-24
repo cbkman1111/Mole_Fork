@@ -50,12 +50,7 @@ namespace Common.Global
             if (trans == false)
             {
                 string resourcePath = $"{path}/{name}.prefab";
-                T prefab = ResourcesManager.Instance.LoadBundle<T>(resourcePath);
-                if (prefab == null)
-                {
-                    prefab = ResourcesManager.Instance.LoadInBuild<T>(resourcePath);
-                }
-
+                GameObject prefab = ResourcesManager.Instance.LoadBundle(resourcePath);
                 if (prefab == false)
                 {
                     Debug.LogError($"{resourcePath} - prefab is null.");
@@ -71,7 +66,7 @@ namespace Common.Global
 
                 clone.transform.SetAsLastSibling();
                 clone.name = name;
-                ret = clone;
+                ret = clone.GetComponent<T>();
             }
             else
             {

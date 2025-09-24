@@ -1,8 +1,8 @@
-using UnityEngine;
+using System;
 
 namespace Common.Table
 {
-    [SerializeField]
+    [Serializable]
     public class TableHeal
     {
     }

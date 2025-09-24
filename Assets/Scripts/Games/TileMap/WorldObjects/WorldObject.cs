@@ -1,12 +1,16 @@
 using Common.Global;
+using GoogleMobileAds.Api;
+using Unity.Behavior;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace Creature
 {
     /// <summary>
     /// 모든 맵위의 객체들의 기본값.
     /// </summary>
-    public partial class WorldObject : StateMachine
+    //public partial class WorldObject : StateMachine
+    public partial class WorldObject : MonoBehaviour //StateMachine
     {
         [System.Flags]
         public enum Direct
@@ -21,21 +25,30 @@ namespace Creature
         [HideInInspector]
         public Direct Direction { get; set; } = Direct.Down;
 
+        [SerializeField] protected NavMeshAgent _navMeshAgent;
+        //[SerializeField] protected Behaviour _agnet = null;
+        [SerializeField] protected BehaviorGraphAgent _agent = null;
+
         /// <summary>
         /// 타일의 좌표계.
         /// </summary>
         public int X { get; set; }
         public int Z { get; set; }
         public int Y { get; set; }
+
+        /// <summary>
+        /// 스탯.
+        /// </summary>
         public Stat Stat { get; set; } = new Stat();
 
         public static WorldObject Create(string path, Transform parent, int x, int z)
         {
-            var go = ResourcesManager.Instance.LoadBundle<GameObject>($"{path}");
+            var go = ResourcesManager.Instance.LoadBundle($"{path}");
             if (go == null)
                 return default;
 
-            var obj = go.GetComponent<WorldObject>();
+            var obj = Instantiate<WorldObject>(go.GetComponent<WorldObject>(), parent);
+            //var obj = go.GetComponent<WorldObject>();
             if (obj != null && obj.Init(x, z) == true)
             {
                 return obj;
@@ -59,13 +72,18 @@ namespace Creature
             Y = 0;
 
             transform.position = new Vector3(X, Y, Z);
-            transform.localScale = Vector3.zero;
-
+            transform.localScale = Vector3.one;
+            
             InitSpine();
-
-            ChangeState(ObjectState.Idle);
-
+            InitStat();
+            _agent.BlackboardReference.SetVariableValue("Self", gameObject);
+            //ChangeState(ObjectState.Idle);
             return true;
+        }
+
+        public void InitStat()
+        {
+            Stat.Health = 100;   
         }
 
         /// <summary>
@@ -91,7 +109,7 @@ namespace Creature
             return dir;
         }
 
-        public override void OnStateEnter(ObjectState state) { }
-        public override void OnStateExit(ObjectState state) { }
+        //public override void OnStateEnter(ObjectState state) { }
+        //public override void OnStateExit(ObjectState state) { }
     }
 }

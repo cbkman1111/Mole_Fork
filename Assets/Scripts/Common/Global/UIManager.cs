@@ -29,7 +29,7 @@ namespace Common.Global
         protected override bool Init()
         {
             const string address = "Assets/AddressableAssets/UI/UIRootDontDestroy.prefab";
-            var prefab = ResourcesManager.Instance.LoadBundle<UIRootDontDestroy>(address);
+            var prefab = ResourcesManager.Instance.LoadBundle(address);
             if (prefab == null)
             {
                 return false;
@@ -56,7 +56,7 @@ namespace Common.Global
             var root = objs.FirstOrDefault(obj => obj.name == "UIRoot");
             if (root == null)
             {
-                var prefab = ResourcesManager.Instance.LoadBundle<GameObject>(uiRoot);
+                var prefab = ResourcesManager.Instance.LoadBundle(uiRoot);
                 var obj = Instantiate(prefab, null);
                 if (obj == false)
                 {

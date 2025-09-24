@@ -108,6 +108,8 @@ namespace Creature
         }
 
         private Dictionary<StatType, int> Info = new();
+        
+        public long Health;
 
         public int GetStat(StatType type)
         {

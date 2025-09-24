@@ -72,13 +72,14 @@ namespace Common.Global
         /// <typeparam name="T"></typeparam>
         /// <param name="path"></param>
         /// <returns></returns>
-        public T LoadBundle<T>(string address) where T : Object
+        public GameObject LoadBundle(string address)
         {
             var op = Addressables.LoadAssetAsync<GameObject>(address);
             var obj = op.WaitForCompletion();
-
+            //if (obj != null)
+            //    return obj.GetComponent<T>();
             if (obj != null)
-                return obj.GetComponent<T>();
+                return obj;
             else
                 Addressables.Release(op);
 

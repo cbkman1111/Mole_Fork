@@ -1,3 +1,4 @@
+using BehaviorDesigner.Runtime;
 using Common.Utils;
 using Spine;
 using Spine.Unity;
@@ -9,14 +10,11 @@ namespace Creature
     /// <summary>
     /// 모든 맵위의 객체들의 기본값.
     /// </summary>
-    public partial class WorldObject : StateMachine
+    //public partial class WorldObject : StateMachine
+    public partial class WorldObject : MonoBehaviour //StateMachine
     {
-        [SerializeField] 
-        protected SkeletonAnimation _skel;
-        [SerializeField]
-        protected Rigidbody _rigidbody;
-        [SerializeField]
-        protected NavMeshAgent _navMeshAgent;
+        [SerializeField] protected SkeletonAnimation _skel;
+        [SerializeField] protected Rigidbody _rigidbody;
 
         public SkeletonAnimation Skel => _skel;
         
@@ -43,7 +41,7 @@ namespace Creature
         {
             if (_skel == null)
                 return;
-
+            
             var animation = _skel.skeleton.Data.FindAnimation(name);
             if (animation == null)
             {
