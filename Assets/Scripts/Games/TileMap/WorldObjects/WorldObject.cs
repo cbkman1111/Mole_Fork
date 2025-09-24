@@ -12,6 +12,9 @@ namespace Creature
     //public partial class WorldObject : StateMachine
     public partial class WorldObject : MonoBehaviour //StateMachine
     {
+        [SerializeField] protected NavMeshAgent _navMeshAgent;
+        [SerializeField] protected BehaviorGraphAgent _agent = null;
+
         [System.Flags]
         public enum Direct
         {
@@ -22,19 +25,13 @@ namespace Creature
             Right = 1 << 3  // 1000
         }
 
-        [HideInInspector]
-        public Direct Direction { get; set; } = Direct.Down;
-
-        [SerializeField] protected NavMeshAgent _navMeshAgent;
-        //[SerializeField] protected Behaviour _agnet = null;
-        [SerializeField] protected BehaviorGraphAgent _agent = null;
-
         /// <summary>
         /// 타일의 좌표계.
         /// </summary>
         public int X { get; set; }
         public int Z { get; set; }
         public int Y { get; set; }
+        [HideInInspector] public Direct Direction { get; set; } = Direct.Down;
 
         /// <summary>
         /// 스탯.
@@ -45,17 +42,20 @@ namespace Creature
         {
             var go = ResourcesManager.Instance.LoadBundle($"{path}");
             if (go == null)
-                return default;
+                return null;
 
-            var obj = Instantiate<WorldObject>(go.GetComponent<WorldObject>(), parent);
-            //var obj = go.GetComponent<WorldObject>();
+            var component = go.GetComponent<WorldObject>();
+            if (component == null)
+                return null;
+
+            var obj = Instantiate(component, parent);
             if (obj != null && obj.Init(x, z) == true)
             {
                 return obj;
             }
 
             Destroy(go);
-            return default;
+            return null;
         }
 
         /// <summary>

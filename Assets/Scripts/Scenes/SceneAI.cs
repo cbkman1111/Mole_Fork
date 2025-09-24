@@ -31,10 +31,8 @@ public class SceneAI : SceneBase
                 if (character == null)
                 {
                     continue;
-                }    
-
+                }
             }
-            //tableHero.Data.ForEach(data => Debug.Log($"{data.ID} {data.NAME_TID} {data.AGE} {data.ENABLE}"));
         }
 
 
