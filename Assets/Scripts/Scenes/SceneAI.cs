@@ -1,13 +1,14 @@
+using System.Linq;
 using Common.Global;
 using Common.Scene;
 using Common.Table;
-using Common.Utils;
 using Creature;
 using UI.Menu;
-using UnityEngine;
 
 public class SceneAI : SceneBase
 {
+    private WorldObjectList list = new();
+
     public override bool Init(JSONObject param)
     {
         var menu = UIManager.Instance.OpenMenu<UIMenuAI>();
@@ -32,11 +33,21 @@ public class SceneAI : SceneBase
                 {
                     continue;
                 }
+
+                list.Add(character);
             }
         }
 
+        var listGameObject = list.ToList();
+        foreach (var obj in list)
+        {
+            var worldObj = obj.GetComponent<WorldObject>();
+            if (worldObj != null)
+            {
+                worldObj.BlackboardReference.SetVariableValue("Creatures", listGameObject);
+            }
+        }
 
-        
         return true;
     }
 }

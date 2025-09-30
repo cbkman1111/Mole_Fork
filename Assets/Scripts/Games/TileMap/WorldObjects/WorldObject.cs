@@ -1,5 +1,5 @@
+using System.Collections.Generic;
 using Common.Global;
-using GoogleMobileAds.Api;
 using Unity.Behavior;
 using UnityEngine;
 using UnityEngine.AI;
@@ -14,6 +14,7 @@ namespace Creature
     {
         [SerializeField] protected NavMeshAgent _navMeshAgent;
         [SerializeField] protected BehaviorGraphAgent _agent = null;
+        public BlackboardReference BlackboardReference => _agent.BlackboardReference;
 
         [System.Flags]
         public enum Direct
@@ -109,6 +110,15 @@ namespace Creature
             return dir;
         }
 
+        private void OnStateEvent(string value)
+        {
+            // React to event
+        }
+
+        private void OnStateValueChanged()
+        {
+            // React to state change
+        }
         //public override void OnStateEnter(ObjectState state) { }
         //public override void OnStateExit(ObjectState state) { }
     }

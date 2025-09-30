@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Creature;
 using Unity.Behavior;
 using UnityEngine;
@@ -7,13 +8,14 @@ using UnityEngine;
 [Condition(
     name: "Alive", 
     description: "Checks if the entity is alive.",
-    story: "[Agent] is Alive", 
+    story: "Alive [Agent] 살아 있는가?", 
     category: "Conditions", 
     id: "dcb021c204446d837cc457b500718540")]
 public partial class AliveCondition : Condition
 {
     [Tooltip("The GameObject to show the text over.")]
     [SerializeReference] public BlackboardVariable<WorldObject> Agent;
+
 
     public override bool IsTrue()
     {
