@@ -38,7 +38,7 @@ public class SceneAI : SceneBase
             }
         }
 
-        var listGameObject = list.ToList();
+        var listGameObject = list.List();
         foreach (var obj in list)
         {
             var worldObj = obj.GetComponent<WorldObject>();
