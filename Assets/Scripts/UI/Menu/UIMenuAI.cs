@@ -19,6 +19,26 @@ namespace UI.Menu
             {
                 AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneMenu);
             }
+            else if (name == "Button - 1")
+            {
+                // Å×½ºÆ® 
+            }
+            else if (name == "Button - 2")
+            {
+
+            }
+            else if (name == "Button - 3")
+            {
+
+            }
+            else if (name == "Button - 4")
+            {
+
+            }
+            else if (name == "Button - 5")
+            {
+
+            }
         }
     }
 }

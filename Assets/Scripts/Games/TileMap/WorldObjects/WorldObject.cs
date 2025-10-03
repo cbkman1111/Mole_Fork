@@ -12,6 +12,8 @@ namespace Creature
     //public partial class WorldObject : StateMachine
     public partial class WorldObject : MonoBehaviour //StateMachine
     {
+        [SerializeField] TMPro.TextMeshProUGUI _Message = null;
+
         [SerializeField] protected NavMeshAgent _navMeshAgent;
         [SerializeField] protected BehaviorGraphAgent _agent = null;
         public BlackboardReference BlackboardReference => _agent.BlackboardReference;
@@ -110,7 +112,15 @@ namespace Creature
             return dir;
         }
 
-        private void OnStateEvent(string value)
+        public void Speak(string messge)
+        {
+            if (_Message != null)
+            {
+                _Message.text = messge;
+            }
+        }
+
+        protected void OnStateChange()
         {
             // React to event
         }
@@ -119,6 +129,7 @@ namespace Creature
         {
             // React to state change
         }
+
         //public override void OnStateEnter(ObjectState state) { }
         //public override void OnStateExit(ObjectState state) { }
     }

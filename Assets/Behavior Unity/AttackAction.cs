@@ -55,7 +55,7 @@ public partial class AttackAction : Action
                     }
                     else
                     {
-                        Debug.Log($"Other : {worldObj.name}");
+                        //Debug.Log($"Other : {worldObj.name}");
                     }
                 }
             }
