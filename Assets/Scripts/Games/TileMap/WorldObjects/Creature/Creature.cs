@@ -15,6 +15,35 @@ namespace Creature
     {
         [HideInInspector] public Tween TweenMove { get; set; } = null;
 
+        private void Update()
+        {
+            var action = stateMachine.CurrentState();
+            if (action == WorldObjectActionType.Chase ||
+                action == WorldObjectActionType.Patrol)
+            {
+                var direction = _navMeshAgent.velocity.normalized;
+                var before = Direction;
+                var curr = GetDirect(direction);
+                if (before != curr)
+                {
+                    Direction = curr;
+                    bool isLeft = (Direction & Direct.Left) != 0;  // true
+                    bool isRight = (Direction & Direct.Right) != 0; // false
+                    bool isUp = (Direction & Direct.Up) != 0;      // false
+                    bool isDown = (Direction & Direct.Down) != 0;  // false
+
+                    Vector3 flip = Vector3.one;
+                    if (isLeft == true)
+                        flip.x = 1;
+                    else if (isRight == true)
+                        flip.x = -1;
+
+                    _skel.transform.localScale = flip;
+                }
+            }
+        }
+
+
         public void Move(Vector3 angle)
         {
             //ChangeState(ObjectState.Move);

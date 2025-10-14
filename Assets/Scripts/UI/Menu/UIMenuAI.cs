@@ -1,3 +1,4 @@
+using System;
 using Common.Global;
 using Common.Scene;
 using Common.UIObject;
@@ -7,8 +8,11 @@ namespace UI.Menu
 {
     public class UIMenuAI : MenuBase
     {
-        public bool InitMenu()
+        public Action<string> clickAction = null;
+
+        public bool InitMenu(Action<string> click)
         {
+            clickAction = click;    
             return true;
         }
 
@@ -21,23 +25,23 @@ namespace UI.Menu
             }
             else if (name == "Button - 1")
             {
-                // Å×½ºÆ® 
+                clickAction.Invoke(name);
             }
             else if (name == "Button - 2")
             {
-
+                clickAction.Invoke(name);
             }
             else if (name == "Button - 3")
             {
-
+                clickAction.Invoke(name);
             }
             else if (name == "Button - 4")
             {
-
+                clickAction.Invoke(name);
             }
             else if (name == "Button - 5")
             {
-
+                clickAction.Invoke(name);
             }
         }
     }

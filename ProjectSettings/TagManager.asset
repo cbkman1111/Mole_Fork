@@ -18,7 +18,7 @@ TagManager:
   - UI
   - Player
   - WorldObject
-  - 
+  - SpeakBalloon
   - 
   - 
   - 
@@ -45,6 +45,12 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: SpeakBalloon
+    uniqueID: 2957213219
+    locked: 0
+  - name: Anchor
+    uniqueID: 2793135199
     locked: 0
   m_RenderingLayers:
   - Default

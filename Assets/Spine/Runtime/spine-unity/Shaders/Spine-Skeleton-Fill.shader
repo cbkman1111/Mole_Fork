@@ -2,12 +2,16 @@
 // - Premultiplied Alpha Blending (Optional straight alpha input)
 // - Double-sided, no depth
 
+// https://dawnhillfrog.tistory.com/164
 Shader "Spine/Skeleton Fill" {
 	Properties {
+
+		[NoScaleOffset] _MainTex ("MainTex", 2D) = "white" {}
+
 		_FillColor ("FillColor", Color) = (1,1,1,1)
 		_FillPhase ("FillPhase", Range(0, 1)) = 0
-		[NoScaleOffset] _MainTex ("MainTex", 2D) = "white" {}
 		_Cutoff ("Shadow alpha cutoff", Range(0,1)) = 0.1
+
 		[Toggle(_STRAIGHT_ALPHA_INPUT)] _StraightAlphaInput("Straight Alpha Texture", Int) = 0
 		[HideInInspector] _StencilRef("Stencil Reference", Float) = 1.0
 		[HideInInspector][Enum(UnityEngine.Rendering.CompareFunction)] _StencilComp("Stencil Comparison", Float) = 8 // Set to Always as default
@@ -23,6 +27,7 @@ Shader "Spine/Skeleton Fill" {
 		[HideInInspector][MaterialToggle(_USE8NEIGHBOURHOOD_ON)] _Use8Neighbourhood("Sample 8 Neighbours", Float) = 1
 		[HideInInspector] _OutlineOpaqueAlpha("Opaque Alpha", Range(0,1)) = 1.0
 		[HideInInspector] _OutlineMipLevel("Outline Mip Level", Range(0,3)) = 0
+
 	}
 	SubShader {
 		Tags { "Queue"="Transparent" "IgnoreProjector"="True" "RenderType"="Transparent" "PreviewType"="Plane" }
@@ -47,8 +52,12 @@ Shader "Spine/Skeleton Fill" {
 			#include "UnityCG.cginc"
 			#include "CGIncludes/Spine-Common.cginc"
 			sampler2D _MainTex;
+
+			CBUFFER_START(UnityPerMaterial)
 			float4 _FillColor;
 			float _FillPhase;
+			fixed _Cutoff;
+			CBUFFER_END
 
 			struct VertexInput {
 				float4 vertex : POSITION;
@@ -83,7 +92,7 @@ Shader "Spine/Skeleton Fill" {
 			}
 			ENDCG
 		}
-
+		
 		Pass {
 			Name "Caster"
 			Tags { "LightMode"="ShadowCaster" }
@@ -102,7 +111,12 @@ Shader "Spine/Skeleton Fill" {
 			#pragma fragmentoption ARB_precision_hint_fastest
 			#include "UnityCG.cginc"
 			sampler2D _MainTex;
+			
+			CBUFFER_START(UnityPerMaterial)
+			float4 _FillColor;
+			float _FillPhase;
 			fixed _Cutoff;
+			CBUFFER_END
 
 			struct VertexOutput {
 				V2F_SHADOW_CASTER;

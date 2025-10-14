@@ -1,4 +1,5 @@
-using System.Collections.Generic;
+using System;
+using BehaviorDesigner.Runtime.Tasks.Unity.UnityCapsuleCollider;
 using Common.Global;
 using Unity.Behavior;
 using UnityEngine;
@@ -10,13 +11,13 @@ namespace Creature
     /// 모든 맵위의 객체들의 기본값.
     /// </summary>
     //public partial class WorldObject : StateMachine
-    public partial class WorldObject : MonoBehaviour //StateMachine
+    public partial class WorldObject : MonoBehaviour
     {
         [SerializeField] TMPro.TextMeshProUGUI _Message = null;
-
         [SerializeField] protected NavMeshAgent _navMeshAgent;
         [SerializeField] protected BehaviorGraphAgent _agent = null;
         public BlackboardReference BlackboardReference => _agent.BlackboardReference;
+        protected CretureStateMachine stateMachine = new CretureStateMachine();
 
         [System.Flags]
         public enum Direct
@@ -74,13 +75,30 @@ namespace Creature
             Z = z;
             Y = 0;
 
+            if (_navMeshAgent != null)
+            {
+                _navMeshAgent.angularSpeed = 0;
+                _navMeshAgent.updateRotation = false;
+            }
+
             transform.position = new Vector3(X, Y, Z);
             transform.localScale = Vector3.one;
-            
+
+            var anchor = transform.Find("Anchor");
+            if (anchor != null)
+            {
+                var camera = AppManager.Instance.CurrScene.MainCamera;
+                anchor.rotation = Quaternion.LookRotation(camera.transform.forward, Vector3.up);
+            }
+
             InitSpine();
             InitStat();
+            stateMachine.Init(OnActionChange);
+
             _agent.BlackboardReference.SetVariableValue("Self", gameObject);
             //ChangeState(ObjectState.Idle);
+            //_Message.geometrySortingOrder = 100;// GlobalDefine.UI_SORTING_ORDER;
+            stateMachine.PushState(WorldObjectActionType.Idle);
             return true;
         }
 
@@ -112,6 +130,7 @@ namespace Creature
             return dir;
         }
 
+
         public void Speak(string messge)
         {
             if (_Message != null)
@@ -120,17 +139,72 @@ namespace Creature
             }
         }
 
-        protected void OnStateChange()
+        protected void OnActionChange(WorldObjectActionType actionType)
         {
             // React to event
+            switch (actionType)
+            {
+                case WorldObjectActionType.None:
+                    break;
+                case WorldObjectActionType.Die:// 죽음 상태
+                    Play("Die", false);
+                    break;
+                case WorldObjectActionType.Idle:// 일반 상태
+                    Play("Idle", true);
+                    break;
+                case WorldObjectActionType.Patrol:// 순찰 상태
+                    Play("Walk", true);
+                    break;
+                case WorldObjectActionType.Chase:// 추적 상태
+                    Play("Run", true);
+                    break;
+                case WorldObjectActionType.Attack:// 공격 상태
+                    Play("Attack1", false);
+                    break;
+                case WorldObjectActionType.Eat:// 먹기 상태
+                    Play("Attack2", false);
+                    break;
+                case WorldObjectActionType.Sleep:// 잠자기 상태
+                    Play("Attack2", false);
+                    break;
+            }
         }
 
-        private void OnStateValueChanged()
+        
+
+        public void ChangeAction(WorldObjectActionType type)
         {
-            // React to state change
+            stateMachine.PushState(type);
+        }
+    }
+
+
+    /// <summary>
+    /// 크리쳐 상태 머신.
+    /// </summary>
+    public class CretureStateMachine
+    {
+        //Stack<WorldObjectActionType> Stack = new Stack<WorldObjectActionType>();
+        public Action<WorldObjectActionType> StateChange = null;
+        private WorldObjectActionType State = WorldObjectActionType.None;
+
+        public void Init(Action<WorldObjectActionType> callback)
+        {
+            StateChange = callback;
         }
 
-        //public override void OnStateEnter(ObjectState state) { }
-        //public override void OnStateExit(ObjectState state) { }
+        public void PushState(WorldObjectActionType state)
+        {
+            if (State == state)
+                return;
+
+            State = state;
+            StateChange(State);
+        }
+
+        public WorldObjectActionType CurrentState()
+        {
+            return State;
+        }
     }
 }

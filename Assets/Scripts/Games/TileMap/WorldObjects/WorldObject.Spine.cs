@@ -1,9 +1,7 @@
-using BehaviorDesigner.Runtime;
 using Common.Utils;
 using Spine;
 using Spine.Unity;
 using UnityEngine;
-using UnityEngine.AI;
 
 namespace Creature
 {
@@ -58,6 +56,12 @@ namespace Creature
             }
 
             _skel.state.SetAnimation(0, name, loop);
+        }
+
+        public bool IsSpineAnimationPlaying()
+        {
+            TrackEntry trackEntry = _skel.AnimationState.GetCurrent(0);
+            return (trackEntry != null && (trackEntry.Loop || !trackEntry.IsComplete));
         }
 
         protected virtual void HandleEventStart(TrackEntry trackEntry) {}
