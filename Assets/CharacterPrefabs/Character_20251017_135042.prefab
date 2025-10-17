@@ -1,0 +1,762 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2986833630765613275
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4481178555968062102}
+  - component: {fileID: 3510896780692068241}
+  - component: {fileID: 9005808168108242027}
+  - component: {fileID: 2204282891476249024}
+  - component: {fileID: 5674719988869109276}
+  - component: {fileID: 4005424397439875295}
+  - component: {fileID: 6567211021332216879}
+  m_Layer: 0
+  m_Name: Character_20251017_135042
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4481178555968062102
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2986833630765613275}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3510896780692068241
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2986833630765613275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da04b92b90dab46e580db786db1793dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  back:
+  - back/back_f_1
+  - back/back_f_2
+  - back/back_f_3
+  - back/back_f_4
+  - back/back_f_5
+  - back/back_f_6
+  - back/back_f_7
+  - back/back_f_8
+  - back/back_f_9
+  - back/back_f_10
+  - back/back_f_11
+  - back/back_f_12
+  - back/back_f_13
+  - back/back_f_14
+  - back/back_f_15
+  - back/back_f_16
+  - back/back_f_17
+  - back/back_f_18
+  - back/back_f_19
+  - back/back_f_20
+  - back/back_f_21
+  - back/back_f_22
+  - back/back_f_23
+  - back/back_f_24
+  - back/back_f_25
+  - back/back_f_26
+  - back/back_f_27
+  - back/back_f_28
+  - back/back_f_29
+  - back/back_f_30
+  beard:
+  - beard/beard_f_1
+  - beard/beard_f_2
+  - beard/beard_f_3
+  - beard/beard_f_4
+  - beard/beard_f_5
+  - beard/beard_f_6
+  - beard/beard_f_7
+  - beard/beard_f_8
+  - beard/beard_f_9
+  - beard/beard_f_10
+  boots:
+  - boots/boots_f_1
+  - boots/boots_f_2
+  - boots/boots_f_3
+  - boots/boots_f_4
+  - boots/boots_f_5
+  - boots/boots_f_6
+  - boots/boots_f_7
+  - boots/boots_f_8
+  - boots/boots_f_9
+  - boots/boots_f_10
+  - boots/boots_f_11
+  - boots/boots_f_12
+  - boots/boots_f_13
+  - boots/boots_f_14
+  - boots/boots_f_15
+  - boots/boots_f_16
+  - boots/boots_f_17
+  - boots/boots_f_18
+  - boots/boots_f_19
+  - boots/boots_f_20
+  - boots/boots_f_21
+  - boots/boots_f_22
+  - boots/boots_f_23
+  - boots/boots_f_24
+  - boots/boots_f_25
+  - boots/boots_f_26
+  - boots/boots_f_27
+  - boots/boots_f_28
+  - boots/boots_f_29
+  - boots/boots_f_30
+  bottom:
+  - bottom/bottom_f_1
+  - bottom/bottom_f_2
+  - bottom/bottom_f_3
+  - bottom/bottom_f_4
+  - bottom/bottom_f_5
+  - bottom/bottom_f_6
+  - bottom/bottom_f_7
+  - bottom/bottom_f_8
+  - bottom/bottom_f_9
+  - bottom/bottom_f_10
+  - bottom/bottom_f_11
+  - bottom/bottom_f_12
+  - bottom/bottom_f_13
+  - bottom/bottom_f_14
+  - bottom/bottom_f_15
+  - bottom/bottom_f_16
+  - bottom/bottom_f_17
+  - bottom/bottom_f_18
+  - bottom/bottom_f_19
+  - bottom/bottom_f_20
+  - bottom/bottom_f_21
+  - bottom/bottom_f_22
+  - bottom/bottom_f_23
+  - bottom/bottom_f_24
+  - bottom/bottom_f_25
+  - bottom/bottom_f_26
+  - bottom/bottom_f_27
+  - bottom/bottom_f_28
+  - bottom/bottom_f_29
+  - bottom/bottom_f_30
+  - bottom/bottom_f_31
+  - bottom/bottom_f_32
+  - bottom/bottom_f_33
+  - bottom/bottom_f_34
+  - bottom/bottom_f_35
+  - bottom/bottom_f_36
+  - bottom/bottom_f_37
+  - bottom/bottom_f_38
+  - bottom/bottom_f_39
+  - bottom/bottom_f_40
+  - bottom/bottom_f_41
+  - bottom/bottom_f_42
+  - bottom/bottom_f_43
+  - bottom/bottom_f_44
+  - bottom/bottom_f_45
+  - bottom/bottom_f_46
+  - bottom/bottom_f_47
+  - bottom/bottom_f_48
+  - bottom/bottom_f_49
+  - bottom/bottom_f_50
+  - bottom/bottom_f_51
+  - bottom/bottom_f_52
+  - bottom/bottom_f_53
+  - bottom/bottom_f_54
+  - bottom/bottom_f_55
+  - bottom/bottom_f_56
+  - bottom/bottom_f_57
+  - bottom/bottom_f_58
+  - bottom/bottom_f_59
+  - bottom/bottom_f_60
+  brow:
+  - brow/brow_f_1
+  - brow/brow_f_2
+  - brow/brow_f_3
+  - brow/brow_f_4
+  - brow/brow_f_5
+  - brow/brow_f_6
+  - brow/brow_f_7
+  - brow/brow_f_8
+  - brow/brow_f_9
+  - brow/brow_f_10
+  eye:
+  - eyes/eyes_f_1
+  - eyes/eyes_f_2
+  - eyes/eyes_f_3
+  - eyes/eyes_f_4
+  - eyes/eyes_f_5
+  - eyes/eyes_f_6
+  - eyes/eyes_f_7
+  - eyes/eyes_f_8
+  - eyes/eyes_f_9
+  - eyes/eyes_f_10
+  - eyes/eyes_f_11
+  - eyes/eyes_f_12
+  - eyes/eyes_f_13
+  - eyes/eyes_f_14
+  - eyes/eyes_f_15
+  - eyes/eyes_f_16
+  - eyes/eyes_f_17
+  - eyes/eyes_f_18
+  - eyes/eyes_f_19
+  - eyes/eyes_f_20
+  gloves:
+  - gloves/gloves_f_1
+  - gloves/gloves_f_2
+  - gloves/gloves_f_3
+  - gloves/gloves_f_4
+  - gloves/gloves_f_5
+  - gloves/gloves_f_6
+  - gloves/gloves_f_7
+  - gloves/gloves_f_8
+  - gloves/gloves_f_9
+  - gloves/gloves_f_10
+  - gloves/gloves_f_11
+  - gloves/gloves_f_12
+  - gloves/gloves_f_13
+  - gloves/gloves_f_14
+  - gloves/gloves_f_15
+  - gloves/gloves_f_16
+  - gloves/gloves_f_17
+  - gloves/gloves_f_18
+  - gloves/gloves_f_19
+  - gloves/gloves_f_20
+  - gloves/gloves_f_21
+  - gloves/gloves_f_22
+  - gloves/gloves_f_23
+  - gloves/gloves_f_24
+  - gloves/gloves_f_25
+  - gloves/gloves_f_26
+  - gloves/gloves_f_27
+  - gloves/gloves_f_28
+  - gloves/gloves_f_29
+  - gloves/gloves_f_30
+  - gloves/gloves_f_31
+  - gloves/gloves_f_32
+  - gloves/gloves_f_33
+  - gloves/gloves_f_34
+  - gloves/gloves_f_35
+  - gloves/gloves_f_36
+  - gloves/gloves_f_37
+  - gloves/gloves_f_38
+  - gloves/gloves_f_39
+  - gloves/gloves_f_40
+  hairShort:
+  - hair_short/hair_short_f_1
+  - hair_short/hair_short_f_2
+  - hair_short/hair_short_f_3
+  - hair_short/hair_short_f_4
+  - hair_short/hair_short_f_5
+  - hair_short/hair_short_f_6
+  - hair_short/hair_short_f_7
+  - hair_short/hair_short_f_8
+  - hair_short/hair_short_f_9
+  - hair_short/hair_short_f_10
+  - hair_short/hair_short_f_11
+  - hair_short/hair_short_f_12
+  - hair_short/hair_short_f_13
+  - hair_short/hair_short_f_14
+  - hair_short/hair_short_f_15
+  - hair_short/hair_short_f_16
+  - hair_short/hair_short_f_17
+  - hair_short/hair_short_f_18
+  - hair_short/hair_short_f_19
+  - hair_short/hair_short_f_20
+  - hair_short/hair_short_f_21
+  - hair_short/hair_short_f_22
+  - hair_short/hair_short_f_23
+  - hair_short/hair_short_f_24
+  - hair_short/hair_short_f_25
+  - hair_short/hair_short_f_26
+  - hair_short/hair_short_f_27
+  - hair_short/hair_short_f_28
+  - hair_short/hair_short_f_29
+  - hair_short/hair_short_f_30
+  hairHat:
+  - hair_hat/hair_hat_f_1
+  - hair_hat/hair_hat_f_2
+  - hair_hat/hair_hat_f_3
+  - hair_hat/hair_hat_f_4
+  - hair_hat/hair_hat_f_5
+  - hair_hat/hair_hat_f_6
+  - hair_hat/hair_hat_f_7
+  - hair_hat/hair_hat_f_8
+  - hair_hat/hair_hat_f_9
+  - hair_hat/hair_hat_f_10
+  - hair_hat/hair_hat_f_11
+  - hair_hat/hair_hat_f_12
+  - hair_hat/hair_hat_f_13
+  - hair_hat/hair_hat_f_14
+  - hair_hat/hair_hat_f_15
+  - hair_hat/hair_hat_f_16
+  - hair_hat/hair_hat_f_17
+  - hair_hat/hair_hat_f_18
+  - hair_hat/hair_hat_f_19
+  - hair_hat/hair_hat_f_20
+  - hair_hat/hair_hat_f_21
+  - hair_hat/hair_hat_f_22
+  - hair_hat/hair_hat_f_23
+  - hair_hat/hair_hat_f_24
+  - hair_hat/hair_hat_f_25
+  - hair_hat/hair_hat_f_26
+  - hair_hat/hair_hat_f_27
+  - hair_hat/hair_hat_f_28
+  - hair_hat/hair_hat_f_29
+  - hair_hat/hair_hat_f_30
+  helmet:
+  - helmet/helmet_f_1
+  - helmet/helmet_f_2
+  - helmet/helmet_f_3
+  - helmet/helmet_f_4
+  - helmet/helmet_f_5
+  - helmet/helmet_f_6
+  - helmet/helmet_f_7
+  - helmet/helmet_f_8
+  - helmet/helmet_f_9
+  - helmet/helmet_f_10
+  - helmet/helmet_f_11
+  - helmet/helmet_f_12
+  - helmet/helmet_f_13
+  - helmet/helmet_f_14
+  - helmet/helmet_f_15
+  - helmet/helmet_f_16
+  - helmet/helmet_f_17
+  - helmet/helmet_f_18
+  - helmet/helmet_f_19
+  - helmet/helmet_f_20
+  - helmet/helmet_f_21
+  - helmet/helmet_f_22
+  - helmet/helmet_f_23
+  - helmet/helmet_f_24
+  - helmet/helmet_f_25
+  - helmet/helmet_f_26
+  - helmet/helmet_f_27
+  - helmet/helmet_f_28
+  - helmet/helmet_f_29
+  - helmet/helmet_f_30
+  - helmet/helmet_f_31
+  - helmet/helmet_f_32
+  - helmet/helmet_f_33
+  - helmet/helmet_f_34
+  - helmet/helmet_f_35
+  - helmet/helmet_f_36
+  - helmet/helmet_f_37
+  - helmet/helmet_f_38
+  - helmet/helmet_f_39
+  - helmet/helmet_f_40
+  - helmet/helmet_f_41
+  - helmet/helmet_f_42
+  - helmet/helmet_f_43
+  - helmet/helmet_f_44
+  - helmet/helmet_f_45
+  - helmet/helmet_f_46
+  - helmet/helmet_f_47
+  - helmet/helmet_f_48
+  - helmet/helmet_f_49
+  - helmet/helmet_f_50
+  - helmet/helmet_f_51
+  - helmet/helmet_f_52
+  - helmet/helmet_f_53
+  - helmet/helmet_f_54
+  - helmet/helmet_f_55
+  - helmet/helmet_f_56
+  - helmet/helmet_f_57
+  - helmet/helmet_f_58
+  - helmet/helmet_f_59
+  - helmet/helmet_f_60
+  - helmet/helmet_f_61
+  - helmet/helmet_f_62
+  - helmet/helmet_f_63
+  - helmet/helmet_f_64
+  - helmet/helmet_f_65
+  mouth:
+  - mouth/mouth_f_1
+  - mouth/mouth_f_2
+  - mouth/mouth_f_3
+  - mouth/mouth_f_4
+  - mouth/mouth_f_5
+  - mouth/mouth_f_6
+  - mouth/mouth_f_7
+  - mouth/mouth_f_8
+  - mouth/mouth_f_9
+  - mouth/mouth_f_10
+  eyewear:
+  - eyewear/eyewear_f_1
+  - eyewear/eyewear_f_2
+  - eyewear/eyewear_f_3
+  - eyewear/eyewear_f_4
+  - eyewear/eyewear_f_5
+  - eyewear/eyewear_f_6
+  - eyewear/eyewear_f_7
+  - eyewear/eyewear_f_8
+  - eyewear/eyewear_f_9
+  - eyewear/eyewear_f_10
+  - eyewear/eyewear_f_11
+  - eyewear/eyewear_f_12
+  - eyewear/eyewear_f_13
+  - eyewear/eyewear_f_14
+  - eyewear/eyewear_f_15
+  - eyewear/eyewear_f_16
+  - eyewear/eyewear_f_17
+  - eyewear/eyewear_f_18
+  - eyewear/eyewear_f_19
+  - eyewear/eyewear_f_20
+  - eyewear/eyewear_f_21
+  - eyewear/eyewear_f_22
+  - eyewear/eyewear_f_23
+  - eyewear/eyewear_f_24
+  - eyewear/eyewear_f_25
+  - eyewear/eyewear_f_26
+  - eyewear/eyewear_f_27
+  - eyewear/eyewear_f_28
+  - eyewear/eyewear_f_29
+  - eyewear/eyewear_f_30
+  gearLeft:
+  - gear_left/gear_left_f_1
+  - gear_left/gear_left_f_2
+  - gear_left/gear_left_f_3
+  - gear_left/gear_left_f_4
+  - gear_left/gear_left_f_5
+  - gear_left/gear_left_f_6
+  - gear_left/gear_left_f_7
+  - gear_left/gear_left_f_8
+  - gear_left/gear_left_f_9
+  - gear_left/gear_left_f_10
+  - gear_left/gear_left_f_11
+  - gear_left/gear_left_f_12
+  - gear_left/gear_left_f_13
+  - gear_left/gear_left_f_14
+  - gear_left/gear_left_f_15
+  - gear_left/gear_left_f_16
+  - gear_left/gear_left_f_17
+  - gear_left/gear_left_f_18
+  - gear_left/gear_left_f_19
+  - gear_left/gear_left_f_20
+  - gear_left/gear_left_f_21
+  - gear_left/gear_left_f_22
+  - gear_left/gear_left_f_23
+  - gear_left/gear_left_f_24
+  - gear_left/gear_left_f_25
+  - gear_left/gear_left_f_26
+  - gear_left/gear_left_f_27
+  - gear_left/gear_left_f_28
+  - gear_left/gear_left_f_29
+  - gear_left/gear_left_f_30
+  - gear_left/gear_left_f_31
+  - gear_left/gear_left_f_32
+  - gear_left/gear_left_f_33
+  - gear_left/gear_left_f_34
+  - gear_left/gear_left_f_35
+  - gear_left/gear_left_f_36
+  - gear_left/gear_left_f_37
+  - gear_left/gear_left_f_38
+  - gear_left/gear_left_f_39
+  - gear_left/gear_left_f_40
+  gearRight:
+  - gear_right/gear_right_f_1
+  - gear_right/gear_right_f_2
+  - gear_right/gear_right_f_3
+  - gear_right/gear_right_f_4
+  - gear_right/gear_right_f_5
+  - gear_right/gear_right_f_6
+  - gear_right/gear_right_f_7
+  - gear_right/gear_right_f_8
+  - gear_right/gear_right_f_9
+  - gear_right/gear_right_f_10
+  - gear_right/gear_right_f_11
+  - gear_right/gear_right_f_12
+  - gear_right/gear_right_f_13
+  - gear_right/gear_right_f_14
+  - gear_right/gear_right_f_15
+  - gear_right/gear_right_f_16
+  - gear_right/gear_right_f_17
+  - gear_right/gear_right_f_18
+  - gear_right/gear_right_f_19
+  - gear_right/gear_right_f_20
+  - gear_right/gear_right_f_21
+  - gear_right/gear_right_f_22
+  - gear_right/gear_right_f_23
+  - gear_right/gear_right_f_24
+  - gear_right/gear_right_f_25
+  - gear_right/gear_right_f_26
+  - gear_right/gear_right_f_27
+  - gear_right/gear_right_f_28
+  - gear_right/gear_right_f_29
+  - gear_right/gear_right_f_30
+  - gear_right/gear_right_f_31
+  - gear_right/gear_right_f_32
+  - gear_right/gear_right_f_33
+  - gear_right/gear_right_f_34
+  - gear_right/gear_right_f_35
+  - gear_right/gear_right_f_36
+  - gear_right/gear_right_f_37
+  - gear_right/gear_right_f_38
+  - gear_right/gear_right_f_39
+  - gear_right/gear_right_f_40
+  top:
+  - top/top_f_1
+  - top/top_f_2
+  - top/top_f_3
+  - top/top_f_4
+  - top/top_f_5
+  - top/top_f_6
+  - top/top_f_7
+  - top/top_f_8
+  - top/top_f_9
+  - top/top_f_10
+  - top/top_f_11
+  - top/top_f_12
+  - top/top_f_13
+  - top/top_f_14
+  - top/top_f_15
+  - top/top_f_16
+  - top/top_f_17
+  - top/top_f_18
+  - top/top_f_19
+  - top/top_f_20
+  - top/top_f_21
+  - top/top_f_22
+  - top/top_f_23
+  - top/top_f_24
+  - top/top_f_25
+  - top/top_f_26
+  - top/top_f_27
+  - top/top_f_28
+  - top/top_f_29
+  - top/top_f_30
+  - top/top_f_31
+  - top/top_f_32
+  - top/top_f_33
+  - top/top_f_34
+  - top/top_f_35
+  - top/top_f_36
+  - top/top_f_37
+  - top/top_f_38
+  - top/top_f_39
+  - top/top_f_40
+  - top/top_f_41
+  - top/top_f_42
+  - top/top_f_43
+  - top/top_f_44
+  - top/top_f_45
+  - top/top_f_46
+  - top/top_f_47
+  - top/top_f_48
+  - top/top_f_49
+  - top/top_f_50
+  - top/top_f_51
+  - top/top_f_52
+  - top/top_f_53
+  - top/top_f_54
+  - top/top_f_55
+  - top/top_f_56
+  - top/top_f_57
+  - top/top_f_58
+  - top/top_f_59
+  - top/top_f_60
+  skin:
+  - skin/skin_1
+  skeletonAnimation: {fileID: 5674719988869109276}
+  skeletonGraphic: {fileID: 0}
+  <IsOptimizeSkin>k__BackingField: 0
+  autoInit: 0
+--- !u!33 &9005808168108242027
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2986833630765613275}
+  m_Mesh: {fileID: 0}
+--- !u!23 &2204282891476249024
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2986833630765613275}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 8540d91079569405d9639618424761d8, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &5674719988869109276
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2986833630765613275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skeletonDataAsset: {fileID: 11400000, guid: 7969d2dd256d54e14bc6c5523bbdf7bc, type: 2}
+  initialSkinName: full_skins_f
+  fixPrefabOverrideViaMeshFilter: 2
+  initialFlipX: 0
+  initialFlipY: 0
+  updateWhenInvisible: 3
+  separatorSlotNames: []
+  zSpacing: 0
+  useClipping: 1
+  immutableTriangles: 0
+  pmaVertexColors: 1
+  clearStateOnDisable: 0
+  tintBlack: 0
+  singleSubmesh: 0
+  fixDrawOrder: 0
+  addNormals: 0
+  calculateTangents: 0
+  maskInteraction: 0
+  maskMaterials:
+    materialsMaskDisabled: []
+    materialsInsideMask: []
+    materialsOutsideMask: []
+  disableRenderingOnOverride: 1
+  physicsPositionInheritanceFactor: {x: 1, y: 1}
+  physicsRotationInheritanceFactor: 1
+  physicsMovementRelativeTo: {fileID: 0}
+  updateTiming: 1
+  unscaledTime: 0
+  _animationName: Idle
+  loop: 1
+  timeScale: 1
+--- !u!210 &4005424397439875295
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2986833630765613275}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
+--- !u!114 &6567211021332216879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2986833630765613275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a88d900a0f514b40ad1cfd9a090f6885, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LayerLab.ArtMaker.CharacterPrefabData
+  skinParts:
+  - partType: 1
+    selectedIndex: -1
+    isHidden: 0
+  - partType: 2
+    selectedIndex: -1
+    isHidden: 0
+  - partType: 3
+    selectedIndex: 1
+    isHidden: 0
+  - partType: 4
+    selectedIndex: -1
+    isHidden: 0
+  - partType: 5
+    selectedIndex: 6
+    isHidden: 0
+  - partType: 6
+    selectedIndex: 15
+    isHidden: 0
+  - partType: 7
+    selectedIndex: -1
+    isHidden: 0
+  - partType: 8
+    selectedIndex: 21
+    isHidden: 0
+  - partType: 9
+    selectedIndex: 21
+    isHidden: 0
+  - partType: 10
+    selectedIndex: -1
+    isHidden: 0
+  - partType: 11
+    selectedIndex: 5
+    isHidden: 0
+  - partType: 12
+    selectedIndex: -1
+    isHidden: 0
+  - partType: 13
+    selectedIndex: -1
+    isHidden: 0
+  - partType: 14
+    selectedIndex: 38
+    isHidden: 0
+  - partType: 15
+    selectedIndex: 58
+    isHidden: 0
+  - partType: 16
+    selectedIndex: 0
+    isHidden: 0
+  slotColors:
+  - slotName: hair
+    color: {r: 0.8742901, g: 0.7940233, b: 0.41901392, a: 1}
+  - slotName: beard
+    color: {r: 0.14496447, g: 0.401766, b: 0.9376577, a: 1}
+  - slotName: brow
+    color: {r: 0.37919343, g: 0.37348425, b: 0.06642108, a: 1}
+  - slotName: body
+    color: {r: 0.46557945, g: 0.9218656, b: 0.2484887, a: 1}
+  colorPickerPositions:
+  - partType: 5
+    position: {x: 0.8248359, y: 0.37919343}

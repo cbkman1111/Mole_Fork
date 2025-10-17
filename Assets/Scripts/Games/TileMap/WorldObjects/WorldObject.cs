@@ -1,23 +1,26 @@
 using System;
-using BehaviorDesigner.Runtime.Tasks.Unity.UnityCapsuleCollider;
 using Common.Global;
+using Games.BehaviorTree.Datas;
+using Games.TileMap.Datas;
 using Unity.Behavior;
 using UnityEngine;
 using UnityEngine.AI;
 
 namespace Creature
 {
+    
     /// <summary>
     /// 모든 맵위의 객체들의 기본값.
     /// </summary>
-    //public partial class WorldObject : StateMachine
-    public partial class WorldObject : MonoBehaviour
+    public partial class WorldObject : StateMachine
+    //public partial class WorldObject : MonoBehaviour
     {
-        [SerializeField] TMPro.TextMeshProUGUI _Message = null;
-        [SerializeField] protected NavMeshAgent _navMeshAgent;
-        [SerializeField] protected BehaviorGraphAgent _agent = null;
-        public BlackboardReference BlackboardReference => _agent.BlackboardReference;
-        protected CretureStateMachine stateMachine = new CretureStateMachine();
+        [SerializeField] protected NavMeshAgent NavMeshAgent;
+        [SerializeField] protected BehaviorGraphAgent BehaviorAgent = null;
+        public BlackboardReference BlackboardReference => BehaviorAgent.BlackboardReference;
+        //protected CretureStateMachine stateMachine = new CretureStateMachine();
+
+        [SerializeField] protected CharacterHud Hud = null;
 
         [System.Flags]
         public enum Direct
@@ -29,12 +32,8 @@ namespace Creature
             Right = 1 << 3  // 1000
         }
 
-        /// <summary>
-        /// 타일의 좌표계.
-        /// </summary>
-        public int X { get; set; }
-        public int Z { get; set; }
-        public int Y { get; set; }
+        public Games.TileMap.Datas.Coordinate Coordinate = new();
+
         [HideInInspector] public Direct Direction { get; set; } = Direct.Down;
 
         /// <summary>
@@ -71,17 +70,17 @@ namespace Creature
         /// <returns></returns>
         public bool Init(int x, int z)
         {
-            X = x;
-            Z = z;
-            Y = 0;
+            Coordinate.X = x;
+            Coordinate.Z = z;
+            //Coordinate.Y = 0;
 
-            if (_navMeshAgent != null)
+            if (NavMeshAgent != null)
             {
-                _navMeshAgent.angularSpeed = 0;
-                _navMeshAgent.updateRotation = false;
+                NavMeshAgent.angularSpeed = 0;
+                NavMeshAgent.updateRotation = false;
             }
 
-            transform.position = new Vector3(X, Y, Z);
+            transform.position = Coordinate.Position;
             transform.localScale = Vector3.one;
 
             var anchor = transform.Find("Anchor");
@@ -93,18 +92,23 @@ namespace Creature
 
             InitSpine();
             InitStat();
-            stateMachine.Init(OnActionChange);
+            InitHud();
 
-            _agent.BlackboardReference.SetVariableValue("Self", gameObject);
-            //ChangeState(ObjectState.Idle);
+            BehaviorAgent.BlackboardReference.SetVariableValue("Self", gameObject);
+            ChangeState(ObjectActionState.Idle);
             //_Message.geometrySortingOrder = 100;// GlobalDefine.UI_SORTING_ORDER;
-            stateMachine.PushState(WorldObjectActionType.Idle);
+            //stateMachine.PushState(WorldObjectActionType.Idle);
             return true;
         }
 
         public void InitStat()
         {
             Stat.Health = 100;   
+        }
+
+        public void InitHud()
+        {
+            Hud.Init();
         }
 
         /// <summary>
@@ -131,80 +135,59 @@ namespace Creature
         }
 
 
-        public void Speak(string messge)
+        public void Speak(string msg)
         {
-            if (_Message != null)
-            {
-                _Message.text = messge;
-            }
+            if(Hud == null)
+                return;
+
+            Hud.SetMessage(msg);
         }
 
-        protected void OnActionChange(WorldObjectActionType actionType)
-        {
-            // React to event
-            switch (actionType)
+
+        public override void OnStateEnter(ObjectActionState state)
+        {            // React to event
+            switch (state)
             {
-                case WorldObjectActionType.None:
+                case ObjectActionState.None:
                     break;
-                case WorldObjectActionType.Die:// 죽음 상태
-                    Play("Die", false);
-                    break;
-                case WorldObjectActionType.Idle:// 일반 상태
+                case ObjectActionState.Idle:// 일반 상태
                     Play("Idle", true);
                     break;
-                case WorldObjectActionType.Patrol:// 순찰 상태
-                    Play("Walk", true);
-                    break;
-                case WorldObjectActionType.Chase:// 추적 상태
-                    Play("Run", true);
-                    break;
-                case WorldObjectActionType.Attack:// 공격 상태
+                case ObjectActionState.Attack:// 공격 상태
                     Play("Attack1", false);
                     break;
-                case WorldObjectActionType.Eat:// 먹기 상태
+                case ObjectActionState.Patrol:// 순찰 상태
+                    Play("Walk", true);
+                    break;
+                case ObjectActionState.Chase:// 추적 상태
+                    Play("Run", true);
+                    break;
+
+
+                    /*
+                case ObjectActionState.Die:// 죽음 상태
+                    Play("Die", false);
+                    break;
+
+                case ObjectActionState.Eat:// 먹기 상태
                     Play("Attack2", false);
                     break;
-                case WorldObjectActionType.Sleep:// 잠자기 상태
+                case ObjectActionState.Sleep:// 잠자기 상태
                     Play("Attack2", false);
                     break;
+                    */
             }
         }
 
-        
+        public override void OnStateExit(ObjectActionState state) 
+        { 
+        }
 
+        /*
         public void ChangeAction(WorldObjectActionType type)
         {
             stateMachine.PushState(type);
         }
-    }
-
-
-    /// <summary>
-    /// 크리쳐 상태 머신.
-    /// </summary>
-    public class CretureStateMachine
-    {
-        //Stack<WorldObjectActionType> Stack = new Stack<WorldObjectActionType>();
-        public Action<WorldObjectActionType> StateChange = null;
-        private WorldObjectActionType State = WorldObjectActionType.None;
-
-        public void Init(Action<WorldObjectActionType> callback)
-        {
-            StateChange = callback;
-        }
-
-        public void PushState(WorldObjectActionType state)
-        {
-            if (State == state)
-                return;
-
-            State = state;
-            StateChange(State);
-        }
-
-        public WorldObjectActionType CurrentState()
-        {
-            return State;
-        }
+        */
     }
 }

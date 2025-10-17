@@ -17,11 +17,12 @@ namespace Creature
 
         private void Update()
         {
-            var action = stateMachine.CurrentState();
-            if (action == WorldObjectActionType.Chase ||
-                action == WorldObjectActionType.Patrol)
+
+            var action = State;
+            if (action == ObjectActionState.Chase ||
+                action == ObjectActionState.Patrol)
             {
-                var direction = _navMeshAgent.velocity.normalized;
+                var direction = NavMeshAgent.velocity.normalized;
                 var before = Direction;
                 var curr = GetDirect(direction);
                 if (before != curr)
@@ -46,7 +47,7 @@ namespace Creature
 
         public void Move(Vector3 angle)
         {
-            //ChangeState(ObjectState.Move);
+            ChangeState(ObjectActionState.Move);
 
             var before = Direction;
             var curr = GetDirect(angle);
@@ -71,20 +72,19 @@ namespace Creature
                 TweenMove = null;
             }
 
-            //ChangeState(ObjectState.Stop);
+            ChangeState(ObjectActionState.Stop);
         }
 
         private void UpdateStateAnimation()
         {
-            /*
             switch (State)
             {
-                case ObjectState.Stop:
-                case ObjectState.Idle:
+                case ObjectActionState.Stop:
+                case ObjectActionState.Idle:
                     Play("Idle", true);
                     break;
 
-                case ObjectState.Move:
+                case ObjectActionState.Move:
                     var speed = Stat.GetStat(Stat.StatType.Speed);
                     if (speed >= 3)
                     {
@@ -109,7 +109,6 @@ namespace Creature
                 flip.x = -1;
 
             _skel.transform.localScale = flip;
-            */
         }
 
         /// <summary>

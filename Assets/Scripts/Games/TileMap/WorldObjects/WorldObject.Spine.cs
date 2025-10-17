@@ -8,8 +8,8 @@ namespace Creature
     /// <summary>
     /// 모든 맵위의 객체들의 기본값.
     /// </summary>
-    //public partial class WorldObject : StateMachine
-    public partial class WorldObject : MonoBehaviour //StateMachine
+    public partial class WorldObject : StateMachine
+    //public partial class WorldObject : MonoBehaviour //StateMachine
     {
         [SerializeField] protected SkeletonAnimation _skel;
         [SerializeField] protected Rigidbody _rigidbody;

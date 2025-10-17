@@ -35,8 +35,7 @@ public partial class SpeakAction : Action
 
 
         string message = Message != null ? Message.Value : string.Empty;
-        if(message != string.Empty)
-            agent.Speak(message);
+        agent.Speak(message);
 
         return Status.Running;
     }

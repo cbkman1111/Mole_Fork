@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using Creature;
 using Unity.Behavior;
 using UnityEngine;
+using UnityEngine.AI;
 using Action = Unity.Behavior.Action;
-
 
 public partial class CretureAction: Action
 {
@@ -13,7 +13,8 @@ public partial class CretureAction: Action
     [SerializeReference] public BlackboardVariable<List<GameObject>> Probs;
 
     protected BlackboardReference BlackBoard = null;
-    protected WorldObject agent = null;
+    protected WorldObject WorldObject = null;
+    protected NavMeshAgent NavAgent = null;
 
     protected override Status OnStart()
     {
@@ -21,11 +22,15 @@ public partial class CretureAction: Action
         if (go == null)
             return Status.Failure;
 
-        agent = go.GetComponent<WorldObject>();
-        if (agent == null)
+        WorldObject = go.GetComponent<WorldObject>();
+        if (WorldObject == null)
             return Status.Failure;
 
-        BlackBoard = agent.BlackboardReference;
+        BlackBoard = WorldObject.BlackboardReference;
+        if (BlackBoard == null)
+            return Status.Failure;
+
+        NavAgent = WorldObject.GetComponent<NavMeshAgent>();
         if (BlackBoard == null)
             return Status.Failure;
 

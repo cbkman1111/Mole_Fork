@@ -1,46 +1,61 @@
 using System;
 using Unity.Behavior;
 using Unity.Properties;
-using Common.Utils;
 using UnityEngine;
 using System.Collections.Generic;
+using Creature;
 
 [Serializable, GeneratePropertyBag]
 [NodeDescription(name: "SerchSight", story: "SerchSight [Agent] See [Target]", category: "Action", id: "780099799002b93f70c0fdebd1b29ee7")]
 public partial class SerchSightAction : CretureAction
 {
+    private WorldObject LastTarget = null;
+
     protected override Status OnStart()
     {
         base.OnStart();
-        agent.ChangeAction(Creature.WorldObjectActionType.Idle);
 
+        WorldObject.ChangeState(ObjectActionState.Idle);
         return Status.Running;
     }
+
+    /// <summary>
+    /// TODO :  시야 내에 있는 오브젝트중에 우선순위가 높은 오브젝트를 타겟으로 설정.
+    /// </summary>
+    /// <returns></returns>
     protected override Status OnUpdate()
     {
-        //GiantDebug.Log($"{agent.name}");
         if (Probs.Value == null)
             return Status.Failure;
 
-        // Filter objects within a radius of 10 around the agent  
-        Vector3 agentPosition = agent.transform.position;
-        List<GameObject> nearbyObjects = Probs.Value.FindAll(obj =>
-        {
+        Vector3 agentPosition = WorldObject.transform.position;
+        List<GameObject> nearbyObjects = Probs.Value.FindAll(obj => {
             if (obj == null) 
                 return false;
 
             float distance = Vector3.Distance(agentPosition, obj.transform.position);
-            return distance <= 10f;
+            return distance <= 10f && LastTarget != obj;
         });
 
-        if (Target.Value == null)
+        for (int i = 0; i < nearbyObjects.Count; i++)
         {
-            var index = UnityEngine.Random.Range(0, nearbyObjects.Count);
-            Target.Value = nearbyObjects[index];
+            var index = i;//;UnityEngine.Random.Range(0, nearbyObjects.Count);
+            var gobject = nearbyObjects[index];
+            if (LastTarget == null)
+            {
+                LastTarget = gobject.GetComponent<WorldObject>();
+                Target.Value = gobject;
+                break;
+            }
+            else if (gobject != LastTarget.gameObject)
+            {
+                LastTarget = gobject.GetComponent<WorldObject>();
+                Target.Value = gobject;
+                break;
+            }
         }
+        
 
-        // Log the count of nearby objects  
-        // GiantDebug.Log($"Nearby objects count: {nearbyObjects.Count}");
         return Status.Success;
     }
 

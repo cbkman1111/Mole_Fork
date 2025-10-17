@@ -219,6 +219,61 @@
         0,
         0
       ]
+    },
+    "20000": {
+      "ID": 20000,
+      "TYPE": 1,
+      "NAME_TID": "녹색괴물",
+      "RADIUS": 1,
+      "PREFAB": "Assets/AddressableAssets/Prefab/Hero/Character_20000.prefab",
+      "ICON": "b.png",
+      "TIER": 1,
+      "AGE": 11,
+      "LEVEL_GROUP_ID": 0,
+      "KEYWORDS": [
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      "SKILLS": [
+        20000,
+        20001,
+        0,
+        0,
+        0
+      ],
+      "STATS": [
+        1,
+        10,
+        10,
+        10,
+        10,
+        10,
+        1,
+        10,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
     }
   }
 }

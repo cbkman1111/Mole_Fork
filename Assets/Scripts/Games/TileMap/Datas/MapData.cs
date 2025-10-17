@@ -12,6 +12,11 @@ namespace Games.TileMap.Datas
 
         public TileData Tile;
         public List<ObjectData> Objects;
+
+        public Vector3 Position
+        {
+            get { return new Vector3(X, 0, Z); }
+        }
     }
 
     public enum TileType

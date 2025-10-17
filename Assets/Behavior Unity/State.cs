@@ -4,18 +4,27 @@ using Unity.Behavior;
 namespace Creature
 {
 	[BlackboardEnum]
-	public enum WorldObjectActionType
-	{
-        None = -1, // 기본 상태
+    public enum ObjectActionState
+    {
+        None = 0,
+        Idle,
 
-        Die = 0, // 죽음 상태
-        Idle, // 일반 상태
-		Patrol, // 순찰 상태
-        Chase, // 추적 상태
-        Attack, // 공격 상태
-        Eat, // 먹기 상태
-        Sleep, // 잠자기 상태
+        Chase, // 추적.
+        Patrol, // 자동 순찰.
+        Move, // 사용자의 직접 이동.
 
-        Max
+        Stop,
+        Hit,
+        Attack,
+        Dead,
+
+        Click, // 클릭했을때 테스트용.
+    }
+
+    [BlackboardEnum]
+    public enum InteractionType
+    {
+        None = 0,
+        Talk,
     }
 }

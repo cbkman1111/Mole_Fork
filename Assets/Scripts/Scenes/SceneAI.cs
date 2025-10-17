@@ -31,11 +31,12 @@ public class SceneAI : SceneBase
         }
 
         CreatePineTree();
-        CreateHeros();
+        CreateHero();
+        //CreateMonsters();
 
         var cretures = listCretures.List();
         var probs = listProbs.List();
-        
+
         foreach (var obj in listCretures)
         {
             var worldObj = obj.GetComponent<WorldObject>();
@@ -48,7 +49,29 @@ public class SceneAI : SceneBase
         return true;
     }
 
-    private void CreateHeros()
+    private void CreateHero()
+    {
+        WorldObject character = null;
+
+        var tableHero = DataManager.Instance.Get<TableHero>();
+        if (tableHero != null)
+        {
+            var first = tableHero.Data.First();
+            var key = first.Key;
+            var table = first.Value;
+
+            var x = (int)UnityEngine.Random.Range(Width * -0.5f, Width * 0.5f);
+            var z = (int)UnityEngine.Random.Range(Height * -0.5f, Height * 0.5f);
+            character = WorldObject.Create($"{table.PREFAB}", null, x, z);
+            character.transform.SetParent(Creatrues);
+            listCretures.Add(character);
+        }
+
+        //int index = UnityEngine.Random.Range(0, listCretures.Count);
+        SetCameraTarget(character.transform);
+    }
+
+    private void CreateMonsters()
     {
         var tableHero = DataManager.Instance.Get<TableHero>();
         if (tableHero != null)
@@ -69,8 +92,6 @@ public class SceneAI : SceneBase
             }
         }
 
-      
-
         int index = UnityEngine.Random.Range(0, listCretures.Count);
         SetCameraTarget(listCretures[index].transform);
     }
@@ -85,6 +106,7 @@ public class SceneAI : SceneBase
             if (tree == null)
                 return;
 
+            tree.name = $"PineTree_{i}";
             tree.transform.SetParent(Woods);
             listProbs.Add(tree);
         }

@@ -2,29 +2,15 @@
 
 namespace Creature
 {
-    public enum ObjectState
-    {
-        None = 0,
-        Idle,
-
-        Move,
-        Stop,
-        Hit,
-        Attack,
-        Dead,
-
-        Click, // 클릭했을때 테스트용.
-    }
-
     /// <summary>
     /// 상태머신.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public abstract class StateMachine : MonoBehaviour
     {
-        protected ObjectState State = ObjectState.None;
+        protected ObjectActionState State = ObjectActionState.None;
 
-        public void ChangeState(ObjectState change)
+        public void ChangeState(ObjectActionState change)
         {
             if(State == change)
                 return;
@@ -36,7 +22,7 @@ namespace Creature
             OnStateEnter(State);
         }
 
-        public abstract void OnStateEnter(ObjectState state);
-        public abstract void OnStateExit(ObjectState state);
+        public abstract void OnStateEnter(ObjectActionState state);
+        public abstract void OnStateExit(ObjectActionState state);
     }
 }

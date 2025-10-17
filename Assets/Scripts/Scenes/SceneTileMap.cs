@@ -61,8 +61,8 @@ namespace Scenes
                     },
                     save:() =>
                     {
-                        _mapData.X = _player.X;
-                        _mapData.Z = _player.Z;
+                        _mapData.X = _player.Coordinate.X;
+                        _mapData.Z = _player.Coordinate.Z;
                         
                         _mapData.Save();
                     },
@@ -437,11 +437,11 @@ namespace Scenes
                     }
                 }
                 
-                if((int)_player.transform.position.x != _player.X ||
-                   (int)_player.transform.position.z != _player.Z)
+                if((int)_player.transform.position.x != _player.Coordinate.X ||
+                   (int)_player.transform.position.z != _player.Coordinate.Z)
                 {
-                    _player.X = (int)_player.transform.position.x;
-                    _player.Z = (int)_player.transform.position.z * 100;
+                    _player.Coordinate.X = (int)_player.transform.position.x;
+                    _player.Coordinate.Z = (int)_player.transform.position.z * 100;
                 }
             }
 
