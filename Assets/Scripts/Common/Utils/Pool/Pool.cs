@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using NPOI.POIFS.Storage;
 using UnityEngine;
 
 namespace Common.Utils.Pool
@@ -14,6 +15,7 @@ namespace Common.Utils.Pool
         private Transform _parent;
         public int Max { get; private set; } = 0;
         private List<T> _activeList { get; set; }
+        public List<T> ActiveList { get => _activeList; }
 
         /// <summary>
         /// 오브젝트 풀.

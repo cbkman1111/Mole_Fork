@@ -24,9 +24,14 @@ namespace Scenes
         //public PoolManager poolManager = null;
         //public MeshRenderer meshRender = null;
 
-        public Pool<SpriteRenderer> poolSprite = null;
+        //public Pool<SpriteRenderer> poolSprite = null;
+        public Pool<Thunder> PoolThunder = null;
         public Transform targetCube = null;
         public Sprite[] icons;
+
+        [SerializeField] private Thunder Thunder;
+        public GameObject From;
+        public GameObject Target;
 
         /// <summary>
         /// 
@@ -38,12 +43,36 @@ namespace Scenes
             if (menu != null)
             {
                 menu.InitMenu();
-                menu.ClickCreateObject = CreateObject;
+                //menu.ClickCreateObject = CreateObject;
+                menu.ClickCreateObject = Foo;
             }
 
-            var prefab = ResourcesManager.Instance.LoadInBuild<SpriteRenderer>("Star");
-            poolSprite = Pool<SpriteRenderer>.Create(prefab, targetCube, 30);
+            PoolThunder = Pool<Thunder>.Create(Thunder, transform, 10);
+            //var prefab = ResourcesManager.Instance.LoadInBuild<SpriteRenderer>("Star");
+            //poolSprite = Pool<SpriteRenderer>.Create(prefab, targetCube, 30);
             return true;
+        }
+
+        private void Foo()
+        {
+            var obj = PoolThunder.GetObject();
+            if(obj == null)
+                return;
+
+            obj.SetActive(true);
+            obj.SetAngle(From.transform, Target.transform);
+        }
+
+        private void Update()
+        {
+            foreach (var obj in PoolThunder.ActiveList)
+            {
+                if(obj.IsExpire() == true)
+                {
+                    PoolThunder.ReturnObject(obj);
+                    break;
+                }
+            }
         }
 
         /// <summary>
@@ -51,6 +80,7 @@ namespace Scenes
         /// </summary>
         private void CreateObject()
         {
+            /*
             float particleCount = UnityEngine.Random.Range(10f, 30f);
             int index = (int)UnityEngine.Random.Range(0f, icons.Length);
             Sprite icon = icons[index];
@@ -97,6 +127,7 @@ namespace Scenes
 
                 sequnce.Play();
             }
+            */
         }
 
         /// <summary>
@@ -104,10 +135,9 @@ namespace Scenes
         /// </summary>
         public async override void Load(Action<float> update)
         {
-
+            /*
             try
             {
-
                 int total = 1000;
                 List<int> list = new List<int>();
                 for (int i = 0; i < total; i++)
@@ -128,6 +158,7 @@ namespace Scenes
                 // handled below
                 GiantDebug.LogError($"{name} - {e.ToString()}");
             }
+            */
 
             update(1f);
         }
