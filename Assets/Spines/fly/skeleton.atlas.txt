@@ -1,0 +1,8 @@
+skeleton.png
+size:50,50
+filter:Linear,Linear
+pma:true
+scale:0.5
+fly
+bounds:0,23,50,27
+offsets:7,25,64,64

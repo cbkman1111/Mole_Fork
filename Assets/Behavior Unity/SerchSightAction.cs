@@ -4,6 +4,7 @@ using Unity.Properties;
 using UnityEngine;
 using System.Collections.Generic;
 using Creature;
+using Common.Utils;
 
 [Serializable, GeneratePropertyBag]
 [NodeDescription(name: "SerchSight", story: "SerchSight [Agent] See [Target]", category: "Action", id: "780099799002b93f70c0fdebd1b29ee7")]
@@ -37,30 +38,30 @@ public partial class SerchSightAction : CretureAction
             return distance <= 10f && LastTarget != obj;
         });
 
-        for (int i = 0; i < nearbyObjects.Count; i++)
-        {
-            var index = i;//;UnityEngine.Random.Range(0, nearbyObjects.Count);
-            var gobject = nearbyObjects[index];
-            if (LastTarget == null)
-            {
-                LastTarget = gobject.GetComponent<WorldObject>();
-                Target.Value = gobject;
-                break;
-            }
-            else if (gobject != LastTarget.gameObject)
-            {
-                LastTarget = gobject.GetComponent<WorldObject>();
-                Target.Value = gobject;
-                break;
-            }
-        }
-        
+        //for (int i = 0; i < nearbyObjects.Count; i++){}
 
+        var index = UnityEngine.Random.Range(0, nearbyObjects.Count);
+        var gobject = nearbyObjects[index];
+        /*
+        if (LastTarget == null)
+        {
+            LastTarget = gobject.GetComponent<WorldObject>();
+            Target.Value = gobject;
+        }
+        else if (gobject != LastTarget.gameObject)
+        {
+            LastTarget = gobject.GetComponent<WorldObj ect>();
+            Target.Value = gobject;
+        }
+        */
+        LastTarget = gobject.GetComponent<WorldObject>();
+        Target.Value = gobject;
         return Status.Success;
     }
 
     protected override void OnEnd()
     {
+        GiantDebug.Log("SerchSightAction OnEnd");
     }
 }
 

@@ -13,7 +13,7 @@ namespace Creature
         Patrol, // 자동 순찰.
         Move, // 사용자의 직접 이동.
 
-        Stop,
+        //Stop,
         Hit,
         Attack,
         Dead,

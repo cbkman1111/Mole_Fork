@@ -4,6 +4,7 @@ using Common.Global;
 using Common.Scene;
 using Common.Utils;
 using Common.Utils.Pool;
+using Creature;
 using DG.Tweening;
 using UI.Menu;
 using UnityEngine;
@@ -33,6 +34,8 @@ namespace Scenes
         public GameObject From;
         public GameObject Target;
 
+        [SerializeField] private SpriteRenderer SpriteRenderer;
+
         /// <summary>
         /// 
         /// </summary>
@@ -47,6 +50,7 @@ namespace Scenes
                 menu.ClickCreateObject = Foo;
             }
 
+            SpriteRenderer.SetActive(false);
             PoolThunder = Pool<Thunder>.Create(Thunder, transform, 10);
             //var prefab = ResourcesManager.Instance.LoadInBuild<SpriteRenderer>("Star");
             //poolSprite = Pool<SpriteRenderer>.Create(prefab, targetCube, 30);
@@ -61,6 +65,15 @@ namespace Scenes
 
             obj.SetActive(true);
             obj.SetAngle(From.transform, Target.transform);
+
+            MEC.Timing.RunCoroutine(SparkFresh());
+        }
+
+        private IEnumerator<float> SparkFresh()
+        {
+            SpriteRenderer.SetActive(true);
+            yield return MEC.Timing.WaitForOneFrame;
+            SpriteRenderer.SetActive(false);
         }
 
         private void Update()

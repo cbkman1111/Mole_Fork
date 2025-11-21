@@ -15,9 +15,14 @@ public partial class InteractionAction : Action
 
     protected override Status OnStart()
     {
+        if(Agent.Value == null)
+            return Status.Failure;
+        
+        if (Target.Value == null)
+            return Status.Failure;
+
         var agent = Agent.Value.gameObject.GetComponent<WorldObject>();
         var target = Target.Value.gameObject.GetComponent<WorldObject>();
-
         target.OnReciveInteraction(Type);
 
         return Status.Running;

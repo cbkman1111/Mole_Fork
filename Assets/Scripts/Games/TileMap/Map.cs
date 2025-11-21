@@ -59,7 +59,7 @@ namespace Games.TileMap
                         if (obj == true)
                         {
                             objList[0].obj = obj;
-                            obj.Init(x, z);
+                            obj.Init(x, z, WorldObject.ObjectTeam.Neutral);
                             objects.Add(obj);
                         }
                     }
@@ -253,7 +253,7 @@ namespace Games.TileMap
                                     WorldObject obj = GetWorldObject(objData);
                                     if (obj == true)
                                     {
-                                        obj.Init(x, z);
+                                        obj.Init(x, z, WorldObject.ObjectTeam.Neutral);
                                         objData.obj = obj;
                                         objects.Add(obj);
                                     }

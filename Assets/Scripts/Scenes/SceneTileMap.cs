@@ -46,7 +46,7 @@ namespace Scenes
             //MainCamera.transparencySortAxis = new Vector3(0, 0, 1);
 
             if(_beefalo != null)
-                _beefalo.Init(100, 101);
+                _beefalo.Init(100, 101, WorldObject.ObjectTeam.Neutral);
 
             _menu = UIManager.Instance.OpenMenu<UIMenuTileMap>();
             if (_menu != null)
@@ -132,7 +132,7 @@ namespace Scenes
             var prefab = ResourcesManager.Instance.LoadInBuild<Human>($"{pathPrefab}/Player");
             _luke = GameObject.Instantiate<Human>(prefab);
             _luke.name = "luke";
-            _luke.Init(startX, startZ);
+            _luke.Init(startX, startZ, WorldObject.ObjectTeam.Neutral);
 
             _player = _luke;
 

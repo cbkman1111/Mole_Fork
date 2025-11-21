@@ -1,10 +1,12 @@
+using Creature;
 using UnityEngine;
 
 namespace Giant.Camera
 {
     public class CameraControl : MonoBehaviour
     {
-        [SerializeField] private Transform target;
+        private WorldObject Target = null;
+
         [SerializeField] private Vector3 offset;
         [SerializeField] private float followSpeed = 5f;
         [SerializeField] private float zoomSpeed = 2f;
@@ -24,16 +26,16 @@ namespace Giant.Camera
         public UnityEngine.Camera Cam { get; private set; }
         public float targetZoom;
 
-        public void SetBounds(UnityEngine.Camera cam, GameObject[] area)
+        public void SetBounds(UnityEngine.Camera cam, WorldObject target, GameObject[] area)
         {
             Cam = cam;
-            
+            Target = target;
             boundLeft = area[0].transform;
             boundTop = area[1].transform;
             boundRight = area[2].transform;
             boundBottom = area[3].transform;
 
-            var desiredPosition = target.position + (Vector3)offset;
+            var desiredPosition = Target.transform.position + (Vector3)offset;
             desiredPosition.z = transform.position.z;
             transform.position = desiredPosition;
 
@@ -46,7 +48,7 @@ namespace Giant.Camera
             if (Cam == null)
                 return;
 
-            if (target == null) 
+            if (Target == null) 
                 return;
 
             MoveCamera();
@@ -120,7 +122,7 @@ namespace Giant.Camera
         /// </summary>
         private void MoveCamera()
         {
-            var desiredPosition = target.position + (Vector3)offset;
+            var desiredPosition = Target.transform.position + (Vector3)offset;
             desiredPosition.y = transform.position.y;
 
             var vertExtent = Cam.orthographicSize;

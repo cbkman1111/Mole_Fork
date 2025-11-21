@@ -31,7 +31,17 @@ namespace Creature
             Left = 1 << 2, // 0100
             Right = 1 << 3  // 1000
         }
+        
+        public enum ObjectTeam 
+        { 
+            None = 0,
+            Neutral, 
+            Ally, 
+            Enemy 
+        }
 
+
+        public ObjectTeam Team { get; set; } = ObjectTeam.None;
         public Games.TileMap.Datas.Coordinate Coordinate = new();
 
         [HideInInspector] public Direct Direction { get; set; } = Direct.Down;
@@ -41,9 +51,18 @@ namespace Creature
         /// </summary>
         public Stat Stat { get; set; } = new Stat();
 
-        public static WorldObject Create(string path, Transform parent, int x, int z)
+        public struct WorldObjectCreateParam
         {
-            var go = ResourcesManager.Instance.LoadBundle($"{path}");
+            public string Path;
+            public Transform Parent;
+            public int X;
+            public int Z;
+            public ObjectTeam ObjectTeam;
+        }
+
+        public static WorldObject Create(WorldObjectCreateParam param)
+        {
+            var go = ResourcesManager.Instance.LoadBundle($"{param.Path}");
             if (go == null)
                 return null;
 
@@ -51,8 +70,8 @@ namespace Creature
             if (component == null)
                 return null;
 
-            var obj = Instantiate(component, parent);
-            if (obj != null && obj.Init(x, z) == true)
+            var obj = Instantiate(component, param.Parent);
+            if (obj != null && obj.Init(param.X, param.Z, param.ObjectTeam) == true)
             {
                 return obj;
             }
@@ -68,11 +87,13 @@ namespace Creature
         /// <param name="posZ"></param>
         /// <param name="scale"></param>
         /// <returns></returns>
-        public bool Init(int x, int z)
+        public bool Init(int x, int z, ObjectTeam team)
         {
             Coordinate.X = x;
             Coordinate.Z = z;
             //Coordinate.Y = 0;
+
+            Team = team;
 
             if (NavMeshAgent != null)
             {

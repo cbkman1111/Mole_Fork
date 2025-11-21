@@ -1,12 +1,16 @@
+using System.Linq;
 using Common.Global;
 using Common.Scene;
+using Common.Table;
 using Common.Utils;
 using Creature;
 using Giant.Camera;
 using UI.Menu;
 using UI.Popup;
+using Unity.Android.Gradle.Manifest;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using static Creature.WorldObject;
 
 namespace Giant.Shooting
 {
@@ -14,13 +18,23 @@ namespace Giant.Shooting
     {
         private UIMenuShooting Menu = null;
 
-        [SerializeField] private Human Player = null;
+        private Human Player = null;
 
         [SerializeField] private Map Map = null;
         [SerializeField] private Map MapDungeon = null;
 
-        public override bool Init(JSONObject param)
+        private WorldObjectList listCretures = new();
+        private WorldObjectList listProbs = new();
+
+        private TableHero tableHeros = null;
+        [SerializeField] private Transform Rocks;
+        [SerializeField] private Transform Woods;
+        [SerializeField] private Transform Creatrues;
+
+        public override bool Init(JSONObject json)
         {
+            DataManager.Instance.Load();
+
             Menu = UIManager.Instance.OpenMenu<UIMenuShooting>();
             Menu.InitMenu();
             Menu.Joystick.OnMove += OnMove;
@@ -30,8 +44,36 @@ namespace Giant.Shooting
             Map.Init();
             Map.OnTeleport += OnTelepotMap;
 
+            tableHeros = DataManager.Instance.Get<TableHero>();
+            var heroTable = tableHeros.Data.First();
+            var key = heroTable.Key;
+            var table = heroTable.Value;
+
+            WorldObjectCreateParam param;
+            param.Path = $"{table.PREFAB}";
+            param.Parent = Creatrues;
+            param.X = 0;
+            param.Z = 0;
+            param.ObjectTeam = ObjectTeam.Enemy;
+
+            Player = WorldObject.Create(param) as Human;
+            Player.transform.SetParent(Creatrues);
+            listCretures.Add(Player);
+
+            var cretures = listCretures.List();
+            var probs = listProbs.List();
+            foreach (var obj in listCretures)
+            {
+                var worldObj = obj.GetComponent<WorldObject>();
+                if (worldObj != null)
+                {
+                    worldObj.BlackboardReference.SetVariableValue("Creatures", cretures);
+                    worldObj.BlackboardReference.SetVariableValue("Probs", probs);
+                }
+            }
+
             var cameraControl = MainCamera.GetComponent<Giant.Camera.CameraControl>();
-            cameraControl.SetBounds(MainCamera, Map.CameraArea);
+            cameraControl.SetBounds(MainCamera, Player, Map.CameraArea);
             return true;
         }
 
@@ -61,7 +103,7 @@ namespace Giant.Shooting
             MapDungeon.OnTeleport += OnTelepotHome;
 
             var cameraControl = MainCamera.GetComponent<Giant.Camera.CameraControl>();
-            cameraControl.SetBounds(MainCamera, MapDungeon.CameraArea);
+            cameraControl.SetBounds(MainCamera, Player, MapDungeon.CameraArea);
 
             loading.Close();
         }
@@ -71,7 +113,7 @@ namespace Giant.Shooting
             Map.SetActive(true);
             
             var cameraControl = MainCamera.GetComponent<Giant.Camera.CameraControl>();
-            cameraControl.SetBounds(MainCamera, Map.CameraArea);
+            cameraControl.SetBounds(MainCamera, Player, Map.CameraArea);
 
             Player.transform.position = Map.Teleports[0].transform.position;
 

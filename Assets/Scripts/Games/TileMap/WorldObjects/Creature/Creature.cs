@@ -72,14 +72,15 @@ namespace Creature
                 TweenMove = null;
             }
 
-            ChangeState(ObjectActionState.Stop);
+            Direction = Direct.None;
+            //ChangeState(ObjectActionState.Stop);
         }
 
         private void UpdateStateAnimation()
         {
             switch (State)
             {
-                case ObjectActionState.Stop:
+                //case ObjectActionState.Stop:
                 case ObjectActionState.Idle:
                     Play("Idle", true);
                     break;

@@ -12,9 +12,7 @@ public partial class ChaseAction : CretureAction
     protected override Status OnStart()
     {
         base.OnStart();
-
         NavAgent.isStopped = false;
-        WorldObject.ChangeState(ObjectActionState.Chase);
         return Status.Running;
     }
 
@@ -24,8 +22,9 @@ public partial class ChaseAction : CretureAction
             return Status.Failure;
 
         if (Target.Value == null)
-            return Status.Success;
+            return Status.Failure;
 
+        WorldObject.ChangeState(ObjectActionState.Chase);
         //agent.Stat.GetStat(Creature.Stat.StatType.Weight);
         var positionTarget = Target.Value.transform.position;
         var positionAgent = WorldObject.transform.position;
