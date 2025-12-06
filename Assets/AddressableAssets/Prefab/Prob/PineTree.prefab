@@ -8,9 +8,41 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 840481660395165536, guid: f9a8265a53a64304995b41ce5151b60f, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 840481660395165536, guid: f9a8265a53a64304995b41ce5151b60f, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3236985778109580497, guid: f9a8265a53a64304995b41ce5151b60f, type: 3}
       propertyPath: m_Name
       value: PineTree
+      objectReference: {fileID: 0}
+    - target: {fileID: 6244863030986347858, guid: f9a8265a53a64304995b41ce5151b60f, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6244863030986347858, guid: f9a8265a53a64304995b41ce5151b60f, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6244863030986347858, guid: f9a8265a53a64304995b41ce5151b60f, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6244863030986347858, guid: f9a8265a53a64304995b41ce5151b60f, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6244863030986347858, guid: f9a8265a53a64304995b41ce5151b60f, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6244863030986347858, guid: f9a8265a53a64304995b41ce5151b60f, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9069071909031387543, guid: f9a8265a53a64304995b41ce5151b60f, type: 3}
       propertyPath: m_LocalPosition.x

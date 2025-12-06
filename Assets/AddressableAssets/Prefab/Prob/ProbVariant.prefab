@@ -159,6 +159,13 @@ MonoBehaviour:
   NavMeshAgent: {fileID: 0}
   BehaviorAgent: {fileID: 4591451180863667135}
   Hud: {fileID: 6955779098361647197}
+  AnchorPoint: {fileID: 5002449709767966944}
+  Coordinate:
+    X: 0
+    Z: 0
+    Tile:
+      type: 0
+    Objects: []
   _skel: {fileID: 0}
   _rigidbody: {fileID: 0}
 --- !u!114 &4591451180863667135

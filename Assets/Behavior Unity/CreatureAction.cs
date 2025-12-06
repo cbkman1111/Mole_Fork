@@ -1,17 +1,21 @@
+﻿using Creature;
 using System.Collections.Generic;
-using Creature;
 using Unity.Behavior;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.AI;
 using Action = Unity.Behavior.Action;
 
-public partial class CretureAction: Action
+public partial class CreatureAction: Action
 {
+    // [수정 2] 입력/출력 변수 정의
     [SerializeReference] public BlackboardVariable<GameObject> Agent;
     [SerializeReference] public BlackboardVariable<GameObject> Target;
-    [SerializeReference] public BlackboardVariable<List<GameObject>> Cretures;
-    [SerializeReference] public BlackboardVariable<List<GameObject>> Probs;
 
+    [SerializeReference] public BlackboardVariable<List<GameObject>> Creatures;
+    [SerializeReference] public BlackboardVariable<List<GameObject>> Props;
+
+    // 캐싱 변수
     protected BlackboardReference BlackBoard = null;
     protected WorldObject WorldObject = null;
     protected NavMeshAgent NavAgent = null;
@@ -37,8 +41,12 @@ public partial class CretureAction: Action
         BlackBoard.GetVariableValue("Creatures", out List<GameObject> listCreture);
         BlackBoard.GetVariableValue("Probs", out List<GameObject> listProbs);
 
-        Cretures.Value = listCreture;
-        Probs.Value = listProbs;
+        Creatures.Value = listCreture;
+        Props.Value = listProbs;
         return Status.Running;
+    }
+    protected void LogFailure(string msg)
+    {
+        // Debug.LogWarning($"[CreatureAction] Failure: {msg}");
     }
 }

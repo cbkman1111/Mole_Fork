@@ -3,7 +3,8 @@ using UnityEngine;
 
 namespace Creature
 {
-    public partial class WorldObject : StateMachine
+    //public partial class WorldObject : StateMachine
+    public partial class WorldObject : MonoBehaviour
     {
         private InteractionType InteractionType = InteractionType.None;
 

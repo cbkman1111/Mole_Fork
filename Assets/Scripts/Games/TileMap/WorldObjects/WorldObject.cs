@@ -8,19 +8,21 @@ using UnityEngine.AI;
 
 namespace Creature
 {
-    
     /// <summary>
     /// 모든 맵위의 객체들의 기본값.
     /// </summary>
-    public partial class WorldObject : StateMachine
-    //public partial class WorldObject : MonoBehaviour
+    //public partial class WorldObject : StateMachine
+    public partial class WorldObject : MonoBehaviour
     {
-        [SerializeField] protected NavMeshAgent NavMeshAgent;
-        [SerializeField] protected BehaviorGraphAgent BehaviorAgent = null;
-        public BlackboardReference BlackboardReference => BehaviorAgent.BlackboardReference;
-        //protected CretureStateMachine stateMachine = new CretureStateMachine();
+        public ObjectActionState CurrentState { get; private set; } = ObjectActionState.Idle;
 
-        [SerializeField] protected CharacterHud Hud = null;
+        [SerializeField] protected NavMeshAgent NavMeshAgent;
+        [SerializeField] protected BehaviorGraphAgent BehaviorAgent;
+        [SerializeField] protected CharacterHud Hud;
+
+        // [변경 2] Find("Anchor") 제거 -> 인스펙터 할당 권장
+        [SerializeField] protected Transform AnchorPoint;
+        public BlackboardReference BlackboardReference => BehaviorAgent != null ? BehaviorAgent.BlackboardReference : null;
 
         [System.Flags]
         public enum Direct
@@ -31,51 +33,47 @@ namespace Creature
             Left = 1 << 2, // 0100
             Right = 1 << 3  // 1000
         }
-        
-        public enum ObjectTeam 
-        { 
-            None = 0,
-            Neutral, 
-            Ally, 
-            Enemy 
-        }
 
-
-        public ObjectTeam Team { get; set; } = ObjectTeam.None;
         public Games.TileMap.Datas.Coordinate Coordinate = new();
 
-        [HideInInspector] public Direct Direction { get; set; } = Direct.Down;
+        [HideInInspector] public Direct Direction { get; protected set; } = Direct.Down;
 
         /// <summary>
         /// 스탯.
         /// </summary>
         public Stat Stat { get; set; } = new Stat();
 
-        public struct WorldObjectCreateParam
+        public static WorldObject Create(string path, Transform parent, int x, int z)
         {
-            public string Path;
-            public Transform Parent;
-            public int X;
-            public int Z;
-            public ObjectTeam ObjectTeam;
-        }
+            // [변경 4] 리소스 로드 로직 명확화
+            // LoadInBuild<GameObject>가 프리팹을 리턴한다고 가정합니다.
+            var prefab = ResourcesManager.Instance.LoadBundle(path);
 
-        public static WorldObject Create(WorldObjectCreateParam param)
-        {
-            var go = ResourcesManager.Instance.LoadBundle($"{param.Path}");
-            if (go == null)
-                return null;
-
-            var component = go.GetComponent<WorldObject>();
-            if (component == null)
-                return null;
-
-            var obj = Instantiate(component, param.Parent);
-            if (obj != null && obj.Init(param.X, param.Z, param.ObjectTeam) == true)
+            if (prefab == null)
             {
-                return obj;
+                Debug.LogError($"Failed to load prefab: {path}");
+                return null;
             }
 
+            // 인스턴스 생성
+            var go = Instantiate(prefab, parent);
+            go.name = prefab.name;
+
+            var worldObj = go.GetComponent<WorldObject>();
+            // [수정 3] 컴포넌트가 없거나 초기화 실패 시 처리
+            if (worldObj == null)
+            {
+                Debug.LogError($"[WorldObject] Prefab '{path}' does not have 'WorldObject' component!");
+                Destroy(go); // 껍데기만 남은 오브젝트 파괴
+                return null;
+            }
+
+            if (worldObj.Init(x, z))
+            {
+                return worldObj;
+            }
+
+            // 초기화 실패 시 파괴
             Destroy(go);
             return null;
         }
@@ -87,13 +85,11 @@ namespace Creature
         /// <param name="posZ"></param>
         /// <param name="scale"></param>
         /// <returns></returns>
-        public bool Init(int x, int z, ObjectTeam team)
+        public bool Init(int x, int z)
         {
             Coordinate.X = x;
             Coordinate.Z = z;
             //Coordinate.Y = 0;
-
-            Team = team;
 
             if (NavMeshAgent != null)
             {
@@ -104,21 +100,25 @@ namespace Creature
             transform.position = Coordinate.Position;
             transform.localScale = Vector3.one;
 
-            var anchor = transform.Find("Anchor");
-            if (anchor != null)
+            // 빌보드 처리
+            if (AnchorPoint != null)
             {
-                var camera = AppManager.Instance.CurrScene.MainCamera;
-                anchor.rotation = Quaternion.LookRotation(camera.transform.forward, Vector3.up);
+                var mainCam = Camera.main; // 캐싱된 카메라 매니저가 있다면 그걸 사용
+                if (mainCam != null)
+                {
+                    AnchorPoint.rotation = Quaternion.LookRotation(mainCam.transform.forward, Vector3.up);
+                }
             }
 
             InitSpine();
             InitStat();
             InitHud();
 
-            BehaviorAgent.BlackboardReference.SetVariableValue("Self", gameObject);
-            ChangeState(ObjectActionState.Idle);
-            //_Message.geometrySortingOrder = 100;// GlobalDefine.UI_SORTING_ORDER;
-            //stateMachine.PushState(WorldObjectActionType.Idle);
+            Play("Idle", true);
+
+            if (BlackboardReference != null)
+                BlackboardReference.SetVariableValue("Self", gameObject);
+
             return true;
         }
 
@@ -155,6 +155,20 @@ namespace Creature
             return dir;
         }
 
+        /// <summary>
+        /// Behavior Graph의 Action 노드나 외부에서 호출하여 상태를 갱신
+        /// </summary>
+        public void SetActionState(ObjectActionState newState)
+        {
+            if (CurrentState == newState)
+                return;
+
+            CurrentState = newState;
+
+            // 상태가 바뀔 때 애니메이션 갱신
+            // WorldObject.spine 파셜 클래스의 Play(string, bool)을 호출하기 위한 연결 함수
+            PlayAnimation(CurrentState);
+        }
 
         public void Speak(string msg)
         {
@@ -163,52 +177,5 @@ namespace Creature
 
             Hud.SetMessage(msg);
         }
-
-
-        public override void OnStateEnter(ObjectActionState state)
-        {            // React to event
-            switch (state)
-            {
-                case ObjectActionState.None:
-                    break;
-                case ObjectActionState.Idle:// 일반 상태
-                    Play("Idle", true);
-                    break;
-                case ObjectActionState.Attack:// 공격 상태
-                    Play("Attack1", false);
-                    break;
-                case ObjectActionState.Patrol:// 순찰 상태
-                    Play("Walk", true);
-                    break;
-                case ObjectActionState.Chase:// 추적 상태
-                    Play("Run", true);
-                    break;
-
-
-                    /*
-                case ObjectActionState.Die:// 죽음 상태
-                    Play("Die", false);
-                    break;
-
-                case ObjectActionState.Eat:// 먹기 상태
-                    Play("Attack2", false);
-                    break;
-                case ObjectActionState.Sleep:// 잠자기 상태
-                    Play("Attack2", false);
-                    break;
-                    */
-            }
-        }
-
-        public override void OnStateExit(ObjectActionState state) 
-        { 
-        }
-
-        /*
-        public void ChangeAction(WorldObjectActionType type)
-        {
-            stateMachine.PushState(type);
-        }
-        */
     }
 }

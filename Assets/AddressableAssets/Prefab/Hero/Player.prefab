@@ -51,8 +51,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30102cc2fd32a464795c6657d1512b8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _navMeshAgent: {fileID: 5088090763726303217}
-  _agent: {fileID: 5959529486262718463}
+  NavMeshAgent: {fileID: 5088090763726303217}
+  BehaviorAgent: {fileID: 5959529486262718463}
+  Hud: {fileID: 0}
+  Coordinate:
+    X: 0
+    Z: 0
+    Tile:
+      type: 0
+    Objects: []
   _skel: {fileID: 4497983402430430271}
   _rigidbody: {fileID: 103139441626781162}
 --- !u!210 &3170298581913142521
@@ -345,6 +352,22 @@ PrefabInstance:
     - target: {fileID: 1224318370516533231, guid: bf46d1b7007a4b341a41d96ae8c48d3a, type: 3}
       propertyPath: m_Mesh
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4307532527903329461, guid: bf46d1b7007a4b341a41d96ae8c48d3a, type: 3}
+      propertyPath: skinParts.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4307532527903329461, guid: bf46d1b7007a4b341a41d96ae8c48d3a, type: 3}
+      propertyPath: slotColors.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4307532527903329461, guid: bf46d1b7007a4b341a41d96ae8c48d3a, type: 3}
+      propertyPath: m_EditorClassIdentifier
+      value: Assembly-CSharp::LayerLab.ArtMaker.CharacterPrefabData
+      objectReference: {fileID: 0}
+    - target: {fileID: 4307532527903329461, guid: bf46d1b7007a4b341a41d96ae8c48d3a, type: 3}
+      propertyPath: colorPickerPositions.Array.size
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5931277967455693445, guid: bf46d1b7007a4b341a41d96ae8c48d3a, type: 3}
       propertyPath: m_Name

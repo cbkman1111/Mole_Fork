@@ -2,48 +2,61 @@ using System;
 using Creature;
 using Unity.Behavior;
 using Unity.Properties;
+using UnityEngine;
 using UnityEngine.AI;
 
 [Serializable, GeneratePropertyBag]
 [NodeDescription(name: "Chase", story: "[Agent] Chase [Target]", category: "Action", id: "b1f0179be5752e9a4bd0dfe92ecdbfb0")]
-public partial class ChaseAction : CretureAction
+public partial class ChaseAction : CreatureAction
 {
+    // [설정] 경로 갱신 주기 (초)
+    private const float PathUpdateInterval = 0.2f;
+    private float _timeSinceLastPathUpdate;
 
     protected override Status OnStart()
     {
         base.OnStart();
+
+        // 안전장치
+        if (NavAgent == null || Target.Value == null) 
+            return Status.Failure;
+
         NavAgent.isStopped = false;
+        NavAgent.updateRotation = true; // 회전도 맡김
+
+        // 시작하자마자 이동하도록 초기화
+        _timeSinceLastPathUpdate = PathUpdateInterval;
+
+        //WorldObject.ChangeState(ObjectActionState.Chase);
         return Status.Running;
     }
 
     protected override Status OnUpdate()
     {
-        if (NavAgent == null)
+        if (NavAgent == null) 
             return Status.Failure;
-
-        if (Target.Value == null)
-            return Status.Failure;
-
-        WorldObject.ChangeState(ObjectActionState.Chase);
-        //agent.Stat.GetStat(Creature.Stat.StatType.Weight);
-        var positionTarget = Target.Value.transform.position;
-        var positionAgent = WorldObject.transform.position;
-
-        if (NavAgent.pathPending == false)
+        if (Target.Value == null) 
+            return Status.Failure; // 타겟이 사라지면 보통 실패 처리
+        if (!NavAgent.pathPending)
         {
-            const float stoppingDistance = 0.1f;
-            if (NavMesh.SamplePosition(Target.Value.transform.position, out NavMeshHit hit, 100f, NavMesh.AllAreas))
+            if (NavAgent.remainingDistance <= NavAgent.stoppingDistance)
             {
-                var diff = NavAgent.transform.position - hit.position;
-                if(UnityEngine.Vector3.SqrMagnitude(diff) < stoppingDistance * stoppingDistance)
+                if (!NavAgent.hasPath || NavAgent.velocity.sqrMagnitude == 0f)
                 {
-                    //Target.Value = null;
-                    NavAgent.isStopped = true;
+                    // 도착함
                     return Status.Success;
                 }
-
-                NavAgent.SetDestination(Target.Value.transform.position);
             }
+        }
+
+        // 2. 경로 갱신 (스로틀링 적용)
+        _timeSinceLastPathUpdate += Time.deltaTime;
+        if (_timeSinceLastPathUpdate >= PathUpdateInterval)
+        {
+            _timeSinceLastPathUpdate = 0f;
+
+            // SamplePosition 제거 -> SetDestination이 내부적으로 처리함
+            NavAgent.SetDestination(Target.Value.transform.position);
         }
 
         return Status.Running;
@@ -51,6 +64,12 @@ public partial class ChaseAction : CretureAction
 
     protected override void OnEnd()
     {
+        // NavAgent가 파괴되지 않았고, 게임오브젝트가 활성화 상태일 때만 정지 명령
+        if (NavAgent != null && NavAgent.isActiveAndEnabled && NavAgent.isOnNavMesh)
+        {
+            NavAgent.isStopped = true;
+            NavAgent.ResetPath();
+        }
     }
 }
 

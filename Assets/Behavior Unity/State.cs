@@ -16,7 +16,7 @@ namespace Creature
         //Stop,
         Hit,
         Attack,
-        Dead,
+        Die,
 
         Click, // 클릭했을때 테스트용.
     }

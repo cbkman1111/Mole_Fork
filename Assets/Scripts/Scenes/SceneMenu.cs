@@ -29,9 +29,9 @@ namespace Scenes
         {
             try
             {
-                SoundManager.Instance.Load();
-                DataManager.Instance.Load();
-                ResourcesManager.Instance.Load();
+                //SoundManager.Instance.Load();
+                //DataManager.Instance.Load();
+                //ResourcesManager.Instance.Load();
 
             }
             catch (System.Exception e)

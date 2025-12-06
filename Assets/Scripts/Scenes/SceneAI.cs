@@ -5,9 +5,7 @@ using Common.Table;
 using Common.Utils;
 using Creature;
 using UI.Menu;
-using Unity.Android.Gradle.Manifest;
 using UnityEngine;
-using static Creature.WorldObject;
 
 public class SceneAI : SceneBase
 {
@@ -16,12 +14,11 @@ public class SceneAI : SceneBase
     [SerializeField] private Transform Creatrues;
 
     [SerializeField] private Vector3 offset;
-    
 
     private WorldObjectList listCretures = new();
     private WorldObjectList listProbs = new();
-    private int Width = 5;
-    private int Height = 5;
+    private int Width = 50;
+    private int Height = 50;
 
     public override bool Init(JSONObject param)
     {
@@ -35,10 +32,11 @@ public class SceneAI : SceneBase
 
         CreatePineTree();
         CreateHero();
-        CreateMonsters();
+        //CreateMonsters();
 
         var cretures = listCretures.List();
         var probs = listProbs.List();
+
         foreach (var obj in listCretures)
         {
             var worldObj = obj.GetComponent<WorldObject>();
@@ -60,22 +58,12 @@ public class SceneAI : SceneBase
         {
             var first = tableHero.Data.First();
             var key = first.Key;
-            var data = first.Value;
+            var table = first.Value;
 
             var x = (int)UnityEngine.Random.Range(Width * -0.5f, Width * 0.5f);
             var z = (int)UnityEngine.Random.Range(Height * -0.5f, Height * 0.5f);
-
-            WorldObjectCreateParam param;
-            param.Path = $"{data.PREFAB}";
-            param.Parent = Creatrues;
-            param.X = x;
-            param.Z = z;
-            param.ObjectTeam = ObjectTeam.Enemy;
-            
-            character = WorldObject.Create(param);
-            if (character == null)
-                return;
-
+            character = WorldObject.Create($"{table.PREFAB}", null, x, z);
+            character.transform.SetParent(Creatrues);
             listCretures.Add(character);
         }
 
@@ -94,18 +82,12 @@ public class SceneAI : SceneBase
                 var key = pair.Key;
                 var x = (int)UnityEngine.Random.Range(Width * -0.5f, Width * 0.5f);
                 var z = (int)UnityEngine.Random.Range(Height * -0.5f, Height * 0.5f);
-
-                WorldObjectCreateParam param;
-                param.Path = $"{data.PREFAB}";
-                param.Parent = Creatrues;
-                param.X = x;
-                param.Z = z;
-                param.ObjectTeam = ObjectTeam.Enemy;
-
-                var character = WorldObject.Create(param);
+                var character = WorldObject.Create($"{data.PREFAB}", null, x, z);
                 if (character == null)
+                {
                     continue;
-
+                }
+                character.transform.SetParent(Creatrues);
                 listCretures.Add(character);
             }
         }
@@ -116,37 +98,19 @@ public class SceneAI : SceneBase
 
     private void CreatePineTree()
     {
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 50; i++)
         {
             var x = (int)UnityEngine.Random.Range(Width * -0.5f, Width * 0.5f);
             var z = (int)UnityEngine.Random.Range(Height * -0.5f, Height * 0.5f);
-            
-            WorldObjectCreateParam param;
-            param.Path = $"Assets/AddressableAssets/Prefab/Prob/PineTree.prefab";
-            param.Parent = Woods;
-            param.X = x;
-            param.Z = z;
-            param.ObjectTeam = ObjectTeam.Enemy;
-
-            var tree = WorldObject.Create(param);
+            var tree = WorldObject.Create($"Assets/AddressableAssets/Prefab/Prob/PineTree.prefab", null, x, z);
             if (tree == null)
                 return;
 
             tree.name = $"PineTree_{i}";
+            tree.transform.SetParent(Woods);
             listProbs.Add(tree);
         }
 
-        /*
-        var listGameObject = listProbs.List();
-        foreach (var obj in listProbs)
-        {
-            var worldObj = obj.GetComponent<WorldObject>();
-            if (worldObj != null)
-            {
-                worldObj.BlackboardReference.SetVariableValue("Probs", listGameObject);
-            }
-        }
-        */
     }
 
     private void SetCameraTarget(Transform target)
@@ -166,7 +130,6 @@ public class SceneAI : SceneBase
 
             int index = UnityEngine.Random.Range(0, listCretures.Count);
             SetCameraTarget(listCretures[index].transform);
-
         }
         else if (name == "Button - 2")
         {
