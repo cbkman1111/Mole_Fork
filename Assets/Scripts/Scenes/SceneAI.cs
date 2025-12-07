@@ -20,8 +20,8 @@ public class SceneAI : SceneBase
 
     private WorldObjectList listCretures = new();
     private WorldObjectList listProbs = new();
-    private int Width = 5;
-    private int Height = 5;
+    private int Width = 100;
+    private int Height = 100;
 
     public override bool Init(JSONObject param)
     {
@@ -116,7 +116,7 @@ public class SceneAI : SceneBase
 
     private void CreatePineTree()
     {
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 1000; i++)
         {
             var x = (int)UnityEngine.Random.Range(Width * -0.5f, Width * 0.5f);
             var z = (int)UnityEngine.Random.Range(Height * -0.5f, Height * 0.5f);
