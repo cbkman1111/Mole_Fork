@@ -39,6 +39,7 @@ namespace Gostop
             }
 
             board.StartGame();
+            board.RunCommandCoroutine();
             return TaskStatus.Failure;
         }
     }

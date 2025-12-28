@@ -36,6 +36,11 @@ namespace Gostop
             CommandInfo = commandProcedure.MoveNext();
         }
 
+
+        public void RunCommandCoroutine()
+        {
+            MEC.Timing.RunCoroutine(CommandCoroutine());
+        }
         /// <summary>
         /// 움직이는 카드 존재 확인.
         /// </summary>
@@ -49,11 +54,21 @@ namespace Gostop
 
         float updateDelta = 0.0f;
 
+        private IEnumerator<float> CommandCoroutine()
+        {
+            while (true)
+            {
+                CommandProcedure();
+
+                yield return MEC.Timing.WaitForSeconds(0.025f);
+            }
+        }
+
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        private void LateUpdate()
+        private void CommandProcedure()
         { 
             if(commandProcedure == null)
                 return;
@@ -61,11 +76,6 @@ namespace Gostop
             if (CommandInfo == null)
                 return;
 
-            updateDelta += Time.deltaTime;
-            if (updateDelta < 0.1f)
-                return;
-
-            updateDelta = 0f;
 
             Command commandType = CommandInfo.CommandType;
             switch (commandType)
@@ -273,19 +283,18 @@ namespace Gostop
                         onStart: () => {
                             if (turnUser == Player.Enemy)
                             {
-                                int turnIndex = (int)turnUser;
-                                var list = GetSameMonthCard(turnIndex, hands[turnIndex][0]);
+                                var list = GetSameMonthCard((int)Player.Enemy, hands[(int)Player.Enemy][0]);
                                 if (list.Count == 3) // 폭탄
                                 {
-                                    HitBomb(turnIndex, list, list[0]);
+                                    HitBomb((int)Player.Enemy, list, list[0]);
                                 }
                                 else if (list.Count == 4) // 총통
                                 {
-                                    HitChongtong(turnIndex, list, list[0]);
+                                    HitChongtong((int)Player.Enemy, list, list[0]);
                                 }
                                 else
                                 {
-                                    HitCard(turnIndex, hands[turnIndex][0]);
+                                    HitCard((int)Player.Enemy, hands[(int)Player.Enemy][0]);
                                 }
                             }
                         },
@@ -293,16 +302,6 @@ namespace Gostop
                             // 칠때까지 대기.
                             if (CommandInfo.Info.isHit == false)
                                 return false;
-
-                            // 조커를 낸 경우면 조금 기다렸다가 패 훔쳐오기 처리.
-                            if(CommandInfo.Info.hit.Month == 13)
-                            {
-                                CommandInfo.Info.delta += Time.deltaTime;
-                                if(CommandInfo.Info.delta < 0.1f)
-                                {
-                                    return false;
-                                }
-                            }
                             
                             int count = GetMoveAllCount();
                             return count == 0;
@@ -323,10 +322,6 @@ namespace Gostop
                     CommandInfo.Execute(
                         onStart: () => {
                             CommandInfo.Info.popCard = PopDeckCard();
-                            if(CommandInfo.Info.popCard == null)
-                            {
-                                Debug.LogError("PopDeckCard() return null.");
-                            }
                         },
                         onUpdate: () => {
                             if (CommandInfo.Info.popCard &&
@@ -348,8 +343,6 @@ namespace Gostop
                     CommandInfo.Execute(
                         onStart: () => {
                             CommandInfo.Info.popCard = PopDeckCard(turnUser);
-                            if(CommandInfo.Info.popCard == null)
-                                Debug.LogError("PopDeckCard is null");
                         },
                         onUpdate: () => {
                             int count = GetMoveAllCount();
@@ -426,8 +419,7 @@ namespace Gostop
                     CommandInfo.Execute(
                         onStart: () => TackeCardToScore(),
                         onUpdate: () => {
-                            CommandInfo.Info.delta += Time.deltaTime;
-                            return CommandInfo.Info.delta > 0.2f;
+                            return true;
                         },
                         onComplete: () => {
                             // 주인 없는 카드로 설정.
@@ -451,7 +443,7 @@ namespace Gostop
 
                             foreach (var card in listEat)
                             {
-                                TackCard(card, total - count); // 카드 획득.
+                                TackCard(card, total - count, complete: () => { card.IsAnimating = false; }); // 카드 획득.
                                 count++;
                             }
 

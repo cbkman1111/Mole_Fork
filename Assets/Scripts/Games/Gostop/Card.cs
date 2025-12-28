@@ -98,11 +98,12 @@ namespace Gostop
 
             Height = boxCollider.size.y;
             Width = boxCollider.size.x;
-            gameObject.name = $"{Month}M_{Num}_{KindOfCard}"; // 디버깅 편하게 이름 변경
 
             SetCardType(Num);
-            SetOpen(false);
+            SetOpen(false, null);
             SetEnablePhysics(false);
+
+            gameObject.name = $"{Month}M_{Num}_{KindOfCard}"; // 디버깅 편하게 이름 변경
             return true;
         }
         public bool ReplaceCard(int num, Sprite sprite)
@@ -235,27 +236,34 @@ namespace Gostop
             sequence.SetDelay(delay)
                .SetEase(ease)
                .OnComplete(() => {
-                   IsAnimating = false;
-                   complete?.Invoke();
+
+                   if (complete != null)
+                       complete();
+ 
                });
         }
 
-        public void JumpTo(Vector3 position, float jumpPower = 2.0f, Ease ease = Ease.OutQuad, float time = 0.5f, float delay = 0f, Action complete = null)
+        public void JumpTo(Vector3 position, Vector3 scale, float jumpPower = 2.0f, Ease ease = Ease.OutQuad, float time = 0.5f, float delay = 0f, Action complete = null)
         {
             IsAnimating = true;
             transform.DOKill();
-            transform.DOJump(position, jumpPower, 1, time)
-                .SetDelay(delay)
+
+            var sequence = DOTween.Sequence();
+            sequence.Join(transform.DOJump(position, jumpPower, 1, time));
+            sequence.Join(transform.DOScale(scale, time));
+            sequence.SetDelay(delay)
                 .SetEase(ease)
                 .OnComplete(() => {
-                    complete?.Invoke();
-                    IsAnimating = false;
+
+                    if (complete != null)
+                        complete();
+  
                 });
         }
 
-        public void SetOpen(bool open)
+        public void SetOpen(bool open, Action complete)
         {
-            RotateCard(new Vector3(0, 0, 180), 0, 0, null);
+            RotateCard(new Vector3(0, 0, open == true ? 180 : 0), 0, 0, complete);
         }
 
         public void CardOpen(float time = 0.1f, float delay = 0.0f, Action complete = null)
@@ -271,7 +279,7 @@ namespace Gostop
         private void RotateCard(Vector3 targetAngle, float time, float delay, Action complete)
         {
             // [중요] 돌기 전에 물리 끄기 (안 그러면 바닥이랑 충돌해서 떼굴떼굴 구름)
-            SetEnablePhysics(false);
+            //SetEnablePhysics(false);
 
             IsAnimating = true;
             var child = transform.GetChild(0);
@@ -281,8 +289,10 @@ namespace Gostop
                 .OnComplete(() => {
                     // 다 돌고 나면 물리 다시 켜기 (필요한 경우만)
                     SetEnablePhysics(true); 
-                    complete?.Invoke();
-                    IsAnimating = false;
+                    
+                    if (complete != null)
+                        complete();
+ 
                 });
         }
 

@@ -96,7 +96,8 @@ namespace Gostop
             foreach (var card in cardsToSteal)
             {
                 targetScoreList.Remove(card);
-                TackCard(card); // 내 패로 가져오는 함수 (비동기 연출 등 포함 가능)
+                TackCard(card, 
+                    complete: () => { card.IsAnimating = false; }); // 내 패로 가져오는 함수 (비동기 연출 등 포함 가능)
                 break;
             }
 
@@ -189,7 +190,10 @@ namespace Gostop
                         card.MoveTo(
                             handPosition,
                             handScale,
-                            time: 0.1f);
+                            time: 0.1f,
+                            complete: () => {
+                                card.IsAnimating = false;
+                            });
                     }
 
                 }
@@ -413,8 +417,11 @@ namespace Gostop
                     var dest = new Vector3(Deck.x, Deck.y + height * i, Deck.z);
 
                     card.transform.position = Deck;
-                    card.SetOpen(false);
-                    card.MoveTo(dest, Vector3.one, time: setting.DeckCardTime, delay: i * 0.01f);
+                    card.SetOpen(false, null);
+                    card.MoveTo(dest, Vector3.one, time: setting.DeckCardTime, delay: i * 0.01f,
+                        complete: () => {
+                        card.IsAnimating = false;
+                    });
                 }
             }
 
@@ -445,10 +452,12 @@ namespace Gostop
                     time: setting.SuffleCardTime,
                     delay: i * setting.SuffleCardInterval, 
                     complete: () => {
-                        card.SetEnablePhysics(true);
+                        //card.SetEnablePhysics(true);
                     });
 
-                card.CardOpen(0.1f);
+                card.CardOpen(0.1f, complete: () => {
+                    card.IsAnimating = false;
+                });
                 slot.Value.Add(card);
             }
         }
@@ -474,7 +483,8 @@ namespace Gostop
                         position,
                         Vector3.one,
                         time: setting.SuffleCardTime,
-                        delay: user * 0.2f + i * setting.SuffleCardInterval);
+                        delay: user * 0.2f + i * setting.SuffleCardInterval, 
+                        complete: () => { card.IsAnimating = false; });
 
                     card.Owner = (Player)user;
                     hands[user].Add(card);
@@ -496,7 +506,7 @@ namespace Gostop
                 for (int i = list.Count - 1; i >= 0; --i)
                 {
                     var card = list[i];
-                    TackCard(card, list.Count - i);
+                    TackCard(card, list.Count - i, complete: () => { card.IsAnimating = false; });
                     slot.Value.Remove(card);
                     
                     count++;
@@ -524,8 +534,7 @@ namespace Gostop
 
                 foreach (var card in cardList)
                 {
-                    card.CardOpen(setting.FlipTime);
-                    card.SetEnablePhysics(true);
+                    card.CardOpen(setting.FlipTime, complete: ()=> { card.IsAnimating = false; });
                 }
             }
 
@@ -553,7 +562,8 @@ namespace Gostop
                         slot.position,
                         slot.localScale,
                         time: setting.HandUpTime,
-                        delay: i * setting.HandUpDelay);
+                        delay: i * setting.HandUpDelay, 
+                        complete: () => { card.IsAnimating = false; });
                 }
             }
 
@@ -569,14 +579,14 @@ namespace Gostop
             for (int index = 0; index < hands[(int)Player.Me].Count; index++)
             {
                 Card card = hands[(int)Player.Me][index];
-                card.ShowMe(delay: index * 0.2f);
+                card.ShowMe(delay: index * 0.2f, complete:() => { card.IsAnimating = false; });
                 //card.SetShadow(false);
             }
 
             for (int index = 0; index < hands[(int)Player.Enemy].Count; index++)
             {
                 Card card = hands[(int)Player.Enemy][index];
-                card.SetOpen(true);
+                card.ShowMe(delay: index * 0.2f, complete: () => { card.IsAnimating = false; });
                 //card.SetShadow(false);
             }
 
@@ -640,7 +650,7 @@ namespace Gostop
                         //Card card = ResourcesManager.Instance.InstantiateInBuild<Card>(pathCard);
                         if (card != null)
                         {
-                            card.Init(52, spriteBomb);
+                            card.Init(56, spriteBomb);
                             card.transform.position = list[i].transform.position;
                             card.transform.rotation = list[i].transform.rotation;
                             hands[user].Add(card);
@@ -713,15 +723,13 @@ namespace Gostop
                     Vector3 destination2 = cardPosition[slot.Key - 1].position +
                         new Vector3(randX, stackCount * card.Height, randZ);
 
-                    //card.SetShadow(true);
-               
                     if (card.Month == 13) // 조커 카드.
                     {
                         playInfo.isHit = true;
                         playInfo.hit = card;
                         stealCount += 1;
 
-                        TackCard(card, 1); // 카드 획득.
+                        TackCard(card, 1, complete: () => { card.IsAnimating = false; }); // 카드 획득.
                     }
                     else if (card.Month == 14) // 폭탄 공짜 카드.
                     {
@@ -737,9 +745,10 @@ namespace Gostop
                         playInfo.hit = card;
                         
                         slot.Value.Add(card);
+
                         card.MoveTo( // 카드를 위로 뽑아서.
                             destination1,
-                            Vector3.one * 2,
+                            Vector3.one * 3,
                             time: setting.HitUpTime,
                             ease: DG.Tweening.Ease.InExpo,
                             complete: () => {
@@ -752,8 +761,7 @@ namespace Gostop
                                     delay: delay,
                                     complete: () =>
                                     {
-                                        card.SetEnablePhysics(true);
-                                        ExplosionEffect(card);
+                                        card.IsAnimating = false;
                                     });
                             });
                     }
@@ -839,7 +847,7 @@ namespace Gostop
             scores[user].Add(card);
 
             // JumpTo (DOMove + 포물선)
-            card.JumpTo(end, jumpPower: 2f, time: 0.5f, delay: count * interval, complete: complete);
+            card.JumpTo(end, Vector3.one, jumpPower: 2f, time: 0.5f, delay: count * interval, complete: complete);
         }
 
         /// <summary>
@@ -1034,8 +1042,7 @@ namespace Gostop
         public Card PopDeckCard()
         {
             Card card = deck.Pop();
-            card.ShowMe(time: 1);
-            //card.SetShadow(false);
+            card.SetOpen(true, null);
             card.Owner = (Player)turnUser;
 
             hands[(int)turnUser].Add(card);
@@ -1091,20 +1098,21 @@ namespace Gostop
                             new Vector3(randX + (stackCount * card.Width * 0.2f), stackCount * card.Height, randZ);
 
                 card.Owner = owner;
-                card.CardOpen(time: 0.1f);
+                card.CardOpen(time: 0.2f);
                 card.MoveTo(
                     destination1,
                     Vector3.one * 2,
                     time: 0.1f,
                     ease: DG.Tweening.Ease.OutCubic,
                     complete: () => {
+
                       card.MoveTo(
                         destination2,
                         Vector3.one,
                         time: 0.1f,
                         ease: DG.Tweening.Ease.InQuad,
                         complete: () => {
-                            card.SetEnablePhysics(true);
+                            card.IsAnimating = false;
                         });
                     });
 

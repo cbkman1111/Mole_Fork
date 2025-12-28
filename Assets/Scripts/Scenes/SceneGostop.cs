@@ -29,6 +29,7 @@ namespace Scenes
 
             board.Init(UpdateScore);
             board.StartGame();
+            board.RunCommandCoroutine();
             return true;
         }
 
@@ -63,7 +64,6 @@ namespace Scenes
                         {
                             if (board.MyTurn() == true)
                             {
-                                
                                 var list = board.GetSameMonthCard((int)Gostop.Board.Player.Me, card);
                                 if (list.Count == 3)
                                 {
