@@ -32,7 +32,7 @@ namespace UI.Menu
             string name = btn.name;
             if (name.CompareTo("Button - Back") == 0)
             {
-                AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneMenu);
+                AppManager.Instance.ChangeScene(Common.Scenes.SceneMenu);
             }
             else if (name.CompareTo("Button - Ok") == 0)
             {
@@ -58,13 +58,13 @@ namespace UI.Menu
             {
                 JSONObject jsonParam = new JSONObject();
                 jsonParam.SetField("map_no", 4);
-                AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneAntHouse, param: jsonParam);
+                AppManager.Instance.ChangeScene(Common.Scenes.SceneAntHouse, param: jsonParam);
             }
             else if (name.CompareTo("Button - Map 3") == 0)
             {
                 JSONObject jsonParam = new JSONObject();
                 jsonParam.SetField("map_no", 3);
-                AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneAntHouse, param: jsonParam);
+                AppManager.Instance.ChangeScene(Common.Scenes.SceneAntHouse, param: jsonParam);
             }
         }
     }

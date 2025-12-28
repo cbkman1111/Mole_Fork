@@ -160,7 +160,7 @@ namespace UI.Menu
             string name = btn.name;
             if (name == "Button - Back")
             {
-                AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneMenu);
+                AppManager.Instance.ChangeScene(Common.Scenes.SceneMenu);
             }
             else if (name == "Button - CreateObject")
             {

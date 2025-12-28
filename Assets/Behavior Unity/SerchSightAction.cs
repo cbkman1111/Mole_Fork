@@ -41,6 +41,9 @@ public partial class SerchSightAction : CretureAction
         //for (int i = 0; i < nearbyObjects.Count; i++){}
 
         var index = UnityEngine.Random.Range(0, nearbyObjects.Count);
+        if (nearbyObjects.Count == 0)
+            return Status.Failure;
+
         var gobject = nearbyObjects[index];
         /*
         if (LastTarget == null)

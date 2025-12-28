@@ -26,7 +26,7 @@ namespace Gostop
 
             var scene = AppManager.Instance.CurrScene as SceneGostop;
             var board = GetComponent<Board>();
-            int count = board.deck.Where(card => card.ListTween.Count != 0).ToList().Count;
+            int count = board.deck.Where(card => card.IsAnimating == true).ToList().Count;
             if (count == 0)
             {
                 return TaskStatus.Success;

@@ -12,10 +12,8 @@ namespace Scenes
     /// </summary>
     public class SceneGostop : SceneBase
     {
-        [SerializeField]
-        public Board board = null;
-        [SerializeField]
-        private TextMeshPro[] Score = new TextMeshPro[(int)Board.Player.Max];
+        [SerializeField] public Board board = null;
+        [SerializeField] private TextMeshPro[] Score = new TextMeshPro[(int)Board.Player.Max];
 
         /// <summary>
         /// 씬 초기화.
@@ -42,6 +40,7 @@ namespace Scenes
         private void UpdateScore(Board.Player player, Score score)
         {
             int index = (int)player;
+
             Score[index].SetText($"{score.total} 점");
         }
 
@@ -60,22 +59,23 @@ namespace Scenes
                     Card card = hit.collider.GetComponent<Card>();
                     if (card != null)
                     {
-                        if (board.CommandInfo.type == Command.HitCard)
+                        if (board.CommandInfo.CommandType == Command.HitCard)
                         {
                             if (board.MyTurn() == true)
                             {
-                                var list = board.GetSameMonthCard((int)Board.Player.Player, card);
+                                
+                                var list = board.GetSameMonthCard((int)Gostop.Board.Player.Me, card);
                                 if (list.Count == 3)
                                 {
-                                    board.HitBomb((int)Board.Player.Player, list, card);
+                                    board.HitBomb((int)Gostop.Board.Player.Me, list, card);
                                 }
                                 else if (list.Count == 4) // 총통
                                 {
-                                    board.HitChongtong((int)Board.Player.Player, list, card);
+                                    board.HitChongtong((int)Gostop.Board.Player.Me, list, card);
                                 }
                                 else
                                 {
-                                    board.HitCard((int)Board.Player.Player, card);
+                                    board.HitCard((int)Gostop.Board.Player.Me, card);
                                 }
                             }
                         }

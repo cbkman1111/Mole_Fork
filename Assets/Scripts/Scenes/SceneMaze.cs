@@ -652,7 +652,7 @@ namespace Scenes
             var popup = UIManager.Instance.OpenPopup<UIPopupNormal>();
             popup.SetUI();
             popup.SetOnClose(() => {
-                AppManager.Instance.ChangeScene(Scenes.SceneMenu);
+                AppManager.Instance.ChangeScene(Common.Scenes.SceneMenu);
             });
         }
 

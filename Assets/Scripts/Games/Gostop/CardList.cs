@@ -23,7 +23,7 @@ namespace Gostop
 
         public int MoveCount()
         {
-            return this.Where(c => c.ListTween.Count != 0).ToList().Count;
+            return this.Where(c => c.IsAnimating == true).ToList().Count;
         }
 
         public List<Card> SameList(Card card)
@@ -43,7 +43,7 @@ namespace Gostop
 
         public void OrderByNum()
         {
-            this.OrderBy(card => card.Num).ToList();
+            this.Sort((a, b) => a.Num.CompareTo(b.Num));
         }
     }
 }

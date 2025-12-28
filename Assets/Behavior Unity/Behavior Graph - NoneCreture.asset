@@ -79,15 +79,66 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Behavior::Unity.Behavior.BehaviorGraph
   Graphs:
   - rid: 3553149182742626556
-  RootGraph:
-    rid: 3553149182742626556
   m_DebugInfo: {fileID: 2566415642343236659}
+  m_WasCompileWithPlaceholderNode: 0
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 3553149182742626553
+    - rid: 341364874059186312
+      type: {class: Start, ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        ID:
+          m_Value0: 15209505045607387152
+          m_Value1: 16805164049892323625
+        Graph:
+          rid: 3553149182742626556
+        m_Parent:
+          rid: -2
+        m_Child:
+          rid: 341364874059186313
+        Repeat: 1
+        AllowMultipleRepeatsPerTick: 0
+    - rid: 341364874059186313
+      type: {class: SequenceComposite, ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        ID:
+          m_Value0: 1000128565824626291
+          m_Value1: 16034558881042704379
+        Graph:
+          rid: 3553149182742626556
+        m_Parent:
+          rid: 341364874059186312
+        m_Children:
+        - rid: 341364874059186315
+    - rid: 341364874059186314
+      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 1
+          m_Value1: 0
+        Name: Self
+        m_Value: {fileID: 0}
+    - rid: 341364874059186315
+      type: {class: IdleAction, ns: , asm: Assembly-CSharp}
+      data:
+        ID:
+          m_Value0: 4880252011041705333
+          m_Value1: 8262989834382469555
+        Graph:
+          rid: 3553149182742626556
+        m_Parent:
+          rid: 341364874059186313
+        Agent:
+          rid: 341364874059186314
+        Target:
+          rid: 341364874059186316
+        Cretures:
+          rid: 341364874059186317
+        Probs:
+          rid: 341364874059186318
+    - rid: 341364874059186316
       type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         GUID:
@@ -95,7 +146,7 @@ MonoBehaviour:
           m_Value1: 0
         Name: 
         m_Value: {fileID: 0}
-    - rid: 3553149182742626554
+    - rid: 341364874059186317
       type: {class: 'BlackboardVariable`1[[System.Collections.Generic.List`1[[UnityEngine.GameObject, UnityEngine.CoreModule]], mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         GUID:
@@ -103,7 +154,7 @@ MonoBehaviour:
           m_Value1: 0
         Name: 
         m_Value: []
-    - rid: 3553149182742626555
+    - rid: 341364874059186318
       type: {class: 'BlackboardVariable`1[[System.Collections.Generic.List`1[[UnityEngine.GameObject, UnityEngine.CoreModule]], mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         GUID:
@@ -117,39 +168,25 @@ MonoBehaviour:
         AuthoringAssetID:
           m_Value0: 13034854482417546375
           m_Value1: 10491016806676758618
-        m_DebugInfo: {fileID: 0}
+        m_DebugInfo: {fileID: 2566415642343236659}
         BlackboardReference:
           rid: 3553149182742626557
         BlackboardGroupReferences: []
         Root:
-          rid: 3553149182742626558
+          rid: 341364874059186312
         m_ActiveNodes: []
         m_NodesToTick: []
         m_NodesToEnd:
           rid: 3553149182742626559
         m_EndedNodes:
           rid: 3553149182742626560
-        m_VersionTimestamp: 638963148668360999
+        m_VersionTimestamp: 639023748155625200
     - rid: 3553149182742626557
       type: {class: BlackboardReference, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         m_Blackboard:
           rid: 3553149182742626561
         m_Source: {fileID: -4043100948161104911}
-    - rid: 3553149182742626558
-      type: {class: Start, ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        ID:
-          m_Value0: 15209505045607387152
-          m_Value1: 16805164049892323625
-        Graph:
-          rid: 3553149182742626556
-        m_Parent:
-          rid: -2
-        m_Child:
-          rid: 3553149182742626562
-        Repeat: 1
-        AllowMultipleRepeatsPerTick: 0
     - rid: 3553149182742626559
       type: {class: 'Stack`1[[Unity.Behavior.Node, Unity.Behavior]]', ns: System.Collections.Generic, asm: mscorlib}
       data: 
@@ -160,45 +197,7 @@ MonoBehaviour:
       type: {class: Blackboard, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         m_Variables:
-        - rid: 3553149182742626563
-    - rid: 3553149182742626562
-      type: {class: SequenceComposite, ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        ID:
-          m_Value0: 1000128565824626291
-          m_Value1: 16034558881042704379
-        Graph:
-          rid: 3553149182742626556
-        m_Parent:
-          rid: 3553149182742626558
-        m_Children:
-        - rid: 3553149182742626564
-    - rid: 3553149182742626563
-      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 1
-          m_Value1: 0
-        Name: Self
-        m_Value: {fileID: 0}
-    - rid: 3553149182742626564
-      type: {class: IdleAction, ns: , asm: Assembly-CSharp}
-      data:
-        ID:
-          m_Value0: 4880252011041705333
-          m_Value1: 8262989834382469555
-        Graph:
-          rid: 3553149182742626556
-        m_Parent:
-          rid: 3553149182742626562
-        Agent:
-          rid: 3553149182742626563
-        Target:
-          rid: 3553149182742626553
-        Cretures:
-          rid: 3553149182742626554
-        Probs:
-          rid: 3553149182742626555
+        - rid: 341364874059186314
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -217,7 +216,8 @@ MonoBehaviour:
   - rid: 3553149110866935924
   - rid: 3553149182742626452
   - rid: 3553149182742626506
-  m_VersionTimestamp: 638963148668360999
+  m_VersionTimestamp: 639023748155625200
+  m_SerializedVersion: 1
   m_DebugInfo: {fileID: 2566415642343236659}
   m_RuntimeGraph: {fileID: -2877978443116298510}
   AssetID:
@@ -230,13 +230,18 @@ MonoBehaviour:
   m_NodeModelsInfo:
   - Name: On Start
     Story: 
+    RuntimeTypeString: Unity.Behavior.Start, Unity.Behavior, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
     RuntimeTypeID:
       m_Value0: 3335272451348827663
       m_Value1: 11549843281177505721
     Variables: []
     NamedChildren: []
+    IsPlaceholder: 0
   - Name: Idle
     Story: '[Agent]  Idle'
+    RuntimeTypeString: IdleAction, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
     RuntimeTypeID:
       m_Value0: 5700513060610512876
       m_Value1: 9048764452738492711
@@ -264,59 +269,25 @@ MonoBehaviour:
           mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
       Tooltip: 
     NamedChildren: []
+    IsPlaceholder: 0
   - Name: Sequence
     Story: 
+    RuntimeTypeString: Unity.Behavior.SequenceComposite, Unity.Behavior, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
     RuntimeTypeID:
       m_Value0: 10181448252506100447
       m_Value1: 8737116843063128493
     Variables: []
     NamedChildren: []
-  - Name: Speak
-    Story: '[Agent] Speak [Message]'
-    RuntimeTypeID:
-      m_Value0: 14750811716573443680
-      m_Value1: 9434572747454077716
-    Variables:
-    - Name: Agent
-      Type:
-        m_SerializableType: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
-      Tooltip: 
-    - Name: Message
-      Type:
-        m_SerializableType: System.String, mscorlib, Version=4.0.0.0, Culture=neutral,
-          PublicKeyToken=b77a5c561934e089
-      Tooltip: 
-    NamedChildren: []
-  - Name: Wait (Seconds)
-    Story: Wait for [SecondsToWait] seconds
-    RuntimeTypeID:
-      m_Value0: 7729581452106168333
-      m_Value1: 8820302366443624372
-    Variables:
-    - Name: SecondsToWait
-      Type:
-        m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
-          PublicKeyToken=b77a5c561934e089
-      Tooltip: 
-    NamedChildren: []
-  - Name: Time Out
-    Story: Time out after [Duration] seconds
-    RuntimeTypeID:
-      m_Value0: 4725243088229644710
-      m_Value1: 8959865044334223964
-    Variables:
-    - Name: Duration
-      Type:
-        m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
-          PublicKeyToken=b77a5c561934e089
-      Tooltip: 
-    NamedChildren: []
+    IsPlaceholder: 0
   m_Blackboards: []
   m_MainBlackboardAuthoringAsset: {fileID: -5190085610325415679}
   m_CommandBuffer:
     m_Commands: []
   m_SubgraphsInfo: []
+  m_BlackboardMissingManagedRef: 0
+  m_GraphMissingManagedRef: 0
+  m_HasMissingTypeInManagedRef: 0
   references:
     version: 2
     RefIds:

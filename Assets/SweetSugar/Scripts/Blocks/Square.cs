@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 using SweetSugar.Scripts.Core;
 using SweetSugar.Scripts.Effects;
 using SweetSugar.Scripts.Items;
@@ -1765,9 +1766,13 @@ namespace SweetSugar.Scripts.Blocks
 
         public Square DeepCopy()
         {
-            var other = (Square)MemberwiseClone();
-            other.Item = Item.DeepCopy();
-            return other;
+            //var other = (Square)MemberwiseClone();
+            //other.Item = Item.DeepCopy();
+            // 나를 텍스트로 바꿨다가 -> 다시 새 객체로 생성
+            string json = JsonConvert.SerializeObject(this);
+            return JsonConvert.DeserializeObject<Square>(json);
+
+            //return other;
         }
         
         public GameObject GetMarmaladeTarget

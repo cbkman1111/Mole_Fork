@@ -98,7 +98,7 @@ namespace Giant.Shooting
 
             Map.SetActive(false);
 
-            MapDungeon = ResourcesManager.Instance.InstantiateAsync<Map>(path, null, Vector3.zero, Quaternion.identity);
+            MapDungeon = ResourcesManager.Instance.InstantiateSync<Map>(path, null);
             MapDungeon.Init();
             MapDungeon.OnTeleport += OnTelepotHome;
 

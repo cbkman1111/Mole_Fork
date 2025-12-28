@@ -46,7 +46,7 @@ namespace UI.Menu
             string name = btn.name;
             if (name == "Button - Back")
             {
-                AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneMenu);
+                AppManager.Instance.ChangeScene(Common.Scenes.SceneMenu);
             }
             else if (name == "Button - Fold")
             {
@@ -81,7 +81,7 @@ namespace UI.Menu
                     switch (GlobalGameManager.Instance.PockerGameData.State)
                     {
                         /*
-                        case SevenPokerState.Start: 
+                        case SevenPokerState.onStart: 
                             GlobalGameManager.Instance.PockerGameData.State = SevenPokerState.CardDeal3;
                             break;
                         */

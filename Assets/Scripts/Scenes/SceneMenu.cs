@@ -31,7 +31,7 @@ namespace Scenes
             {
                 SoundManager.Instance.Load();
                 DataManager.Instance.Load();
-                ResourcesManager.Instance.Load();
+                //ResourcesManager.Instance.Load();
 
             }
             catch (System.Exception e)

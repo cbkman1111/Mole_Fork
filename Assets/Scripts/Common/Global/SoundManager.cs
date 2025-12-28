@@ -38,7 +38,7 @@ namespace Common.Global
             if (loaded == true)
                 return false;
 
-            AudioClip[] clips = ResourcesManager.Instance.LoadnBuildAllI<AudioClip>("Sounds");
+            AudioClip[] clips = ResourcesManager.Instance.LoadAllInBuild<AudioClip>("Sounds");
             foreach (var clip in clips)
             {
                 soundTable.Add(clip.name, clip);

@@ -50,24 +50,24 @@ namespace Gostop
         Start,
         Progress,
         Done,
+        Next,
     }
 
+    [System.Serializable] // 인스펙터에서 보려고 추가
     public class PlayInfo
     {
-        public int index; // 턴 횟수.
-        public Board.Player user; // 턴 유저.
+        public int turnIndex;           // 몇 번째 턴인가
+        public Board.Player player;     // 행동 주체
         public Card popCard; // 덱에서 꺼낸 정보.
         public Card hit; // 최초 친 카드.
-        public bool hited = false; // 쳤는가.
+        public bool isHit = false; // 쳤는가.
         public float delta = 0.0f; // 시간.
-        public PlayInfo(int num = 0)
+
+        public PlayInfo(Board.Player player = Board.Player.None)
         {
-            index = num;
-            popCard = null;
-            hit = null;
-            hited = false; // 쳤는가.
-            user = Board.Player.None;
-            delta = 0.0f;
+            this.player = player;
+            this.turnIndex = 0;
+            this.isHit = false;
         }
     }
 
@@ -75,45 +75,49 @@ namespace Gostop
     /// <summary>
     /// 
     /// </summary>
+    [System.Serializable] // 인스펙터에서 보려고 추가
     public class CommandInfo
     {
-        public Command type;
-        public CommandStep step;
-        public PlayInfo info;
+        public Command CommandType { get; private set; }
+        public CommandStep Step { get; set; }
+        public PlayInfo Info { get; private set; }
 
-        public CommandInfo()
+        public CommandInfo(Command type, Board.Player player)
         {
-            type = Command.None;
-            step = CommandStep.None;
-            info = new PlayInfo();
+            CommandType = type;
+            Step = CommandStep.None;
+            Info = new PlayInfo(player);
         }
 
         /// <summary>
-        /// 시작, 트리거 리턴 ture, 완료 순으로 호출되며 상태를 처리합니다.
+        /// 상태머신 처리: Start -> Progress(반복) -> Done
         /// </summary>
-        /// <param name="start"></param>
-        /// <param name="check"></param>
-        /// <param name="complete"></param>
-        public void Process(Action start, Func<bool> check, Action complete)
+        /// <returns>명령이 완전히 끝났으면 true 반환</returns>
+        public void Execute(Action onStart, Func<bool> onUpdate, Action onComplete)
         {
-            switch (step)
+            switch (Step)
             {
                 case CommandStep.None:
-                    step = CommandStep.Start;
+                    Step = CommandStep.Start;
                     break;
 
                 case CommandStep.Start:
-                    step = CommandStep.Progress;
-                    start();
+                    onStart?.Invoke(); // 시작 로직 실행
+                    Step = CommandStep.Progress;
                     break;
 
                 case CommandStep.Progress:
-                    if (check() == true)
-                        step = CommandStep.Done;
+                    var done = onUpdate.Invoke();
+                    if(done == true)
+                        Step = CommandStep.Done;
                     break;
 
                 case CommandStep.Done:
-                    complete();
+                    onComplete?.Invoke(); // 종료 로직 실행
+                    Step = CommandStep.Next;
+                    break;
+
+                default:
                     break;
             }
         }
@@ -121,66 +125,44 @@ namespace Gostop
 
     public class CommandProcedure
     {
-        public Queue<CommandInfo> QueueCommand { get; set; }
+        private Queue<CommandInfo> _commandQueue = new Queue<CommandInfo>();
 
-        public static CommandProcedure Create()
+        // 현재 실행 중인 명령 (디버깅용)
+        public CommandInfo CurrentCommand { get; private set; }
+
+        // [싱글턴 대신 프로퍼티 접근 권장] 
+        // 외부에서 참조가 필요하다면 CurrentCommand.Info를 쓰도록 유도
+
+        public CommandProcedure()
         {
-            CommandProcedure ret = new CommandProcedure();
-            if (ret != null && ret.Init() == true)
-            {
-                return ret;
-            }
-
-            return null;
-        }
-
-        public bool Init()
-        {
-            QueueCommand = new ();
-            return true;
+            _commandQueue.Clear();
         }
 
         public void Clear()
         {
-            QueueCommand.Clear();
+            _commandQueue.Clear();
+            CurrentCommand = null;
+        }
+
+        public void Enqueue(Command type, Board.Player player = Board.Player.None)
+        {
+            var cmd = new CommandInfo(type, player);
+            _commandQueue.Enqueue(cmd);
         }
 
         /// <summary>
-        /// 상태 변경.
+        /// 다음 명령을 꺼내서 CurrentCommand로 설정
         /// </summary>
-        /// <param name="state"></param>
-        public void Enqueue(Command command, Board.Player player = Board.Player.None)
+        public CommandInfo MoveNext()
         {
-            CommandInfo info = new CommandInfo() {
-                type = command,
-                step = CommandStep.None,
-                info = new PlayInfo()
-                {
-                    index = 0,
-                    user = player,
-                    popCard = null,
-                    hit = null,
-                    hited = false,
-                },
-            };
-
-            QueueCommand.Enqueue(info);
-        }
-
-        /// <summary>
-        /// 상태 꺼내기.
-        /// </summary>
-        /// <returns></returns>
-        public CommandInfo Dequeue()
-        {
-            if (QueueCommand.Count > 0)
+            if (_commandQueue.Count > 0)
             {
-                var command = QueueCommand.Dequeue();
-                return command;
+                CurrentCommand = _commandQueue.Dequeue();
+                return CurrentCommand;
             }
-            
+
+            CurrentCommand = null;
             return null;
         }
     }
-
 }

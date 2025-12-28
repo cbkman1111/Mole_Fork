@@ -14,6 +14,7 @@ namespace Gostop
     public partial class Board : MonoBehaviour
     {
         public Stack<Card> deck = null;
+
         public CardList[] hands = null;
         public CardList[] scores = null;
 
@@ -22,89 +23,84 @@ namespace Gostop
         private CardList select = null; // 선택해야 하는 카드.
         private CardList listEat = null; // 먹는패.
 
-        /// <summary>
-        /// 상대의 패를 훔칩니다.
-        /// </summary>
         private void StealCard()
         {
-            int target = (int)Player.None;
-            
-            if (turnUser == Player.Enemy)
-            {
-                target = (int)Player.Player;
-            }
-            else if (turnUser == Player.Player)
-            {
-                target = (int)Player.Enemy;
-            }
-
-            var listAll = scores[target].Where(e =>
-                         e.KindOfCard == Card.KindOf.P ||
-                         e.KindOfCard == Card.KindOf.PP ||
-                         e.KindOfCard == Card.KindOf.PPP).
-                         OrderBy(e => e.KindOfCard).ToList();
-
-            var list1 = listAll.Where(e => e.KindOfCard == Card.KindOf.P).ToList();
-            var list2 = listAll.Where(e => e.KindOfCard == Card.KindOf.PP).ToList();
-            var list3 = listAll.Where(e => e.KindOfCard == Card.KindOf.PPP).ToList();
-            if (listAll.Count == 0)
-            {
-                stealCount = 0;
+            if (stealCount <= 0) 
                 return;
-            }
 
-            Card card = null;
-            if (stealCount >= 3 && list3.Count > 0)
+            // 1. 타겟 설정
+            int targetIndex = (turnUser == Player.Me) ? (int)Player.Enemy : (int)Player.Me;
+            CardList targetScoreList = scores[targetIndex];
+
+            // 2. 피 종류별 분류 (1피, 2피, 3피)
+            // 리스트를 복사해서 사용하는 것이 안전함 (RemoveAt 할 때 인덱스 문제 방지)
+            var p1List = targetScoreList.Where(c => c.IsPe && c.PeCount == 1).ToList();
+            var p2List = targetScoreList.Where(c => c.IsPe && c.PeCount == 2).ToList();
+            var p3List = targetScoreList.Where(c => c.IsPe && c.PeCount == 3).ToList();
+
+            List<Card> cardsToSteal = new List<Card>();
+
+            // ==========================================================
+            // 핵심 로직: 1피로 해결 가능한가?
+            // ==========================================================
+
+            // [Case 1] 1점짜리만으로 충분히 낼 수 있는 경우 (무조건 1점짜리로만 냄)
+            if (p1List.Count >= stealCount)
             {
-                card = list3[0];
+                for (int i = 0; i < stealCount; i++)
+                {
+                    cardsToSteal.Add(p1List[i]);
+                }
             }
-            else if (stealCount >= 2 && list2.Count > 0)
-            {
-                card = list2[0];
-            }
+            // [Case 2] 1점짜리가 모자란 경우 (어쩔 수 없이 큰 것부터 내서 퉁침)
             else
             {
-                card = listAll[0];
+                // 남은 뺏을 수량
+                int remain = stealCount;
+
+                while (remain > 0)
+                {
+                    // 3점(쓰리피)이 있고, 남은 뺏을 양이 많으면 우선 처리
+                    if (p3List.Count > 0)
+                    {
+                        var card = p3List[0];
+                        cardsToSteal.Add(card);
+                        p3List.RemoveAt(0);
+                        remain -= 3;
+                    }
+                    // 2점(쌍피)이 있으면 처리
+                    else if (p2List.Count > 0)
+                    {
+                        var card = p2List[0];
+                        cardsToSteal.Add(card);
+                        p2List.RemoveAt(0);
+                        remain -= 2;
+                    }
+                    // 1점(피)이 있으면 처리
+                    else if (p1List.Count > 0)
+                    {
+                        var card = p1List[0];
+                        cardsToSteal.Add(card);
+                        p1List.RemoveAt(0);
+                        remain -= 1;
+                    }
+                    // 상대방 피가 다 말랐음
+                    else
+                    {
+                        break;
+                    }
+                }
             }
 
-            if (listAll[0].KindOfCard == Card.KindOf.P)
-                stealCount -= 1;
-            else if (listAll[0].KindOfCard == Card.KindOf.PP)
-                stealCount -= 2;
-            else if (listAll[0].KindOfCard == Card.KindOf.PPP)
-                stealCount -= 3;
+            // 3. 실제 이동 및 제거 처리
+            foreach (var card in cardsToSteal)
+            {
+                targetScoreList.Remove(card);
+                TackCard(card); // 내 패로 가져오는 함수 (비동기 연출 등 포함 가능)
+                break;
+            }
 
-            if (stealCount < 0)
-                stealCount = 0;
-
-            scores[target].Remove(card);
-            listAll.Remove(card);
-
-            TackCard(card, complete:() => {
-                var start = boardPositions[target].Pee.position;
-                var end = new Vector3(start.x + card.Width * 2f, start.y, start.z);
-
-                /*
-                // 기존 카드들 재배치.
-                for (int i = 0; i < listAll.Count; i++)
-                {
-                    var c = listAll[i];
-                    if (c == null)
-                        continue;
-
-                    c.SetSortOrder(i + 1);
-                    c.SetEnablePhysics(true);
-                    c.Owner = (Player)target;
-
-                    Vector3 newPosition = start + new Vector3((card.Width * i) * 0.5f, 0, 0);
-                    c.MoveTo(
-                    newPosition,
-                        time: 0.1f,
-                        delay: i * 0.1f);
-                }
-
-                */
-            });
+            stealCount = 0;
         }
 
         /// <summary>
@@ -187,9 +183,12 @@ namespace Gostop
                     for (int index = 0; index < hands[i].Count; index++)
                     {
                         var card = hands[i][index];
-                        var handPosition = boardPositions[i].Hand.GetChild(index).transform.position;
+                        var handCard = boardPositions[i].Hand.GetChild(index);
+                        var handPosition = handCard.position;
+                        var handScale = handCard.localScale;
                         card.MoveTo(
                             handPosition,
+                            handScale,
                             time: 0.1f);
                     }
 
@@ -298,13 +297,13 @@ namespace Gostop
             {
                 int player = (int)user;
                 int enemy = (int)Player.Enemy;
-                if (player == (int)Player.Player)
+                if (player == (int)Player.Me)
                 {
                     enemy = (int)Player.Enemy;
                 }
                 else
                 {
-                    enemy = (int)Player.Player;
+                    enemy = (int)Player.Me;
                 }
 
                 if (gameScore[player].gawng > 0)
@@ -414,7 +413,8 @@ namespace Gostop
                     var dest = new Vector3(Deck.x, Deck.y + height * i, Deck.z);
 
                     card.transform.position = Deck;
-                    card.MoveTo(dest, time: setting.DeckCardTime, delay: i * 0.01f);
+                    card.SetOpen(false);
+                    card.MoveTo(dest, Vector3.one, time: setting.DeckCardTime, delay: i * 0.01f);
                 }
             }
 
@@ -441,6 +441,7 @@ namespace Gostop
   
                 card.MoveTo(
                     position,
+                    Vector3.one,
                     time: setting.SuffleCardTime,
                     delay: i * setting.SuffleCardInterval, 
                     complete: () => {
@@ -471,6 +472,7 @@ namespace Gostop
                     
                     card.MoveTo(
                         position,
+                        Vector3.one,
                         time: setting.SuffleCardTime,
                         delay: user * 0.2f + i * setting.SuffleCardInterval);
 
@@ -549,6 +551,7 @@ namespace Gostop
                     card.CardOpen(setting.FlipTime);
                     card.MoveTo(
                         slot.position,
+                        slot.localScale,
                         time: setting.HandUpTime,
                         delay: i * setting.HandUpDelay);
                 }
@@ -563,18 +566,18 @@ namespace Gostop
         /// <returns></returns>
         private bool HandOpen()
         {
-            for (int index = 0; index < hands[(int)Player.Player].Count; index++)
+            for (int index = 0; index < hands[(int)Player.Me].Count; index++)
             {
-                Card card = hands[(int)Player.Player][index];
-                card.ShowMe(delay: index * setting.HandOpenTime);
-                card.SetShadow(false);
+                Card card = hands[(int)Player.Me][index];
+                card.ShowMe(delay: index * 0.2f);
+                //card.SetShadow(false);
             }
 
             for (int index = 0; index < hands[(int)Player.Enemy].Count; index++)
             {
                 Card card = hands[(int)Player.Enemy][index];
                 card.SetOpen(true);
-                card.SetShadow(false);
+                //card.SetShadow(false);
             }
 
             return true;
@@ -632,11 +635,12 @@ namespace Gostop
                     // 폭탄 카드를 손에 쥐어줍니다.
                     if (i > 0)
                     {
+                        //string pathCard = "CardGostop.prefab";
                         Card card = Instantiate<Card>(prefabCard);
+                        //Card card = ResourcesManager.Instance.InstantiateInBuild<Card>(pathCard);
                         if (card != null)
                         {
-                            card.Init(-1, spriteBomb);
-                            card.Month = 100;
+                            card.Init(52, spriteBomb);
                             card.transform.position = list[i].transform.position;
                             card.transform.rotation = list[i].transform.rotation;
                             hands[user].Add(card);
@@ -653,13 +657,47 @@ namespace Gostop
             }
         }
 
+        private void ExplosionEffect(Card centerCard)
+        {
+            float radius = 2f;        // 탐색 반경
+            float power = 0.5f;       // 밀려나는 거리 (강도)
+            float duration = 0.5f;    // 흔들리는 시간
+            /*
+            // 1. 주변 카드 탐색
+            Collider[] colliders = Physics.OverlapSphere(centerCard.transform.position, radius);
+
+            foreach (var coll in colliders)
+            {
+                // 자기 자신 제외하고 Card 컴포넌트 가져오기
+                if (coll.TryGetComponent(out Card surroundCard) && surroundCard != centerCard)
+                {
+                    // [수정됨] "같은 월(Month)"인 경우에만 흔들리도록 조건 추가
+                    if (surroundCard.Month == centerCard.Month)
+                    {
+                        // 2. 밀려날 방향 계산
+                        Vector3 direction = surroundCard.transform.position - centerCard.transform.position;
+
+                        if (direction.magnitude < 0.01f)
+                            direction = UnityEngine.Random.onUnitSphere;
+
+                        // 3. 펀치 효과 실행
+                        Vector3 punchVector = direction.normalized * power;
+
+                        surroundCard.transform.DOKill();
+                        surroundCard.transform.DOPunchPosition(punchVector, duration, 10, 1f);
+                    }
+                }
+            }
+            */
+        }
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="card"></param>
         public void HitCard(int user, Card card, float delay = 0)
         {
-            var playInfo = CommandInfo.info;
+            var playInfo = CommandInfo.Info;
      
             KeyValuePair<int, CardList> slot = GetSlot(card);
             bool success = hands[user].Remove(card);
@@ -675,19 +713,19 @@ namespace Gostop
                     Vector3 destination2 = cardPosition[slot.Key - 1].position +
                         new Vector3(randX, stackCount * card.Height, randZ);
 
-                    card.SetShadow(true);
+                    //card.SetShadow(true);
                
                     if (card.Month == 13) // 조커 카드.
                     {
-                        playInfo.hited = true;
+                        playInfo.isHit = true;
                         playInfo.hit = card;
                         stealCount += 1;
 
                         TackCard(card, 1); // 카드 획득.
                     }
-                    else if (card.Month == 100) // 폭탄 공짜 카드.
+                    else if (card.Month == 14) // 폭탄 공짜 카드.
                     {
-                        playInfo.hited = true;
+                        playInfo.isHit = true;
                         playInfo.hit = card;
 
                         GameObject.Destroy(card.gameObject);
@@ -695,41 +733,27 @@ namespace Gostop
                     }
                     else // 일반 카드.
                     {
+                        playInfo.isHit = true;
                         playInfo.hit = card;
-                        playInfo.hited = true;
-
+                        
                         slot.Value.Add(card);
                         card.MoveTo( // 카드를 위로 뽑아서.
                             destination1,
+                            Vector3.one * 2,
                             time: setting.HitUpTime,
                             ease: DG.Tweening.Ease.InExpo,
                             complete: () => {
 
                                 card.MoveTo(
                                     destination2,
+                                    Vector3.one,
                                     time: setting.HitDownTime,
                                     ease: DG.Tweening.Ease.InExpo,
                                     delay: delay,
                                     complete: () =>
                                     {
                                         card.SetEnablePhysics(true);
-
-                                        Collider[] colliders = Physics.OverlapSphere(card.transform.position, 5f);
-                                        for (int i = 0; i < colliders.Length; i++)
-                                        {
-                                            var coll = colliders[i];
-                                            if (coll == null)
-                                                continue;
-                                            var surroundCard = coll.GetComponent<Card>();
-                                            if (surroundCard == null)
-                                                continue;
-
-                                            surroundCard.SetEnablePhysics(true);
-                                            surroundCard.rigidBody.AddExplosionForce(10, card.transform.position, 10f);
-                                        }
-
-                                        Debug.Log(colliders.ToString());
-                                        //card.rigidBody.AddExplosionForce(10000, card.transform.position, 10, 5f);
+                                        ExplosionEffect(card);
                                     });
                             });
                     }
@@ -738,82 +762,84 @@ namespace Gostop
         }
 
         /// <summary>
-        /// 
+        /// 카드를 점수판으로 이동시킵니다.
         /// </summary>
         /// <param name="card"></param>
         private void TackCard(Card card, int count = 0, Action complete = null)
         {
             int user = (int)turnUser;
-            List<Card> list = null;
-            Vector3 start = Vector3.zero;
-            Vector3 end = Vector3.zero;
+            List<Card> list = null; // 현재 해당 슬롯에 이미 있는 카드들
+            Vector3 start = Vector3.zero; // 기준점 (슬롯의 0번 위치)
 
-            //card.gameObject.SetActive(false);
+            // 카드 간격 설정 (카드의 너비 대비 몇 %씩 겹칠 것인가)
+            float spacingRatio = 0.0f;
+
             switch (card.KindOfCard)
             {
-                // 카드 두개 칸.
+                // [광] : 개수가 적으므로 넓게 배치 (80% 간격)
                 case Card.KindOf.GWANG:
                 case Card.KindOf.GWANG_B:
-                    list = scores[user].
-                        Where(e => e.KindOfCard == Card.KindOf.GWANG ||
-                                   e.KindOfCard == Card.KindOf.GWANG_B).
-                                    ToList();
-
+                    list = scores[user].Where(e => e.KindOfCard == Card.KindOf.GWANG || e.KindOfCard == Card.KindOf.GWANG_B).ToList();
                     start = boardPositions[user].Gwang.position;
-                    //end = new Vector3(start.x + card.Width * 2f, start.y, start.z);
+                    spacingRatio = 0.8f;
                     break;
 
-                // 카드 두개 반ㅂ 칸.
+                // [멍/띠] : 적당히 겹침 (40% 간격)
                 case Card.KindOf.MUNG:
                 case Card.KindOf.MUNG_GODORI:
                 case Card.KindOf.MUNG_KOO:
-                    list = scores[user].
-                        Where(e => e.KindOfCard == Card.KindOf.MUNG ||
-                                   e.KindOfCard == Card.KindOf.MUNG_GODORI ||
-                                   e.KindOfCard == Card.KindOf.MUNG_KOO).
-                                   ToList();
-
+                    list = scores[user].Where(e => e.KindOfCard == Card.KindOf.MUNG || e.KindOfCard == Card.KindOf.MUNG_GODORI || e.KindOfCard == Card.KindOf.MUNG_KOO).ToList();
                     start = boardPositions[user].Mung.position;
-                    //end = new Vector3(start.x + card.Width * 2.5f, start.y, start.z);
+                    spacingRatio = 0.45f;
                     break;
 
                 case Card.KindOf.CHO:
                 case Card.KindOf.CHUNG:
                 case Card.KindOf.HONG:
                 case Card.KindOf.CHO_B:
-                    list = scores[user].
-                        Where(e => e.KindOfCard == Card.KindOf.CHO ||
-                                   e.KindOfCard == Card.KindOf.CHUNG ||
-                                   e.KindOfCard == Card.KindOf.HONG ||
-                                   e.KindOfCard == Card.KindOf.CHO_B).
-                                   ToList();
-
+                    list = scores[user].Where(e => e.KindOfCard == Card.KindOf.CHO || e.KindOfCard == Card.KindOf.CHUNG || e.KindOfCard == Card.KindOf.HONG || e.KindOfCard == Card.KindOf.CHO_B).ToList();
                     start = boardPositions[user].Thee.position;
-                    //end = new Vector3(start.x + card.Width * 2.5f, start.y, start.z);
+                    spacingRatio = 0.45f;
                     break;
 
+                // [피] : 개수가 많으므로 촘촘하게 겹침 (30% 간격)
                 case Card.KindOf.P:
                 case Card.KindOf.PP:
                 case Card.KindOf.PPP:
-                    list = scores[user].
-                        Where(e => e.KindOfCard == Card.KindOf.P ||
-                                   e.KindOfCard == Card.KindOf.PP ||
-                                   e.KindOfCard == Card.KindOf.PPP).
-                                   ToList();
-
+                    list = scores[user].Where(e => e.KindOfCard == Card.KindOf.P || e.KindOfCard == Card.KindOf.PP || e.KindOfCard == Card.KindOf.PPP).ToList();
                     start = boardPositions[user].Pee.position;
-                    //end = new Vector3(start.x + card.Width * 2.5f, start.y, start.z);
+                    spacingRatio = 0.35f;
                     break;
             }
 
-            float interval = 0.05f;
-            card.Owner = (Player)user;
-            card.MoveTo(start, time: 0.1f,
-                     delay: count * interval,
-                     complete: complete);
+            // [핵심] 최종 목적지(end) 계산
+            // 현재 쌓인 카드 개수(currentIndex)만큼 옆으로 밀어줍니다.
+            int currentIndex = list.Count;
 
-           
-            scores[(int)turnUser].Add(card);
+            // X축: 카드 너비 * 비율 * 개수만큼 이동
+            float xOffset = card.Width * spacingRatio * currentIndex;
+            float zOffset = 0f;
+
+            // Z축: 카드가 쌓일수록 카메라 쪽으로(혹은 위로) 미세하게 올라와야 겹침 버그가 안 생김
+            // 값이 -0.01f 인지 +0.01f 인지는 카메라 방향에 따라 조정하세요. (보통 -Z가 카메라 쪽)
+            float yOffset = 0.02f * currentIndex;
+
+            // 최종 좌표 설정
+            // start.y는 바닥 높이 유지
+            Vector3 end = new Vector3(start.x + xOffset, start.y + yOffset, start.z + zOffset);
+
+            // 이동 애니메이션 실행
+            // interval은 여러 장을 동시에 먹을 때 카드별 출발 지연 시간
+            float interval = 0.5f;
+
+            card.Owner = (Player)user;
+
+            // 카드를 바로 scores에 넣지 않고, 애니메이션 시작과 동시에 넣습니다.
+            // (그래야 다음 카드가 이 카드의 위치를 참고해서 그 옆에 붙습니다 - 연속 획득 시)
+            scores[user].Add(card);
+
+            // JumpTo (DOMove + 포물선)
+            card.JumpTo(end, jumpPower: 2f, time: 0.5f, delay: count * interval, complete: complete);
         }
 
         /// <summary>
@@ -1008,8 +1034,8 @@ namespace Gostop
         public Card PopDeckCard()
         {
             Card card = deck.Pop();
-            card.ShowMe();
-            card.SetShadow(false);
+            card.ShowMe(time: 1);
+            //card.SetShadow(false);
             card.Owner = (Player)turnUser;
 
             hands[(int)turnUser].Add(card);
@@ -1068,11 +1094,13 @@ namespace Gostop
                 card.CardOpen(time: 0.1f);
                 card.MoveTo(
                     destination1,
+                    Vector3.one * 2,
                     time: 0.1f,
                     ease: DG.Tweening.Ease.OutCubic,
                     complete: () => {
                       card.MoveTo(
                         destination2,
+                        Vector3.one,
                         time: 0.1f,
                         ease: DG.Tweening.Ease.InQuad,
                         complete: () => {
@@ -1129,6 +1157,11 @@ namespace Gostop
             foreach (var slot in bottoms)
             {
                 count += slot.Value.MoveCount();// GetMoveCount();
+            }
+
+            foreach (var list in scores)
+            {
+                count += list.MoveCount();
             }
 
             return count;

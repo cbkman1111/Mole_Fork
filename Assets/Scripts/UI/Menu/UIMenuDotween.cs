@@ -79,7 +79,7 @@ public class UIMenuDotween : MenuBase
         }
         else if (name == "Button - Back")
         {
-            AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneMenu);
+            AppManager.Instance.ChangeScene(Common.Scenes.SceneMenu);
         }
         else if (name == "Button - ParticleLifeCycle")
         {

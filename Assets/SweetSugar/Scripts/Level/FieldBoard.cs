@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Newtonsoft.Json;
 using SweetSugar.Scripts.Blocks;
 using SweetSugar.Scripts.Core;
 using SweetSugar.Scripts.Effects;
@@ -12,6 +9,10 @@ using SweetSugar.Scripts.System.Combiner;
 using SweetSugar.Scripts.System.Pool;
 using SweetSugar.Scripts.TargetScripts.TargetEditor;
 using SweetSugar.Scripts.TargetScripts.TargetSystem;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -801,8 +802,11 @@ using Random = UnityEngine.Random;
 
          public FieldBoard DeepCopy()
          {
-             var other = (FieldBoard)MemberwiseClone();
-             other.squaresArray = new Square[fieldData.maxCols * fieldData.maxRows];
+             //var other = (FieldBoard)MemberwiseClone();
+            string json = JsonConvert.SerializeObject(this);
+            var other = JsonConvert.DeserializeObject<FieldBoard>(json);
+
+            other.squaresArray = new Square[fieldData.maxCols * fieldData.maxRows];
              for (var i = 0; i < squaresArray.Count(); i++)
              {
                  var square = squaresArray[i];

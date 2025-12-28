@@ -61,7 +61,7 @@ namespace Gostop
                 var board = sceneGostop.board;
                 if (board != null)
                 {
-                    
+                    board.ReplaceCard(HandIndex, HandCardNum);
                 }
             }
 

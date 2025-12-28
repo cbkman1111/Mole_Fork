@@ -12,6 +12,11 @@ namespace Gostop
     public partial class Board : MonoBehaviour
     {
         public CommandInfo CommandInfo = null;
+        public CommandInfo CommnadLast = null;
+
+        public const int MONTH_JOKER = 13;
+        public const int MONTH_BOMB = 100;
+        public const int MAX_MONTH = 12;
 
         /// <summary>
         /// 내턴
@@ -19,7 +24,7 @@ namespace Gostop
         /// <returns></returns>
         public bool MyTurn()
         {
-            return turnUser == Player.Player;
+            return turnUser == Player.Me;
         }
 
         /// <summary>
@@ -28,7 +33,7 @@ namespace Gostop
         public void StartGame()
         {
             commandProcedure.Enqueue(Command.StartGame);
-            CommandInfo = commandProcedure.Dequeue();
+            CommandInfo = commandProcedure.MoveNext();
         }
 
         /// <summary>
@@ -38,9 +43,11 @@ namespace Gostop
         /// <returns></returns>
         private int GetMoveCount(Stack<Card> stack)
         {
-            int count = stack.Where(card => card.ListTween.Count != 0).ToList().Count;
+            int count = stack.Where(card => card.IsAnimating == true).ToList().Count;
             return count;
         }
+
+        float updateDelta = 0.0f;
 
         /// <summary>
         /// 
@@ -53,24 +60,30 @@ namespace Gostop
            
             if (CommandInfo == null)
                 return;
-            
-            Command commandType = CommandInfo.type;
+
+            updateDelta += Time.deltaTime;
+            if (updateDelta < 0.1f)
+                return;
+
+            updateDelta = 0f;
+
+            Command commandType = CommandInfo.CommandType;
             switch (commandType)
             {
                 // 게임 시작.
                 case Command.StartGame:
-                    CommandInfo.Process(
-                         start: () => {
+                    CommandInfo.Execute(
+                         onStart: () => {
                              DestroyAllCards();
 
                              gameScore[0].Init();
                              gameScore[1].Init();
                              ScoreUpdate();
                          },
-                         check: () => {
+                         onUpdate: () => {
                              return true;
                          },
-                         complete: () => {
+                         onComplete: () => {
                              commandProcedure.Enqueue(Command.CreateDeck);
 
                          });
@@ -78,15 +91,15 @@ namespace Gostop
           
                 // 카드덱 생성.
                 case Command.CreateDeck:
-                    CommandInfo.Process(
-                        start: () => {
+                    CommandInfo.Execute(
+                        onStart: () => {
                             CreateDeck();
                         },
-                        check: () => {
+                        onUpdate: () => {
                             int count = GetMoveCount(deck);
                             return count == 0;
                         },
-                        complete: () => {
+                        onComplete: () => {
                             commandProcedure.Enqueue(Command.Shuffle_8);
                             
                         });
@@ -94,14 +107,14 @@ namespace Gostop
 
                 // 바닥 8장 깔기.
                 case Command.Shuffle_8:
-                    CommandInfo.Process(
-                        start: () => {
+                    CommandInfo.Execute(
+                        onStart: () => {
                             Shuffle8Card();
                         },
-                        check: () => {
+                        onUpdate: () => {
                             return GetMoveAllCount() == 0;
                         },
-                        complete: () => {
+                        onComplete: () => {
                             commandProcedure.Enqueue(Command.Shuffle_10);
                             
                         });
@@ -109,17 +122,17 @@ namespace Gostop
           
                 // 열장씩 나누기.
                 case Command.Shuffle_10:
-                    CommandInfo.Process(
-                        start: () => {
+                    CommandInfo.Execute(
+                        onStart: () => {
                             Shuffle10Card();
                         },
-                        check: () => {
+                        onUpdate: () => {
                             int count = 0;
                             count += hands[0].MoveCount();//
                             count += hands[1].MoveCount();//
                             return count == 0;
                         },
-                        complete: () => {
+                        onComplete: () => {
                             commandProcedure.Enqueue(Command.Open8);
                             
                         });
@@ -128,11 +141,11 @@ namespace Gostop
 
                 // 8장 뒤집기
                 case Command.Open8:
-                    CommandInfo.Process(
-                        start: () => {
+                    CommandInfo.Execute(
+                        onStart: () => {
                             FlipCard8();
                         },
-                        check: () => {
+                        onUpdate: () => {
                             int count = 0;
                             foreach (var slot in bottoms) {
                                 count += slot.Value.MoveCount();
@@ -140,7 +153,7 @@ namespace Gostop
 
                             return count == 0;
                         },
-                        complete: () => {
+                        onComplete: () => {
                             commandProcedure.Enqueue(Command.CheckJocker);
                             
                         });
@@ -149,11 +162,11 @@ namespace Gostop
 
                 // 바닥 조커 확인.
                 case Command.CheckJocker:
-                    CommandInfo.Process(
-                        start: () => {
+                    CommandInfo.Execute(
+                        onStart: () => {
                             CheckJoker();
                         },
-                        check: () => {
+                        onUpdate: () => {
                             int countMove = 0;
                             foreach (var slot in bottoms)
                             {
@@ -162,7 +175,7 @@ namespace Gostop
 
                             return countMove == 0;
                         },
-                        complete: () => {
+                        onComplete: () => {
                             int Count = 0;
                             int jockerCount = 0;
                             foreach (var slot in bottoms)
@@ -190,11 +203,11 @@ namespace Gostop
                     break;
        
                 case Command.Open1More:
-                    CommandInfo.Process(
-                        start: () => {
+                    CommandInfo.Execute(
+                        onStart: () => {
                             PopDeckCard(Player.None);
                         },
-                        check: () => {
+                        onUpdate: () => {
                             int count = 0;
 
                             foreach (var slot in bottoms)
@@ -204,24 +217,24 @@ namespace Gostop
 
                             return count == 0;
                         },
-                        complete: () => {
+                        onComplete: () => {
                             commandProcedure.Enqueue(Command.CheckJocker);
                         });
                     break;
 
 
                 case Command.HandUp:
-                    CommandInfo.Process(
-                        start: () => {
+                    CommandInfo.Execute(
+                        onStart: () => {
                             HandsUp();
                         },
-                        check: () => {
+                        onUpdate: () => {
                             int count = 0;
                             count += hands[0].MoveCount();
                             count += hands[1].MoveCount(); 
                             return count == 0;
                         },
-                        complete: () => {
+                        onComplete: () => {
                             commandProcedure.Enqueue(Command.HandOpen);
                             
                         });
@@ -229,35 +242,35 @@ namespace Gostop
             
  
                 case Command.HandOpen: // 손패를 뒤집습니다.
-                    CommandInfo.Process(
-                        start: () => {
+                    CommandInfo.Execute(
+                        onStart: () => {
                             HandOpen();
                         },
-                        check: () => {
+                        onUpdate: () => {
                             int count = hands[0].MoveCount();// GetMoveCount(hands[0].List);
                             return count == 0;
                         },
-                        complete: () => {
+                        onComplete: () => {
                             commandProcedure.Enqueue(Command.HandSort);
                             
                         });
                     break;
 
                 case Command.HandSort: // 손패를 정렬합니다.
-                    CommandInfo.Process(
-                        start: () => HandSort(),
-                        check: () => {
+                    CommandInfo.Execute(
+                        onStart: () => HandSort(),
+                        onUpdate: () => {
                             return hands[0].MoveCount() == 0;
                         },
-                        complete: () => {
+                        onComplete: () => {
                             commandProcedure.Enqueue(Command.HitCard);
                             
                         });
                     break;
                 
                 case Command.HitCard:
-                    CommandInfo.Process(
-                        start: () => {
+                    CommandInfo.Execute(
+                        onStart: () => {
                             if (turnUser == Player.Enemy)
                             {
                                 int turnIndex = (int)turnUser;
@@ -276,16 +289,16 @@ namespace Gostop
                                 }
                             }
                         },
-                        check: () => {
+                        onUpdate: () => {
                             // 칠때까지 대기.
-                            if (CommandInfo.info.hited == false)
+                            if (CommandInfo.Info.isHit == false)
                                 return false;
 
                             // 조커를 낸 경우면 조금 기다렸다가 패 훔쳐오기 처리.
-                            if(CommandInfo.info.hit.Month == 13)
+                            if(CommandInfo.Info.hit.Month == 13)
                             {
-                                CommandInfo.info.delta += Time.deltaTime;
-                                if(CommandInfo.info.delta < 0.1f)
+                                CommandInfo.Info.delta += Time.deltaTime;
+                                if(CommandInfo.Info.delta < 0.1f)
                                 {
                                     return false;
                                 }
@@ -294,8 +307,8 @@ namespace Gostop
                             int count = GetMoveAllCount();
                             return count == 0;
                         },
-                        complete: () => {
-                            if (CommandInfo.info.hit.Month == 13)
+                        onComplete: () => {
+                            if (CommandInfo.Info.hit.Month == 13)
                             {
                                 commandProcedure.Enqueue(Command.StealCardAndPopDeck, turnUser);
                             }
@@ -307,52 +320,52 @@ namespace Gostop
                     break;
 
                 case Command.PopCardDeckAndHit:
-                    CommandInfo.Process(
-                        start: () => {
-                            CommandInfo.info.popCard = PopDeckCard();
-                            if(CommandInfo.info.popCard == null)
+                    CommandInfo.Execute(
+                        onStart: () => {
+                            CommandInfo.Info.popCard = PopDeckCard();
+                            if(CommandInfo.Info.popCard == null)
                             {
                                 Debug.LogError("PopDeckCard() return null.");
                             }
                         },
-                        check: () => {
-                            if (CommandInfo.info.popCard &&
-                                CommandInfo.info.popCard.Month == 13) // 뒤집어서 조커가 나오면 다시 뽑습니다.
+                        onUpdate: () => {
+                            if (CommandInfo.Info.popCard &&
+                                CommandInfo.Info.popCard.Month == 13) // 뒤집어서 조커가 나오면 다시 뽑습니다.
                             {
-                                CommandInfo.step = CommandStep.Start;
+                                CommandInfo.Step = CommandStep.Start;
                                 return false;
                             }
 
                             return 0 == GetMoveAllCount();
                         },
-                        complete: () => {
+                        onComplete: () => {
                             commandProcedure.Enqueue(Command.HitCard, turnUser);
                             
                         });
                     break;
 
                 case Command.PopCardDeck:
-                    CommandInfo.Process(
-                        start: () => {
-                            CommandInfo.info.popCard = PopDeckCard(turnUser);
-                            if(CommandInfo.info.popCard == null)
+                    CommandInfo.Execute(
+                        onStart: () => {
+                            CommandInfo.Info.popCard = PopDeckCard(turnUser);
+                            if(CommandInfo.Info.popCard == null)
                                 Debug.LogError("PopDeckCard is null");
                         },
-                        check: () => {
+                        onUpdate: () => {
                             int count = GetMoveAllCount();
                             if (count == 0)
                             {
-                                if (CommandInfo.info.popCard != null &&
-                                    CommandInfo.info.popCard.Month == 13) // 뒤집어서 조커가 나오면 다시 뽑습니다.
+                                if (CommandInfo.Info.popCard != null &&
+                                    CommandInfo.Info.popCard.Month == 13) // 뒤집어서 조커가 나오면 다시 뽑습니다.
                                 {
-                                    CommandInfo.step = CommandStep.Start;
+                                    CommandInfo.Step = CommandStep.Start;
                                     return false;
                                 }
                             }
 
                             return count == 0;
                         },
-                        complete: () => {
+                        onComplete: () => {
                             commandProcedure.Enqueue(Command.TakeCardCondition, turnUser);
                             
                         });
@@ -360,9 +373,9 @@ namespace Gostop
                     break;
 
                 case Command.TakeCardCondition: // 카드 획득 처리.
-                    CommandInfo.Process(
-                        start: () => TakeCardCondition(),
-                        check: () => {
+                    CommandInfo.Execute(
+                        onStart: () => TakeCardCondition(),
+                        onUpdate: () => {
                             if (select.Count == 2)
                             {
                                 var list = select;
@@ -403,20 +416,20 @@ namespace Gostop
                                 return true;
                             }
                         },
-                        complete: () => {
+                        onComplete: () => {
                             select.Clear();
                             commandProcedure.Enqueue(Command.TakeCard, turnUser);
                         });
                     break;
 
                 case Command.TakeCard: // 카드 획득.
-                    CommandInfo.Process(
-                        start: () => TackeCardToScore(),
-                        check: () => {
-                            CommandInfo.info.delta += Time.deltaTime;
-                            return CommandInfo.info.delta > 0.2f;
+                    CommandInfo.Execute(
+                        onStart: () => TackeCardToScore(),
+                        onUpdate: () => {
+                            CommandInfo.Info.delta += Time.deltaTime;
+                            return CommandInfo.Info.delta > 0.2f;
                         },
-                        complete: () => {
+                        onComplete: () => {
                             // 주인 없는 카드로 설정.
                             foreach (var kindSlot in bottoms)
                             {
@@ -431,8 +444,8 @@ namespace Gostop
                     break;
 
                 case Command.TakeToMe:
-                    CommandInfo.Process(
-                        start: () => {
+                    CommandInfo.Execute(
+                        onStart: () => {
                             int count = 0;
                             int total = listEat.Count;
 
@@ -445,10 +458,10 @@ namespace Gostop
                             listEat.Clear();
                             ScoreUpdate();
                         },
-                        check: () => {
+                        onUpdate: () => {
                             return GetMoveAllCount() == 0;
                         },
-                        complete: () => {
+                        onComplete: () => {
                             if (stealCount == 0)
                             {
                                 commandProcedure.Enqueue(Command.ChangeTurn, turnUser);
@@ -462,16 +475,16 @@ namespace Gostop
                     break;
 
                 case Command.StealCardAndPopDeck: // 카드 뺃고 턴 가져오기.
-                    CommandInfo.Process(
-                        start: () => {
+                    CommandInfo.Execute(
+                        onStart: () => {
                             StealCard();
                             ScoreUpdate();
                         },
-                        check: () => {
+                        onUpdate: () => {
                             int count = GetMoveAllCount();
                             return count == 0;
                         },
-                        complete: () => {
+                        onComplete: () => {
                             if (stealCount == 0)
                             {
                                 commandProcedure.Enqueue(Command.PopCardDeckAndHit, turnUser);
@@ -484,17 +497,17 @@ namespace Gostop
                     break;
 
                 case Command.StealCard: // 카드 뺃기.
-                    CommandInfo.Process(
-                        start: () =>
+                    CommandInfo.Execute(
+                        onStart: () =>
                         {
                             StealCard();
                             ScoreUpdate();
                         },
-                        check: () => {
+                        onUpdate: () => {
                             int count = GetMoveAllCount();
                             return count == 0;
                         },
-                        complete: () => {
+                        onComplete: () => {
                             if (stealCount == 0)
                             {
                                 commandProcedure.Enqueue(Command.ChangeTurn, turnUser);
@@ -507,16 +520,16 @@ namespace Gostop
                     break;
 
                 case Command.ChangeTurn: // 턴 바꾸기.
-                    CommandInfo.Process(
-                        start: () => HandSort(),
-                        check: () => {
+                    CommandInfo.Execute(
+                        onStart: () => HandSort(),
+                        onUpdate: () => {
                             int count = GetMoveAllCount();
                             return count == 0;
                         },
-                        complete: () => {
+                        onComplete: () => {
                             Command nextCommand = Command.HandSort;
 
-                            if (hands[(int)Player.Enemy].Count == 0 && hands[(int)Player.Player].Count == 0)
+                            if (hands[(int)Player.Enemy].Count == 0 && hands[(int)Player.Me].Count == 0)
                             {
                                 nextCommand = Command.GameOver_Tie;
                                 nextCommand = Command.GameOver_Win;
@@ -524,13 +537,13 @@ namespace Gostop
                             }
                             else 
                             {
-                                if (turnUser == Player.Player)
+                                if (turnUser == Player.Me)
                                 {
                                     turnUser = Player.Enemy;
                                 }
                                 else
                                 {
-                                    turnUser = Player.Player;
+                                    turnUser = Player.Me;
                                 }
                             }
 
@@ -539,46 +552,44 @@ namespace Gostop
                     break;
 
                 case Command.GameOver_Win: // 승리 상태 처리.
-                    CommandInfo.Process(
-                        start: () => { },
-                        check: () => {
+                    CommandInfo.Execute(
+                        onStart: () => { },
+                        onUpdate: () => {
                             return GetMoveAllCount() == 0;
                         },
-                        complete: () => {
+                        onComplete: () => {
                             commandProcedure.Enqueue(Command.StartGame, turnUser);
                         });
                     break;
 
                 case Command.GameOver_Lose: // 패배 상태 처리.
-                    CommandInfo.Process(
-                        start: () => { },
-                        check: () => {
+                    CommandInfo.Execute(
+                        onStart: () => { },
+                        onUpdate: () => {
                             return GetMoveAllCount() == 0;
                         },
-                        complete: () => {
+                        onComplete: () => {
                             commandProcedure.Enqueue(Command.StartGame, turnUser);
                         });
                     break;
 
                 case Command.GameOver_Tie: // 무승부 상태 처리.
-                    CommandInfo.Process(
-                        start: () => { },
-                        check: () => {
+                    CommandInfo.Execute(
+                        onStart: () => { },
+                        onUpdate: () => {
                             return GetMoveAllCount() == 0;
                         },
-                        complete: () => {
+                        onComplete: () => {
                             commandProcedure.Enqueue(Command.StartGame, turnUser);
                         });
                     break;
             }
 
             // 처리 다된 커맨드이면 다음 커맨드 꺼냄.
-            if (CommandInfo != null && CommandInfo.step == CommandStep.Done)
+            if (CommandInfo != null && CommandInfo.Step == CommandStep.Next)
             {
-                if (commandProcedure.QueueCommand.Count > 0)
-                {
-                    CommandInfo = commandProcedure.Dequeue();
-                }
+                CommnadLast = CommandInfo;
+                CommandInfo = commandProcedure.MoveNext();
             }
         }
     }

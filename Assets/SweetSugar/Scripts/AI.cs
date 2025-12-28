@@ -169,7 +169,7 @@ namespace SweetSugar.Scripts
             maxRow = LevelManager.THIS.levelData.maxRows;
             maxCol = LevelManager.THIS.levelData.maxCols;
 
-            //variable to check: are we got tip or not
+            //variable to onUpdate: are we got tip or not
             gotTip = false;
 
             //break, if the main scripts have not ready yet

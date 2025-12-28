@@ -1,50 +1,55 @@
 ﻿using DG.Tweening;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Gostop
 {
     public class Card : MonoBehaviour
     {
-        [SerializeField]
-        public SpriteRenderer spriteRenderer = null;
-        public SpriteRenderer spriteRendererBack = null;
-        public MeshRenderer meshRenderer = null;
-        public SpriteRenderer spriteRendererDebug = null;
-        public GameObject cardObject = null;
-        public BoxCollider boxCollider = null;
-        public Rigidbody rigidBody = null;
-        public int Num { get; set; }
-        public KindOf KindOfCard { get; set; }
-        public int Month { get; set; }
-        public float Height { get; set; }
-        public float Width { get; set; }
-        private Action OnComplete = null;
+        [Header("Components")]
+        [SerializeField] private SpriteRenderer spriteRenderer = null;
+        [SerializeField] private SpriteRenderer spriteRendererDebug = null; // 디버그용(주인 표시)
+        [SerializeField] private MeshRenderer meshRenderer = null; // 그림자용
+        [SerializeField] private BoxCollider boxCollider = null;
+        //[SerializeField] private Rigidbody rigidBody = null;
+
+        // [추가] 외부에서 필요하다면 프로퍼티로 접근 (캡슐화)
+        //public Rigidbody RigidBody => rigidBody;
+
+        // --- 데이터 프로퍼티 ---
+        public int Num { get; private set; }
+        public int Month { get; private set; }
+        public KindOf KindOfCard { get; private set; }
+        public float Width { get; private set; }
+        public float Height { get; private set; }
 
         private Board.Player owner = Board.Player.None;
-
-        public List<Tween> ListTween { get; set; } = new List<Tween>();
-
         public Board.Player Owner
         {
-            get
-            {
-                return owner;
-            }
+            get => owner;
             set
             {
                 owner = value;
-                if (owner == Board.Player.Player)
-                    spriteRendererDebug.color = Color.blue;
-                else if (owner == Board.Player.Enemy)
-                    spriteRendererDebug.color = Color.red;
-                else
-                    spriteRendererDebug.color = Color.white;
+                UpdateDebugColor();
             }
         }
+
+        /// <summary>
+        /// 이 카드가 피(껍질) 종류인지 여부
+        /// </summary>
+        public bool IsPe => KindOfCard == KindOf.P || KindOfCard == KindOf.PP || KindOfCard == KindOf.PPP;
+
+        /// <summary>
+        /// 피의 가치 (일반피=1, 쌍피=2, 쓰리피=3)
+        /// </summary>
+        public int PeCount => KindOfCard switch
+        {
+            KindOf.P => 1,
+            KindOf.PP => 2,
+            KindOf.PPP => 3,
+            _ => 0 // 그 외(광, 열끗 등)는 0 리턴
+        };
 
         public enum KindOf
         {
@@ -65,21 +70,86 @@ namespace Gostop
             PPP,
         }
 
+        private void Awake()
+        {
+            // 컴포넌트 자동 캐싱 (실수 방지)
+            if (boxCollider == null) boxCollider = GetComponent<BoxCollider>();
+            //if (rigidBody == null) rigidBody = GetComponent<Rigidbody>();
+        }
+
+        private void OnDisable()
+        {
+            // [중요] 오브젝트가 꺼질 때 이 트랜스폼에 걸린 모든 트윈을 즉시 종료
+            // LateUpdate에서 관리할 필요 없이 이게 가장 깔끔하고 확실함
+            transform.DOKill();
+        }
+
         public bool Init(int num, Sprite sprite)
         {
             Num = num;
             Month = GetMonth(num);
-            
             Owner = Board.Player.None;
 
-            spriteRenderer.sprite = sprite;
-            spriteRenderer.sortingOrder = 1;
-            //spriteRendererBack.sprite = sprite; // 치트용.
+            if (spriteRenderer != null)
+            {
+                spriteRenderer.sprite = sprite;
+                spriteRenderer.sortingOrder = 1;
+            }
 
             Height = boxCollider.size.y;
             Width = boxCollider.size.x;
-            gameObject.name = $"{Month}/{num}";
+            gameObject.name = $"{Month}M_{Num}_{KindOfCard}"; // 디버깅 편하게 이름 변경
 
+            SetCardType(Num);
+            SetOpen(false);
+            SetEnablePhysics(false);
+            return true;
+        }
+        public bool ReplaceCard(int num, Sprite sprite)
+        {
+            Num = num;
+            Month = GetMonth(num);
+
+            if (spriteRenderer != null)
+            {
+                spriteRenderer.sprite = sprite;
+                spriteRenderer.sortingOrder = 1;
+            }
+
+            Height = boxCollider.size.y;
+            Width = boxCollider.size.x;
+            gameObject.name = $"{Month}M_{Num}_{KindOfCard}"; // 디버깅 편하게 이름 변경
+
+            SetCardType(Num);
+            return true;
+        }
+        public Sprite GetSprite()
+        {
+            return spriteRenderer.sprite;
+        }
+
+        public void SetSortOrder(int order)
+        {
+            spriteRenderer.sortingOrder = order;
+        }
+
+        private void UpdateDebugColor()
+        {
+            if (spriteRendererDebug == null) return;
+
+            spriteRendererDebug.color = owner switch
+            {
+                Board.Player.Me => Color.blue,
+                Board.Player.Enemy => Color.red,
+                _ => Color.white
+            };
+        }
+
+        /// <summary>
+        /// 번호에 따른 카드 타입 분류 (Init 내부 정리)
+        /// </summary>
+        private void SetCardType(int num)
+        {
             switch (Num)
             {
                 case 1:
@@ -137,20 +207,6 @@ namespace Gostop
                     KindOfCard = KindOf.P;
                     break;
             }
-
-            SetOpen(false);
-            SetEnablePhysics(false);
-            return true;
-        }
-
-        public Sprite GetSprite()
-        {
-            return spriteRenderer.sprite;
-        }
-
-        public void SetSortOrder(int order)
-        {
-            spriteRenderer.sortingOrder = order;
         }
 
         public int GetMonth(int num)
@@ -158,91 +214,79 @@ namespace Gostop
             return (int)Mathf.Floor((num - 1) / 4 + 1);
         }
 
-        public void SetOpen(bool open)
-        {
-            if (open == true)
-            {
-                transform.rotation = Quaternion.Euler(0, 0, 180);
-            }
-            else
-            {
-                transform.rotation = Quaternion.Euler(0, 0, 0);
-            }
-        }
+
 
         public void SetEnablePhysics(bool enable)
         {
-            rigidBody.isKinematic = !enable;
+            //if (rigidBody != null)
+            //    rigidBody.isKinematic = !enable;
         }
 
-        private void LateUpdate()
+        public void MoveTo(Vector3 position, Vector3 scale, Ease ease = Ease.Linear, float time = 0.5f, float delay = 0f, Action complete = null)
         {
-            if (ListTween.Count == 0)
-                return;
+            IsAnimating = true;
+            transform.DOKill();
 
-            for (int i = 0; i < ListTween.Count; i++)
-            {
-                var tween = ListTween[i];
+            var sequence = DOTween.Sequence();
+            sequence.Join(transform.DOMove(position, time));
+            sequence.Join(transform.DOScale(scale, time));
 
-                if (tween == null)
-                    continue;
-
-                if (tween.active == false || tween.IsComplete() == true)
-                {
-                    ListTween.Remove(tween);
-                    break;
-                }
-            }
+            // 3. 공통 설정 적용 (딜레이, 이징, 콜백)
+            sequence.SetDelay(delay)
+               .SetEase(ease)
+               .OnComplete(() => {
+                   IsAnimating = false;
+                   complete?.Invoke();
+               });
         }
 
-        public void MoveTo(Vector3 position, Ease ease = Ease.Linear, float time = 0.5f, float delay = 0f, Action complete = null)
+        public void JumpTo(Vector3 position, float jumpPower = 2.0f, Ease ease = Ease.OutQuad, float time = 0.5f, float delay = 0f, Action complete = null)
         {
-            OnComplete = complete;
-            var tween = transform.DOMove(position, time).
-                SetDelay(delay).
-                SetEase(ease).
-                OnComplete(() => {
-                    OnComplete?.Invoke();
-                    OnComplete = null;
+            IsAnimating = true;
+            transform.DOKill();
+            transform.DOJump(position, jumpPower, 1, time)
+                .SetDelay(delay)
+                .SetEase(ease)
+                .OnComplete(() => {
+                    complete?.Invoke();
+                    IsAnimating = false;
                 });
+        }
 
-            ListTween.Add(tween);
+        public void SetOpen(bool open)
+        {
+            RotateCard(new Vector3(0, 0, 180), 0, 0, null);
         }
 
         public void CardOpen(float time = 0.1f, float delay = 0.0f, Action complete = null)
         {
-            OnComplete = complete;
-
-            var tween = transform.DORotate(
-                new Vector3(0, 0, 180), time).
-                SetDelay(delay).
-                SetEase(Ease.Linear).
-                OnComplete(() => {
-
-                    OnComplete?.Invoke();
-                    OnComplete = null;
-                });
-
-            ListTween.Add(tween);
+            RotateCard(new Vector3(0, 0, 180), time, delay, complete);
         }
 
         public void ShowMe(float time = 0.1f, float delay = 0.0f, Action complete = null)
         {
-            OnComplete = complete;
-
-            var tween = transform.DORotate(
-                new Vector3(0, 0, 180), time).
-                SetEase(Ease.Linear).
-                SetDelay(delay).
-                OnComplete(() => {
-
-                    OnComplete?.Invoke();
-                    OnComplete = null;
-                });
-
-            ListTween.Add(tween);
+            RotateCard(new Vector3(0, 0, 180), time, delay, complete);
         }
 
+        private void RotateCard(Vector3 targetAngle, float time, float delay, Action complete)
+        {
+            // [중요] 돌기 전에 물리 끄기 (안 그러면 바닥이랑 충돌해서 떼굴떼굴 구름)
+            SetEnablePhysics(false);
+
+            IsAnimating = true;
+            var child = transform.GetChild(0);
+            child.DORotate(targetAngle, time)
+                .SetDelay(delay)
+                .SetEase(Ease.OutBack) // 뒤집을 때 살짝 튕김 (타격감)
+                .OnComplete(() => {
+                    // 다 돌고 나면 물리 다시 켜기 (필요한 경우만)
+                    SetEnablePhysics(true); 
+                    complete?.Invoke();
+                    IsAnimating = false;
+                });
+        }
+
+        /*
         public void SetShadow(bool active)
         {
             if (active == true)
@@ -254,5 +298,11 @@ namespace Gostop
                 meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
             }
         }
+        */
+
+        /// <summary>
+        /// 현재 DOTween으로 움직이거나 회전 중인지 여부
+        /// </summary>
+        public bool IsAnimating { get; set; } = false;
     }
 }

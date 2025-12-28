@@ -48,85 +48,85 @@ namespace UI.Menu
             string name = btn.name;
             if (name == "Button - TileMap")
             {
-                AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneTileMap);
+                AppManager.Instance.ChangeScene(Common.Scenes.SceneTileMap);
             }
             else if (name == "Button - Gostop")
             {
-                AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneGostop);
+                AppManager.Instance.ChangeScene(Common.Scenes.SceneGostop);
             }
             else if (name == "Button - AntHouse")
             {
                 JSONObject jsonParam = new JSONObject();
                 jsonParam.SetField("map_no", 3);
-                AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneAntHouse, param: jsonParam);
+                AppManager.Instance.ChangeScene(Common.Scenes.SceneAntHouse, param: jsonParam);
             }
             else if (name.CompareTo("Button - Start5") == 0)
             {
-                AppManager.Instance.ChangeScene(SceneBase.Scenes.game);
+                AppManager.Instance.ChangeScene(Common.Scenes.Game);
             }
             else if (name.CompareTo("Button - ChattScroll") == 0)
             {
-                AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneChatScroll);
+                AppManager.Instance.ChangeScene(Common.Scenes.SceneChatScroll);
             }
             else if (name.CompareTo("Button - AddressableBundle") == 0)
             {
-                AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneBundle);
+                AppManager.Instance.ChangeScene(Common.Scenes.SceneBundle);
             }
             else if (name == "Button - Maze")
             {
-                AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneMaze);
+                AppManager.Instance.ChangeScene(Common.Scenes.SceneMaze);
             }
             else if (name == "Button - ExcelData")
             {
-                AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneTextRpg);
+                AppManager.Instance.ChangeScene(Common.Scenes.SceneTextRpg);
             }
             else if (name == "Button - Puzzle")
             {
-                AppManager.Instance.ChangeScene(SceneBase.Scenes.ScenePuzzle);
+                AppManager.Instance.ChangeScene(Common.Scenes.ScenePuzzle);
             }
             else if (name == "Button - Tetris")
             {
-                AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneTetris);
+                AppManager.Instance.ChangeScene(Common.Scenes.SceneTetris);
             }
             else if (name == "Button - TextRpg")
             {
-                AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneTextRpg);
+                AppManager.Instance.ChangeScene(Common.Scenes.SceneTextRpg);
             }
             else if (name == "Button - Dotween")
             {
-                AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneDotween);
+                AppManager.Instance.ChangeScene(Common.Scenes.SceneDotween);
             }
             else if (name == "Button - 3Match")
             {
-                AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneMatch3);
+                AppManager.Instance.ChangeScene(Common.Scenes.SceneMatch3);
             }
             else if (name == "Button - Test")
             {
-                AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneTest);
+                AppManager.Instance.ChangeScene(Common.Scenes.SceneTest);
             }
             else if (name == "Button - Hash")
             {
-                AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneHash);
+                AppManager.Instance.ChangeScene(Common.Scenes.SceneHash);
             }
             else if (name == "Button - Loading")
             {
-                AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneLoading);
+                AppManager.Instance.ChangeScene(Common.Scenes.SceneLoading);
             }
             else if (name == "Button - AdMob")
             {
-                AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneAdMob);
+                AppManager.Instance.ChangeScene(Common.Scenes.SceneAdMob);
             }
             else if (name == "Button - Pocker")
             {
-                AppManager.Instance.ChangeScene(SceneBase.Scenes.ScenePoker);
+                AppManager.Instance.ChangeScene(Common.Scenes.ScenePoker);
             }
             else if (name == "Button - Test")
             {
-                AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneTest);
+                AppManager.Instance.ChangeScene(Common.Scenes.SceneTest);
             }
             else if (name == "Button - Shooting")
             {
-                AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneShooting);
+                AppManager.Instance.ChangeScene(Common.Scenes.SceneShooting);
             }
         }
     }

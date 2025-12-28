@@ -47,10 +47,10 @@ namespace Common.Global
 
         public void StartApplication()
         {
-            SceneBase.Scenes startScene = SceneBase.Scenes.SceneIntro;
+            Scenes startScene = Scenes.SceneIntro;
 
 #if UNITY_EDITOR
-            startScene = StringToEnum<SceneBase.Scenes>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+            startScene = StringToEnum<Scenes>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
 #endif
             ChangeScene(startScene, false);
         }
@@ -221,7 +221,7 @@ namespace Common.Global
         /// <param name="scene"></param>
         /// <param name="loading"></param>
         /// <param name="param"></param>
-        public void ChangeScene(SceneBase.Scenes scene, bool loading = true, JSONObject param = null)
+        public void ChangeScene(Scenes scene, bool loading = true, JSONObject param = null)
         {
             _param = param; 
             var sceneName = scene.ToString();

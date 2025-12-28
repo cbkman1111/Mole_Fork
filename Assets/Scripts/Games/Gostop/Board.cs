@@ -1,7 +1,6 @@
-using System;
-
-using System.Collections.Generic;
 using Common.Global;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -15,12 +14,12 @@ namespace Gostop
         public enum Player
         {
             None = -1,
-            Player = 0,
+            Me = 0,
             Enemy,
             Max,
         };
 
-        public enum BoardPositions
+        public enum BoardArea
         {
             GWANG = 0,
             MUNG,
@@ -30,23 +29,26 @@ namespace Gostop
             HAND,
         }
 
-        private CommandProcedure commandProcedure = null;
-        //private BehaviorTree behaviorTree = null;
+        [Header("Settings")]
+        [SerializeField] public BoardSetting setting;
+        [SerializeField] public Card prefabCard;
 
-        public BoardSetting setting;
+        [Header("Resources")]
+        [SerializeField] public Sprite[] sprites = null;
+        [SerializeField] public Sprite spriteBomb = null;
 
         [SerializeField]
-        public Card prefabCard = null;
-        public Sprite[] sprites = null;
-        public Sprite spriteBomb = null;
-        public Transform[] hitPosition = null;
-        public Transform deckPosition = null;
-        public Vector3 Deck => deckPosition.position;
+        private CommandProcedure commandProcedure = null;
 
-        public List<Transform> cardPosition = null;
+        [Header("Positions")]
+        [SerializeField] public Transform[] hitPosition = null;
+        [SerializeField] public List<Transform> cardPosition = null;
+        [SerializeField] public Transform deckPosition = null;
+        
+        public Vector3 Deck => deckPosition.position;
         public BoardPosition[] boardPositions = null;
 
-        private Board.Player turnUser = 0;
+        private Player turnUser = Player.Me;
         private int stealCount = 0; // 빼앗아올 패.
 
         /// <summary>
@@ -56,12 +58,20 @@ namespace Gostop
         public static Board Create(Action<Player, Score> updateScore)
         {
             Board prefab = ResourcesManager.Instance.LoadInBuild<Board>("Board");
+            if (prefab == null)
+            {
+                Debug.LogError("[Board] Failed to load Board prefab.");
+                return null;
+            }
+
             Board board = Instantiate<Board>(prefab);
             if (board != null && board.Init(updateScore))
             {
                 return board;
             }
 
+            // 초기화 실패 시 생성된 객체 파괴
+            Destroy(board.gameObject);
             return null;
         }
 
@@ -72,11 +82,15 @@ namespace Gostop
         public bool Init(Action<Player, Score> score)
         {
             setting = ResourcesManager.Instance.LoadInBuild<BoardSetting>("BoardSetting");
-            //setting = container.setting.DeepClone();
+            if (setting == null)
+            {
+                Debug.LogWarning("[Board] BoardSetting is missing.");
+                // return false; // 필수라면 false 리턴
+            }
 
             updateScore = score;
-            commandProcedure = CommandProcedure.Create();
-            turnUser = Player.Player;
+            commandProcedure = new();
+            turnUser = Player.Me;
             deck = new Stack<Card>();
             
             hands = new CardList[(int)Player.Max];
@@ -111,6 +125,11 @@ namespace Gostop
             gameScore[1] = new Score();
             //behaviorTree = GetComponent<BehaviorTree>();
             return true;
+        }
+
+        public void ReplaceCard(int index, int cardnum)
+        {
+            hands[(int)Player.Me][index].ReplaceCard(cardnum, sprites[cardnum]);
         }
     }
 }

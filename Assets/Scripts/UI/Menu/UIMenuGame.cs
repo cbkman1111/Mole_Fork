@@ -55,7 +55,7 @@ namespace UI.Menu
             }
             else if (name == "Button - Exit")
             {
-                AppManager.Instance.ChangeScene(SceneBase.Scenes.SceneMenu);
+                AppManager.Instance.ChangeScene(Common.Scenes.SceneMenu);
             }
         }
     }

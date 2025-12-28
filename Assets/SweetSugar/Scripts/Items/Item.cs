@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Newtonsoft.Json;
 using SweetSugar.Scripts.Blocks;
 using SweetSugar.Scripts.Core;
 using SweetSugar.Scripts.Effects;
@@ -1350,8 +1351,12 @@ namespace SweetSugar.Scripts.Items
 
         public Item DeepCopy()
         {
-            var other = (Item)MemberwiseClone();
-            return other;
+            //var other = (Item)MemberwiseClone();
+            // 나를 텍스트로 바꿨다가 -> 다시 새 객체로 생성
+            string json = JsonConvert.SerializeObject(this);
+            return JsonConvert.DeserializeObject<Item>(json);
+
+            //return other;
         }
 
         public void OnColorChanged(int color)
